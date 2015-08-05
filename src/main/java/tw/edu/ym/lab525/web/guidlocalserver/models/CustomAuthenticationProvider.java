@@ -38,6 +38,8 @@ import tw.edu.ym.lab525.web.guidlocalserver.models.repo.AccountUsersRepository;
 @Component
 public class CustomAuthenticationProvider implements AuthenticationProvider {
 
+  private String name;
+
   @Autowired
   AccountUsersRepository userRepo;
 
@@ -51,6 +53,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
       List<GrantedAuthority> grantedAuths = newArrayList();
       grantedAuths.add(new SimpleGrantedAuthority("ROLE_USER"));
       Authentication auth = new UsernamePasswordAuthenticationToken(name, password, grantedAuths);
+      this.name = name;
       return auth;
     } else {
       return null;
@@ -62,4 +65,12 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
   public boolean supports(Class<?> authentication) {
     return authentication.equals(UsernamePasswordAuthenticationToken.class);
   }
+
+  /**
+   * @return the name
+   */
+  public String getName() {
+    return name;
+  }
+
 }

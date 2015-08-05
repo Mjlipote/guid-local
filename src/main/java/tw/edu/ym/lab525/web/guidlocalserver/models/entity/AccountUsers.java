@@ -158,6 +158,11 @@ public class AccountUsers extends AbstractPersistable<Long> {
     this.address = address;
   }
 
+  // /**
+  // *
+  // * @author apple
+  // *
+  // */
   // public static class Builder {
   //
   // private final String username;
@@ -240,9 +245,5 @@ public class AccountUsers extends AbstractPersistable<Long> {
   // this.telephone = builder.telephone;
   // this.address = builder.address;
   // }
-
-  // @OneToMany(mappedBy = "user", cascade = { CascadeType.ALL }, fetch = EAGER)
-  // @Column(nullable = false)
-  // private List<ActionAudit> action;
 
 }

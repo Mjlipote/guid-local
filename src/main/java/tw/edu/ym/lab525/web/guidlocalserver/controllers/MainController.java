@@ -3,7 +3,7 @@
  * @author Ming-Jheng Li
  *
  *
- * Copyright 2014 Ming-Jheng Li
+ * Copyright 2015 Ming-Jheng Li
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -21,26 +21,37 @@
 package tw.edu.ym.lab525.web.guidlocalserver.controllers;
 
 import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.collect.Lists.newArrayList;
 
 import java.io.IOException;
-import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.TestRestTemplate;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.client.RestTemplate;
 
-import tw.edu.ym.guid.client.GuidClient;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import tw.edu.ym.guid.client.PII;
 import tw.edu.ym.guid.client.field.Birthday;
 import tw.edu.ym.guid.client.field.Name;
 import tw.edu.ym.guid.client.field.Sex;
 import tw.edu.ym.guid.client.field.TWNationalId;
+import tw.edu.ym.lab525.web.guidlocalserver.models.CustomAuthenticationProvider;
+import tw.edu.ym.lab525.web.guidlocalserver.models.SubprimeGuidRequest;
 import tw.edu.ym.lab525.web.guidlocalserver.models.entity.AccountUsers;
 import tw.edu.ym.lab525.web.guidlocalserver.models.repo.AccountUsersRepository;
 import tw.edu.ym.lab525.web.guidlocalserver.models.repo.ActionAuditRepository;
@@ -57,21 +68,25 @@ public class MainController {
   SPGuidRepository spguidRepo;
   @Autowired
   AccountUsersRepository userRepo;
+  @Autowired
+  CustomAuthenticationProvider customAuthenticationProvider;
 
-  // @RequestMapping(value = "/create", method = RequestMethod.POST)
-  // String create(@RequestBody ) {
-  // List<SPGuidCreateRequest> spGuidCreateRequestList = newArrayList();
-  // RestTemplate restTemplate = new TestRestTemplate();
-  // ObjectMapper mapper = new ObjectMapper();
-  // HttpEntity<String> jsonRequest =
-  // new HttpEntity<String>(mapper.writeValueAsString(spGuidCreateRequestList),
-  // headers);
-  // ResponseEntity<String> res =
-  // restTemplate.postForEntity("http://localhost:8080/guid/create",
-  // jsonRequest, String.class);
-  //
-  // return "spguids";
-  // }
+  @RequestMapping(value = "/create", method = RequestMethod.POST)
+      String create(@RequestBody List<SubprimeGuidRequest> spGuidCreateRequestList) throws JsonProcessingException {
+
+    HttpHeaders headers = new HttpHeaders();
+    headers.setContentType(MediaType.APPLICATION_JSON);
+    headers.add("custom", "true");
+
+    RestTemplate restTemplate = new TestRestTemplate();
+    ObjectMapper mapper = new ObjectMapper();
+    HttpEntity<String> jsonRequest =
+        new HttpEntity<String>(mapper.writeValueAsString(spGuidCreateRequestList), headers);
+    ResponseEntity<String> res =
+        restTemplate.postForEntity("http://localhost:8080/guid/create", jsonRequest, String.class);
+
+    return res.getBody();
+  }
 
   @RequestMapping(value = "/web/create", method = RequestMethod.POST)
       String webcreate(ModelMap map, @RequestParam(value = "Gender") String gender,
@@ -82,9 +97,28 @@ public class MainController {
     PII pii = new PII.Builder(new Name(name.substring(1, 3), name.substring(0, 1)),
         gender.equals("M") ? Sex.MALE : Sex.FEMALE,
         new Birthday(Integer.valueOf(boy), Integer.valueOf(bom), Integer.valueOf(bod)), new TWNationalId(sid)).build();
-    GuidClient gc = new GuidClient(new URI("https://120.126.47.138:8443"), "guid1", "12345", "TEST");
+    // GuidClient gc = new GuidClient(new URI("https://120.126.47.138:8443"),
+    // "guid1", "12345", "TEST");
 
-    map.addAttribute("spguids", gc.create(pii));
+    List<SubprimeGuidRequest> sgrs = newArrayList();
+    SubprimeGuidRequest sgr = new SubprimeGuidRequest();
+
+    sgr.setGuidHash(pii.getHashcodes());
+    sgr.setPrefix(userRepo.findByUsername(customAuthenticationProvider.getName()).getPrefix());
+    // sgr.setPrefix("TTT");
+    sgrs.add(sgr);
+
+    HttpHeaders headers = new HttpHeaders();
+    headers.setContentType(MediaType.APPLICATION_JSON);
+    headers.add("custom", "true");
+
+    RestTemplate restTemplate = new TestRestTemplate();
+    ObjectMapper mapper = new ObjectMapper();
+    HttpEntity<String> jsonRequest = new HttpEntity<String>(mapper.writeValueAsString(sgrs), headers);
+    ResponseEntity<String> res =
+        restTemplate.postForEntity("http://localhost:8080/guid/create", jsonRequest, String.class);
+
+    map.addAttribute("spguids", res.getBody());
 
     return "spguids";
   }
@@ -96,6 +130,11 @@ public class MainController {
           @RequestParam(value = "telephone") String telephone, @RequestParam(value = "address") String address,
           @RequestParam(value = "prefix") String prefix) {
 
+    // AccountUsers user = new AccountUsers.Builder(checkNotNull(username),
+    // checkNotNull(password), checkNotNull(email),
+    // checkNotNull(institute),
+    // checkNotNull(prefix)).address(address).jobTitle(jobTitle).telephone(telephone).build();
+
     AccountUsers user = new AccountUsers();
     user.setUsername(checkNotNull(username));
     user.setPassword(checkNotNull(password));
@@ -105,6 +144,7 @@ public class MainController {
     user.setTelephone(telephone);
     user.setJobTitle(jobTitle);
     user.setAddress(address);
+
     userRepo.save(user);
     map.addAttribute("users", user);
 

@@ -31,6 +31,10 @@ public class SetupController {
   @PostConstruct
       void preProcessData() {
 
+    // AccountUsers user = new AccountUsers.Builder("mjli", "potepote",
+    // "mjli0721@gmail.com", "陽明大學", "YMTEST")
+    // .address("國立陽明大學").jobTitle("博士後研究員").telephone("0910777655").build();
+
     AccountUsers user = new AccountUsers();
     user.setUsername("mjli");
     user.setPassword("potepote");
