@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8"></meta>
+<title>新增使用者</title>
+</head>
+<body>
+  <div th:if="${users}">
+    新增使用者:
+    <span th:text="${users.username}"></span><br/>
+    Prefix 值:
+    <span th:text="${users.prefix}"></span>
+  </div>
+</body>
+</html>

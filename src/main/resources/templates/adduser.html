@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8"/>
+<title> 新增使用者 </title>
+<th:block th:include="head :: bootstrap" />
+<style type="text/css">
+</style>
+</head>
+<body>
+<form method="post" th:action="@{guid/user}">
+　
+姓名：<input type="text" name="username"></input><br/>
+　
+密碼：<input type="password" name="password"></input><br/>
+　
+E-Mail：<input type="text" name="email"></input><br/>
+　
+單位：<select name="institute">
+      <option value="北榮">北榮</option>
+      <option value="三總">三總</option>
+      <option value="台大">台大</option>
+    </select><br/>
+　
+Prefix：<select name="prefix">
+      <option value="TpeVGH">TpeVGH</option>
+      <option value="TSGH">TSGH</option>
+      <option value="NTUH">NTUH</option>
+    </select><br/>
+  
+  工作職銜：<input type="text" name="jobTitle"></input><br/>
+  
+  聯絡電話：<input type="text" name="telephone"></input><br/>
+  
+  聯絡住址：<input type="text" name="address"></input><br/>
+　<input type="submit" value="新增使用者"></input>
+</form>
+</body>
+</html>
