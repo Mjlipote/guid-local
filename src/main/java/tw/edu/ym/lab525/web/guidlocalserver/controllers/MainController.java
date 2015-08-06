@@ -71,6 +71,13 @@ public class MainController {
   @Autowired
   CustomAuthenticationProvider customAuthenticationProvider;
 
+  /**
+   * 產生 GUID
+   * 
+   * @param spGuidCreateRequestList
+   * @return
+   * @throws JsonProcessingException
+   */
   @RequestMapping(value = "/create", method = RequestMethod.POST)
       String create(@RequestBody List<SubprimeGuidRequest> spGuidCreateRequestList) throws JsonProcessingException {
 
@@ -88,6 +95,20 @@ public class MainController {
     return res.getBody();
   }
 
+  /**
+   * 網頁版產生 GUID
+   * 
+   * @param map
+   * @param gender
+   * @param boy
+   * @param bom
+   * @param bod
+   * @param sid
+   * @param name
+   * @return
+   * @throws URISyntaxException
+   * @throws IOException
+   */
   @RequestMapping(value = "/web/create", method = RequestMethod.POST)
       String webcreate(ModelMap map, @RequestParam(value = "Gender") String gender,
           @RequestParam(value = "BOY") String boy, @RequestParam(value = "BOM") String bom,
@@ -124,6 +145,20 @@ public class MainController {
     }
   }
 
+  /**
+   * 新增使用者
+   * 
+   * @param map
+   * @param username
+   * @param password
+   * @param email
+   * @param jobTitle
+   * @param institute
+   * @param telephone
+   * @param address
+   * @param prefix
+   * @return
+   */
   @RequestMapping(value = "/user", method = RequestMethod.POST)
       String addUser(ModelMap map, @RequestParam(value = "username") String username,
           @RequestParam(value = "password") String password, @RequestParam(value = "email") String email,
@@ -155,6 +190,11 @@ public class MainController {
     }
   }
 
+  /**
+   * 使用者名單
+   * 
+   * @return
+   */
   @ResponseBody
   @RequestMapping(value = "/user", method = RequestMethod.GET)
       List<AccountUsers> user() {
