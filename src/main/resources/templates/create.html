@@ -9,6 +9,8 @@
 </style>
 </head>
 <body>
+<h1>輸入 PII</h1>
+
 <form method="post" th:action="@{guid/web/create}">
 　姓名：<input type="text" name="Name"></input><br/>
 　性別：<select name="Gender">
@@ -66,5 +68,6 @@
 　身份證字號：<input type="text" name="SID"></input><br/>
 　<input type="submit" value="產生二次編碼"></input>
 </form>
+<p><a th:href="@{/home}">回到首頁</a></p><br/>
 </body>
 </html>

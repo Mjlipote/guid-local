@@ -9,6 +9,8 @@
 </style>
 </head>
 <body>
+<h1>新增使用者</h1>
+
 <form method="post" th:action="@{guid/user}">
 　
 姓名：<input type="text" name="username"></input><br/>
@@ -36,5 +38,6 @@ Prefix：<select name="prefix">
   聯絡住址：<input type="text" name="address"></input><br/>
 　<input type="submit" value="新增使用者"></input>
 </form>
+<p><a th:href="@{/home}">回到首頁</a></p><br/>
 </body>
 </html>
