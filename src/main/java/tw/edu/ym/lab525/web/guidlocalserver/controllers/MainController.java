@@ -93,34 +93,35 @@ public class MainController {
           @RequestParam(value = "BOY") String boy, @RequestParam(value = "BOM") String bom,
           @RequestParam(value = "BOD") String bod, @RequestParam(value = "SID") String sid,
           @RequestParam(value = "Name") String name) throws URISyntaxException, IOException {
+    if (gender.equals("") || boy.equals("") || bom.equals("") || bod.equals("") || sid.equals("") || name.equals("")) {
+      return "null-error";
+    } else {
+      PII pii = new PII.Builder(new Name(name.substring(1, 3), name.substring(0, 1)),
+          gender.equals("M") ? Sex.MALE : Sex.FEMALE,
+          new Birthday(Integer.valueOf(boy), Integer.valueOf(bom), Integer.valueOf(bod)), new TWNationalId(sid))
+              .build();
 
-    PII pii = new PII.Builder(new Name(name.substring(1, 3), name.substring(0, 1)),
-        gender.equals("M") ? Sex.MALE : Sex.FEMALE,
-        new Birthday(Integer.valueOf(boy), Integer.valueOf(bom), Integer.valueOf(bod)), new TWNationalId(sid)).build();
-    // GuidClient gc = new GuidClient(new URI("https://120.126.47.138:8443"),
-    // "guid1", "12345", "TEST");
+      List<SubprimeGuidRequest> sgrs = newArrayList();
+      SubprimeGuidRequest sgr = new SubprimeGuidRequest();
 
-    List<SubprimeGuidRequest> sgrs = newArrayList();
-    SubprimeGuidRequest sgr = new SubprimeGuidRequest();
+      sgr.setGuidHash(pii.getHashcodes());
+      sgr.setPrefix(userRepo.findByUsername(customAuthenticationProvider.getName()).getPrefix());
+      sgrs.add(sgr);
 
-    sgr.setGuidHash(pii.getHashcodes());
-    sgr.setPrefix(userRepo.findByUsername(customAuthenticationProvider.getName()).getPrefix());
-    // sgr.setPrefix("TTT");
-    sgrs.add(sgr);
+      HttpHeaders headers = new HttpHeaders();
+      headers.setContentType(MediaType.APPLICATION_JSON);
+      headers.add("custom", "true");
 
-    HttpHeaders headers = new HttpHeaders();
-    headers.setContentType(MediaType.APPLICATION_JSON);
-    headers.add("custom", "true");
+      RestTemplate restTemplate = new TestRestTemplate();
+      ObjectMapper mapper = new ObjectMapper();
+      HttpEntity<String> jsonRequest = new HttpEntity<String>(mapper.writeValueAsString(sgrs), headers);
+      ResponseEntity<String> res =
+          restTemplate.postForEntity("http://localhost:8080/guid/create", jsonRequest, String.class);
 
-    RestTemplate restTemplate = new TestRestTemplate();
-    ObjectMapper mapper = new ObjectMapper();
-    HttpEntity<String> jsonRequest = new HttpEntity<String>(mapper.writeValueAsString(sgrs), headers);
-    ResponseEntity<String> res =
-        restTemplate.postForEntity("http://localhost:8080/guid/create", jsonRequest, String.class);
+      map.addAttribute("spguids", res.getBody());
 
-    map.addAttribute("spguids", res.getBody());
-
-    return "spguids";
+      return "spguids";
+    }
   }
 
   @RequestMapping(value = "/user", method = RequestMethod.POST)
@@ -134,21 +135,24 @@ public class MainController {
     // checkNotNull(password), checkNotNull(email),
     // checkNotNull(institute),
     // checkNotNull(prefix)).address(address).jobTitle(jobTitle).telephone(telephone).build();
+    if (username.equals("") || password.equals("") || institute.equals("") || email.equals("") || prefix.equals("")) {
+      return "null-error";
+    } else {
+      AccountUsers user = new AccountUsers();
+      user.setUsername(checkNotNull(username));
+      user.setPassword(checkNotNull(password));
+      user.setInstitute(checkNotNull(institute));
+      user.setEmail(checkNotNull(email));
+      user.setPrefix(checkNotNull(prefix));
+      user.setTelephone(telephone);
+      user.setJobTitle(jobTitle);
+      user.setAddress(address);
 
-    AccountUsers user = new AccountUsers();
-    user.setUsername(checkNotNull(username));
-    user.setPassword(checkNotNull(password));
-    user.setInstitute(checkNotNull(institute));
-    user.setEmail(checkNotNull(email));
-    user.setPrefix(checkNotNull(prefix));
-    user.setTelephone(telephone);
-    user.setJobTitle(jobTitle);
-    user.setAddress(address);
+      userRepo.save(user);
+      map.addAttribute("users", user);
 
-    userRepo.save(user);
-    map.addAttribute("users", user);
-
-    return "users";
+      return "users";
+    }
   }
 
   @ResponseBody
