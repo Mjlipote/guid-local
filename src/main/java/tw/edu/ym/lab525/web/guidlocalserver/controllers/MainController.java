@@ -158,7 +158,7 @@ public class MainController {
    * @param prefix
    * @return
    */
-  @RequestMapping(value = "/user", method = RequestMethod.POST)
+  @RequestMapping(value = "/register", method = RequestMethod.POST)
       String register(ModelMap map, @RequestParam(value = "username") String username,
           @RequestParam(value = "password") String password, @RequestParam(value = "email") String email,
           @RequestParam(value = "jobTitle") String jobTitle, @RequestParam(value = "institute") String institute,
