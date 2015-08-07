@@ -21,6 +21,8 @@
 
 package tw.edu.ym.lab525.web.guidlocalserver.models.repo;
 
+import java.util.Set;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import tw.edu.ym.lab525.web.guidlocalserver.models.entity.AccountUsers;
@@ -29,6 +31,10 @@ public interface AccountUsersRepository extends JpaRepository<AccountUsers, Long
 
   public AccountUsers findByUsername(String username);
 
-  public AccountUsers findByPassword(String password);
+  public Set<AccountUsers> findByPassword(String password);
+
+  public Set<AccountUsers> findByPrefix(String prefix);
+
+  public Set<AccountUsers> findByInstitute(String institute);
 
 }
