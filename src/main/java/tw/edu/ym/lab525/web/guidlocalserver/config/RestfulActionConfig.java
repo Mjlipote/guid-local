@@ -23,7 +23,7 @@ package tw.edu.ym.lab525.web.guidlocalserver.config;
  *         permissions and limitations under the License.
  *
  */
-public class ResfulActionConfig {
+public class RestfulActionConfig {
 
   public static final String GUID_CENTRAL_SERVER_URL = "http://localhost:8080/";
 
