@@ -31,17 +31,13 @@ public class SetupController {
   @PostConstruct
       void preProcessData() {
 
-    // AccountUsers user = new AccountUsers.Builder("mjli", "potepote",
-    // "mjli0721@gmail.com", "陽明大學", "YMTEST")
-    // .address("國立陽明大學").jobTitle("博士後研究員").telephone("0910777655").build();
-
     AccountUsers user = new AccountUsers();
-    user.setUsername("mjli");
-    user.setPassword("potepote");
-    user.setEmail("mjli0721@gmail.com");
-    user.setInstitute("陽明大學");
-    user.setJobTitle("博士後");
-    user.setPrefix("YMTEST");
+    user.setUsername("admin");
+    user.setPassword("password");
+    user.setEmail("admin@ym.com");
+    user.setInstitute("國立陽明大學");
+    user.setJobTitle("系統管理員");
+    user.setPrefix("AdminTest");
     user.setTelephone("0910777666");
     user.setAddress("國立陽明大學");
 
