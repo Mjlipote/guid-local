@@ -30,15 +30,12 @@ import java.util.List;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.SpringApplicationConfiguration;
-import org.springframework.boot.test.TestRestTemplate;
 import org.springframework.boot.test.WebIntegrationTest;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.web.client.RestTemplate;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 import tw.edu.ym.lab25.web.guidlocalserver.helper.HttpActionHelper;
 import tw.edu.ym.lab525.web.guidlocalserver.Application;
@@ -50,9 +47,6 @@ import tw.edu.ym.lab525.web.guidlocalserver.models.SubprimeGuidRequest;
 @WebIntegrationTest
 
 public class MainControllerTest {
-
-  RestTemplate restTemplate = new TestRestTemplate();
-  ObjectMapper mapper = new ObjectMapper();
 
   @Test
   public void testCreateSPGuid() throws JsonProcessingException, URISyntaxException {
