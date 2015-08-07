@@ -54,7 +54,7 @@ import tw.edu.ym.guid.client.field.Name;
 import tw.edu.ym.guid.client.field.Sex;
 import tw.edu.ym.guid.client.field.TWNationalId;
 import tw.edu.ym.lab25.web.guidlocalserver.helper.HttpActionHelper;
-import tw.edu.ym.lab525.web.guidlocalserver.config.ResfulActionConfig;
+import tw.edu.ym.lab525.web.guidlocalserver.config.RestfulActionConfig;
 import tw.edu.ym.lab525.web.guidlocalserver.models.AccountUsersResponse;
 import tw.edu.ym.lab525.web.guidlocalserver.models.CustomAuthenticationProvider;
 import tw.edu.ym.lab525.web.guidlocalserver.models.SubprimeGuidRequest;
@@ -89,7 +89,7 @@ public class MainController {
       String create(@RequestBody List<SubprimeGuidRequest> spGuidCreateRequestList)
           throws JsonProcessingException, URISyntaxException {
 
-    return HttpActionHelper.toPost(new URI("http://localhost:8080"), ResfulActionConfig.CREATE,
+    return HttpActionHelper.toPost(new URI("http://localhost:8080"), RestfulActionConfig.CREATE,
         spGuidCreateRequestList);
 
   }

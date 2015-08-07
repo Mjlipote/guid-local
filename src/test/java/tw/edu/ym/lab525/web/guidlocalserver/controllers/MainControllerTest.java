@@ -23,6 +23,8 @@ package tw.edu.ym.lab525.web.guidlocalserver.controllers;
 import static com.google.common.collect.Lists.newArrayList;
 import static org.junit.Assert.assertEquals;
 
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.List;
 
 import org.junit.Test;
@@ -30,17 +32,17 @@ import org.junit.runner.RunWith;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.boot.test.TestRestTemplate;
 import org.springframework.boot.test.WebIntegrationTest;
-import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.web.client.RestTemplate;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import tw.edu.ym.lab25.web.guidlocalserver.helper.HttpActionHelper;
 import tw.edu.ym.lab525.web.guidlocalserver.Application;
+import tw.edu.ym.lab525.web.guidlocalserver.config.RestfulActionConfig;
 import tw.edu.ym.lab525.web.guidlocalserver.models.SubprimeGuidRequest;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -53,7 +55,7 @@ public class MainControllerTest {
   ObjectMapper mapper = new ObjectMapper();
 
   @Test
-  public void testCreateSPGuid() throws JsonProcessingException {
+  public void testCreateSPGuid() throws JsonProcessingException, URISyntaxException {
     HttpHeaders headers = new HttpHeaders();
     headers.setContentType(MediaType.APPLICATION_JSON);
     headers.add("custom", "true");
@@ -73,15 +75,9 @@ public class MainControllerTest {
     List<SubprimeGuidRequest> spGuidCreateRequestList = newArrayList();
     spGuidCreateRequestList.add(scr);
 
-    HttpEntity<String> jsonRequest =
-        new HttpEntity<String>(mapper.writeValueAsString(spGuidCreateRequestList), headers);
-    ResponseEntity<String> res =
-        restTemplate.postForEntity("http://localhost:8080/guid/create", jsonRequest, String.class);
-    assertEquals(mapper.writeValueAsString(spGuidCreateRequestList),
-        "[" + "{\"prefix\":\"TEST\",\"guidHash\":[\"f3042960fc9351d1ad99550817f892968207c6cb2539c6fd11b3258e815dedfe4f8f3f2a95c846b32aacf6201282921e2b93812587cc19752cfc9c0cf236a57b00\",\"e92e7cf25a726bb9f7aff7c36c31fa4a96b0014a3a7ce5018c6b84bc459df512653253d01e0742878ca7ddd7bd9c5179273fa915761a9ba84948fd85007cc8f900\",\"636ce21c211c33e6ee8e2f7590034fef8a3a5b3263c6d83af9c54b490175d649f11937e855509f57c986d1882cb5259372a37697899660afff8db6c8049de6a900\"]}"
-            + "]");
-
-    assertEquals(res.getBody(), "[" + "{\"spguid\":\"TEST-Y3XZU2NG\",\"prefix\":\"TEST\"}" + "]");
+    assertEquals(
+        HttpActionHelper.toPost(new URI("http://localhost:8080"), RestfulActionConfig.CREATE, spGuidCreateRequestList),
+        "[" + "{\"spguid\":\"TEST-Y3XZU2NG\",\"prefix\":\"TEST\"}" + "]");
 
   }
 
