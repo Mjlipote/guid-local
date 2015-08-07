@@ -28,4 +28,6 @@ public class RestfulActionConfig {
   public static final String GUID_CENTRAL_SERVER_URL = "http://localhost:8080/";
 
   public static final String CREATE = "guid/create";
+
+  public static final String COMPARISON = "guid/comparison";
 }

@@ -31,11 +31,6 @@ import java.util.List;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.TestRestTemplate;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -43,10 +38,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.client.RestTemplate;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 import tw.edu.ym.guid.client.PII;
 import tw.edu.ym.guid.client.field.Birthday;
@@ -89,8 +82,8 @@ public class MainController {
       String create(@RequestBody List<SubprimeGuidRequest> spGuidCreateRequestList)
           throws JsonProcessingException, URISyntaxException {
 
-    return HttpActionHelper.toPost(new URI("http://localhost:8080"), RestfulActionConfig.CREATE,
-        spGuidCreateRequestList);
+    return HttpActionHelper
+        .toPost(new URI("http://localhost:8080"), RestfulActionConfig.CREATE, spGuidCreateRequestList).getBody();
 
   }
 
@@ -109,7 +102,7 @@ public class MainController {
    * @throws IOException
    */
   @RequestMapping(value = "/web/create", method = RequestMethod.POST)
-      String webcreate(ModelMap map, @RequestParam(value = "Gender") String gender,
+      String webCreate(ModelMap map, @RequestParam(value = "Gender") String gender,
           @RequestParam(value = "BOY") String boy, @RequestParam(value = "BOM") String bom,
           @RequestParam(value = "BOD") String bod, @RequestParam(value = "SID") String sid,
           @RequestParam(value = "Name") String name) throws URISyntaxException, IOException {
@@ -128,17 +121,8 @@ public class MainController {
       sgr.setPrefix(userRepo.findByUsername(customAuthenticationProvider.getName()).getPrefix());
       sgrs.add(sgr);
 
-      HttpHeaders headers = new HttpHeaders();
-      headers.setContentType(MediaType.APPLICATION_JSON);
-      headers.add("custom", "true");
-
-      RestTemplate restTemplate = new TestRestTemplate();
-      ObjectMapper mapper = new ObjectMapper();
-      HttpEntity<String> jsonRequest = new HttpEntity<String>(mapper.writeValueAsString(sgrs), headers);
-      ResponseEntity<String> res =
-          restTemplate.postForEntity("http://localhost:8080/guid/create", jsonRequest, String.class);
-
-      map.addAttribute("spguids", res.getBody());
+      map.addAttribute("spguids",
+          HttpActionHelper.toPost(new URI("http://localhost:8080"), RestfulActionConfig.CREATE, sgrs).getBody());
 
       return "spguids";
     }
@@ -222,4 +206,28 @@ public class MainController {
       return "search";
     }
   }
+
+  /**
+   * 在 Web 進行二次編碼比對
+   * 
+   * @param map
+   * @param subprimeGuids
+   * @return
+   * @throws JsonProcessingException
+   * @throws URISyntaxException
+   */
+  @RequestMapping(value = "web/comparison", method = RequestMethod.POST)
+      String webComparison(ModelMap map, @RequestParam(value = "subprimeGuids") String subprimeGuids)
+          throws JsonProcessingException, URISyntaxException {
+    List<String> list = newArrayList();
+    String[] str = subprimeGuids.split(",");
+    for (String s : str) {
+      list.add(s);
+    }
+    map.addAttribute("result",
+        HttpActionHelper.toPost(new URI("http://localhost:8080"), RestfulActionConfig.COMPARISON, list).getBody());
+
+    return "comparison-result";
+  }
+
 }

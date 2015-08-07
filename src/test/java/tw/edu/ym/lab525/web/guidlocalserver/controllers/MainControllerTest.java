@@ -69,8 +69,8 @@ public class MainControllerTest {
     List<SubprimeGuidRequest> spGuidCreateRequestList = newArrayList();
     spGuidCreateRequestList.add(scr);
 
-    assertEquals(
-        HttpActionHelper.toPost(new URI("http://localhost:8080"), RestfulActionConfig.CREATE, spGuidCreateRequestList),
+    assertEquals(HttpActionHelper
+        .toPost(new URI("http://localhost:8080"), RestfulActionConfig.CREATE, spGuidCreateRequestList).getBody(),
         "[" + "{\"spguid\":\"TEST-Y3XZU2NG\",\"prefix\":\"TEST\"}" + "]");
 
   }

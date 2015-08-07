@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8"></meta>
+<title>比對結果</title>
+</head>
+<body>
+ <h1>二次編碼比對結果</h1>
+  <div th:if="${result}">
+
+    <span th:text="${result}"></span><br/>
+
+  </div>
+    <p><a th:href="@{/home}">回到首頁</a></p><br/>
+</body>
+</html>

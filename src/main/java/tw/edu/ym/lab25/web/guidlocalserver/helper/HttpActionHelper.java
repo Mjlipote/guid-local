@@ -54,7 +54,7 @@ public class HttpActionHelper {
    * @return
    * @throws JsonProcessingException
    */
-  public static String toPost(URI url, String action, Object object) throws JsonProcessingException {
+  public static ResponseEntity<String> toPost(URI url, String action, Object object) throws JsonProcessingException {
 
     headers.setContentType(MediaType.APPLICATION_JSON);
     headers.add("custom", "true");
@@ -64,7 +64,7 @@ public class HttpActionHelper {
     ResponseEntity<String> res = restTemplate
         .postForEntity("http://" + url.getHost() + ":" + url.getPort() + "/" + action, jsonRequest, String.class);
 
-    return res.getBody();
+    return res;
   }
 
   /**
@@ -74,11 +74,12 @@ public class HttpActionHelper {
    * @param object
    * @return
    */
-  public static String toGet(URI url, String action, Object object) {
+  public static ResponseEntity<String> toGet(URI url, String action, Object object) {
 
     ResponseEntity<String> res = restTemplate
         .getForEntity("http://" + url.getHost() + ":" + url.getPort() + "/" + action + object, String.class);
 
-    return res.getBody();
+    return res;
   }
+
 }
