@@ -1,6 +1,3 @@
-/**
- * 
- */
 package tw.edu.ym.lab525.web.guidlocalserver.models;
 
 import static com.google.common.collect.Lists.newArrayList;
@@ -45,6 +42,8 @@ public final class AccountUsersResponse {
 
   private String address;
 
+  private Authority authority;
+
   private AccountUsersResponse() {
 
   }
@@ -62,6 +61,7 @@ public final class AccountUsersResponse {
       aur.jobTitle = au.getJobTitle();
       aur.telephone = au.getTelephone();
       aur.address = au.getAddress();
+      aur.authority = au.getAuthority();
       aurs.add(aur);
     }
     return aurs;
@@ -116,14 +116,28 @@ public final class AccountUsersResponse {
     return address;
   }
 
+  /**
+   * @return the authority
+   */
+  public Authority getAuthority() {
+    return authority;
+  }
+
+  /**
+   * @param authority
+   *          the authority to set
+   */
+  public void setAuthority(Authority authority) {
+    this.authority = authority;
+  }
+
   @Override
   public String toString() {
-    return "AccountUsersResponse [" + (username != null ? "username=" + username + ", " : "")
+    return "AccountUsersResponse [" + (username != null ? "帳號名稱=" + username + ", " : "")
         + (prefix != null ? "prefix=" + prefix + ", " : "") + (email != null ? "email=" + email + ", " : "")
-        + (institute != null ? "institute=" + institute + ", " : "")
-        + (jobTitle != null ? "jobTitle=" + jobTitle + ", " : "")
-        + (telephone != null ? "telephone=" + telephone + ", " : "") + (address != null ? "address=" + address : "")
-        + "]";
+        + (institute != null ? "工作單位=" + institute + ", " : "") + (jobTitle != null ? "工作職稱=" + jobTitle + ", " : "")
+        + (telephone != null ? "聯絡電話=" + telephone + ", " : "") + (address != null ? "聯絡地址=" + address + ", " : "")
+        + (authority != null ? "使用者權限=" + authority : "") + "]";
   }
 
 }

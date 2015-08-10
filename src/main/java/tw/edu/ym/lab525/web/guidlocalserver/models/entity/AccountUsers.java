@@ -2,8 +2,12 @@ package tw.edu.ym.lab525.web.guidlocalserver.models.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 
 import org.springframework.data.jpa.domain.AbstractPersistable;
+
+import tw.edu.ym.lab525.web.guidlocalserver.models.Authority;
 
 @Entity
 public class AccountUsers extends AbstractPersistable<Long> {
@@ -24,6 +28,10 @@ public class AccountUsers extends AbstractPersistable<Long> {
 
   @Column(nullable = false)
   private String prefix;
+
+  @Column(nullable = false)
+  @Enumerated(EnumType.STRING)
+  private Authority authority;
 
   @Column(nullable = true)
   private String jobTitle;
@@ -111,6 +119,21 @@ public class AccountUsers extends AbstractPersistable<Long> {
    */
   public void setPrefix(String prefix) {
     this.prefix = prefix;
+  }
+
+  /**
+   * @return the authority
+   */
+  public Authority getAuthority() {
+    return authority;
+  }
+
+  /**
+   * @param authority
+   *          the authority to set
+   */
+  public void setAuthority(Authority authority) {
+    this.authority = authority;
   }
 
   /**

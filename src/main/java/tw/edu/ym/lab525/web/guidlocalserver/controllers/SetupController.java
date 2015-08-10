@@ -8,6 +8,7 @@ import javax.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
+import tw.edu.ym.lab525.web.guidlocalserver.models.Authority;
 import tw.edu.ym.lab525.web.guidlocalserver.models.entity.AccountUsers;
 import tw.edu.ym.lab525.web.guidlocalserver.models.repo.AccountUsersRepository;
 import tw.edu.ym.lab525.web.guidlocalserver.models.repo.ActionAuditRepository;
@@ -40,6 +41,7 @@ public class SetupController {
     user.setPrefix("AdminTest");
     user.setTelephone("0910777666");
     user.setAddress("國立陽明大學");
+    user.setAuthority(Authority.ROLE_ADMIN);
 
     userRepo.save(user);
   }

@@ -48,14 +48,17 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
     String name = authentication.getName();
     String password = authentication.getCredentials().toString();
 
-    if (name.equals("admin") && password.equals("password")) {
+    if (name.equals(userRepo.findByUsername(name).getUsername())
+        && password.equals(userRepo.findByUsername(name).getPassword())
+        && userRepo.findByUsername(name).getAuthority().equals(Authority.ROLE_ADMIN)) {
       List<GrantedAuthority> grantedAuths = newArrayList();
       grantedAuths.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
       Authentication auth = new UsernamePasswordAuthenticationToken(name, password, grantedAuths);
       this.name = name;
       return auth;
     } else if (name.equals(userRepo.findByUsername(name).getUsername())
-        && password.equals(userRepo.findByUsername(name).getPassword())) {
+        && password.equals(userRepo.findByUsername(name).getPassword())
+        && userRepo.findByUsername(name).getAuthority().equals(Authority.ROLE_USER)) {
       List<GrantedAuthority> grantedAuths = newArrayList();
       grantedAuths.add(new SimpleGrantedAuthority("ROLE_USER"));
       Authentication auth = new UsernamePasswordAuthenticationToken(name, password, grantedAuths);

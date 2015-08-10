@@ -12,6 +12,11 @@
 <h1>新增使用者</h1>
 
 <form method="post" th:action="@{guid/register}">
+
+使用者權限：<select name="authority">
+      <option value="ROLE_ADMIN">系統管理者</option>
+      <option value="ROLE_USER">一般使用者</option>
+    </select><br/>
 　
 姓名：<input type="text" name="username"></input><br/>
 　

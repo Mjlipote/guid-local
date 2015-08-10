@@ -49,6 +49,7 @@ import tw.edu.ym.guid.client.field.TWNationalId;
 import tw.edu.ym.lab25.web.guidlocalserver.helper.HttpActionHelper;
 import tw.edu.ym.lab525.web.guidlocalserver.config.RestfulActionConfig;
 import tw.edu.ym.lab525.web.guidlocalserver.models.AccountUsersResponse;
+import tw.edu.ym.lab525.web.guidlocalserver.models.Authority;
 import tw.edu.ym.lab525.web.guidlocalserver.models.CustomAuthenticationProvider;
 import tw.edu.ym.lab525.web.guidlocalserver.models.SubprimeGuidRequest;
 import tw.edu.ym.lab525.web.guidlocalserver.models.entity.AccountUsers;
@@ -102,17 +103,19 @@ public class MainController {
    * @throws IOException
    */
   @RequestMapping(value = "/web/create", method = RequestMethod.POST)
-      String webCreate(ModelMap map, @RequestParam(value = "Gender") String gender,
-          @RequestParam(value = "BOY") String boy, @RequestParam(value = "BOM") String bom,
-          @RequestParam(value = "BOD") String bod, @RequestParam(value = "SID") String sid,
-          @RequestParam(value = "Name") String name) throws URISyntaxException, IOException {
-    if (gender.equals("") || boy.equals("") || bom.equals("") || bod.equals("") || sid.equals("") || name.equals("")) {
+      String webCreate(ModelMap map, @RequestParam(value = "gender") String gender,
+          @RequestParam(value = "birthOfYear") String birthOfYear,
+          @RequestParam(value = "birthOfMonth") String birthOfMonth,
+          @RequestParam(value = "birthOfDay") String birthOfDay, @RequestParam(value = "sid") String sid,
+          @RequestParam(value = "name") String name) throws URISyntaxException, IOException {
+    if (gender.equals("") || birthOfYear.equals("") || birthOfMonth.equals("") || birthOfDay.equals("")
+        || sid.equals("") || name.equals("")) {
       return "null-error";
     } else {
       PII pii = new PII.Builder(new Name(name.substring(1, 3), name.substring(0, 1)),
           gender.equals("M") ? Sex.MALE : Sex.FEMALE,
-          new Birthday(Integer.valueOf(boy), Integer.valueOf(bom), Integer.valueOf(bod)), new TWNationalId(sid))
-              .build();
+          new Birthday(Integer.valueOf(birthOfYear), Integer.valueOf(birthOfMonth), Integer.valueOf(birthOfDay)),
+          new TWNationalId(sid)).build();
 
       List<SubprimeGuidRequest> sgrs = newArrayList();
       SubprimeGuidRequest sgr = new SubprimeGuidRequest();
@@ -147,7 +150,7 @@ public class MainController {
           @RequestParam(value = "password") String password, @RequestParam(value = "email") String email,
           @RequestParam(value = "jobTitle") String jobTitle, @RequestParam(value = "institute") String institute,
           @RequestParam(value = "telephone") String telephone, @RequestParam(value = "address") String address,
-          @RequestParam(value = "prefix") String prefix) {
+          @RequestParam(value = "prefix") String prefix, @RequestParam(value = "authority") String authority) {
 
     if (username.equals("") || password.equals("") || institute.equals("") || email.equals("") || prefix.equals("")) {
       return "null-error";
@@ -161,6 +164,7 @@ public class MainController {
       user.setTelephone(telephone);
       user.setJobTitle(jobTitle);
       user.setAddress(address);
+      user.setAuthority(authority.equals("ROLE_ADMIN") ? Authority.ROLE_ADMIN : Authority.ROLE_USER);
 
       userRepo.save(user);
       map.addAttribute("users", user);
