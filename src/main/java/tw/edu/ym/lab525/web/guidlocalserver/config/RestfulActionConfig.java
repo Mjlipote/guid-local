@@ -25,7 +25,7 @@ package tw.edu.ym.lab525.web.guidlocalserver.config;
  */
 public class RestfulActionConfig {
 
-  public static final String GUID_CENTRAL_SERVER_URL = "http://localhost:8080/";
+  public static final String GUID_CENTRAL_SERVER_URL = "http://localhost:8080";
 
   public static final String CREATE = "guid/create";
 

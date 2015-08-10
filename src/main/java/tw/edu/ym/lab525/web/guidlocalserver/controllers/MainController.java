@@ -82,8 +82,8 @@ public class MainController {
       String create(@RequestBody List<SubprimeGuidRequest> spGuidCreateRequestList)
           throws JsonProcessingException, URISyntaxException {
 
-    return HttpActionHelper
-        .toPost(new URI("http://localhost:8080"), RestfulActionConfig.CREATE, spGuidCreateRequestList).getBody();
+    return HttpActionHelper.toPost(new URI(RestfulActionConfig.GUID_CENTRAL_SERVER_URL), RestfulActionConfig.CREATE,
+        spGuidCreateRequestList).getBody();
 
   }
 
@@ -121,8 +121,8 @@ public class MainController {
       sgr.setPrefix(userRepo.findByUsername(customAuthenticationProvider.getName()).getPrefix());
       sgrs.add(sgr);
 
-      map.addAttribute("spguids",
-          HttpActionHelper.toPost(new URI("http://localhost:8080"), RestfulActionConfig.CREATE, sgrs).getBody());
+      map.addAttribute("spguids", HttpActionHelper
+          .toPost(new URI(RestfulActionConfig.GUID_CENTRAL_SERVER_URL), RestfulActionConfig.CREATE, sgrs).getBody());
 
       return "spguids";
     }
@@ -224,8 +224,8 @@ public class MainController {
     for (String s : str) {
       list.add(s);
     }
-    map.addAttribute("result",
-        HttpActionHelper.toPost(new URI("http://localhost:8080"), RestfulActionConfig.COMPARISON, list).getBody());
+    map.addAttribute("result", HttpActionHelper
+        .toPost(new URI(RestfulActionConfig.GUID_CENTRAL_SERVER_URL), RestfulActionConfig.COMPARISON, list).getBody());
 
     return "comparison-result";
   }
