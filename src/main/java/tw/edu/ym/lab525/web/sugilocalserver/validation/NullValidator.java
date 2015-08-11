@@ -1,4 +1,4 @@
-package tw.edu.ym.lab525.web.sugilocalserver.valisation;
+package tw.edu.ym.lab525.web.sugilocalserver.validation;
 
 public final class NullValidator {
 

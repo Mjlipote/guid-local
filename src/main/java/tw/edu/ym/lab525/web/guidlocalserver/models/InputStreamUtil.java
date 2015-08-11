@@ -68,8 +68,7 @@ public final class InputStreamUtil {
       @Override
       public void doLine(String line) {
         sb.append(line);
-        if (lineSeparator)
-          sb.append(System.getProperty("line.separator"));
+        if (lineSeparator) sb.append(System.getProperty("line.separator"));
       }
 
     });
@@ -121,8 +120,7 @@ public final class InputStreamUtil {
    *          a LineOperator
    */
   public static void eachLine(InputStream is, LineOperator operator) {
-    if (is == null || operator == null)
-      throw new NullPointerException();
+    if (is == null || operator == null) throw new NullPointerException();
 
     BufferedReader br = null;
     String line;
@@ -131,13 +129,15 @@ public final class InputStreamUtil {
       while ((line = br.readLine()) != null)
         operator.doLine(line);
     } catch (IOException e) {
-      Logger.getLogger(InputStreamUtil.class.getName()).log(Level.SEVERE, null, e);
+      Logger.getLogger(InputStreamUtil.class.getName()).log(Level.SEVERE, null,
+          e);
     } finally {
       if (br != null) {
         try {
           br.close();
         } catch (IOException e) {
-          Logger.getLogger(InputStreamUtil.class.getName()).log(Level.SEVERE, null, e);
+          Logger.getLogger(InputStreamUtil.class.getName()).log(Level.SEVERE,
+              null, e);
         }
       }
     }

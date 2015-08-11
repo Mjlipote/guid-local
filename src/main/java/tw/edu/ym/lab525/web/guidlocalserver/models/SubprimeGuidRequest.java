@@ -67,7 +67,8 @@ public class SubprimeGuidRequest {
   public boolean equals(Object o) {
     if (o instanceof SubprimeGuidRequest) {
       SubprimeGuidRequest sgr = (SubprimeGuidRequest) o;
-      return Objects.equal(prefix, sgr.prefix) && Objects.equal(guidHash, sgr.guidHash);
+      return Objects.equal(prefix, sgr.prefix)
+          && Objects.equal(guidHash, sgr.guidHash);
     }
     return false;
   }
@@ -79,7 +80,8 @@ public class SubprimeGuidRequest {
 
   @Override
   public String toString() {
-    return "SubprimeGuidRequest [" + (prefix != null ? "prefix=" + prefix + ", " : "")
+    return "SubprimeGuidRequest ["
+        + (prefix != null ? "prefix=" + prefix + ", " : "")
         + (guidHash != null ? "guidHash=" + guidHash : "") + "]";
   }
 

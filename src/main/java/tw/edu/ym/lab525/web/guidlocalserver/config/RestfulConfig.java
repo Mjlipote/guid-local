@@ -1,9 +1,4 @@
 /**
- * 
- */
-package tw.edu.ym.lab525.web.guidlocalserver.config;
-
-/**
  *
  * @author Ming-Jheng Li
  *
@@ -23,6 +18,8 @@ package tw.edu.ym.lab525.web.guidlocalserver.config;
  *         permissions and limitations under the License.
  *
  */
+package tw.edu.ym.lab525.web.guidlocalserver.config;
+
 public class RestfulConfig {
 
   public static final String GUID_CENTRAL_SERVER_URL = "http://localhost:8081";

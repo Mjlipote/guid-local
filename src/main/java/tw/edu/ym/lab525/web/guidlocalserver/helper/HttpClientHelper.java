@@ -1,4 +1,4 @@
-package tw.edu.ym.lab25.web.guidlocalserver.helper;
+package tw.edu.ym.lab525.web.guidlocalserver.helper;
 
 import static com.google.common.collect.Lists.newArrayList;
 import static org.apache.http.conn.ssl.SSLSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER;
@@ -54,7 +54,8 @@ public final class HttpClientHelper {
 
   private final Action action;
 
-  public HttpClientHelper(URI url, String username, String password, Action action) {
+  public HttpClientHelper(URI url, String username, String password,
+      Action action) {
     this.uri = url;
     this.username = username;
     this.password = password;
@@ -67,11 +68,15 @@ public final class HttpClientHelper {
 
   public String toGet(String param) throws IOException {
     if (httpClient == null)
-      httpClient = new DefaultHttpClient(getSSLClientConnectionManager(uri.getPort() == -1 ? 443 : uri.getPort()));
+      httpClient = new DefaultHttpClient(getSSLClientConnectionManager(
+          uri.getPort() == -1 ? 443 : uri.getPort()));
 
-    HttpGet httpGet = new HttpGet("https://" + uri.getHost() + (uri.getPort() == -1 ? "" : ":" + uri.getPort()) + "/"
-        + API_ROOT + "/" + action + param);
-    httpGet.addHeader(BasicScheme.authenticate(new UsernamePasswordCredentials(username, password), "US-ASCII", false));
+    HttpGet httpGet = new HttpGet("https://" + uri.getHost()
+        + (uri.getPort() == -1 ? "" : ":" + uri.getPort()) + "/" + API_ROOT
+        + "/" + action + param);
+    httpGet.addHeader(BasicScheme.authenticate(
+        new UsernamePasswordCredentials(username, password), "US-ASCII",
+        false));
 
     HttpResponse response = checkStatusCode(httpClient.execute(httpGet));
     HttpEntity entity = response.getEntity();
@@ -81,14 +86,18 @@ public final class HttpClientHelper {
     return result;
   }
 
-  public List<String> toPsot(List<Map<String, String>> listmap) throws IOException {
+  public List<String> toPsot(List<Map<String, String>> listmap)
+      throws IOException {
     if (httpClient == null)
-      httpClient = new DefaultHttpClient(getSSLClientConnectionManager(uri.getPort() == -1 ? 443 : uri.getPort()));
+      httpClient = new DefaultHttpClient(getSSLClientConnectionManager(
+          uri.getPort() == -1 ? 443 : uri.getPort()));
 
-    HttpPost httpPost = new HttpPost(
-        "https://" + uri.getHost() + (uri.getPort() == -1 ? "" : ":" + uri.getPort()) + "/" + API_ROOT + "/" + action);
-    httpPost
-        .addHeader(BasicScheme.authenticate(new UsernamePasswordCredentials(username, password), "US-ASCII", false));
+    HttpPost httpPost = new HttpPost("https://" + uri.getHost()
+        + (uri.getPort() == -1 ? "" : ":" + uri.getPort()) + "/" + API_ROOT
+        + "/" + action);
+    httpPost.addHeader(BasicScheme.authenticate(
+        new UsernamePasswordCredentials(username, password), "US-ASCII",
+        false));
 
     List<NameValuePair> nvps = newArrayList();
 
@@ -141,10 +150,12 @@ public final class HttpClientHelper {
         }
 
         @Override
-        public void checkClientTrusted(X509Certificate[] certs, String authType) {}
+        public void checkClientTrusted(X509Certificate[] certs,
+            String authType) {}
 
         @Override
-        public void checkServerTrusted(X509Certificate[] certs, String authType) {}
+        public void checkServerTrusted(X509Certificate[] certs,
+            String authType) {}
 
       } }, new SecureRandom());
     } catch (KeyManagementException e) {
@@ -152,7 +163,8 @@ public final class HttpClientHelper {
       new GuidClientException(e);
     }
 
-    SSLSocketFactory sf = new SSLSocketFactory(sslContext, ALLOW_ALL_HOSTNAME_VERIFIER);
+    SSLSocketFactory sf =
+        new SSLSocketFactory(sslContext, ALLOW_ALL_HOSTNAME_VERIFIER);
     Scheme httpsScheme = new Scheme("https", port, sf);
     SchemeRegistry schemeRegistry = new SchemeRegistry();
     schemeRegistry.register(httpsScheme);

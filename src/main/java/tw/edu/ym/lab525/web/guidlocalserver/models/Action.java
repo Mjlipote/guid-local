@@ -25,7 +25,8 @@ package tw.edu.ym.lab525.web.guidlocalserver.models;
  */
 public enum Action {
 
-  CREATE("create"), BATCH("batch"), COMPARISON("comparison"), USER("user"), EXIST("exist");
+  CREATE("create"), BATCH("batch"), COMPARISON("comparison"), USER("user"),
+  EXIST("exist");
 
   private String action;
 

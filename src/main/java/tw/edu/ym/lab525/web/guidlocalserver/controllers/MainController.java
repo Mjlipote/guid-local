@@ -49,8 +49,8 @@ import tw.edu.ym.guid.client.field.Birthday;
 import tw.edu.ym.guid.client.field.Name;
 import tw.edu.ym.guid.client.field.Sex;
 import tw.edu.ym.guid.client.field.TWNationalId;
-import tw.edu.ym.lab25.web.guidlocalserver.helper.HttpActionHelper;
 import tw.edu.ym.lab525.web.guidlocalserver.config.RestfulConfig;
+import tw.edu.ym.lab525.web.guidlocalserver.helper.HttpActionHelper;
 import tw.edu.ym.lab525.web.guidlocalserver.models.AccountUsersResponse;
 import tw.edu.ym.lab525.web.guidlocalserver.models.Action;
 import tw.edu.ym.lab525.web.guidlocalserver.models.CustomAuthenticationProvider;
@@ -86,14 +86,15 @@ public class MainController {
    * @throws URISyntaxException
    */
   @RequestMapping(value = "/create", method = RequestMethod.POST)
-      String create(@RequestBody SubprimeGuidRequest spGuidCreateRequest)
-          throws JsonProcessingException, URISyntaxException {
+  String create(@RequestBody SubprimeGuidRequest spGuidCreateRequest)
+      throws JsonProcessingException, URISyntaxException {
 
     List<SubprimeGuidRequest> sgrs = newArrayList();
     sgrs.add(spGuidCreateRequest);
 
     Map<String, Object> flattenJson = JsonFlattener.flattenAsMap(
-        HttpActionHelper.toPost(new URI(RestfulConfig.GUID_CENTRAL_SERVER_URL), Action.CREATE, sgrs, false).getBody());
+        HttpActionHelper.toPost(new URI(RestfulConfig.GUID_CENTRAL_SERVER_URL),
+            Action.CREATE, sgrs, false).getBody());
 
     return flattenJson.get("[0].spguid").toString();
 
@@ -108,12 +109,17 @@ public class MainController {
    * @throws URISyntaxException
    */
   @RequestMapping(value = "/batch", method = RequestMethod.POST)
-      List<String> batch(@RequestBody List<SubprimeGuidRequest> spGuidCreateRequestList)
+  List<String> batch(
+      @RequestBody List<SubprimeGuidRequest> spGuidCreateRequestList)
           throws JsonProcessingException, URISyntaxException {
 
-    Map<String, Object> flattenJson = JsonFlattener.flattenAsMap(HttpActionHelper
-        .toPost(new URI(RestfulConfig.GUID_CENTRAL_SERVER_URL), Action.CREATE, spGuidCreateRequestList, false)
-        .getBody());
+    Map<String, Object> flattenJson =
+        JsonFlattener
+            .flattenAsMap(
+                HttpActionHelper
+                    .toPost(new URI(RestfulConfig.GUID_CENTRAL_SERVER_URL),
+                        Action.CREATE, spGuidCreateRequestList, false)
+                    .getBody());
 
     List<String> list = newArrayList();
 
@@ -139,23 +145,30 @@ public class MainController {
    * @throws IOException
    */
   @RequestMapping(value = "/web/create", method = RequestMethod.POST)
-      String webCreate(ModelMap map, @RequestParam(value = "gender") String gender,
-          @RequestParam(value = "birthOfYear") String birthOfYear,
-          @RequestParam(value = "birthOfMonth") String birthOfMonth,
-          @RequestParam(value = "birthOfDay") String birthOfDay, @RequestParam(value = "sid") String sid,
-          @RequestParam(value = "name") String name) throws URISyntaxException, IOException {
-    if (gender.equals("") || birthOfYear.equals("") || birthOfMonth.equals("") || birthOfDay.equals("")
-        || sid.equals("") || name.equals("")) {
+  String webCreate(ModelMap map, @RequestParam(value = "gender") String gender,
+      @RequestParam(value = "birthOfYear") String birthOfYear,
+      @RequestParam(value = "birthOfMonth") String birthOfMonth,
+      @RequestParam(value = "birthOfDay") String birthOfDay,
+      @RequestParam(value = "sid") String sid,
+      @RequestParam(value = "name") String name)
+          throws URISyntaxException, IOException {
+    if (gender.equals("") || birthOfYear.equals("") || birthOfMonth.equals("")
+        || birthOfDay.equals("") || sid.equals("") || name.equals("")) {
       return "null-error";
     } else {
-      PII pii = new PII.Builder(new Name(name.substring(1, 3), name.substring(0, 1)),
-          gender.equals("M") ? Sex.MALE : Sex.FEMALE,
-          new Birthday(Integer.valueOf(birthOfYear), Integer.valueOf(birthOfMonth), Integer.valueOf(birthOfDay)),
+      PII pii =
+          new PII.Builder(new Name(name.substring(1, 3), name.substring(0, 1)),
+              gender.equals("M") ? Sex.MALE : Sex.FEMALE,
+              new Birthday(Integer.valueOf(birthOfYear),
+                  Integer.valueOf(birthOfMonth), Integer.valueOf(birthOfDay)),
           new TWNationalId(sid)).build();
 
-      String prefix = userRepo.findByUsername(customAuthenticationProvider.getName()).getPrefix();
-      SubprimeGuid sg = spguidRepo.findByHashcode1AndHashcode2AndHashcode3AndPrefix(pii.getHashcodes().get(0),
-          pii.getHashcodes().get(1), pii.getHashcodes().get(2), prefix);
+      String prefix = userRepo
+          .findByUsername(customAuthenticationProvider.getName()).getPrefix();
+      SubprimeGuid sg =
+          spguidRepo.findByHashcode1AndHashcode2AndHashcode3AndPrefix(
+              pii.getHashcodes().get(0), pii.getHashcodes().get(1),
+              pii.getHashcodes().get(2), prefix);
 
       if (sg != null) {
         map.addAttribute("spguids", "重覆" + sg.getSpguid());
@@ -169,8 +182,11 @@ public class MainController {
         sgr.setPrefix(prefix);
         sgrs.add(sgr);
 
-        Map<String, Object> flattenJson = JsonFlattener.flattenAsMap(HttpActionHelper
-            .toPost(new URI(RestfulConfig.GUID_CENTRAL_SERVER_URL), Action.CREATE, sgrs, false).getBody());
+        Map<String, Object> flattenJson =
+            JsonFlattener.flattenAsMap(HttpActionHelper
+                .toPost(new URI(RestfulConfig.GUID_CENTRAL_SERVER_URL),
+                    Action.CREATE, sgrs, false)
+                .getBody());
 
         map.addAttribute("spguids", flattenJson.get("[0].spguid").toString());
 
@@ -202,13 +218,19 @@ public class MainController {
    * @return
    */
   @RequestMapping(value = "/register", method = RequestMethod.POST)
-      String register(ModelMap map, @RequestParam(value = "username") String username,
-          @RequestParam(value = "password") String password, @RequestParam(value = "email") String email,
-          @RequestParam(value = "jobTitle") String jobTitle, @RequestParam(value = "institute") String institute,
-          @RequestParam(value = "telephone") String telephone, @RequestParam(value = "address") String address,
-          @RequestParam(value = "prefix") String prefix, @RequestParam(value = "authority") String authority) {
+  String register(ModelMap map,
+      @RequestParam(value = "username") String username,
+      @RequestParam(value = "password") String password,
+      @RequestParam(value = "email") String email,
+      @RequestParam(value = "jobTitle") String jobTitle,
+      @RequestParam(value = "institute") String institute,
+      @RequestParam(value = "telephone") String telephone,
+      @RequestParam(value = "address") String address,
+      @RequestParam(value = "prefix") String prefix,
+      @RequestParam(value = "authority") String authority) {
 
-    if (username.equals("") || password.equals("") || institute.equals("") || email.equals("") || prefix.equals("")) {
+    if (username.equals("") || password.equals("") || institute.equals("")
+        || email.equals("") || prefix.equals("")) {
       return "null-error";
     } else {
       AccountUsers user = new AccountUsers();
@@ -220,7 +242,8 @@ public class MainController {
       user.setTelephone(telephone);
       user.setJobTitle(jobTitle);
       user.setAddress(address);
-      user.setRole(authority.equals("ROLE_ADMIN") ? Role.ROLE_ADMIN : Role.ROLE_USER);
+      user.setRole(
+          authority.equals("ROLE_ADMIN") ? Role.ROLE_ADMIN : Role.ROLE_USER);
 
       userRepo.save(user);
       map.addAttribute("users", user);
@@ -237,7 +260,7 @@ public class MainController {
 
   @ResponseBody
   @RequestMapping(value = "/user", method = RequestMethod.GET)
-      List<AccountUsersResponse> getCurrentUser() {
+  List<AccountUsersResponse> getCurrentUser() {
 
     return AccountUsersResponse.getResponse(userRepo.findAll());
   }
@@ -252,8 +275,10 @@ public class MainController {
    * @return
    */
   @RequestMapping(value = "/search/user", method = RequestMethod.GET)
-      String searchUser(ModelMap map, @RequestParam(value = "username") String username,
-          @RequestParam(value = "prefix") String prefix, @RequestParam(value = "institute") String institute) {
+  String searchUser(ModelMap map,
+      @RequestParam(value = "username") String username,
+      @RequestParam(value = "prefix") String prefix,
+      @RequestParam(value = "institute") String institute) {
 
     Set<AccountUsers> aus = newHashSet();
     if (username.equals("") && prefix.equals("") && institute.equals("")) {
@@ -277,15 +302,17 @@ public class MainController {
    * @throws URISyntaxException
    */
   @RequestMapping(value = "web/comparison", method = RequestMethod.POST)
-      String webComparison(ModelMap map, @RequestParam(value = "subprimeGuids") String subprimeGuids)
+  String webComparison(ModelMap map,
+      @RequestParam(value = "subprimeGuids") String subprimeGuids)
           throws JsonProcessingException, URISyntaxException {
     List<String> list = newArrayList();
     String[] str = subprimeGuids.trim().split(",");
     for (String s : str) {
       list.add(s);
     }
-    map.addAttribute("result", HttpActionHelper
-        .toPost(new URI(RestfulConfig.GUID_CENTRAL_SERVER_URL), Action.COMPARISON, list, false).getBody());
+    map.addAttribute("result",
+        HttpActionHelper.toPost(new URI(RestfulConfig.GUID_CENTRAL_SERVER_URL),
+            Action.COMPARISON, list, false).getBody());
 
     return "comparison-result";
   }
@@ -301,18 +328,24 @@ public class MainController {
    * @throws URISyntaxException
    */
   @RequestMapping(value = "/exist", method = RequestMethod.GET)
-      boolean isExist(@RequestParam("hashcode1") String hashcode1, @RequestParam("hashcode2") String hashcode2,
-          @RequestParam("hashcode3") String hashcode3) throws SQLException, URISyntaxException {
+  boolean isExist(@RequestParam("hashcode1") String hashcode1,
+      @RequestParam("hashcode2") String hashcode2,
+      @RequestParam("hashcode3") String hashcode3)
+          throws SQLException, URISyntaxException {
 
     boolean b = false;
     for (SubprimeGuid spguid : spguidRepo.findAll()) {
-      if (spguid.getHashcode1().equals(hashcode1) && spguid.getHashcode2().equals(hashcode2)
+      if (spguid.getHashcode1().equals(hashcode1)
+          && spguid.getHashcode2().equals(hashcode2)
           && spguid.getHashcode3().equals(hashcode3)) {
         b = true;
       } else {
-        b = HttpActionHelper.toGet(new URI(RestfulConfig.GUID_CENTRAL_SERVER_URL), Action.EXIST,
-            "?hashcode1=" + hashcode1 + "&hashcode2=" + hashcode2 + "&hashcode3=" + hashcode3, false).equals("true")
-                ? true : false;
+        b = HttpActionHelper
+            .toGet(new URI(RestfulConfig.GUID_CENTRAL_SERVER_URL), Action.EXIST,
+                "?hashcode1=" + hashcode1 + "&hashcode2=" + hashcode2
+                    + "&hashcode3=" + hashcode3,
+                false)
+            .equals("true") ? true : false;
       }
     }
 

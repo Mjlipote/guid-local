@@ -44,7 +44,8 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
   AccountUsersRepository userRepo;
 
   @Override
-  public Authentication authenticate(Authentication authentication) throws AuthenticationException {
+  public Authentication authenticate(Authentication authentication)
+      throws AuthenticationException {
     String name = authentication.getName();
     String password = authentication.getCredentials().toString();
 
@@ -53,7 +54,8 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
         && userRepo.findByUsername(name).getRole().equals(Role.ROLE_ADMIN)) {
       List<GrantedAuthority> grantedAuths = newArrayList();
       grantedAuths.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
-      Authentication auth = new UsernamePasswordAuthenticationToken(name, password, grantedAuths);
+      Authentication auth =
+          new UsernamePasswordAuthenticationToken(name, password, grantedAuths);
       this.name = name;
       return auth;
     } else if (name.equals(userRepo.findByUsername(name).getUsername())
@@ -61,7 +63,8 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
         && userRepo.findByUsername(name).getRole().equals(Role.ROLE_USER)) {
       List<GrantedAuthority> grantedAuths = newArrayList();
       grantedAuths.add(new SimpleGrantedAuthority("ROLE_USER"));
-      Authentication auth = new UsernamePasswordAuthenticationToken(name, password, grantedAuths);
+      Authentication auth =
+          new UsernamePasswordAuthenticationToken(name, password, grantedAuths);
       this.name = name;
       return auth;
     } else {

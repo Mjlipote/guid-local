@@ -25,6 +25,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import tw.edu.ym.lab525.web.guidlocalserver.models.entity.ActionAudit;
 
-public interface ActionAuditRepository extends JpaRepository<ActionAudit, Long> {
+public interface ActionAuditRepository
+    extends JpaRepository<ActionAudit, Long> {
 
 }

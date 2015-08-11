@@ -1,9 +1,4 @@
 /**
- * 
- */
-package tw.edu.ym.lab525.web.guidlocalserver.models;
-
-/**
  *
  * @author Ming-Jheng Li
  *
@@ -23,7 +18,10 @@ package tw.edu.ym.lab525.web.guidlocalserver.models;
  *         permissions and limitations under the License.
  *
  */
+package tw.edu.ym.lab525.web.guidlocalserver.models;
+
 public enum Role {
 
   ROLE_ADMIN, ROLE_USER;
+
 }

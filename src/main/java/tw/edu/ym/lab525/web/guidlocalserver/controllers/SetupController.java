@@ -31,7 +31,7 @@ public class SetupController {
    * 先將 Excel 的資料匯入
    */
   @PostConstruct
-      void preProcessData() {
+  void preProcessData() {
 
     AccountUsers user = new AccountUsers();
     user.setUsername("admin");

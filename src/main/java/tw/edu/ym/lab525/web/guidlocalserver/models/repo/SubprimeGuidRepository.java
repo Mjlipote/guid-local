@@ -25,8 +25,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import tw.edu.ym.lab525.web.guidlocalserver.models.entity.SubprimeGuid;
 
-public interface SubprimeGuidRepository extends JpaRepository<SubprimeGuid, Long> {
+public interface SubprimeGuidRepository
+    extends JpaRepository<SubprimeGuid, Long> {
 
-  public SubprimeGuid findByHashcode1AndHashcode2AndHashcode3AndPrefix(String hashcode1, String hashcode2,
-      String hashcode3, String prefix);
+  public SubprimeGuid findByHashcode1AndHashcode2AndHashcode3AndPrefix(
+      String hashcode1, String hashcode2, String hashcode3, String prefix);
 }

@@ -33,7 +33,8 @@ import com.zaxxer.hikari.HikariDataSource;
 @Configuration
 @EnableTransactionManagement
 @EnableJpaRepositories("tw.edu.ym.lab525.web.guidlocalserver.models.repo")
-@PropertySource({ "classpath:jdbc.properties", "classpath:hibernate.properties" })
+@PropertySource({ "classpath:jdbc.properties",
+    "classpath:hibernate.properties" })
 public class PersistenceConfig {
 
   @Autowired
@@ -41,7 +42,8 @@ public class PersistenceConfig {
 
   @Bean
   public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
-    LocalContainerEntityManagerFactoryBean emf = new LocalContainerEntityManagerFactoryBean();
+    LocalContainerEntityManagerFactoryBean emf =
+        new LocalContainerEntityManagerFactoryBean();
     emf.setDataSource(dataSource());
     emf.setPackagesToScan("tw.edu.ym.lab525.web.guidlocalserver.models.entity");
 
@@ -57,9 +59,11 @@ public class PersistenceConfig {
     return new Properties() {
 
       {
-        setProperty("hibernate.hbm2ddl.auto", env.getProperty("hibernate.hbm2ddl.auto", "create"));
+        setProperty("hibernate.hbm2ddl.auto",
+            env.getProperty("hibernate.hbm2ddl.auto", "create"));
         setProperty("hibernate.dialect", env.getProperty("hibernate.dialect"));
-        setProperty("hibernate.show_sql", env.getProperty("hibernate.show_sql", "true"));
+        setProperty("hibernate.show_sql",
+            env.getProperty("hibernate.show_sql", "true"));
         setProperty("hibernate.globally_quoted_identifiers",
             env.getProperty("hibernate.globally_quoted_identifiers", "true"));
       }
@@ -80,7 +84,8 @@ public class PersistenceConfig {
 
   @Autowired
   @Bean
-  public PlatformTransactionManager transactionManager(EntityManagerFactory emf) {
+  public PlatformTransactionManager transactionManager(
+      EntityManagerFactory emf) {
     JpaTransactionManager transactionManager = new JpaTransactionManager();
     transactionManager.setEntityManagerFactory(emf);
 
@@ -101,25 +106,27 @@ public class PersistenceConfig {
 
   @Bean
   public EmbeddedServletContainerFactory servletContainer() {
-    TomcatEmbeddedServletContainerFactory tomcat = new TomcatEmbeddedServletContainerFactory() {
+    TomcatEmbeddedServletContainerFactory tomcat =
+        new TomcatEmbeddedServletContainerFactory() {
 
-      @Override
-      protected void postProcessContext(Context context) {
-        SecurityConstraint securityConstraint = new SecurityConstraint();
-        securityConstraint.setUserConstraint("CONFIDENTIAL");
-        SecurityCollection collection = new SecurityCollection();
-        collection.addPattern("/*");
-        securityConstraint.addCollection(collection);
-        context.addConstraint(securityConstraint);
-      }
-    };
+          @Override
+          protected void postProcessContext(Context context) {
+            SecurityConstraint securityConstraint = new SecurityConstraint();
+            securityConstraint.setUserConstraint("CONFIDENTIAL");
+            SecurityCollection collection = new SecurityCollection();
+            collection.addPattern("/*");
+            securityConstraint.addCollection(collection);
+            context.addConstraint(securityConstraint);
+          }
+        };
 
     tomcat.addAdditionalTomcatConnectors(initiateHttpConnector());
     return tomcat;
   }
 
   private Connector initiateHttpConnector() {
-    Connector connector = new Connector("org.apache.coyote.http11.Http11NioProtocol");
+    Connector connector =
+        new Connector("org.apache.coyote.http11.Http11NioProtocol");
     connector.setScheme("http");
     connector.setPort(8080);
     connector.setSecure(false);

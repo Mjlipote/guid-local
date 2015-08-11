@@ -38,17 +38,19 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
   @Override
   protected void configure(HttpSecurity http) throws Exception {
-    http.authorizeRequests().antMatchers("/register", "/comparison").hasAuthority("ROLE_ADMIN").anyRequest()
-        .hasAnyAuthority("ROLE_ADMIN", "ROLE_USER").and().formLogin().loginPage("/login").permitAll().and().logout()
-        .permitAll().and().csrf().disable();
+    http.authorizeRequests().antMatchers("/register", "/comparison")
+        .hasAuthority("ROLE_ADMIN").anyRequest()
+        .hasAnyAuthority("ROLE_ADMIN", "ROLE_USER").and().formLogin()
+        .loginPage("/login").permitAll().and().logout().permitAll().and().csrf()
+        .disable();
 
     // http.authorizeRequests().anyRequest().permitAll().and().csrf().disable();
-
   }
 
   @Autowired
-  public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
+  public void configureGlobal(AuthenticationManagerBuilder auth)
+      throws Exception {
     auth.authenticationProvider(customAuthenticationProvider);
-
   }
+
 }

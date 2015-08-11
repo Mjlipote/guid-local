@@ -28,7 +28,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import tw.edu.ym.lab525.web.guidlocalserver.models.Role;
 import tw.edu.ym.lab525.web.guidlocalserver.models.entity.AccountUsers;
 
-public interface AccountUsersRepository extends JpaRepository<AccountUsers, Long> {
+public interface AccountUsersRepository
+    extends JpaRepository<AccountUsers, Long> {
 
   public AccountUsers findByUsername(String username);
 

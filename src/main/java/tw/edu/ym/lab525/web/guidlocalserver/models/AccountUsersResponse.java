@@ -48,7 +48,8 @@ public final class AccountUsersResponse {
 
   }
 
-  public static List<AccountUsersResponse> getResponse(List<AccountUsers> accountusers) {
+  public static List<AccountUsersResponse> getResponse(
+      List<AccountUsers> accountusers) {
 
     List<AccountUsersResponse> aurs = newArrayList();
 
@@ -133,12 +134,15 @@ public final class AccountUsersResponse {
 
   @Override
   public String toString() {
-    return "AccountUsersResponse [" + (username != null ? "username=" + username + ", " : "")
-        + (prefix != null ? "prefix=" + prefix + ", " : "") + (email != null ? "email=" + email + ", " : "")
+    return "AccountUsersResponse ["
+        + (username != null ? "username=" + username + ", " : "")
+        + (prefix != null ? "prefix=" + prefix + ", " : "")
+        + (email != null ? "email=" + email + ", " : "")
         + (institute != null ? "institute=" + institute + ", " : "")
         + (jobTitle != null ? "jobTitle=" + jobTitle + ", " : "")
         + (telephone != null ? "telephone=" + telephone + ", " : "")
-        + (address != null ? "address=" + address + ", " : "") + (role != null ? "role=" + role : "") + "]";
+        + (address != null ? "address=" + address + ", " : "")
+        + (role != null ? "role=" + role : "") + "]";
   }
 
 }
