@@ -29,8 +29,11 @@ public class SubprimeGuidRequest {
   private String prefix;
   private List<String> guidHash;
 
-  public SubprimeGuidRequest() {
+  public SubprimeGuidRequest() {}
 
+  public SubprimeGuidRequest(String prefix, List<String> guidHash) {
+    this.prefix = prefix;
+    this.guidHash = guidHash;
   }
 
   /**

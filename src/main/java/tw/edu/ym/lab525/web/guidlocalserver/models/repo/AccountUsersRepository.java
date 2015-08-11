@@ -31,6 +31,9 @@ import tw.edu.ym.lab525.web.guidlocalserver.models.entity.AccountUsers;
 public interface AccountUsersRepository
     extends JpaRepository<AccountUsers, Long> {
 
+  public AccountUsers findByUsernameAndPassword(String username,
+      String password);
+
   public AccountUsers findByUsername(String username);
 
   public Set<AccountUsers> findByPassword(String password);
