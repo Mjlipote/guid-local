@@ -64,8 +64,8 @@ public class LegacyGuidClientController {
     String base64Credentials = headers.getFirst("Authorization");
     String credentials = new String(Base64.decode(base64Credentials.getBytes()),
         Charset.forName("UTF-8"));
-    final String[] values = credentials.split(":", 2);
 
+    final String[] values = credentials.split(":", 2);
     AccountUsers acctUser =
         acctUserRepo.findByUsernameAndPassword(values[0], values[1]);
 
@@ -112,15 +112,11 @@ public class LegacyGuidClientController {
           new TypeToken<List<List<String>>>() {}.getType());
     }
 
-    if (hash != null)
-
-    {
+    if (hash != null) {
       sgrs.add(new SubprimeGuidRequest(prefix, hash));
     }
 
-    if (hashes != null)
-
-    {
+    if (hashes != null) {
       for (List<String> h : hashes) {
         sgrs.add(new SubprimeGuidRequest(prefix, h));
       }
