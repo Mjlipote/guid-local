@@ -7,7 +7,7 @@ import javax.persistence.Enumerated;
 
 import org.springframework.data.jpa.domain.AbstractPersistable;
 
-import tw.edu.ym.lab525.web.guidlocalserver.models.Authority;
+import tw.edu.ym.lab525.web.guidlocalserver.models.Role;
 
 @Entity
 public class AccountUsers extends AbstractPersistable<Long> {
@@ -31,7 +31,7 @@ public class AccountUsers extends AbstractPersistable<Long> {
 
   @Column(nullable = false)
   @Enumerated(EnumType.STRING)
-  private Authority authority;
+  private Role role;
 
   @Column(nullable = true)
   private String jobTitle;
@@ -122,18 +122,18 @@ public class AccountUsers extends AbstractPersistable<Long> {
   }
 
   /**
-   * @return the authority
+   * @return the role
    */
-  public Authority getAuthority() {
-    return authority;
+  public Role getRole() {
+    return role;
   }
 
   /**
-   * @param authority
-   *          the authority to set
+   * @param role
+   *          the role to set
    */
-  public void setAuthority(Authority authority) {
-    this.authority = authority;
+  public void setRole(Role role) {
+    this.role = role;
   }
 
   /**

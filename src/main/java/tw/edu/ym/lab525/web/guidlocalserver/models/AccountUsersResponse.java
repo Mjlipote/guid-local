@@ -42,7 +42,7 @@ public final class AccountUsersResponse {
 
   private String address;
 
-  private Authority authority;
+  private Role role;
 
   private AccountUsersResponse() {
 
@@ -61,7 +61,7 @@ public final class AccountUsersResponse {
       aur.jobTitle = au.getJobTitle();
       aur.telephone = au.getTelephone();
       aur.address = au.getAddress();
-      aur.authority = au.getAuthority();
+      aur.role = au.getRole();
       aurs.add(aur);
     }
     return aurs;
@@ -117,27 +117,28 @@ public final class AccountUsersResponse {
   }
 
   /**
-   * @return the authority
+   * @return the role
    */
-  public Authority getAuthority() {
-    return authority;
+  public Role getRole() {
+    return role;
   }
 
   /**
-   * @param authority
-   *          the authority to set
+   * @param role
+   *          the role to set
    */
-  public void setAuthority(Authority authority) {
-    this.authority = authority;
+  public void setRole(Role role) {
+    this.role = role;
   }
 
   @Override
   public String toString() {
-    return "AccountUsersResponse [" + (username != null ? "帳號名稱=" + username + ", " : "")
+    return "AccountUsersResponse [" + (username != null ? "username=" + username + ", " : "")
         + (prefix != null ? "prefix=" + prefix + ", " : "") + (email != null ? "email=" + email + ", " : "")
-        + (institute != null ? "工作單位=" + institute + ", " : "") + (jobTitle != null ? "工作職稱=" + jobTitle + ", " : "")
-        + (telephone != null ? "聯絡電話=" + telephone + ", " : "") + (address != null ? "聯絡地址=" + address + ", " : "")
-        + (authority != null ? "使用者權限=" + authority : "") + "]";
+        + (institute != null ? "institute=" + institute + ", " : "")
+        + (jobTitle != null ? "jobTitle=" + jobTitle + ", " : "")
+        + (telephone != null ? "telephone=" + telephone + ", " : "")
+        + (address != null ? "address=" + address + ", " : "") + (role != null ? "role=" + role : "") + "]";
   }
 
 }

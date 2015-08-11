@@ -25,7 +25,7 @@ import java.util.Set;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import tw.edu.ym.lab525.web.guidlocalserver.models.Authority;
+import tw.edu.ym.lab525.web.guidlocalserver.models.Role;
 import tw.edu.ym.lab525.web.guidlocalserver.models.entity.AccountUsers;
 
 public interface AccountUsersRepository extends JpaRepository<AccountUsers, Long> {
@@ -38,6 +38,6 @@ public interface AccountUsersRepository extends JpaRepository<AccountUsers, Long
 
   public Set<AccountUsers> findByInstitute(String institute);
 
-  public Set<AccountUsers> findByAuthority(Authority authority);
+  public Set<AccountUsers> findByRole(Role role);
 
 }
