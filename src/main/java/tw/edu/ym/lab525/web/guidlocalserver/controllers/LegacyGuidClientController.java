@@ -34,7 +34,9 @@ import org.springframework.http.HttpRequest;
 import org.springframework.security.crypto.codec.Base64;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.github.wnameless.json.flattener.JsonFlattener;
@@ -56,6 +58,7 @@ public class LegacyGuidClientController {
   AccountUsersRepository acctUserRepo;
 
   @RequestMapping("/authenticate")
+  @ResponseBody
   String authenticate(HttpRequest httpRequest) {
     HttpHeaders headers = httpRequest.getHeaders();
     String base64Credentials = headers.getFirst("Authorization");
@@ -69,7 +72,8 @@ public class LegacyGuidClientController {
     return new Gson().toJson(acctUser != null, Boolean.class);
   }
 
-  @RequestMapping("/create")
+  @RequestMapping(value = "/create", method = RequestMethod.POST)
+  @ResponseBody
   String create(@RequestParam("prefix") String prefix,
       @RequestParam("jsonHashes") String jsonHashes)
           throws JsonProcessingException, URISyntaxException {
@@ -108,11 +112,15 @@ public class LegacyGuidClientController {
           new TypeToken<List<List<String>>>() {}.getType());
     }
 
-    if (hash != null) {
+    if (hash != null)
+
+    {
       sgrs.add(new SubprimeGuidRequest(prefix, hash));
     }
 
-    if (hashes != null) {
+    if (hashes != null)
+
+    {
       for (List<String> h : hashes) {
         sgrs.add(new SubprimeGuidRequest(prefix, h));
       }
