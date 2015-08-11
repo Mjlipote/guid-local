@@ -153,19 +153,37 @@ public class MainController {
           new Birthday(Integer.valueOf(birthOfYear), Integer.valueOf(birthOfMonth), Integer.valueOf(birthOfDay)),
           new TWNationalId(sid)).build();
 
-      List<SubprimeGuidRequest> sgrs = newArrayList();
-      SubprimeGuidRequest sgr = new SubprimeGuidRequest();
+      String prefix = userRepo.findByUsername(customAuthenticationProvider.getName()).getPrefix();
+      SubprimeGuid sg = spguidRepo.findByHashcode1AndHashcode2AndHashcode3AndPrefix(pii.getHashcodes().get(0),
+          pii.getHashcodes().get(1), pii.getHashcodes().get(2), prefix);
 
-      sgr.setGuidHash(pii.getHashcodes());
-      sgr.setPrefix(userRepo.findByUsername(customAuthenticationProvider.getName()).getPrefix());
-      sgrs.add(sgr);
+      if (sg != null) {
+        map.addAttribute("spguids", "重覆" + sg.getSpguid());
+        return "create-result";
+      } else {
 
-      Map<String, Object> flattenJson = JsonFlattener.flattenAsMap(HttpActionHelper
-          .toPost(new URI(RestfulConfig.GUID_CENTRAL_SERVER_URL), Action.CREATE, sgrs, false).getBody());
+        List<SubprimeGuidRequest> sgrs = newArrayList();
+        SubprimeGuidRequest sgr = new SubprimeGuidRequest();
 
-      map.addAttribute("spguids", flattenJson.get("[0].spguid").toString());
+        sgr.setGuidHash(pii.getHashcodes());
+        sgr.setPrefix(prefix);
+        sgrs.add(sgr);
 
-      return "create-result";
+        Map<String, Object> flattenJson = JsonFlattener.flattenAsMap(HttpActionHelper
+            .toPost(new URI(RestfulConfig.GUID_CENTRAL_SERVER_URL), Action.CREATE, sgrs, false).getBody());
+
+        map.addAttribute("spguids", flattenJson.get("[0].spguid").toString());
+
+        SubprimeGuid spGuid = new SubprimeGuid();
+        spGuid.setSpguid(flattenJson.get("[0].spguid").toString());
+        spGuid.setHashcode1(pii.getHashcodes().get(0));
+        spGuid.setHashcode2(pii.getHashcodes().get(1));
+        spGuid.setHashcode3(pii.getHashcodes().get(2));
+        spGuid.setPrefix(prefix);
+        spguidRepo.save(spGuid);
+
+        return "create-result";
+      }
     }
   }
 
@@ -262,7 +280,7 @@ public class MainController {
       String webComparison(ModelMap map, @RequestParam(value = "subprimeGuids") String subprimeGuids)
           throws JsonProcessingException, URISyntaxException {
     List<String> list = newArrayList();
-    String[] str = subprimeGuids.split(",");
+    String[] str = subprimeGuids.trim().split(",");
     for (String s : str) {
       list.add(s);
     }

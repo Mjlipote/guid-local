@@ -35,6 +35,9 @@ public class SubprimeGuid extends AbstractPersistable<Long> {
   private String spguid;
 
   @Column(nullable = false)
+  private String prefix;
+
+  @Column(nullable = false)
   private String hashcode1;
 
   @Column(nullable = false)
@@ -48,6 +51,21 @@ public class SubprimeGuid extends AbstractPersistable<Long> {
    */
   public String getSpguid() {
     return spguid;
+  }
+
+  /**
+   * @return the prefix
+   */
+  public String getPrefix() {
+    return prefix;
+  }
+
+  /**
+   * @param prefix
+   *          the prefix to set
+   */
+  public void setPrefix(String prefix) {
+    this.prefix = prefix;
   }
 
   /**

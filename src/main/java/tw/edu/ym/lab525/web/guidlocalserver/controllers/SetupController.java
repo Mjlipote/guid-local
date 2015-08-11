@@ -53,6 +53,7 @@ public class SetupController {
         "e92e7cf25a726bb9f7aff7c36c31fa4a96b0014a3a7ce5018c6b84bc459df512653253d01e0742878ca7ddd7bd9c5179273fa915761a9ba84948fd85007cc8f900");
     spguid.setHashcode3(
         "636ce21c211c33e6ee8e2f7590034fef8a3a5b3263c6d83af9c54b490175d649f11937e855509f57c986d1882cb5259372a37697899660afff8db6c8049de6a900");
+    spguid.setPrefix("TEST");
     spguid.setSpguid("TEST-Y3XZU2NG");
 
     spGuidRepo.save(spguid);
