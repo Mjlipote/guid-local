@@ -37,12 +37,12 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 
-import tw.edu.ym.lab525.web.guidlocalserver.Application;
-import tw.edu.ym.lab525.web.guidlocalserver.config.RestfulConfig;
-import tw.edu.ym.lab525.web.guidlocalserver.helper.HttpActionHelper;
-import tw.edu.ym.lab525.web.guidlocalserver.helper.HttpClientHelper;
-import tw.edu.ym.lab525.web.guidlocalserver.models.Action;
-import tw.edu.ym.lab525.web.guidlocalserver.models.SubprimeGuidRequest;
+import tw.guid.local.Application;
+import tw.guid.local.config.RestfulConfig;
+import tw.guid.local.helper.HttpActionHelper;
+import tw.guid.local.helper.HttpClientHelper;
+import tw.guid.local.models.Action;
+import tw.guid.local.models.SubprimeGuidRequest;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = Application.class)
