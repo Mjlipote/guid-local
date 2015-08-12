@@ -27,7 +27,8 @@ public enum Action {
 
   CREATE("create"), AUTHENTICATE("authenticate"), EXIST("exist"),
   COMPARISON("comparison"), WEB_CREATE("web/create"), WEB_EXIST("web/exist"),
-  WEB_USERS("web/users"), WEB_COMPARISON("web/comparison");
+  WEB_USERS("web/users"), WEB_COMPARISON("web/comparison"),
+  API_USERS("api/users"), API_EXIST("api/exist");
 
   private String action;
 

@@ -38,11 +38,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
   @Override
   protected void configure(HttpSecurity http) throws Exception {
-    http.authorizeRequests().antMatchers("/register", "/comparison")
-        .hasAuthority("ROLE_ADMIN").antMatchers("/*", "/guid/web/**")
-        .hasAnyAuthority("ROLE_ADMIN", "ROLE_USER").anyRequest().permitAll()
-        .and().formLogin().loginPage("/login").permitAll().and().logout()
-        .permitAll().and().csrf().disable();
+    // http.authorizeRequests().antMatchers("/register", "/comparison")
+    // .hasAuthority("ROLE_ADMIN").antMatchers("/*", "/guid/web/**")
+    // .hasAnyAuthority("ROLE_ADMIN", "ROLE_USER").anyRequest().permitAll()
+    // .and().formLogin().loginPage("/login").permitAll().and().logout()
+    // .permitAll().and().csrf().disable();
 
     http.authorizeRequests().anyRequest().authenticated().and().csrf().disable()
         .httpBasic();

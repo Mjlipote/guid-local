@@ -27,7 +27,6 @@ import static com.google.common.collect.Sets.newHashSet;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -290,41 +289,6 @@ public class WebController {
             Action.COMPARISON, list, false).getBody());
 
     return "comparison-result";
-  }
-
-  /**
-   * 確認是否存在於 local server 資料庫
-   * 
-   * @param hashcode1
-   * @param hashcode2
-   * @param hashcode3
-   * @return
-   * @throws SQLException
-   * @throws URISyntaxException
-   */
-  @RequestMapping(value = "/exist", method = RequestMethod.GET)
-  boolean exist(@RequestParam("hashcode1") String hashcode1,
-      @RequestParam("hashcode2") String hashcode2,
-      @RequestParam("hashcode3") String hashcode3)
-          throws SQLException, URISyntaxException {
-
-    boolean b = false;
-    for (SubprimeGuid spguid : spguidRepo.findAll()) {
-      if (spguid.getHashcode1().equals(hashcode1)
-          && spguid.getHashcode2().equals(hashcode2)
-          && spguid.getHashcode3().equals(hashcode3)) {
-        b = true;
-      } else {
-        b = HttpActionHelper
-            .toGet(new URI(RestfulConfig.GUID_CENTRAL_SERVER_URL), Action.EXIST,
-                "?hashcode1=" + hashcode1 + "&hashcode2=" + hashcode2
-                    + "&hashcode3=" + hashcode3,
-                false)
-            .equals("true") ? true : false;
-      }
-    }
-
-    return b;
   }
 
 }

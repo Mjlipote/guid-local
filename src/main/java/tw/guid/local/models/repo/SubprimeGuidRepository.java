@@ -30,4 +30,8 @@ public interface SubprimeGuidRepository
 
   public SubprimeGuid findByHashcode1AndHashcode2AndHashcode3AndPrefix(
       String hashcode1, String hashcode2, String hashcode3, String prefix);
+
+  public SubprimeGuid findByHashcode1AndHashcode2AndHashcode3(String hashcode1,
+      String hashcode2, String hashcode3);
+
 }

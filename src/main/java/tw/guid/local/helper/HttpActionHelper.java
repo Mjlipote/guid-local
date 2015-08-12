@@ -70,18 +70,25 @@ public class HttpActionHelper {
       headers.add("custom", "true");
     }
 
+    String http[] = url.toString().split("://");
+
     HttpEntity<String> jsonRequest =
         new HttpEntity<String>(mapper.writeValueAsString(object), headers);
-    ResponseEntity<String> response = restTemplate.exchange("http://"
-        + url.getHost() + ":" + url.getPort() + "/" + API_ROOT + "/" + action,
-        HttpMethod.POST, jsonRequest, String.class);
+    ResponseEntity<String> response =
+        restTemplate.exchange(
+            http[0] + "://" + url.getHost() + ":" + url.getPort() + "/"
+                + API_ROOT + "/" + action,
+            HttpMethod.POST, jsonRequest, String.class);
 
     // HttpEntity<String> jsonRequest = new
     // HttpEntity<String>(mapper.writeValueAsString(object), headers);
     //
-    // ResponseEntity<String> response = restTemplate.postForEntity(
-    // "http://" + url.getHost() + ":" + url.getPort() + "/" + API_ROOT + "/" +
-    // action, jsonRequest, String.class);
+    // ResponseEntity<String> response =
+    // restTemplate
+    // .postForEntity(
+    // http[0] + "://" + url.getHost() + ":" + url.getPort() + "/"
+    // + API_ROOT + "/" + action,
+    // jsonRequest, String.class);
 
     return response;
   }
@@ -104,15 +111,17 @@ public class HttpActionHelper {
       headers.add("custom", "true");
     }
 
+    String http[] = url.toString().split("://");
+
     // ResponseEntity<String> response = restTemplate.getForEntity(
-    // "http://" + url.getHost() + ":" + url.getPort() + "/" + API_ROOT + "/" +
-    // action + param, String.class);
+    // http[0] + "://" + url.getHost() + ":" + url.getPort() + "/"
+    // + API_ROOT + "/" + action + param, String.class);
 
     HttpEntity<String> jsonRequest = new HttpEntity<String>(headers);
     ResponseEntity<String> response =
         restTemplate.exchange(
-            "http://" + url.getHost() + ":" + url.getPort() + "/" + API_ROOT
-                + "/" + action + param,
+            http[0] + "://" + url.getHost() + ":" + url.getPort() + "/"
+                + API_ROOT + "/" + action + param,
             HttpMethod.GET, jsonRequest, String.class);
 
     return response;
