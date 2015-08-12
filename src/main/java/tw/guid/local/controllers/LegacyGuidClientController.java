@@ -46,6 +46,7 @@ import com.google.gson.reflect.TypeToken;
 import tw.guid.local.config.RestfulConfig;
 import tw.guid.local.helper.HttpActionHelper;
 import tw.guid.local.models.Action;
+import tw.guid.local.models.CustomAuthenticationProvider;
 import tw.guid.local.models.SubprimeGuidRequest;
 import tw.guid.local.models.entity.AccountUsers;
 import tw.guid.local.models.repo.AccountUsersRepository;
@@ -56,6 +57,12 @@ public class LegacyGuidClientController {
 
   @Autowired
   AccountUsersRepository acctUserRepo;
+
+  @Autowired
+  CustomAuthenticationProvider customAuthenticationProvider;
+
+  @Autowired
+  AccountUsersRepository userRepo;
 
   @RequestMapping("/authenticate")
   @ResponseBody
@@ -77,6 +84,15 @@ public class LegacyGuidClientController {
   String create(@RequestParam("prefix") String prefix,
       @RequestParam("jsonHashes") String jsonHashes)
           throws JsonProcessingException, URISyntaxException {
+    AccountUsers acc =
+        userRepo.findByUsername(customAuthenticationProvider.getName());
+
+    if (prefix.equals("") && acc != null) {
+      prefix = acc.getPrefix();
+    } else if (prefix.equals("") && acc == null) {
+      prefix = "PSEUDO";
+    }
+
     List<SubprimeGuidRequest> sgrs = buildRequests(prefix, jsonHashes);
 
     Map<String, Object> flattenJson = JsonFlattener.flattenAsMap(
