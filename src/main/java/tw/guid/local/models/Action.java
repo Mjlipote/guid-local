@@ -25,8 +25,9 @@ package tw.guid.local.models;
  */
 public enum Action {
 
-  CREATE("create"), BATCH("batch"), COMPARISON("comparison"), USER("user"),
-  EXIST("exist");
+  CREATE("create"), AUTHENTICATE("authenticate"), EXIST("exist"),
+  COMPARISON("comparison"), WEB_CREATE("web/create"), WEB_EXIST("web/exist"),
+  WEB_USERS("web/users"), WEB_COMPARISON("web/comparison");
 
   private String action;
 
