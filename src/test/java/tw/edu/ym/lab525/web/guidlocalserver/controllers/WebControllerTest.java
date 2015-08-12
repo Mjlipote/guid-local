@@ -47,7 +47,7 @@ import tw.edu.ym.lab525.web.guidlocalserver.models.SubprimeGuidRequest;
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = Application.class)
 @WebIntegrationTest
-public class MainControllerTest {
+public class WebControllerTest {
 
   @Test
   public void testCreateSubprimeGuid() throws URISyntaxException, IOException {

@@ -62,10 +62,10 @@ import tw.edu.ym.lab525.web.guidlocalserver.models.repo.AccountUsersRepository;
 import tw.edu.ym.lab525.web.guidlocalserver.models.repo.ActionAuditRepository;
 import tw.edu.ym.lab525.web.guidlocalserver.models.repo.SubprimeGuidRepository;
 
-@RequestMapping("/guid")
+@RequestMapping("/guid/web")
 // @RestController
 @Controller
-public class MainController {
+public class WebController {
 
   @Autowired
   ActionAuditRepository actionAuditRepo;
@@ -75,30 +75,6 @@ public class MainController {
   AccountUsersRepository userRepo;
   @Autowired
   CustomAuthenticationProvider customAuthenticationProvider;
-
-  /**
-   *
-   * 單筆產生 GUID
-   *
-   * @param spGuidCreateRequest
-   * @return
-   * @throws JsonProcessingException
-   * @throws URISyntaxException
-   */
-  @RequestMapping(value = "/create", method = RequestMethod.POST)
-  String create(@RequestBody SubprimeGuidRequest spGuidCreateRequest)
-      throws JsonProcessingException, URISyntaxException {
-
-    List<SubprimeGuidRequest> sgrs = newArrayList();
-    sgrs.add(spGuidCreateRequest);
-
-    Map<String, Object> flattenJson = JsonFlattener.flattenAsMap(
-        HttpActionHelper.toPost(new URI(RestfulConfig.GUID_CENTRAL_SERVER_URL),
-            Action.CREATE, sgrs, false).getBody());
-
-    return flattenJson.get("[0].spguid").toString();
-
-  }
 
   /**
    * 批次產生 GUID
@@ -144,7 +120,7 @@ public class MainController {
    * @throws URISyntaxException
    * @throws IOException
    */
-  @RequestMapping(value = "/web/create", method = RequestMethod.POST)
+  @RequestMapping(value = "/create", method = RequestMethod.POST)
   String webCreate(ModelMap map, @RequestParam(value = "gender") String gender,
       @RequestParam(value = "birthOfYear") String birthOfYear,
       @RequestParam(value = "birthOfMonth") String birthOfMonth,
@@ -259,8 +235,8 @@ public class MainController {
    */
 
   @ResponseBody
-  @RequestMapping(value = "/user", method = RequestMethod.GET)
-  List<AccountUsersResponse> getCurrentUser() {
+  @RequestMapping(value = "/users", method = RequestMethod.GET)
+  List<AccountUsersResponse> users() {
 
     return AccountUsersResponse.getResponse(userRepo.findAll());
   }
@@ -274,9 +250,8 @@ public class MainController {
    * @param institute
    * @return
    */
-  @RequestMapping(value = "/search/user", method = RequestMethod.GET)
-  String searchUser(ModelMap map,
-      @RequestParam(value = "username") String username,
+  @RequestMapping(value = "/user", method = RequestMethod.GET)
+  String user(ModelMap map, @RequestParam(value = "username") String username,
       @RequestParam(value = "prefix") String prefix,
       @RequestParam(value = "institute") String institute) {
 
@@ -301,8 +276,8 @@ public class MainController {
    * @throws JsonProcessingException
    * @throws URISyntaxException
    */
-  @RequestMapping(value = "web/comparison", method = RequestMethod.POST)
-  String webComparison(ModelMap map,
+  @RequestMapping(value = "/comparison", method = RequestMethod.POST)
+  String comparison(ModelMap map,
       @RequestParam(value = "subprimeGuids") String subprimeGuids)
           throws JsonProcessingException, URISyntaxException {
     List<String> list = newArrayList();
@@ -328,7 +303,7 @@ public class MainController {
    * @throws URISyntaxException
    */
   @RequestMapping(value = "/exist", method = RequestMethod.GET)
-  boolean isExist(@RequestParam("hashcode1") String hashcode1,
+  boolean exist(@RequestParam("hashcode1") String hashcode1,
       @RequestParam("hashcode2") String hashcode2,
       @RequestParam("hashcode3") String hashcode3)
           throws SQLException, URISyntaxException {

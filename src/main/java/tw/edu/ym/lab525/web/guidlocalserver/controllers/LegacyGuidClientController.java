@@ -50,7 +50,7 @@ import tw.edu.ym.lab525.web.guidlocalserver.models.SubprimeGuidRequest;
 import tw.edu.ym.lab525.web.guidlocalserver.models.entity.AccountUsers;
 import tw.edu.ym.lab525.web.guidlocalserver.models.repo.AccountUsersRepository;
 
-@RequestMapping("/guid/client")
+@RequestMapping("/guid")
 @Controller
 public class LegacyGuidClientController {
 
