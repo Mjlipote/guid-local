@@ -64,7 +64,7 @@ public class LegacyGuidClientController {
   @Autowired
   AccountUsersRepository userRepo;
 
-  @RequestMapping("/authenticate")
+  @RequestMapping(value = "/authenticate", method = RequestMethod.GET)
   @ResponseBody
   String authenticate(HttpRequest httpRequest) {
     HttpHeaders headers = httpRequest.getHeaders();
