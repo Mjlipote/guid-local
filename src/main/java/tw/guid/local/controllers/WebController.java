@@ -38,7 +38,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.github.wnameless.json.flattener.JsonFlattener;
@@ -62,7 +61,6 @@ import tw.guid.local.models.repo.ActionAuditRepository;
 import tw.guid.local.models.repo.SubprimeGuidRepository;
 
 @RequestMapping("/guid/web")
-// @RestController
 @Controller
 public class WebController {
 
@@ -233,10 +231,10 @@ public class WebController {
    * @return
    */
 
-  @ResponseBody
   @RequestMapping(value = "/users", method = RequestMethod.GET)
   List<AccountUsersResponse> users() {
 
+    // 未補完
     return AccountUsersResponse.getResponse(userRepo.findAll());
   }
 

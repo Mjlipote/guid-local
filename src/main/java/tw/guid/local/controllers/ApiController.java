@@ -26,11 +26,11 @@ import java.sql.SQLException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import tw.guid.local.config.RestfulConfig;
 import tw.guid.local.helper.HttpActionHelper;
@@ -42,8 +42,8 @@ import tw.guid.local.models.repo.ActionAuditRepository;
 import tw.guid.local.models.repo.SubprimeGuidRepository;
 
 @RequestMapping("/guid/api")
-// @RestController
-@Controller
+@RestController
+
 public class ApiController {
 
   @Autowired
@@ -60,7 +60,6 @@ public class ApiController {
    * 
    * @return
    */
-
   @ResponseBody
   @RequestMapping(value = "/users", method = RequestMethod.GET)
   List<AccountUsersResponse> users() {
@@ -84,10 +83,10 @@ public class ApiController {
       @RequestParam("hashcode3") String hashcode3)
           throws SQLException, URISyntaxException {
 
-    boolean b = false;
+    boolean b;
 
     if (spguidRepo.findByHashcode1AndHashcode2AndHashcode3(hashcode1, hashcode2,
-        hashcode3) != null) {
+        hashcode3).size() > 0) {
       b = true;
     } else {
       b = HttpActionHelper

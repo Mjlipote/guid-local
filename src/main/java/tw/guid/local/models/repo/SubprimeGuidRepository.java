@@ -21,6 +21,8 @@
 
 package tw.guid.local.models.repo;
 
+import java.util.Set;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import tw.guid.local.models.entity.SubprimeGuid;
@@ -31,7 +33,7 @@ public interface SubprimeGuidRepository
   public SubprimeGuid findByHashcode1AndHashcode2AndHashcode3AndPrefix(
       String hashcode1, String hashcode2, String hashcode3, String prefix);
 
-  public SubprimeGuid findByHashcode1AndHashcode2AndHashcode3(String hashcode1,
-      String hashcode2, String hashcode3);
+  public Set<SubprimeGuid> findByHashcode1AndHashcode2AndHashcode3(
+      String hashcode1, String hashcode2, String hashcode3);
 
 }
