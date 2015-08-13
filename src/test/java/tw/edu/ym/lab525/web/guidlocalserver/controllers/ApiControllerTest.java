@@ -48,7 +48,7 @@ public class ApiControllerTest {
 
     assertEquals(
         HttpActionHelper.toGet(new URI(RestfulConfig.GUID_LOCAL_SERVER_URL),
-            Action.WEB_USERS, "", true).getBody(),
+            Action.API_USERS, "", true).getBody(),
         "[" + "{\"username\":\"admin\",\"prefix\":\"AdminTest\",\"email\":\"admin@ym.com\",\"institute\":\"國立陽明大學\",\"jobTitle\":\"系統管理員\",\"telephone\":\"0910777666\",\"address\":\"國立陽明大學\",\"role\":\"ROLE_ADMIN\"}"
             + "]");
 
@@ -67,19 +67,20 @@ public class ApiControllerTest {
 
     assertTrue(HttpActionHelper
         .toGet(new URI(RestfulConfig.GUID_LOCAL_SERVER_URL), Action.API_EXIST,
-            "?hashcode1=f3042960fc9351d1ad99550817f892968207c6cb2539c6fd11b3258e815dedfe4f8f3f2a95c846b32aacf6201282921e2b93812587cc19752cfc9c0cf236a57b00&hashcode2=e92e7cf25a726bb9f7aff7c36c31fa4a96b0014a3a7ce5018c6b84bc459df512653253d01e0742878ca7ddd7bd9c5179273fa915761a9ba84948fd85007cc8f900&hashcode3=636ce21c211c33e6ee8e2f7590034fef8a3a5b3263c6d83af9c54b490175d649f11937e855509f57c986d1882cb5259372a37697899660afff8db6c8049de6a900",
+            "?hashcode1="
+                + "f3042960fc9351d1ad99550817f892968207c6cb2539c6fd11b3258e815dedfe4f8f3f2a95c846b32aacf6201282921e2b93812587cc19752cfc9c0cf236a57b00"
+                + "&hashcode2="
+                + "e92e7cf25a726bb9f7aff7c36c31fa4a96b0014a3a7ce5018c6b84bc459df512653253d01e0742878ca7ddd7bd9c5179273fa915761a9ba84948fd85007cc8f900"
+                + "&hashcode3="
+                + "636ce21c211c33e6ee8e2f7590034fef8a3a5b3263c6d83af9c54b490175d649f11937e855509f57c986d1882cb5259372a37697899660afff8db6c8049de6a900",
             true)
         .getBody().equals("true"));
 
-    // assertTrue(HttpActionHelper
-    // .toGet(new URI(RestfulConfig.GUID_LOCAL_SERVER_URL), Action.API_EXIST,
-    // "?hashcode1=xxxxx&hashcode2=yyyyy&hashcode3=zzzzz", true)
-    // .getBody().equals("false"));
+    assertTrue(HttpActionHelper.toGet(
+        new URI(RestfulConfig.GUID_LOCAL_SERVER_URL), Action.API_EXIST,
+        "?hashcode1=" + "xxx" + "&hashcode2=" + "yyy" + "&hashcode3=" + "zzz",
+        true).getBody().equals("false"));
 
-    // HttpClientHelper hch =
-    // new HttpClientHelper(new URI(RestfulConfig.GUID_CENTRAL_SERVER_URL),
-    // "admin", "password", Action.WEB_EXIST);
-    // assertTrue(hch.toGet().equals("false"));
   }
 
 }
