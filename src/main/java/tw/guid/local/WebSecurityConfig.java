@@ -40,10 +40,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
   protected void configure(HttpSecurity http) throws Exception {
     http.authorizeRequests().antMatchers("/register", "/comparison")
         .hasAuthority("ROLE_ADMIN").antMatchers("/*")
-        .hasAnyAuthority("ROLE_ADMIN", "ROLE_USER").antMatchers("/guid/**")
+        .hasAnyAuthority("ROLE_ADMIN", "ROLE_USER").antMatchers("/guid/**/*")
         .permitAll().and().formLogin().loginPage("/login").permitAll().and()
         .logout().permitAll();
-
+    http.csrf().disable();
   }
 
   @Autowired
