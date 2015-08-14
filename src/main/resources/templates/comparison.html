@@ -1,22 +1,24 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
-  xmlns:th="http://www.thymeleaf.org">
+	xmlns:th="http://www.thymeleaf.org">
 <head>
-<meta charset="UTF-8"/>
-<title> 比對二次編碼 </title>
+<meta charset="UTF-8" />
+<title>比對二次編碼</title>
 <th:block th:include="head :: bootstrap" />
 <style type="text/css">
 </style>
 </head>
 <body>
-<h1>比對二次編碼</h1>
+	<h1>比對二次編碼</h1>
 
-<form method="post" th:action="@{guid/web/comparison}">
-　
-填入二次編碼字串列（以 "," 做區隔）：<textarea name="subprimeGuids"></textarea><br/>
-　
-　<input type="submit" value="進行比對"></input>
-</form>
-<div><a th:href="@{/home}">回到首頁</a></div>
+	<form method="post" th:action="@{guid/web/comparison}">
+
+		填入二次編碼字串列（以 "," 做區隔）：
+		<textarea name="subprimeGuids"></textarea>
+		<br /> <input class="form-control" type="submit" value="進行比對"></input>
+	</form>
+	<div>
+		<a th:href="@{/home}">回到首頁</a>
+	</div>
 </body>
 </html>

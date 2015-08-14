@@ -62,11 +62,22 @@ public class LegacyControllerTest {
         });
   }
 
+  // String hc1 =
+  // "f3042960fc9351d1ad99550817f892968207c6cb2539c6fd11b3258e815dedfe4f8f3f2a95c846b32aacf6201282921e2b93812587cc19752cfc9c0cf236a57b00";
+  // String hc2 =
+  // "e92e7cf25a726bb9f7aff7c36c31fa4a96b0014a3a7ce5018c6b84bc459df512653253d01e0742878ca7ddd7bd9c5179273fa915761a9ba84948fd85007cc8f900";
+  // String hc3 =
+  // "636ce21c211c33e6ee8e2f7590034fef8a3a5b3263c6d83af9c54b490175d649f11937e855509f57c986d1882cb5259372a37697899660afff8db6c8049de6a900";
+
   @Test
   public void testAuthenticate() throws IOException, URISyntaxException {
     GuidClient gc = new GuidClient(new URI(RestfulConfig.GUID_LOCAL_SERVER_URL),
         "admin", "password");
     assertTrue(gc.authenticate());
+
+    // assertTrue(
+    // HttpActionHelper.toGet(new URI(RestfulConfig.GUID_LOCAL_SERVER_URL),
+    // Action.AUTHENTICATE, "", true).getBody().equals("true"));
 
   }
 
@@ -78,6 +89,19 @@ public class LegacyControllerTest {
         new Birthday(1979, 7, 21), new TWNationalId("E122371585")).build();
 
     assertEquals(gc.create(pii), "AdminTest-T8A37BPL");
+
+    // List<String> jsonHashes = newArrayList();
+    // jsonHashes.add(hc1);
+    // jsonHashes.add(hc2);
+    // jsonHashes.add(hc3);
+    //
+    // assertEquals(
+    // HttpActionHelper
+    // .toPost(new URI(RestfulConfig.GUID_LOCAL_SERVER_URL), Action.CREATE,
+    // "?prefix=" + "TEST" + "&" + "jsonHashes=" + "[" + hc1 + ","
+    // + hc2 + "," + hc3 + "]")
+    // .getBody(),
+    // "[" + "{\"spguid\":\"TEST-Y3XZU2NG\",\"prefix\":\"TEST\"}" + "]");
 
   }
 

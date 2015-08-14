@@ -1,15 +1,17 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
-  xmlns:th="http://www.thymeleaf.org">
+	xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta charset="UTF-8"></meta>
 <title>二次編碼</title>
 </head>
 <body>
-<h1>產生的二次編碼 GUIDs</h1>
-  <div th:if="${spguids}">
-    <span th:text="${spguids}"></span>
-  </div>
-  <div><a th:href="@{/home}">回到首頁</a></div>
+	<h1>產生的二次編碼 GUIDs</h1>
+	<div th:if="${spguids}">
+		<span th:text="${spguids}"></span>
+	</div>
+	<div>
+		<a th:href="@{/home}">回到首頁</a>
+	</div>
 </body>
 </html>

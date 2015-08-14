@@ -33,17 +33,29 @@ public class SetupController {
   @PostConstruct
   void preProcessData() {
 
-    AccountUsers user = new AccountUsers();
-    user.setUsername("admin");
-    user.setPassword("password");
-    user.setEmail("admin@ym.com");
-    user.setInstitute("國立陽明大學");
-    user.setJobTitle("系統管理員");
-    user.setPrefix("AdminTest");
-    user.setTelephone("0910777666");
-    user.setAddress("國立陽明大學");
-    user.setRole(Role.ROLE_ADMIN);
+    AccountUsers admin = new AccountUsers();
+    admin.setUsername("admin");
+    admin.setPassword("password");
+    admin.setEmail("admin@ym.com");
+    admin.setInstitute("國立陽明大學");
+    admin.setJobTitle("系統管理員");
+    admin.setPrefix("AdminTest");
+    admin.setTelephone("0910777666");
+    admin.setAddress("國立陽明大學");
+    admin.setRole(Role.ROLE_ADMIN);
 
+    AccountUsers user = new AccountUsers();
+    user.setUsername("user");
+    user.setPassword("password");
+    user.setEmail("user@ym.com");
+    user.setInstitute("國立陽明大學");
+    user.setJobTitle("使用者");
+    user.setPrefix("UserTest");
+    user.setTelephone("0910777000");
+    user.setAddress("國立陽明大學");
+    user.setRole(Role.ROLE_USER);
+
+    userRepo.save(admin);
     userRepo.save(user);
 
     SubprimeGuid spguid = new SubprimeGuid();

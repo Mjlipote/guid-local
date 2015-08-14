@@ -1,50 +1,72 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
-  xmlns:th="http://www.thymeleaf.org">
+	xmlns:th="http://www.thymeleaf.org">
 <head>
-<meta charset="UTF-8"/>
-<title> 新增使用者 </title>
+<meta charset="UTF-8" />
+<title>新增使用者</title>
 <th:block th:include="head :: bootstrap" />
 <style type="text/css">
 </style>
 </head>
 <body>
-<h1>新增使用者</h1>
+	<h1>新增使用者1</h1>
 
-<form method="post" th:action="@{guid/web/register}">
+	<form class="form" method="post" th:action="@{guid/web/register}">
 
-<div>使用者權限：<select name="authority">
-      <option value="ROLE_ADMIN">系統管理者</option>
-      <option value="ROLE_USER">一般使用者</option>
-    </select></div>
-　
-<div>姓名：<input type="text" name="username"></input></div>
-　
-<div>密碼：<input type="password" name="password"></input></div>
-　
-<div>E-Mail：<input type="text" name="email"></input></div>
-　
-<div>單位：<select name="institute">
-      <option value="北榮">北榮</option>
-      <option value="三總">三總</option>
-      <option value="台大">台大</option>
-    </select></div>
-　
-<div>Prefix：<select name="prefix">
-      <option value="TpeVGH">TpeVGH</option>
-      <option value="TSGH">TSGH</option>
-      <option value="NTUH">NTUH</option>
-    </select></div>
-  
-  <div>工作職銜：<input type="text" name="jobTitle"></input></div>
-  
-  <div>聯絡電話：<input type="text" name="telephone"></input></div>
-  
-  <div>聯絡住址：<input type="text" name="address"></input></div>
-  
-　<div><input type="submit" value="新增使用者"></input></div>
+		<div class="form-group">
+			使用者權限：<select class="form-control" name="authority">
+				<option value="ROLE_ADMIN">系統管理者</option>
+				<option value="ROLE_USER">一般使用者</option>
+			</select>
+		</div>
 
-</form>
-<div><a th:href="@{/home}">回到首頁</a></div>
+		<div>
+			姓名：<input class="form-control" type="text" name="username"></input>
+		</div>
+
+		<div>
+			密碼：<input class="form-control" type="password" name="password"></input>
+		</div>
+
+		<div class="form-control">
+			E-Mail：<input class="form-control" type="text" name="email"></input>
+		</div>
+
+		<div>
+			單位：<select class="form-control" name="institute">
+				<option value="北榮">北榮</option>
+				<option value="三總">三總</option>
+				<option value="台大">台大</option>
+			</select>
+		</div>
+
+		<div>
+			Prefix：<select class="form-control" name="prefix">
+				<option value="TpeVGH">TpeVGH</option>
+				<option value="TSGH">TSGH</option>
+				<option value="NTUH">NTUH</option>
+			</select>
+		</div>
+
+		<div>
+			工作職銜：<input class="form-control" type="text" name="jobTitle"></input>
+		</div>
+
+		<div>
+			聯絡電話：<input class="form-control" type="text" name="telephone"></input>
+		</div>
+
+		<div>
+			聯絡住址：<input class="form-control" type="text" name="address"></input>
+		</div>
+
+		<div>
+			<input class="form-control" type="submit" value="新增使用者"></input>
+		</div>
+
+	</form>
+	<div>
+		<a th:href="@{/home}">回到首頁</a>
+	</div>
 </body>
 </html>

@@ -24,14 +24,12 @@ import static com.google.common.collect.Lists.newArrayList;
 
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.nio.charset.Charset;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpRequest;
-import org.springframework.security.crypto.codec.Base64;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -40,6 +38,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.github.wnameless.json.flattener.JsonFlattener;
+import com.google.common.io.BaseEncoding;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -66,11 +65,10 @@ public class LegacyGuidClientController {
 
   @RequestMapping(value = "/authenticate", method = RequestMethod.GET)
   @ResponseBody
-  String authenticate(HttpRequest httpRequest) {
-    HttpHeaders headers = httpRequest.getHeaders();
-    String base64Credentials = headers.getFirst("Authorization");
-    String credentials = new String(Base64.decode(base64Credentials.getBytes()),
-        Charset.forName("UTF-8"));
+  String authenticate(HttpServletRequest request) {
+    String base64Credentials = request.getHeader("Authorization");
+    String credentials = new String(BaseEncoding.base64()
+        .decode(base64Credentials.replaceFirst("^Basic\\s+", "")));
 
     final String[] values = credentials.split(":", 2);
     AccountUsers acctUser =
@@ -82,7 +80,7 @@ public class LegacyGuidClientController {
   @RequestMapping(value = "/create", method = RequestMethod.POST)
   @ResponseBody
   String create(@RequestParam("prefix") String prefix,
-      @RequestParam("jsonHashes") String jsonHashes)
+      @RequestParam("hashes") String jsonHashes)
           throws JsonProcessingException, URISyntaxException {
     AccountUsers acc =
         userRepo.findByUsername(customAuthenticationProvider.getName());
@@ -100,7 +98,7 @@ public class LegacyGuidClientController {
             Action.CREATE, sgrs, false).getBody());
 
     if (sgrs.size() == 1) {
-      return flattenJson.get("[0].spguid").toString();
+      return "[" + flattenJson.get("[0].spguid").toString() + "]";
     } else {
       List<String> guids = newArrayList();
       for (String key : flattenJson.keySet()) {
