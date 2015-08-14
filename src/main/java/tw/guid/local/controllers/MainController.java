@@ -28,7 +28,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
  */
 
 @Controller
-public class HomeController {
+public class MainController {
 
   @RequestMapping("/home")
 
@@ -40,5 +40,29 @@ public class HomeController {
 
   String register() {
     return "register";
+  }
+
+  @RequestMapping("/create")
+
+  String create() {
+    return "create";
+  }
+
+  @RequestMapping("/comparison")
+
+  String comparison() {
+    return "comparison";
+  }
+
+  @RequestMapping("/hello")
+
+  String hello() {
+    return "hello";
+  }
+
+  @RequestMapping("/login")
+
+  String login() {
+    return "login";
   }
 }
