@@ -11,11 +11,11 @@
 <body>
 	<h1>比對二次編碼</h1>
 
-	<form method="post" th:action="@{guid/web/comparison}">
+	<form class="form-horizontal" method="post" th:action="@{guid/web/comparison}">
 
 		填入二次編碼字串列（以 "," 做區隔）：
-		<textarea name="subprimeGuids"></textarea>
-		<br /> <input class="form-control" type="submit" value="進行比對"></input>
+		<textarea class="form-control" rows="5" name="subprimeGuids"></textarea>
+		<br /> <input class="btn btn-default" type="submit" value="進行比對"></input>
 	</form>
 	<div>
 		<a th:href="@{/home}">回到首頁</a>

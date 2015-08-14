@@ -11,28 +11,28 @@
 <body>
 	<h1>新增使用者</h1>
 
-	<form class="form" method="post" th:action="@{guid/web/register}">
+	<form class="form-horizontal" method="post" th:action="@{guid/web/register}">
 
-		<div class="form-group">
+		<div class="col-sm-10">
 			使用者權限：<select class="form-control" name="authority">
 				<option value="ROLE_ADMIN">系統管理者</option>
 				<option value="ROLE_USER">一般使用者</option>
 			</select>
 		</div>
 
-		<div>
+		<div class="col-sm-10">
 			姓名：<input class="form-control" type="text" name="username"></input>
 		</div>
 
-		<div>
+		<div class="col-sm-10">
 			密碼：<input class="form-control" type="password" name="password"></input>
 		</div>
 
-		<div class="form-control">
-			E-Mail：<input class="form-control" type="text" name="email"></input>
+		<div class="col-sm-10">
+			E-Mail：<input class="form-control" type="text" placeholder="Sample@mail.com" name="email"></input>
 		</div>
 
-		<div>
+		<div class="col-sm-10">
 			單位：<select class="form-control" name="institute">
 				<option value="北榮">北榮</option>
 				<option value="三總">三總</option>
@@ -40,7 +40,7 @@
 			</select>
 		</div>
 
-		<div>
+		<div class="col-sm-10">
 			Prefix：<select class="form-control" name="prefix">
 				<option value="TpeVGH">TpeVGH</option>
 				<option value="TSGH">TSGH</option>
@@ -48,24 +48,24 @@
 			</select>
 		</div>
 
-		<div>
+		<div class="col-sm-10">
 			工作職銜：<input class="form-control" type="text" name="jobTitle"></input>
 		</div>
 
-		<div>
+		<div class="col-sm-10">
 			聯絡電話：<input class="form-control" type="text" name="telephone"></input>
 		</div>
 
-		<div>
+		<div class="col-sm-10">
 			聯絡住址：<input class="form-control" type="text" name="address"></input>
 		</div>
 
-		<div>
-			<input class="form-control" type="submit" value="新增使用者"></input>
+		<div class="col-sm-10">
+			<input class="btn btn-default" type="submit" value="新增使用者"></input>
 		</div>
 
 	</form>
-	<div>
+	<div class="col-sm-10">
 		<a th:href="@{/home}">回到首頁</a>
 	</div>
 </body>
