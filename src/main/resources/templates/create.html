@@ -12,13 +12,13 @@
 <h1>輸入 PII</h1>
 
 <form method="post" th:action="@{guid/web/create}">
-　姓名：<input type="text" name="name"></input><br/>
-　性別：<select name="gender">
+　<div>姓名：<input type="text" name="name"></input></div>
+　<div>性別：<select name="gender">
       <option value="M">男</option>
       <option value="F">女</option>
-    </select><br/>
-　出生年：<input type="text" name="birthOfYear"></input><br/>
-　出生月：<select name="birthOfMonth">
+    </select></div>
+　<div>出生年：<input type="text" name="birthOfYear"></input></div>
+　<div>出生月：<select name="birthOfMonth">
       <option value="1">1</option>
       <option value="2">2</option>
       <option value="3">3</option>
@@ -31,8 +31,8 @@
       <option value="10">10</option>
       <option value="11">11</option>
       <option value="12">12</option>
-    </select><br/>
-　出生日：<select name="birthOfDay">
+    </select></div>
+　<div>出生日：<select name="birthOfDay">
       <option value="1">1</option>
       <option value="2">2</option>
       <option value="3">3</option>
@@ -64,10 +64,10 @@
       <option value="29">29</option>
       <option value="30">30</option>
       <option value="31">31</option>
-    </select><br/>
-　身份證字號：<input type="text" name="sid"></input><br/>
-　<input type="submit" value="產生二次編碼"></input>
+    </select></div>
+　<div>身份證字號：<input type="text" name="sid"></input></div>
+　<div><input type="submit" value="產生二次編碼"></input></div>
 </form>
-<p><a th:href="@{/home}">回到首頁</a></p><br/>
+<div><a th:href="@{/home}">回到首頁</a></div>
 </body>
 </html>

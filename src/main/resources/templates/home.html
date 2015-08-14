@@ -1,14 +1,15 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
     <head>
-        <title>Spring Security Example</title>
+        <title>Welcome!</title>
     </head>
     <body>
-        <h1>Welcome!</h1>
+        <div><h1>Welcome!</h1></div>
 
-        <p><a th:href="@{/hello}">歡迎頁面</a></p><br/>
-        <p><a th:href="@{/register}">新增使用者頁面</a></p><br/>
-        <p><a th:href="@{/create}">產生 GUID 頁面</a></p><br/>
-        <p><a th:href="@{/comparison}">二次編碼比對</a></p><br/>
+        <div><a th:href="@{/hello}">歡迎頁面</a></div>
+        <div><a th:href="@{/register}">新增使用者頁面</a></div>
+        <div><a th:href="@{/create}">產生 GUID 頁面</a></div>
+        <div><a th:href="@{/comparison}">二次編碼比對</a></div>
+        
     </body>
 </html>

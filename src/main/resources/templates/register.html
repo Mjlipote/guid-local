@@ -13,36 +13,38 @@
 
 <form method="post" th:action="@{guid/web/register}">
 
-使用者權限：<select name="authority">
+<div>使用者權限：<select name="authority">
       <option value="ROLE_ADMIN">系統管理者</option>
       <option value="ROLE_USER">一般使用者</option>
-    </select><br/>
+    </select></div>
 　
-姓名：<input type="text" name="username"></input><br/>
+<div>姓名：<input type="text" name="username"></input></div>
 　
-密碼：<input type="password" name="password"></input><br/>
+<div>密碼：<input type="password" name="password"></input></div>
 　
-E-Mail：<input type="text" name="email"></input><br/>
+<div>E-Mail：<input type="text" name="email"></input></div>
 　
-單位：<select name="institute">
+<div>單位：<select name="institute">
       <option value="北榮">北榮</option>
       <option value="三總">三總</option>
       <option value="台大">台大</option>
-    </select><br/>
+    </select></div>
 　
-Prefix：<select name="prefix">
+<div>Prefix：<select name="prefix">
       <option value="TpeVGH">TpeVGH</option>
       <option value="TSGH">TSGH</option>
       <option value="NTUH">NTUH</option>
-    </select><br/>
+    </select></div>
   
-  工作職銜：<input type="text" name="jobTitle"></input><br/>
+  <div>工作職銜：<input type="text" name="jobTitle"></input></div>
   
-  聯絡電話：<input type="text" name="telephone"></input><br/>
+  <div>聯絡電話：<input type="text" name="telephone"></input></div>
   
-  聯絡住址：<input type="text" name="address"></input><br/>
-　<input type="submit" value="新增使用者"></input>
+  <div>聯絡住址：<input type="text" name="address"></input></div>
+  
+　<div><input type="submit" value="新增使用者"></input></div>
+
 </form>
-<p><a th:href="@{/home}">回到首頁</a></p><br/>
+<div><a th:href="@{/home}">回到首頁</a></div>
 </body>
 </html>
