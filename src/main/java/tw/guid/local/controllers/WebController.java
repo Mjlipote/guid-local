@@ -31,6 +31,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -65,6 +67,9 @@ import tw.guid.local.util.NameSplitter;
 @RequestMapping("/guid/web")
 @Controller
 public class WebController {
+
+  private static final Logger log =
+      LoggerFactory.getLogger(WebController.class);
 
   @Autowired
   ActionAuditRepository actionAuditRepo;
@@ -125,8 +130,7 @@ public class WebController {
       @RequestParam(value = "birthOfMonth") String birthOfMonth,
       @RequestParam(value = "birthOfDay") String birthOfDay,
       @RequestParam(value = "sid") String sid,
-      @RequestParam(value = "name") String name)
-          throws URISyntaxException, IOException {
+      @RequestParam(value = "name") String name) {
     if (gender.equals("") || birthOfYear.equals("") || birthOfMonth.equals("")
         || birthOfDay.equals("") || sid.equals("") || name.equals("")) {
       return "null-error";
@@ -158,11 +162,17 @@ public class WebController {
         sgr.setPrefix(prefix);
         sgrs.add(sgr);
 
-        Map<String, Object> flattenJson =
-            JsonFlattener.flattenAsMap(HttpActionHelper
-                .toPost(new URI(RestfulConfig.GUID_CENTRAL_SERVER_URL),
-                    Action.CREATE, sgrs, false)
-                .getBody());
+        Map<String, Object> flattenJson = null;
+        try {
+          flattenJson = JsonFlattener.flattenAsMap(HttpActionHelper
+              .toPost(new URI(RestfulConfig.GUID_CENTRAL_SERVER_URL),
+                  Action.CREATE, sgrs, false)
+              .getBody());
+        } catch (JsonProcessingException e) {
+          log.error(e.getMessage(), e);
+        } catch (URISyntaxException e) {
+          log.error(e.getMessage(), e);
+        }
 
         map.addAttribute("spguids", flattenJson.get("[0].spguid").toString());
 
@@ -305,16 +315,23 @@ public class WebController {
    */
   @RequestMapping(value = "/comparison", method = RequestMethod.POST)
   String comparison(ModelMap map,
-      @RequestParam(value = "subprimeGuids") String subprimeGuids)
-          throws JsonProcessingException, URISyntaxException {
+      @RequestParam(value = "subprimeGuids") String subprimeGuids) {
     List<String> list = newArrayList();
     String[] str = subprimeGuids.trim().split(",");
     for (String s : str) {
       list.add(s);
     }
-    map.addAttribute("result",
-        HttpActionHelper.toPost(new URI(RestfulConfig.GUID_CENTRAL_SERVER_URL),
-            Action.COMPARISON, list, false).getBody());
+    try {
+      map.addAttribute("result",
+          HttpActionHelper
+              .toPost(new URI(RestfulConfig.GUID_CENTRAL_SERVER_URL),
+                  Action.COMPARISON, list, false)
+              .getBody());
+    } catch (JsonProcessingException e) {
+      log.error(e.getMessage(), e);
+    } catch (URISyntaxException e) {
+      log.error(e.getMessage(), e);
+    }
 
     return "comparison-result";
   }

@@ -22,10 +22,8 @@ package tw.guid.local.controllers;
 
 import static com.google.common.collect.Lists.newArrayList;
 
-import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.security.NoSuchAlgorithmException;
 import java.util.List;
 import java.util.Map;
 
@@ -70,8 +68,7 @@ public class LegacyGuidClientController {
 
   @RequestMapping(value = "/authenticate", method = RequestMethod.GET)
   @ResponseBody
-  String authenticate(HttpServletRequest request)
-      throws NoSuchAlgorithmException, UnsupportedEncodingException {
+  String authenticate(HttpServletRequest request) {
     String base64Credentials = request.getHeader("Authorization");
     String credentials = new String(BaseEncoding.base64()
         .decode(base64Credentials.replaceFirst("^Basic\\s+", "")));
@@ -86,9 +83,7 @@ public class LegacyGuidClientController {
   @RequestMapping(value = "/create", method = RequestMethod.POST)
   @ResponseBody
   String create(@RequestParam("prefix") String prefix,
-      @RequestParam("hashes") String jsonHashes, HttpServletRequest request)
-          throws JsonProcessingException, URISyntaxException,
-          NoSuchAlgorithmException, UnsupportedEncodingException {
+      @RequestParam("hashes") String jsonHashes, HttpServletRequest request) {
 
     String base64Credentials = request.getHeader("Authorization");
     String credentials = new String(BaseEncoding.base64()
@@ -107,9 +102,17 @@ public class LegacyGuidClientController {
 
     List<SubprimeGuidRequest> sgrs = buildRequests(prefix, jsonHashes);
 
-    Map<String, Object> flattenJson = JsonFlattener.flattenAsMap(
-        HttpActionHelper.toPost(new URI(RestfulConfig.GUID_CENTRAL_SERVER_URL),
-            Action.CREATE, sgrs, false).getBody());
+    Map<String, Object> flattenJson = null;
+    try {
+      flattenJson = JsonFlattener.flattenAsMap(HttpActionHelper
+          .toPost(new URI(RestfulConfig.GUID_CENTRAL_SERVER_URL), Action.CREATE,
+              sgrs, false)
+          .getBody());
+    } catch (JsonProcessingException e) {
+      log.error(e.getMessage(), e);
+    } catch (URISyntaxException e) {
+      log.error(e.getMessage(), e);
+    }
 
     if (sgrs.size() == 1) {
       return "[" + flattenJson.get("[0].spguid").toString() + "]";
