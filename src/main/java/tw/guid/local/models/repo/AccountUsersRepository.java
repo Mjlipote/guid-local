@@ -36,6 +36,8 @@ public interface AccountUsersRepository
 
   public AccountUsers findByUsername(String username);
 
+  public AccountUsers findByUsernameAndRole(String username, Role role);
+
   public Set<AccountUsers> findByPassword(String password);
 
   public Set<AccountUsers> findByPrefix(String prefix);
@@ -43,5 +45,8 @@ public interface AccountUsersRepository
   public Set<AccountUsers> findByInstitute(String institute);
 
   public Set<AccountUsers> findByRole(Role role);
+
+  // public boolean findByUsernameAndPasswordExist(String username,
+  // String password);
 
 }
