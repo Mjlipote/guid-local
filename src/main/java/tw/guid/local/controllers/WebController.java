@@ -333,32 +333,36 @@ public class WebController {
   @RequestMapping(value = "/comparison", method = RequestMethod.POST)
   String comparison(ModelMap map,
       @RequestParam(value = "subprimeGuids") String subprimeGuids) {
-    List<String> list = newArrayList();
-    String[] str = subprimeGuids.trim().split(",");
-    for (String s : str) {
-      list.add(s);
-    }
-    Properties prop = new Properties();
-    try {
-      prop.load(new FileInputStream("serverhost.properties"));
-    } catch (FileNotFoundException e) {
-      log.error(e.getMessage(), e);
-    } catch (IOException e) {
-      log.error(e.getMessage(), e);
-    }
-    try {
-      map.addAttribute("result",
-          HttpActionHelper
-              .toPost(new URI(prop.getProperty("central_server_url")),
-                  Action.COMPARISON, list, false)
-              .getBody());
-    } catch (JsonProcessingException e) {
-      log.error(e.getMessage(), e);
-    } catch (URISyntaxException e) {
-      log.error(e.getMessage(), e);
-    }
 
-    return "comparison-result";
+    if (subprimeGuids.equals("")) {
+      return "null-error";
+    } else {
+      List<String> list = newArrayList();
+      String[] str = subprimeGuids.trim().split(",");
+      for (String s : str) {
+        list.add(s);
+      }
+      Properties prop = new Properties();
+      try {
+        prop.load(new FileInputStream("serverhost.properties"));
+      } catch (FileNotFoundException e) {
+        log.error(e.getMessage(), e);
+      } catch (IOException e) {
+        log.error(e.getMessage(), e);
+      }
+      try {
+        map.addAttribute("result",
+            HttpActionHelper
+                .toPost(new URI(prop.getProperty("central_server_url")),
+                    Action.COMPARISON, list, false)
+                .getBody());
+      } catch (JsonProcessingException e) {
+        log.error(e.getMessage(), e);
+      } catch (URISyntaxException e) {
+        log.error(e.getMessage(), e);
+      }
+      return "comparison-result";
+    }
   }
 
 }
