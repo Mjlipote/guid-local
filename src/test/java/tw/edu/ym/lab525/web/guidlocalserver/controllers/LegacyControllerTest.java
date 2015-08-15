@@ -88,7 +88,7 @@ public class LegacyControllerTest {
     PII pii = new PII.Builder(new Name("明政", "李"), Sex.MALE,
         new Birthday(1979, 7, 21), new TWNationalId("E122371585")).build();
 
-    assertEquals(gc.create(pii), "AdminTest-8LO31HIK");
+    assertEquals(gc.create(pii), "AdminTest-T8A37BPL");
 
     // List<String> jsonHashes = newArrayList();
     // jsonHashes.add(hc1);
