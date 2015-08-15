@@ -46,7 +46,6 @@ import com.github.wnameless.json.flattener.JsonFlattener;
 
 import tw.edu.ym.guid.client.PII;
 import tw.edu.ym.guid.client.field.Birthday;
-import tw.edu.ym.guid.client.field.Name;
 import tw.edu.ym.guid.client.field.Sex;
 import tw.edu.ym.guid.client.field.TWNationalId;
 import tw.guid.local.config.RestfulConfig;
@@ -61,6 +60,7 @@ import tw.guid.local.models.entity.SubprimeGuid;
 import tw.guid.local.models.repo.AccountUsersRepository;
 import tw.guid.local.models.repo.ActionAuditRepository;
 import tw.guid.local.models.repo.SubprimeGuidRepository;
+import tw.guid.local.util.NameSplitter;
 
 @RequestMapping("/guid/web")
 @Controller
@@ -131,11 +131,10 @@ public class WebController {
         || birthOfDay.equals("") || sid.equals("") || name.equals("")) {
       return "null-error";
     } else {
-      PII pii =
-          new PII.Builder(new Name(name.substring(1, 3), name.substring(0, 1)),
-              gender.equals("M") ? Sex.MALE : Sex.FEMALE,
-              new Birthday(Integer.valueOf(birthOfYear),
-                  Integer.valueOf(birthOfMonth), Integer.valueOf(birthOfDay)),
+      PII pii = new PII.Builder(NameSplitter.split(name),
+          gender.equals("M") ? Sex.MALE : Sex.FEMALE,
+          new Birthday(Integer.valueOf(birthOfYear),
+              Integer.valueOf(birthOfMonth), Integer.valueOf(birthOfDay)),
           new TWNationalId(sid)).build();
 
       Authentication auth =
