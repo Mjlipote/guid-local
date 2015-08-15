@@ -19,13 +19,13 @@
 *
 */
 
-package tw.guid.local.models;
+package tw.guid.local.helper;
 
 import java.util.zip.CRC32;
 
-public class Crc32Algorithm {
+public class Crc32HashcodeCreator {
 
-  private Crc32Algorithm() {}
+  private Crc32HashcodeCreator() {}
 
   /**
    * 

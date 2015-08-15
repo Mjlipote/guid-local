@@ -47,9 +47,9 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import tw.guid.local.config.RestfulConfig;
+import tw.guid.local.helper.Crc32HashcodeCreator;
 import tw.guid.local.helper.HttpActionHelper;
 import tw.guid.local.models.Action;
-import tw.guid.local.models.Crc32Algorithm;
 import tw.guid.local.models.CustomAuthenticationProvider;
 import tw.guid.local.models.SubprimeGuidRequest;
 import tw.guid.local.models.entity.AccountUsers;
@@ -78,7 +78,7 @@ public class LegacyGuidClientController {
 
     final String[] values = credentials.split(":", 2);
     AccountUsers acctUser = acctUserRepo.findByUsernameAndPassword(values[0],
-        Crc32Algorithm.getCrc32(values[1]));
+        Crc32HashcodeCreator.getCrc32(values[1]));
 
     return new Gson().toJson(acctUser != null, Boolean.class);
   }
@@ -97,7 +97,7 @@ public class LegacyGuidClientController {
     final String[] values = credentials.split(":", 2);
 
     AccountUsers acctUser = acctUserRepo.findByUsernameAndPassword(values[0],
-        Crc32Algorithm.getCrc32(values[1]));
+        Crc32HashcodeCreator.getCrc32(values[1]));
 
     if (prefix.equals("") && acctUser != null) {
       prefix = acctUser.getPrefix();

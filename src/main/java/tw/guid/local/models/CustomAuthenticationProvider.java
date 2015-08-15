@@ -33,6 +33,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Component;
 
+import tw.guid.local.helper.Crc32HashcodeCreator;
 import tw.guid.local.models.repo.AccountUsersRepository;
 
 @Component
@@ -46,7 +47,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
       throws AuthenticationException {
     String username = authentication.getName();
     String password =
-        Crc32Algorithm.getCrc32(authentication.getCredentials().toString());
+        Crc32HashcodeCreator.getCrc32(authentication.getCredentials().toString());
 
     if (acctUserRepo.findByUsernameAndPasswordAndRole(username, password,
         Role.ROLE_ADMIN) != null) {

@@ -9,7 +9,7 @@ import javax.persistence.Enumerated;
 
 import org.springframework.data.jpa.domain.AbstractPersistable;
 
-import tw.guid.local.models.Crc32Algorithm;
+import tw.guid.local.helper.Crc32HashcodeCreator;
 import tw.guid.local.models.Role;
 
 @Entity
@@ -77,7 +77,7 @@ public class AccountUsers extends AbstractPersistable<Long> {
    */
   public void setPassword(String password) {
 
-    this.password = Crc32Algorithm.getCrc32(checkNotNull(password));
+    this.password = Crc32HashcodeCreator.getCrc32(checkNotNull(password));
   }
 
   /**
