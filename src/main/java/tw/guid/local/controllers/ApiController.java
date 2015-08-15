@@ -20,10 +20,14 @@
  */
 package tw.guid.local.controllers;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Properties;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,7 +38,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import tw.guid.local.config.RestfulConfig;
 import tw.guid.local.helper.HttpActionHelper;
 import tw.guid.local.models.AccountUsersResponse;
 import tw.guid.local.models.Action;
@@ -61,9 +64,17 @@ public class ApiController {
   @RequestMapping(value = "/validate", method = RequestMethod.GET)
   boolean validate(@RequestParam(value = "spguid") String spguid)
       throws URISyntaxException {
+    Properties prop = new Properties();
+    try {
+      prop.load(new FileInputStream("serverhost.properties"));
+    } catch (FileNotFoundException e) {
+      log.error(e.getMessage(), e);
+    } catch (IOException e) {
+      log.error(e.getMessage(), e);
+    }
 
     return HttpActionHelper
-        .toGet(new URI(RestfulConfig.GUID_CENTRAL_SERVER_URL), Action.VALIDATE,
+        .toGet(new URI(prop.getProperty("central_server_url")), Action.VALIDATE,
             "?spguid=" + spguid, false)
         .getBody().equals("true") ? true : false;
   }
@@ -102,10 +113,20 @@ public class ApiController {
         hashcode3).size() > 0) {
       b = true;
     } else {
-      b = HttpActionHelper.toGet(new URI(RestfulConfig.GUID_CENTRAL_SERVER_URL),
-          Action.EXIST, "?hashcode1=" + hashcode1 + "&hashcode2=" + hashcode2
-              + "&hashcode3=" + hashcode3,
-          false).getBody().equals("true") ? true : false;
+      Properties prop = new Properties();
+      try {
+        prop.load(new FileInputStream("serverhost.properties"));
+      } catch (FileNotFoundException e) {
+        log.error(e.getMessage(), e);
+      } catch (IOException e) {
+        log.error(e.getMessage(), e);
+      }
+      b = HttpActionHelper
+          .toGet(new URI(prop.getProperty("central_server_url")), Action.EXIST,
+              "?hashcode1=" + hashcode1 + "&hashcode2=" + hashcode2
+                  + "&hashcode3=" + hashcode3,
+              false)
+          .getBody().equals("true") ? true : false;
     }
 
     return b;

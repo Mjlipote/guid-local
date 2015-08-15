@@ -24,11 +24,14 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.collect.Lists.newArrayList;
 import static com.google.common.collect.Sets.newHashSet;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 import java.util.Set;
 
 import org.slf4j.Logger;
@@ -50,7 +53,6 @@ import tw.edu.ym.guid.client.PII;
 import tw.edu.ym.guid.client.field.Birthday;
 import tw.edu.ym.guid.client.field.Sex;
 import tw.edu.ym.guid.client.field.TWNationalId;
-import tw.guid.local.config.RestfulConfig;
 import tw.guid.local.helper.HttpActionHelper;
 import tw.guid.local.models.AccountUsersResponse;
 import tw.guid.local.models.Action;
@@ -92,12 +94,19 @@ public class WebController {
   List<String> batch(
       @RequestBody List<SubprimeGuidRequest> spGuidCreateRequestList)
           throws JsonProcessingException, URISyntaxException {
-
+    Properties prop = new Properties();
+    try {
+      prop.load(new FileInputStream("serverhost.properties"));
+    } catch (FileNotFoundException e) {
+      log.error(e.getMessage(), e);
+    } catch (IOException e) {
+      log.error(e.getMessage(), e);
+    }
     Map<String, Object> flattenJson =
         JsonFlattener
             .flattenAsMap(
                 HttpActionHelper
-                    .toPost(new URI(RestfulConfig.GUID_CENTRAL_SERVER_URL),
+                    .toPost(new URI(prop.getProperty("central_server_url")),
                         Action.CREATE, spGuidCreateRequestList, false)
                     .getBody());
 
@@ -162,10 +171,18 @@ public class WebController {
         sgr.setPrefix(prefix);
         sgrs.add(sgr);
 
+        Properties prop = new Properties();
+        try {
+          prop.load(new FileInputStream("serverhost.properties"));
+        } catch (FileNotFoundException e) {
+          log.error(e.getMessage(), e);
+        } catch (IOException e) {
+          log.error(e.getMessage(), e);
+        }
         Map<String, Object> flattenJson = null;
         try {
           flattenJson = JsonFlattener.flattenAsMap(HttpActionHelper
-              .toPost(new URI(RestfulConfig.GUID_CENTRAL_SERVER_URL),
+              .toPost(new URI(prop.getProperty("central_server_url")),
                   Action.CREATE, sgrs, false)
               .getBody());
         } catch (JsonProcessingException e) {
@@ -321,10 +338,18 @@ public class WebController {
     for (String s : str) {
       list.add(s);
     }
+    Properties prop = new Properties();
+    try {
+      prop.load(new FileInputStream("serverhost.properties"));
+    } catch (FileNotFoundException e) {
+      log.error(e.getMessage(), e);
+    } catch (IOException e) {
+      log.error(e.getMessage(), e);
+    }
     try {
       map.addAttribute("result",
           HttpActionHelper
-              .toPost(new URI(RestfulConfig.GUID_CENTRAL_SERVER_URL),
+              .toPost(new URI(prop.getProperty("central_server_url")),
                   Action.COMPARISON, list, false)
               .getBody());
     } catch (JsonProcessingException e) {

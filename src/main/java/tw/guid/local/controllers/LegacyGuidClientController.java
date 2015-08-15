@@ -22,10 +22,14 @@ package tw.guid.local.controllers;
 
 import static com.google.common.collect.Lists.newArrayList;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -44,7 +48,6 @@ import com.google.common.io.BaseEncoding;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
-import tw.guid.local.config.RestfulConfig;
 import tw.guid.local.helper.Crc32HashcodeCreator;
 import tw.guid.local.helper.HttpActionHelper;
 import tw.guid.local.models.Action;
@@ -102,11 +105,20 @@ public class LegacyGuidClientController {
 
     List<SubprimeGuidRequest> sgrs = buildRequests(prefix, jsonHashes);
 
+    Properties prop = new Properties();
+    try {
+      prop.load(new FileInputStream("serverhost.properties"));
+    } catch (FileNotFoundException e) {
+      log.error(e.getMessage(), e);
+    } catch (IOException e) {
+      log.error(e.getMessage(), e);
+    }
+
     Map<String, Object> flattenJson = null;
     try {
       flattenJson = JsonFlattener.flattenAsMap(HttpActionHelper
-          .toPost(new URI(RestfulConfig.GUID_CENTRAL_SERVER_URL), Action.CREATE,
-              sgrs, false)
+          .toPost(new URI(prop.getProperty("central_server_url")),
+              Action.CREATE, sgrs, false)
           .getBody());
     } catch (JsonProcessingException e) {
       log.error(e.getMessage(), e);

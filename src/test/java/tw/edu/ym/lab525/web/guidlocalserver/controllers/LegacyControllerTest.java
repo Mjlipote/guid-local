@@ -23,12 +23,18 @@ package tw.edu.ym.lab525.web.guidlocalserver.controllers;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.Properties;
 
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.boot.test.WebIntegrationTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -40,7 +46,6 @@ import tw.edu.ym.guid.client.field.Name;
 import tw.edu.ym.guid.client.field.Sex;
 import tw.edu.ym.guid.client.field.TWNationalId;
 import tw.guid.local.Application;
-import tw.guid.local.config.RestfulConfig;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = Application.class)
@@ -62,46 +67,40 @@ public class LegacyControllerTest {
         });
   }
 
-  // String hc1 =
-  // "f3042960fc9351d1ad99550817f892968207c6cb2539c6fd11b3258e815dedfe4f8f3f2a95c846b32aacf6201282921e2b93812587cc19752cfc9c0cf236a57b00";
-  // String hc2 =
-  // "e92e7cf25a726bb9f7aff7c36c31fa4a96b0014a3a7ce5018c6b84bc459df512653253d01e0742878ca7ddd7bd9c5179273fa915761a9ba84948fd85007cc8f900";
-  // String hc3 =
-  // "636ce21c211c33e6ee8e2f7590034fef8a3a5b3263c6d83af9c54b490175d649f11937e855509f57c986d1882cb5259372a37697899660afff8db6c8049de6a900";
+  private static final Logger log =
+      LoggerFactory.getLogger(LegacyControllerTest.class);
+
+  private static String localServerUrl;
+
+  @Before
+  public void setUp() {
+    Properties prop = new Properties();
+    try {
+      prop.load(new FileInputStream("serverhost.properties"));
+      localServerUrl = prop.getProperty("local_server_url");
+    } catch (FileNotFoundException e) {
+      log.error(e.getMessage(), e);
+    } catch (IOException e) {
+      log.error(e.getMessage(), e);
+    }
+  }
 
   @Test
   public void testAuthenticate() throws IOException, URISyntaxException {
-    GuidClient gc = new GuidClient(new URI(RestfulConfig.GUID_LOCAL_SERVER_URL),
-        "admin", "password");
+    GuidClient gc =
+        new GuidClient(new URI(localServerUrl), "admin", "password");
     assertTrue(gc.authenticate());
-
-    // assertTrue(
-    // HttpActionHelper.toGet(new URI(RestfulConfig.GUID_LOCAL_SERVER_URL),
-    // Action.AUTHENTICATE, "", true).getBody().equals("true"));
 
   }
 
   @Test
   public void testCreate() throws IOException, URISyntaxException {
-    GuidClient gc = new GuidClient(new URI(RestfulConfig.GUID_LOCAL_SERVER_URL),
-        "admin", "password", "AdminTest");
+    GuidClient gc = new GuidClient(new URI(localServerUrl), "admin", "password",
+        "AdminTest");
     PII pii = new PII.Builder(new Name("明政", "李"), Sex.MALE,
         new Birthday(1979, 7, 21), new TWNationalId("E122371585")).build();
 
     assertEquals(gc.create(pii), "AdminTest-T8A37BPL");
-
-    // List<String> jsonHashes = newArrayList();
-    // jsonHashes.add(hc1);
-    // jsonHashes.add(hc2);
-    // jsonHashes.add(hc3);
-    //
-    // assertEquals(
-    // HttpActionHelper
-    // .toPost(new URI(RestfulConfig.GUID_LOCAL_SERVER_URL), Action.CREATE,
-    // "?prefix=" + "TEST" + "&" + "jsonHashes=" + "[" + hc1 + ","
-    // + hc2 + "," + hc3 + "]")
-    // .getBody(),
-    // "[" + "{\"spguid\":\"TEST-Y3XZU2NG\",\"prefix\":\"TEST\"}" + "]");
 
   }
 
