@@ -20,6 +20,8 @@
 */
 package tw.guid.local.models;
 
+import com.google.common.base.MoreObjects;
+
 public class SubprimeGuidResponse {
 
   String spguid;
@@ -90,9 +92,8 @@ public class SubprimeGuidResponse {
 
   @Override
   public String toString() {
-    return "SPGuidResponse ["
-        + (spguid != null ? "spguid=" + spguid + ", " : "")
-        + (prefix != null ? "prefix=" + prefix : "") + "]";
+    return MoreObjects.toStringHelper(this).add("spguid", spguid)
+        .add("prefix", prefix).toString();
   }
 
 }

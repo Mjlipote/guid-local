@@ -22,6 +22,7 @@ package tw.guid.local.models;
 
 import java.util.List;
 
+import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 
 public class SubprimeGuidRequest {
@@ -83,9 +84,8 @@ public class SubprimeGuidRequest {
 
   @Override
   public String toString() {
-    return "SubprimeGuidRequest ["
-        + (prefix != null ? "prefix=" + prefix + ", " : "")
-        + (guidHash != null ? "guidHash=" + guidHash : "") + "]";
+    return MoreObjects.toStringHelper(this).add("prefix", prefix)
+        .add("guidHash", guidHash).toString();
   }
 
 }

@@ -4,6 +4,8 @@ import static com.google.common.collect.Lists.newArrayList;
 
 import java.util.List;
 
+import com.google.common.base.MoreObjects;
+
 import tw.guid.local.models.entity.AccountUsers;
 
 /**
@@ -134,15 +136,10 @@ public final class AccountUsersResponse {
 
   @Override
   public String toString() {
-    return "AccountUsersResponse ["
-        + (username != null ? "username=" + username + ", " : "")
-        + (prefix != null ? "prefix=" + prefix + ", " : "")
-        + (email != null ? "email=" + email + ", " : "")
-        + (institute != null ? "institute=" + institute + ", " : "")
-        + (jobTitle != null ? "jobTitle=" + jobTitle + ", " : "")
-        + (telephone != null ? "telephone=" + telephone + ", " : "")
-        + (address != null ? "address=" + address + ", " : "")
-        + (role != null ? "role=" + role : "") + "]";
+    return MoreObjects.toStringHelper(this).add("username", username)
+        .add("prefix", prefix).add("email", email).add("institute", institute)
+        .add("jobTitle", jobTitle).add("telephone", telephone)
+        .add("address", address).add("role", role).toString();
   }
 
 }
