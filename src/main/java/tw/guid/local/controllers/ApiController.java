@@ -36,7 +36,6 @@ import tw.guid.local.config.RestfulConfig;
 import tw.guid.local.helper.HttpActionHelper;
 import tw.guid.local.models.AccountUsersResponse;
 import tw.guid.local.models.Action;
-import tw.guid.local.models.CustomAuthenticationProvider;
 import tw.guid.local.models.repo.AccountUsersRepository;
 import tw.guid.local.models.repo.ActionAuditRepository;
 import tw.guid.local.models.repo.SubprimeGuidRepository;
@@ -51,9 +50,18 @@ public class ApiController {
   @Autowired
   SubprimeGuidRepository spguidRepo;
   @Autowired
-  AccountUsersRepository userRepo;
-  @Autowired
-  CustomAuthenticationProvider customAuthenticationProvider;
+  AccountUsersRepository accUserRepo;
+
+  @ResponseBody
+  @RequestMapping(value = "/validate", method = RequestMethod.GET)
+  boolean validate(@RequestParam(value = "spguid") String spguid)
+      throws URISyntaxException {
+
+    return HttpActionHelper
+        .toGet(new URI(RestfulConfig.GUID_CENTRAL_SERVER_URL), Action.VALIDATE,
+            "?spguid=" + spguid, false)
+        .getBody().equals("true") ? true : false;
+  }
 
   /**
    * 使用者名單
@@ -64,7 +72,7 @@ public class ApiController {
   @RequestMapping(value = "/users", method = RequestMethod.GET)
   List<AccountUsersResponse> users() {
 
-    return AccountUsersResponse.getResponse(userRepo.findAll());
+    return AccountUsersResponse.getResponse(accUserRepo.findAll());
   }
 
   /**
@@ -89,12 +97,10 @@ public class ApiController {
         hashcode3).size() > 0) {
       b = true;
     } else {
-      b = HttpActionHelper
-          .toGet(new URI(RestfulConfig.GUID_CENTRAL_SERVER_URL), Action.EXIST,
-              "?hashcode1=" + hashcode1 + "&hashcode2=" + hashcode2
-                  + "&hashcode3=" + hashcode3,
-              false)
-          .equals("true") ? true : false;
+      b = HttpActionHelper.toGet(new URI(RestfulConfig.GUID_CENTRAL_SERVER_URL),
+          Action.EXIST, "?hashcode1=" + hashcode1 + "&hashcode2=" + hashcode2
+              + "&hashcode3=" + hashcode3,
+          false).getBody().equals("true") ? true : false;
     }
 
     return b;

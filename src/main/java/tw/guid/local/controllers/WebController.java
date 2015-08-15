@@ -228,11 +228,13 @@ public class WebController {
   /**
    * 刪除一般使用者
    * 
+   * 
    * @param map
    * @param username
    * @return
    */
-  @RequestMapping(value = "/deleteuser", method = RequestMethod.POST)
+  // 應該使用 RequestMethod.DELETE，待確定用法後修正
+  @RequestMapping(value = "/user", method = RequestMethod.GET)
   String deleteuser(ModelMap map,
       @RequestParam(value = "username") String username) {
 
@@ -272,7 +274,7 @@ public class WebController {
    * @param institute
    * @return
    */
-  @RequestMapping(value = "/user", method = RequestMethod.GET)
+  @RequestMapping(value = "/user", method = RequestMethod.POST)
   String user(ModelMap map, @RequestParam(value = "username") String username,
       @RequestParam(value = "prefix") String prefix,
       @RequestParam(value = "institute") String institute) {
