@@ -72,15 +72,8 @@ public class LegacyGuidClientController {
   @RequestMapping(value = "/authenticate", method = RequestMethod.GET)
   @ResponseBody
   String authenticate(HttpServletRequest request) {
-    String base64Credentials = request.getHeader("Authorization");
-    String credentials = new String(BaseEncoding.base64()
-        .decode(base64Credentials.replaceFirst("^Basic\\s+", "")));
 
-    final String[] values = credentials.split(":", 2);
-    AccountUsers acctUser = acctUserRepo.findByUsernameAndPassword(values[0],
-        Crc32HashcodeCreator.getCrc32(values[1]));
-
-    return new Gson().toJson(acctUser != null, Boolean.class);
+    return new Gson().toJson(isValidate(request), Boolean.class);
   }
 
   @RequestMapping(value = "/create", method = RequestMethod.POST)
@@ -88,17 +81,8 @@ public class LegacyGuidClientController {
   String create(@RequestParam("prefix") String prefix,
       @RequestParam("hashes") String jsonHashes, HttpServletRequest request) {
 
-    String base64Credentials = request.getHeader("Authorization");
-    String credentials = new String(BaseEncoding.base64()
-        .decode(base64Credentials.replaceFirst("^Basic\\s+", "")));
-
-    final String[] values = credentials.split(":", 2);
-
-    AccountUsers acctUser = acctUserRepo.findByUsernameAndPassword(values[0],
-        Crc32HashcodeCreator.getCrc32(values[1]));
-
-    if (prefix.equals("") && acctUser != null) {
-      prefix = acctUser.getPrefix();
+    if (prefix.equals("") && isValidate(request) == true) {
+      prefix = getAccountUsers(request).getPrefix();
     } else if (prefix.equals("")) {
       prefix = "PSEUDO";
     }
@@ -166,6 +150,22 @@ public class LegacyGuidClientController {
     }
 
     return sgrs;
+  }
+
+  private AccountUsers getAccountUsers(HttpServletRequest request) {
+    String base64Credentials = request.getHeader("Authorization");
+    String credentials = new String(BaseEncoding.base64()
+        .decode(base64Credentials.replaceFirst("^Basic\\s+", "")));
+
+    final String[] values = credentials.split(":", 2);
+
+    return acctUserRepo.findByUsernameAndPassword(values[0],
+        Crc32HashcodeCreator.getCrc32(values[1]));
+  }
+
+  private boolean isValidate(HttpServletRequest request) {
+
+    return getAccountUsers(request) != null ? true : false;
   }
 
 }
