@@ -44,22 +44,54 @@ import tw.guid.local.models.Action;
 public class ApiControllerTest {
 
   @Test
-  public void testUsers() throws URISyntaxException, IOException {
+  public void testValidateNovelSubprimeGuid() throws URISyntaxException {
 
+    assertTrue(HttpActionHelper
+        .toGet(new URI(RestfulConfig.GUID_LOCAL_SERVER_URL),
+            Action.API_VALIDATE, "?spguid=" + "BBB-SG1XQETJ", false)
+        .getBody().equals("true"));
+
+    assertTrue(HttpActionHelper
+        .toGet(new URI(RestfulConfig.GUID_LOCAL_SERVER_URL),
+            Action.API_VALIDATE, "?spguid=" + "BBB-SG1XQETH", false)
+        .getBody().equals("false"));
+  }
+
+  @Test
+  public void testValidateOldSubprimeGuid() throws URISyntaxException {
+
+    assertTrue(HttpActionHelper
+        .toGet(new URI(RestfulConfig.GUID_LOCAL_SERVER_URL),
+            Action.API_VALIDATE, "?spguid=" + "YM-75be31f6", false)
+        .getBody().equals("true"));
+
+    assertTrue(HttpActionHelper
+        .toGet(new URI(RestfulConfig.GUID_LOCAL_SERVER_URL),
+            Action.API_VALIDATE, "?spguid=" + "YM-75be31f0", false)
+        .getBody().equals("false"));
+  }
+
+  @Test
+  public void testValidateSubprimeGuidLength() throws URISyntaxException {
+
+    assertTrue(HttpActionHelper
+        .toGet(new URI(RestfulConfig.GUID_LOCAL_SERVER_URL),
+            Action.API_VALIDATE, "?spguid=" + "YM-75be3", false)
+        .getBody().equals("false"));
+
+    assertTrue(HttpActionHelper
+        .toGet(new URI(RestfulConfig.GUID_LOCAL_SERVER_URL),
+            Action.API_VALIDATE, "?spguid=" + "YM-75be31f6kkp", false)
+        .getBody().equals("false"));
+  }
+
+  @Test
+  public void testUsers() throws URISyntaxException, IOException {
     assertEquals(
         HttpActionHelper.toGet(new URI(RestfulConfig.GUID_LOCAL_SERVER_URL),
             Action.API_USERS, "", true).getBody(),
         "[" + "{\"username\":\"admin\",\"prefix\":\"AdminTest\",\"email\":\"admin@ym.com\",\"institute\":\"國立陽明大學\",\"jobTitle\":\"系統管理員\",\"telephone\":\"0910777666\",\"address\":\"國立陽明大學\",\"role\":\"ROLE_ADMIN\"}"
             + "]");
-
-    // HttpClientHelper hch =
-    // new HttpClientHelper(new URI(RestfulConfig.GUID_LOCAL_SERVER_URL),
-    // "admin", "password", Action.WEB_USERS);
-    // assertEquals(hch.toGet(),
-    // "[" +
-    // "{\"username\":\"admin\",\"prefix\":\"AdminTest\",\"email\":\"admin@ym.com\",\"institute\":\"國立陽明大學\",\"jobTitle\":\"系統管理員\",\"telephone\":\"0910777666\",\"address\":\"國立陽明大學\",\"role\":\"ROLE_ADMIN\"}"
-    // + "]");
-
   }
 
   @Test
