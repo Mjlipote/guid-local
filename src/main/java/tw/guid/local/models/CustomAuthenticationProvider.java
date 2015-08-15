@@ -38,35 +38,32 @@ import tw.guid.local.models.repo.AccountUsersRepository;
 @Component
 public class CustomAuthenticationProvider implements AuthenticationProvider {
 
-  private String name;
-
   @Autowired
-  AccountUsersRepository userRepo;
+  AccountUsersRepository acctUserRepo;
 
   @Override
   public Authentication authenticate(Authentication authentication)
       throws AuthenticationException {
-    String name = authentication.getName();
+    String username = authentication.getName();
     String password =
         Crc32Algorithm.getCrc32(authentication.getCredentials().toString());
 
-    if (name.equals(userRepo.findByUsername(name).getUsername())
-        && password.equals(userRepo.findByUsername(name).getPassword())
-        && userRepo.findByUsername(name).getRole().equals(Role.ROLE_ADMIN)) {
+    if (acctUserRepo.findByUsernameAndPasswordAndRole(username, password,
+        Role.ROLE_ADMIN) != null) {
       List<GrantedAuthority> grantedAuths = newArrayList();
+
       grantedAuths.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
-      Authentication auth =
-          new UsernamePasswordAuthenticationToken(name, password, grantedAuths);
-      this.name = name;
+      Authentication auth = new UsernamePasswordAuthenticationToken(username,
+          password, grantedAuths);
+
       return auth;
-    } else if (name.equals(userRepo.findByUsername(name).getUsername())
-        && password.equals(userRepo.findByUsername(name).getPassword())
-        && userRepo.findByUsername(name).getRole().equals(Role.ROLE_USER)) {
+    } else if (acctUserRepo.findByUsernameAndPasswordAndRole(username, password,
+        Role.ROLE_USER) != null) {
       List<GrantedAuthority> grantedAuths = newArrayList();
       grantedAuths.add(new SimpleGrantedAuthority("ROLE_USER"));
-      Authentication auth =
-          new UsernamePasswordAuthenticationToken(name, password, grantedAuths);
-      this.name = name;
+      Authentication auth = new UsernamePasswordAuthenticationToken(username,
+          password, grantedAuths);
+
       return auth;
     } else {
       return null;
@@ -77,13 +74,6 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
   @Override
   public boolean supports(Class<?> authentication) {
     return authentication.equals(UsernamePasswordAuthenticationToken.class);
-  }
-
-  /**
-   * @return the name
-   */
-  public String getName() {
-    return name;
   }
 
 }

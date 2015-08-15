@@ -38,6 +38,9 @@ public interface AccountUsersRepository
 
   public AccountUsers findByUsernameAndRole(String username, Role role);
 
+  public AccountUsers findByUsernameAndPasswordAndRole(String username,
+      String password, Role role);
+
   public Set<AccountUsers> findByPassword(String password);
 
   public Set<AccountUsers> findByPrefix(String prefix);

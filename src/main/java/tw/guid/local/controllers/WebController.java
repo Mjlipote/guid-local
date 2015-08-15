@@ -32,6 +32,8 @@ import java.util.Map;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -136,8 +138,10 @@ public class WebController {
                   Integer.valueOf(birthOfMonth), Integer.valueOf(birthOfDay)),
           new TWNationalId(sid)).build();
 
-      String prefix = acctUserRepo
-          .findByUsername(customAuthenticationProvider.getName()).getPrefix();
+      Authentication auth =
+          SecurityContextHolder.getContext().getAuthentication();
+
+      String prefix = acctUserRepo.findByUsername(auth.getName()).getPrefix();
       SubprimeGuid sg =
           spguidRepo.findByHashcode1AndHashcode2AndHashcode3AndPrefix(
               pii.getHashcodes().get(0), pii.getHashcodes().get(1),
