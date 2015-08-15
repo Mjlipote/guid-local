@@ -69,7 +69,7 @@ public class WebController {
   @Autowired
   SubprimeGuidRepository spguidRepo;
   @Autowired
-  AccountUsersRepository userRepo;
+  AccountUsersRepository acctUserRepo;
   @Autowired
   CustomAuthenticationProvider customAuthenticationProvider;
 
@@ -136,7 +136,7 @@ public class WebController {
                   Integer.valueOf(birthOfMonth), Integer.valueOf(birthOfDay)),
           new TWNationalId(sid)).build();
 
-      String prefix = userRepo
+      String prefix = acctUserRepo
           .findByUsername(customAuthenticationProvider.getName()).getPrefix();
       SubprimeGuid sg =
           spguidRepo.findByHashcode1AndHashcode2AndHashcode3AndPrefix(
@@ -144,7 +144,7 @@ public class WebController {
               pii.getHashcodes().get(2), prefix);
 
       if (sg != null) {
-        map.addAttribute("spguids", "重覆" + sg.getSpguid());
+        map.addAttribute("spguids", "REPEAT:" + sg.getSpguid());
         return "create-result";
       } else {
 
@@ -218,10 +218,35 @@ public class WebController {
       user.setRole(
           authority.equals("ROLE_ADMIN") ? Role.ROLE_ADMIN : Role.ROLE_USER);
 
-      userRepo.save(user);
+      acctUserRepo.save(user);
       map.addAttribute("users", user);
 
       return "register-success";
+    }
+  }
+
+  /**
+   * 刪除一般使用者
+   * 
+   * @param map
+   * @param username
+   * @return
+   */
+  @RequestMapping(value = "/deleteuser", method = RequestMethod.POST)
+  String deleteuser(ModelMap map,
+      @RequestParam(value = "username") String username) {
+
+    if (username.equals("")) {
+      return "null-error";
+    } else {
+      AccountUsers acctUser =
+          acctUserRepo.findByUsernameAndRole(username, Role.ROLE_USER);
+
+      // 待補！！應該使用下拉選單，以避免找不到要刪除的 User
+      acctUserRepo.delete(acctUser);
+      map.addAttribute("users", acctUser);
+      return "deleteuser-success";
+
     }
   }
 
@@ -235,7 +260,7 @@ public class WebController {
   List<AccountUsersResponse> users() {
 
     // 未補完
-    return AccountUsersResponse.getResponse(userRepo.findAll());
+    return AccountUsersResponse.getResponse(acctUserRepo.findAll());
   }
 
   /**
@@ -256,9 +281,9 @@ public class WebController {
     if (username.equals("") && prefix.equals("") && institute.equals("")) {
       return "null-error";
     } else {
-      aus.add(userRepo.findByUsername(username));
-      aus.addAll(userRepo.findByInstitute(institute));
-      aus.addAll(userRepo.findByPrefix(prefix));
+      aus.add(acctUserRepo.findByUsername(username));
+      aus.addAll(acctUserRepo.findByInstitute(institute));
+      aus.addAll(acctUserRepo.findByPrefix(prefix));
       map.addAttribute("accountUsersSet", aus);
       return "search";
     }

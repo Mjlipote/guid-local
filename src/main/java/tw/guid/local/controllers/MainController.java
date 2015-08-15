@@ -54,6 +54,12 @@ public class MainController {
     return "comparison";
   }
 
+  @RequestMapping("/deleteuser")
+
+  String deleteuser() {
+    return "deleteuser";
+  }
+
   @RequestMapping("/hello")
 
   String hello() {

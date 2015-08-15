@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8" />
+<title>刪除使用者</title>
+<th:block th:include="head :: bootstrap" />
+<style type="text/css">
+</style>
+</head>
+<body>
+  <h1>刪除使用者</h1>
+
+  <form class="form-horizontal" method="post" th:action="@{guid/web/deleteuser}">
+
+    <div class="col-sm-10">
+      姓名：<input class="form-control" type="text" name="username"></input>
+    </div>
+
+    <div class="col-sm-10">
+      <input class="btn btn-primary" type="submit" value="新增使用者"></input>
+    </div>
+
+  </form>
+  <div class="col-sm-10">
+    <a th:href="@{/home}">回到首頁</a>
+  </div>
+</body>
+</html>

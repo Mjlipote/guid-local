@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8"></meta>
+<title>刪除使用者</title>
+</head>
+<body>
+  <h1>刪除一般使用者成功</h1>
+  <div th:if="${users}">
+    刪除使用者: <span th:text="${users.username}"></span><br /> Prefix 值: <span
+      th:text="${users.prefix}"></span>
+  </div>
+  <div>
+    <a th:href="@{/home}">回到首頁</a>
+  </div>
+</body>
+</html>
