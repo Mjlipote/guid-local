@@ -26,9 +26,10 @@ package tw.guid.local.models;
 public enum Action {
 
   CREATE("create"), AUTHENTICATE("authenticate"), EXIST("exist"),
-  COMPARISON("comparison"), WEB_CREATE("web/create"), WEB_EXIST("web/exist"),
-  WEB_USERS("web/users"), WEB_COMPARISON("web/comparison"),
-  API_USERS("api/users"), API_EXIST("api/exist");
+  COMPARISON("comparison"), VALIDATE("validate"), WEB_CREATE("web/create"),
+  WEB_EXIST("web/exist"), WEB_USERS("web/users"),
+  WEB_DELETEUSER("web/deleteuser"), WEB_COMPARISON("web/comparison"),
+  API_USERS("api/users"), API_EXIST("api/exist"), API_VALIDATE("api/validate");
 
   private String action;
 
