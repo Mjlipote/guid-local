@@ -1,9 +1,9 @@
 /**
  *
- * @author Wei-Ming Wu
+ * @author Wei-Ming Wu, Ming-Jheng Li
  *
  *
- * Copyright 2015 Wei-Ming Wu
+ * Copyright 2015 Wei-Ming Wu, Ming-Jheng Li
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -22,13 +22,17 @@ package tw.guid.local.controllers;
 
 import static com.google.common.collect.Lists.newArrayList;
 
+import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.security.NoSuchAlgorithmException;
 import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -45,6 +49,7 @@ import com.google.gson.reflect.TypeToken;
 import tw.guid.local.config.RestfulConfig;
 import tw.guid.local.helper.HttpActionHelper;
 import tw.guid.local.models.Action;
+import tw.guid.local.models.Crc32Algorithm;
 import tw.guid.local.models.CustomAuthenticationProvider;
 import tw.guid.local.models.SubprimeGuidRequest;
 import tw.guid.local.models.entity.AccountUsers;
@@ -60,19 +65,20 @@ public class LegacyGuidClientController {
   @Autowired
   CustomAuthenticationProvider customAuthenticationProvider;
 
-  @Autowired
-  AccountUsersRepository userRepo;
+  private static final Logger log =
+      LoggerFactory.getLogger(LegacyGuidClientController.class);
 
   @RequestMapping(value = "/authenticate", method = RequestMethod.GET)
   @ResponseBody
-  String authenticate(HttpServletRequest request) {
+  String authenticate(HttpServletRequest request)
+      throws NoSuchAlgorithmException, UnsupportedEncodingException {
     String base64Credentials = request.getHeader("Authorization");
     String credentials = new String(BaseEncoding.base64()
         .decode(base64Credentials.replaceFirst("^Basic\\s+", "")));
 
     final String[] values = credentials.split(":", 2);
-    AccountUsers acctUser =
-        acctUserRepo.findByUsernameAndPassword(values[0], values[1]);
+    AccountUsers acctUser = acctUserRepo.findByUsernameAndPassword(values[0],
+        Crc32Algorithm.getCrc32(values[1]));
 
     return new Gson().toJson(acctUser != null, Boolean.class);
   }
@@ -80,14 +86,22 @@ public class LegacyGuidClientController {
   @RequestMapping(value = "/create", method = RequestMethod.POST)
   @ResponseBody
   String create(@RequestParam("prefix") String prefix,
-      @RequestParam("hashes") String jsonHashes)
-          throws JsonProcessingException, URISyntaxException {
-    AccountUsers acc =
-        userRepo.findByUsername(customAuthenticationProvider.getName());
+      @RequestParam("hashes") String jsonHashes, HttpServletRequest request)
+          throws JsonProcessingException, URISyntaxException,
+          NoSuchAlgorithmException, UnsupportedEncodingException {
 
-    if (prefix.equals("") && acc != null) {
-      prefix = acc.getPrefix();
-    } else if (prefix.equals("") && acc == null) {
+    String base64Credentials = request.getHeader("Authorization");
+    String credentials = new String(BaseEncoding.base64()
+        .decode(base64Credentials.replaceFirst("^Basic\\s+", "")));
+
+    final String[] values = credentials.split(":", 2);
+
+    AccountUsers acctUser = acctUserRepo.findByUsernameAndPassword(values[0],
+        Crc32Algorithm.getCrc32(values[1]));
+
+    if (prefix.equals("") && acctUser != null) {
+      prefix = acctUser.getPrefix();
+    } else if (prefix.equals("")) {
       prefix = "PSEUDO";
     }
 

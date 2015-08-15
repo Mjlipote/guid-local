@@ -48,12 +48,12 @@ public class ApiControllerTest {
 
     assertTrue(HttpActionHelper
         .toGet(new URI(RestfulConfig.GUID_LOCAL_SERVER_URL),
-            Action.API_VALIDATE, "?spguid=" + "BBB-SG1XQETJ", false)
+            Action.API_VALIDATE, "?spguid=" + "BBB-SG1XQETJ", true)
         .getBody().equals("true"));
 
     assertTrue(HttpActionHelper
         .toGet(new URI(RestfulConfig.GUID_LOCAL_SERVER_URL),
-            Action.API_VALIDATE, "?spguid=" + "BBB-SG1XQETH", false)
+            Action.API_VALIDATE, "?spguid=" + "BBB-SG1XQETH", true)
         .getBody().equals("false"));
   }
 
@@ -62,12 +62,12 @@ public class ApiControllerTest {
 
     assertTrue(HttpActionHelper
         .toGet(new URI(RestfulConfig.GUID_LOCAL_SERVER_URL),
-            Action.API_VALIDATE, "?spguid=" + "YM-75be31f6", false)
+            Action.API_VALIDATE, "?spguid=" + "YM-75be31f6", true)
         .getBody().equals("true"));
 
     assertTrue(HttpActionHelper
         .toGet(new URI(RestfulConfig.GUID_LOCAL_SERVER_URL),
-            Action.API_VALIDATE, "?spguid=" + "YM-75be31f0", false)
+            Action.API_VALIDATE, "?spguid=" + "YM-75be31f0", true)
         .getBody().equals("false"));
   }
 
@@ -76,12 +76,12 @@ public class ApiControllerTest {
 
     assertTrue(HttpActionHelper
         .toGet(new URI(RestfulConfig.GUID_LOCAL_SERVER_URL),
-            Action.API_VALIDATE, "?spguid=" + "YM-75be3", false)
+            Action.API_VALIDATE, "?spguid=" + "YM-75be3", true)
         .getBody().equals("false"));
 
     assertTrue(HttpActionHelper
         .toGet(new URI(RestfulConfig.GUID_LOCAL_SERVER_URL),
-            Action.API_VALIDATE, "?spguid=" + "YM-75be31f6kkp", false)
+            Action.API_VALIDATE, "?spguid=" + "YM-75be31f6kkp", true)
         .getBody().equals("false"));
   }
 
@@ -91,6 +91,8 @@ public class ApiControllerTest {
         HttpActionHelper.toGet(new URI(RestfulConfig.GUID_LOCAL_SERVER_URL),
             Action.API_USERS, "", true).getBody(),
         "[" + "{\"username\":\"admin\",\"prefix\":\"AdminTest\",\"email\":\"admin@ym.com\",\"institute\":\"國立陽明大學\",\"jobTitle\":\"系統管理員\",\"telephone\":\"0910777666\",\"address\":\"國立陽明大學\",\"role\":\"ROLE_ADMIN\"}"
+            + ","
+            + "{\"username\":\"user\",\"prefix\":\"UserTest\",\"email\":\"user@ym.com\",\"institute\":\"國立陽明大學\",\"jobTitle\":\"使用者\",\"telephone\":\"0910777000\",\"address\":\"國立陽明大學\",\"role\":\"ROLE_USER\"}"
             + "]");
   }
 

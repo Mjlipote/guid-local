@@ -1,5 +1,7 @@
 package tw.guid.local.models.entity;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -7,6 +9,7 @@ import javax.persistence.Enumerated;
 
 import org.springframework.data.jpa.domain.AbstractPersistable;
 
+import tw.guid.local.models.Crc32Algorithm;
 import tw.guid.local.models.Role;
 
 @Entity
@@ -73,7 +76,8 @@ public class AccountUsers extends AbstractPersistable<Long> {
    *          the password to set
    */
   public void setPassword(String password) {
-    this.password = password;
+
+    this.password = Crc32Algorithm.getCrc32(checkNotNull(password));
   }
 
   /**
@@ -180,93 +184,5 @@ public class AccountUsers extends AbstractPersistable<Long> {
   public void setAddress(String address) {
     this.address = address;
   }
-
-  // /**
-  // *
-  // * @author apple
-  // *
-  // */
-  // public static class Builder {
-  //
-  // private final String username;
-  //
-  // private final String password;
-  //
-  // private final String email;
-  //
-  // private final String institute;
-  //
-  // private final String prefix;
-  //
-  // private String jobTitle;
-  //
-  // private String telephone;
-  //
-  // private String address;
-  //
-  // /**
-  // * Required parameters
-  // *
-  // * @param username
-  // * @param password
-  // * @param email
-  // * @param institute
-  // * @param prefix
-  // */
-  //
-  // public Builder(String username, String password, String email, String
-  // institute, String prefix) {
-  // this.username = NullValidator.checkNotNull(username, "Username can't be
-  // null.");
-  //
-  // this.password = NullValidator.checkNotNull(password, "Password can't be
-  // null.");
-  //
-  // this.email = NullValidator.checkNotNull(email, "Email can't be null.");
-  //
-  // this.institute = NullValidator.checkNotNull(institute, "Institute can't be
-  // null.");
-  //
-  // this.prefix = NullValidator.checkNotNull(prefix, "Prefix can't be null.");
-  // }
-  //
-  // /**
-  // * Optional parameter
-  // *
-  // * @param str
-  // * @return
-  // */
-  //
-  // public Builder jobTitle(String str) {
-  // jobTitle = NullValidator.checkNotNull(str, "Job Title can't be null.");
-  // return this;
-  // }
-  //
-  // public Builder telephone(String str) {
-  // telephone = NullValidator.checkNotNull(str, "Job Title can't be null.");
-  // return this;
-  // }
-  //
-  // public Builder address(String str) {
-  // address = NullValidator.checkNotNull(str, "Job Title can't be null.");
-  // return this;
-  // }
-  //
-  // public AccountUsers build() {
-  // return new AccountUsers(this);
-  // }
-  //
-  // }
-  //
-  // private AccountUsers(Builder builder) {
-  // this.username = builder.username;
-  // this.password = builder.password;
-  // this.email = builder.email;
-  // this.institute = builder.institute;
-  // this.prefix = builder.prefix;
-  // this.jobTitle = builder.jobTitle;
-  // this.telephone = builder.telephone;
-  // this.address = builder.address;
-  // }
 
 }

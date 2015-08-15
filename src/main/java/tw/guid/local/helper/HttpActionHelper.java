@@ -36,6 +36,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import tw.guid.local.models.Action;
+import tw.guid.local.models.Crc32Algorithm;
 
 public class HttpActionHelper {
 
@@ -63,7 +64,7 @@ public class HttpActionHelper {
       Object object, boolean authority) throws JsonProcessingException {
 
     if (authority == true) {
-      headers = getHeaders("admin", "password");
+      headers = getHeaders("admin", Crc32Algorithm.getCrc32("password"));
     } else {
       headers.setContentType(MediaType.APPLICATION_JSON);
       headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
@@ -104,7 +105,7 @@ public class HttpActionHelper {
       String param, boolean authority) {
 
     if (authority == true) {
-      headers = getHeaders("admin", "password");
+      headers = getHeaders("admin", Crc32Algorithm.getCrc32("password"));
     } else {
       headers.setContentType(MediaType.APPLICATION_JSON);
       headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));

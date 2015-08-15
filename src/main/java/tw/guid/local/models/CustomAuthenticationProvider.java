@@ -47,7 +47,8 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
   public Authentication authenticate(Authentication authentication)
       throws AuthenticationException {
     String name = authentication.getName();
-    String password = authentication.getCredentials().toString();
+    String password =
+        Crc32Algorithm.getCrc32(authentication.getCredentials().toString());
 
     if (name.equals(userRepo.findByUsername(name).getUsername())
         && password.equals(userRepo.findByUsername(name).getPassword())
