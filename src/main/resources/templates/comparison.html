@@ -8,17 +8,21 @@
 <style type="text/css">
 </style>
 </head>
+<th:block th:include="top :: navigation" />
 <body>
-	<h1>比對二次編碼</h1>
 
-	<form class="form-horizontal" method="post" th:action="@{guid/web/comparison}">
+	<h1 class="text-center">比對二次編碼</h1>
 
-		填入二次編碼字串列（以 "," 做區隔）：
-		<textarea class="form-control" rows="5" name="subprimeGuids"></textarea>
+	<form class="form-horizontal" method="post"
+		th:action="@{guid/web/comparison}">
+
+		<div class="text-center"> 填入二次編碼字串列（以 "," 做區隔）：</div>
+		<textarea class="col-md-6 col-md-offset-3" rows="5" name="subprimeGuids"></textarea>
 		<br /> <input class="btn btn-primary" type="submit" value="進行比對"></input>
 	</form>
 	<div>
-		<a th:href="@{/home}">回到首頁</a>
+		<a class="text-center" th:href="@{/home}">回到首頁</a>
 	</div>
+
 </body>
 </html>

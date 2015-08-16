@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+
+<head>
+<title>使用者清單</title>
+<th:block th:include="head :: bootstrap" />
+<style type="text/css">
+</style>
+</head>
+<th:block th:include="top :: navigation" class="container-fluid" />
+<body>
+
+	<h1 class="text-center">使用者</h1>
+
+	<form method="get" th:action="@{/users}">
+		<div class="form-group">
+			<div class="col-xs-8 col-sm-6 col-md-7">
+				Username：<input class="form-control" type="text" name="username"></input>
+
+				Prefix： <select name="prefix">
+					<option value="TpeVGH">TpeVGH</option>
+					<option value="TSGH">TSGH</option>
+					<option value="NTUH">NTUH</option>
+				</select> <input class="btn btn-primary" type="submit" value="搜尋使用者"></input>
+			</div>
+		</div>
+	</form>
+
+	<th:block th:each="accuntusers : ${accPage}">
+		<div class="row">
+			<div class="col-xs-2 col-sm-2 col-md-2">
+				<span th:text="${accuntusers.username}"></span> <span
+					th:text="${accuntusers.prefix}"></span>
+			</div>
+		</div>
+	</th:block>
+
+</body>
+</html>

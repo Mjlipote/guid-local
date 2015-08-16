@@ -8,11 +8,12 @@
 <style type="text/css">
 </style>
 </head>
+<th:block th:include="top :: navigation" />
 <body>
+
 	<h1>刪除使用者</h1>
 
 	<form class="form-horizontal" method="get" th:action="@{guid/web/user}">
-
 
 		<div class="col-sm-10">
 			姓名：<input class="form-control" type="text" name="username"></input>
@@ -26,5 +27,6 @@
 	<div class="col-sm-10">
 		<a th:href="@{/home}">回到首頁</a>
 	</div>
+
 </body>
 </html>

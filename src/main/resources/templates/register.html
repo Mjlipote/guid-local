@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:th="http://www.thymeleaf.org">
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
 <head>
 <meta charset="UTF-8" />
 <title>新增使用者</title>
@@ -8,65 +9,83 @@
 <style type="text/css">
 </style>
 </head>
+<th:block th:include="top :: navigation" />
 <body>
+
 	<h1>新增使用者</h1>
 
-	<form class="form-horizontal" method="post" th:action="@{guid/web/register}">
-
-		<div class="col-sm-10">
-			使用者權限：<select class="form-control" name="authority">
-				<option value="ROLE_ADMIN">系統管理者</option>
-				<option value="ROLE_USER">一般使用者</option>
-			</select>
+	<form method="post" th:action="@{guid/web/register}">
+		<div class="form-group">
+			<div class="col-xs-8 col-sm-6 col-md-7">
+				<label>使用者權限</label>：<select class="form-control" name="authority">
+					<option value="ROLE_ADMIN">系統管理者</option>
+					<option value="ROLE_USER">一般使用者</option>
+				</select>
+			</div>
 		</div>
-
-		<div class="col-sm-10">
-			姓名：<input class="form-control" type="text" name="username"></input>
+		<div class="form-group">
+			<div class="col-xs-8 col-sm-6 col-md-7">
+				<label>姓名：</label><input class="form-control" type="text"
+					name="username"></input>
+			</div>
 		</div>
-
-		<div class="col-sm-10">
-			密碼：<input class="form-control" type="password" name="password"></input>
+		<div class="form-group">
+			<div class="col-xs-8 col-sm-6 col-md-7">
+				<label>密碼：</label><input class="form-control" type="password"
+					placeholder="Password" name="password"></input>
+			</div>
 		</div>
-
-		<div class="col-sm-10">
-			E-Mail：<input class="form-control" type="text" placeholder="Sample@mail.com" name="email"></input>
+		<div class="form-group">
+			<div class="col-xs-8 col-sm-6 col-md-7">
+				<label>E-Mail：</label><input type="email" class="form-control"
+					placeholder="Sample@mail.com" name="email"></input>
+			</div>
 		</div>
-
-		<div class="col-sm-10">
-			單位：<select class="form-control" name="institute">
-				<option value="北榮">北榮</option>
-				<option value="三總">三總</option>
-				<option value="台大">台大</option>
-			</select>
+		<div class="form-group">
+			<div class="col-xs-8 col-sm-6 col-md-7">
+				<label>單位：</label><select class="form-control" name="institute">
+					<option value="北榮">北榮</option>
+					<option value="三總">三總</option>
+					<option value="台大">台大</option>
+				</select>
+			</div>
 		</div>
-
-		<div class="col-sm-10">
-			Prefix：<select class="form-control" name="prefix">
-				<option value="TpeVGH">TpeVGH</option>
-				<option value="TSGH">TSGH</option>
-				<option value="NTUH">NTUH</option>
-			</select>
+		<div class="form-group">
+			<div class="col-xs-8 col-sm-6 col-md-7">
+				<label>Prefix：</label><select class="form-control" name="prefix">
+					<option value="TpeVGH">TpeVGH</option>
+					<option value="TSGH">TSGH</option>
+					<option value="NTUH">NTUH</option>
+				</select>
+			</div>
 		</div>
-
-		<div class="col-sm-10">
-			工作職銜：<input class="form-control" type="text" name="jobTitle"></input>
+		<div class="form-group">
+			<div class="col-xs-8 col-sm-6 col-md-7">
+				<label>工作職銜：</label><input class="form-control" type="text"
+					name="jobTitle"></input>
+			</div>
 		</div>
-
-		<div class="col-sm-10">
-			聯絡電話：<input class="form-control" type="text" name="telephone"></input>
+		<div class="form-group">
+			<div class="col-xs-8 col-sm-6 col-md-7">
+				<label>聯絡電話：</label><input class="form-control" type="text"
+					placeholder="0910xxxxxx" name="telephone"></input>
+			</div>
 		</div>
-
-		<div class="col-sm-10">
-			聯絡住址：<input class="form-control" type="text" name="address"></input>
+		<div class="form-group">
+			<div class="col-xs-8 col-sm-6 col-md-7">
+				<label>聯絡住址：</label><input class="form-control" type="text"
+					name="address"></input>
+			</div>
 		</div>
-
-		<div class="col-sm-10">
-			<input class="btn btn-primary" type="submit" value="新增使用者"></input>
+		<div class="form-group">
+			<div class="col-xs-8 col-sm-6 col-md-7">
+				<input class="btn btn-primary" type="submit" value="新增使用者"></input>
+			</div>
 		</div>
-
 	</form>
-	<div class="col-sm-10">
+	<div class="col-xs-6 col-sm-6 col-md-6">
 		<a th:href="@{/home}">回到首頁</a>
 	</div>
+
 </body>
 </html>
