@@ -9,10 +9,10 @@
 <style type="text/css">
 </style>
 </head>
-<th:block th:include="top :: navigation" />
-<body>
 
-	<h1>新增使用者</h1>
+<body>
+	<th:block th:include="top :: navigation" />
+	<h1 class="text-center">新增使用者</h1>
 
 	<form method="post" th:action="@{guid/web/register}">
 		<div class="form-group">
@@ -83,9 +83,6 @@
 			</div>
 		</div>
 	</form>
-	<div class="col-xs-6 col-sm-6 col-md-6">
-		<a th:href="@{/home}">回到首頁</a>
-	</div>
 
 </body>
 </html>

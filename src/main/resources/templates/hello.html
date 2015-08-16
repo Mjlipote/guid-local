@@ -7,17 +7,15 @@
 <th:block th:include="head :: bootstrap" />
 <style type="text/css">
 </style>
+<th:block th:include="top :: navigation" class="container-fluid" />
 </head>
-<th:block th:include="top :: navigation" />
+
 <body>
 
-	<h1 th:inline="text">Hello [[${#httpServletRequest.remoteUser}]]!</h1>
+	<h1 class="text-center" th:inline="text">Hello [[${#httpServletRequest.remoteUser}]]!</h1>
 	<form th:action="@{/logout}" method="post">
 		<input class="btn btn-primary" type="submit" value="Sign Out" />
 	</form>
-	<div>
-		<a th:href="@{/home}">回到首頁</a>
-	</div>
 
 </body>
 </html>

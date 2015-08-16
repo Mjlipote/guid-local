@@ -2,19 +2,17 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:th="http://www.thymeleaf.org">
 <head>
-<meta charset="UTF-8"></meta>
 <title>二次編碼</title>
+<th:block th:include="top :: navigation" class="container-fluid" />
 </head>
 <th:block th:include="head :: bootstrap" />
 <style type="text/css">
 </style>
 <body>
-	<h1>產生的二次編碼 GUIDs</h1>
+	<h1 class="text-center">產生的二次編碼 GUIDs</h1>
 	<div th:if="${spguids}">
 		<span th:text="${spguids}"></span>
 	</div>
-	<div>
-		<a th:href="@{/home}">回到首頁</a>
-	</div>
+
 </body>
 </html>

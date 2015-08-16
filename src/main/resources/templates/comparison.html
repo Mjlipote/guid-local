@@ -7,8 +7,9 @@
 <th:block th:include="head :: bootstrap" />
 <style type="text/css">
 </style>
-</head>
 <th:block th:include="top :: navigation" />
+</head>
+
 <body>
 
 	<h1 class="text-center">比對二次編碼</h1>
@@ -20,9 +21,6 @@
 		<textarea class="col-md-6 col-md-offset-3" rows="5" name="subprimeGuids"></textarea>
 		<br /> <input class="btn btn-primary" type="submit" value="進行比對"></input>
 	</form>
-	<div>
-		<a class="text-center" th:href="@{/home}">回到首頁</a>
-	</div>
 
 </body>
 </html>

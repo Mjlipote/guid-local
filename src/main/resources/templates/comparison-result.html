@@ -7,8 +7,9 @@
 <th:block th:include="head :: bootstrap" />
 <style type="text/css">
 </style>
-</head>
 <th:block th:include="top :: navigation" />
+</head>
+
 <body>
 	<h1 class="text-center">二次編碼比對結果</h1>
 	<div th:if="${result}">
@@ -16,8 +17,6 @@
 		<span th:text="${result}"></span><br />
 
 	</div>
-	<div>
-		<a class="text-center" th:href="@{/home}">回到首頁</a>
-	</div>
+
 </body>
 </html>

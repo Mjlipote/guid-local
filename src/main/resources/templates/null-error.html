@@ -7,26 +7,12 @@
 <th:block th:include="head :: bootstrap" />
 <style type="text/css">
 </style>
+<th:block th:include="top :: navigation" class="container-fluid" />
 </head>
-<th:block th:include="top :: navigation" />
-<body>
-	<h1>請確實填寫資料，勿留空值！！</h1>
 
-	<div sec:authorize="hasRole('ROLE_ADMIN')">
-		<a th:href="@{/register}">回新增使用者介面</a>
-	</div>
-	<div sec:authorize="hasRole('ROLE_ADMIN')">
-		<a th:href="@{/create}">回刪除使用者介面</a>
-	</div>
-	<div sec:authorize="hasRole('ROLE_ADMIN')">
-		<a th:href="@{/comparison}">回二次編碼比對介面</a>
-	</div>
-	<div>
-		<a th:href="@{/create}">回產生 GUID 介面</a>
-	</div>
-	<div>
-		<a th:href="@{/home}">回到首頁</a>
-	</div>
+<body>
+
+	<h1 class="text-center">請確實填寫資料，勿留空值！！</h1>
 
 </body>
 </html>
