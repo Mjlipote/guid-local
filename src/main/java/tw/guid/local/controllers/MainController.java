@@ -94,12 +94,6 @@ public class MainController {
     return "users";
   }
 
-  @RequestMapping("/hello")
-
-  String hello() {
-    return "hello";
-  }
-
   @RequestMapping("/login")
 
   String login() {

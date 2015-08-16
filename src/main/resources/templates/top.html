@@ -8,7 +8,7 @@
 		<div class="container">
 			<div class="tabbable">
 				<ul class="nav nav-tabs nav-justified">
-					<li class="active"><a th:href="@{/hello}" data-toggle="tab1">歡迎頁面</a></li>
+					<li class="active"><a th:href="@{/home}" data-toggle="tab1">首頁</a></li>
 
 					<li class="active" sec:authorize="hasRole('ROLE_ADMIN')"><a
 						th:href="@{/register}" data-toggle="tab2">新增使用者頁面</a></li>
