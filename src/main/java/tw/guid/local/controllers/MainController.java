@@ -3,8 +3,20 @@
  */
 package tw.guid.local.controllers;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
+import org.springframework.data.domain.Sort.Order;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+
+import tw.guid.local.models.entity.AccountUsers;
+import tw.guid.local.models.repo.AccountUsersRepository;
 
 /**
  *
@@ -29,6 +41,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 public class MainController {
+
+  @Autowired
+  AccountUsersRepository acctUserRepo;
 
   @RequestMapping("/home")
 
@@ -58,6 +73,25 @@ public class MainController {
 
   String deleteuser() {
     return "deleteuser";
+  }
+
+  @RequestMapping(value = "/users", method = RequestMethod.GET)
+  String users(ModelMap map, @Param("username") String username,
+      @Param("prefix") String prefix) {
+
+    PageRequest pageReq =
+        new PageRequest(0, 10, new Sort(new Order(Direction.ASC, "username")));
+
+    Page<AccountUsers> accPage;
+
+    if (username != null && prefix != null) {
+      accPage = acctUserRepo.findByUsernameAndPrefix(username, prefix, pageReq);
+    } else {
+      accPage = acctUserRepo.findAll(pageReq);
+    }
+
+    map.addAttribute("accPage", accPage);
+    return "users";
   }
 
   @RequestMapping("/hello")

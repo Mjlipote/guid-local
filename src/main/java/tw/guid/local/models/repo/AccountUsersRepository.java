@@ -23,6 +23,8 @@ package tw.guid.local.models.repo;
 
 import java.util.Set;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import tw.guid.local.models.Role;
@@ -30,6 +32,9 @@ import tw.guid.local.models.entity.AccountUsers;
 
 public interface AccountUsersRepository
     extends JpaRepository<AccountUsers, Long> {
+
+  public Page<AccountUsers> findByUsernameAndPrefix(String username,
+      String prefix, Pageable pageable);
 
   public AccountUsers findByUsernameAndPassword(String username,
       String password);

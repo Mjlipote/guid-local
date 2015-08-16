@@ -54,7 +54,6 @@ import tw.edu.ym.guid.client.field.Birthday;
 import tw.edu.ym.guid.client.field.Sex;
 import tw.edu.ym.guid.client.field.TWNationalId;
 import tw.guid.local.helper.HttpActionHelper;
-import tw.guid.local.models.AccountUsersResponse;
 import tw.guid.local.models.Action;
 import tw.guid.local.models.CustomAuthenticationProvider;
 import tw.guid.local.models.Role;
@@ -287,13 +286,6 @@ public class WebController {
    * 
    * @return
    */
-
-  @RequestMapping(value = "/users", method = RequestMethod.GET)
-  List<AccountUsersResponse> users() {
-
-    // 未補完
-    return AccountUsersResponse.getResponse(acctUserRepo.findAll());
-  }
 
   /**
    * 搜尋使用者
