@@ -4,30 +4,32 @@
 	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
 
 <th:block th:fragment="navigation" class="container-fluid">
-<header class="navbar navbar-default navbar-static-top" role="navigation">
+	<header class="navbar navbar-default navbar-static-top"
+		role="navigation">
 		<div class="container">
 			<div class="tabbable">
 				<ul class="nav nav-tabs nav-justified">
 					<li class="active"><a th:href="@{/home}" data-toggle="tab1">首頁</a></li>
 
-					<li class="active" sec:authorize="hasRole('ROLE_ADMIN')"><a
-						th:href="@{/register}" data-toggle="tab2">新增使用者頁面</a></li>
-
-					<li class="active" sec:authorize="hasRole('ROLE_ADMIN')"><a
-						th:href="@{/users}" data-toggle="tab3">使用者清單頁面</a></li>
-
-					<li class="active" sec:authorize="hasRole('ROLE_ADMIN')"><a
-						th:href="@{/deleteuser}" data-toggle="tab4">刪除使用者頁面</a></li>
-
-					<li class="active"><a th:href="@{/create}" data-toggle="tab5">產生
+					<li class="active"><a th:href="@{/create}" data-toggle="tab2">產生
 							GUID 頁面</a></li>
 
 					<li class="active" sec:authorize="hasRole('ROLE_ADMIN')"><a
-						th:href="@{/comparison}" data-toggle="tab6">二次編碼比對</a></li>
+						th:href="@{/comparison}" data-toggle="tab3">二次編碼比對</a></li>
+						
+					<li class="active" sec:authorize="hasRole('ROLE_ADMIN')"><a
+						th:href="@{/register}" data-toggle="tab4">新增使用者頁面</a></li>
+
+					<li class="active" sec:authorize="hasRole('ROLE_ADMIN')"><a
+						th:href="@{/users}" data-toggle="tab5">使用者清單頁面</a></li>
+
+					<li class="active" sec:authorize="hasRole('ROLE_ADMIN')"><a
+						th:href="@{/deleteuser}" data-toggle="tab6">刪除使用者頁面</a></li>
+
 				</ul>
 			</div>
 		</div>
-</header>
+	</header>
 </th:block>
 
 </html>

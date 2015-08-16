@@ -15,25 +15,76 @@
 
 	<h1 class="text-center">使用者</h1>
 
-	<form method="get" th:action="@{/users}">
-		<div class="form-group">
-			<div class="col-xs-8 col-sm-6 col-md-7">
-				Username：<input class="form-control" type="text" name="username"></input>
+	<div class="container">
+		<form method="get" th:action="@{/users}">
+			<div class="form-group">
+				<div class="col-md-4 col-md-offset-4">
+					Username：<input class="form-control" type="text" name="username"></input>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="col-md-4 col-md-offset-4">
+					Prefix： <select name="prefix">
+						<option value="TpeVGH">TpeVGH</option>
+						<option value="TSGH">TSGH</option>
+						<option value="NTUH">NTUH</option>
+					</select>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="col-md-4 col-md-offset-4">
+					<input class="btn btn-primary btn-block btn-lg" type="submit"
+						value="搜尋使用者"></input>
 
-				Prefix： <select name="prefix">
-					<option value="TpeVGH">TpeVGH</option>
-					<option value="TSGH">TSGH</option>
-					<option value="NTUH">NTUH</option>
-				</select> <input class="btn btn-primary" type="submit" value="搜尋使用者"></input>
+				</div>
+			</div>
+		</form>
+	</div>
+
+
+	<div class="row">
+		<div class="col-xs-12 col-sm-12 col-md-12">
+			<div class="col-xs-2 col-sm-2 col-md-2">
+				<span>使用者權限</span>
+			</div>
+			<div class="col-xs-2 col-sm-2 col-md-2">
+				<span>使用者帳號</span>
+			</div>
+			<div class="col-xs-2 col-sm-2 col-md-2">
+				<span>Prefix 值</span>
+			</div>
+			<div class="col-xs-2 col-sm-2 col-md-2">
+				<span>服務單位</span>
+			</div>
+			<div class="col-xs-2 col-sm-2 col-md-2">
+				<span>工作職銜</span>
+			</div>
+			<div class="col-xs-2 col-sm-2 col-md-2">
+				<span>電子郵件 E-mail</span>
 			</div>
 		</div>
-	</form>
-
+	</div>
 	<th:block th:each="accuntusers : ${accPage}">
 		<div class="row">
-			<div class="col-xs-2 col-sm-2 col-md-2">
-				<span th:text="${accuntusers.username}"></span> <span
-					th:text="${accuntusers.prefix}"></span>
+			<div class="col-xs-12 col-sm-12 col-md-12">
+				<div class="col-xs-2 col-sm-2 col-md-2">
+					<span th:text="${accuntusers.role}"></span>
+				</div>
+				<div class="col-xs-2 col-sm-2 col-md-2">
+					<span th:text="${accuntusers.username}"></span>
+				</div>
+				<div class="col-xs-2 col-sm-2 col-md-2">
+					<span th:text="${accuntusers.prefix}"></span>
+				</div>
+				<div class="col-xs-2 col-sm-2 col-md-2">
+					<span th:text="${accuntusers.institute}"></span>
+				</div>
+				<div class="col-xs-2 col-sm-2 col-md-2">
+					<span th:text="${accuntusers.jobTitle}"></span>
+				</div>
+				<div class="col-xs-2 col-sm-2 col-md-2">
+					<span th:text="${accuntusers.email}"></span>
+				</div>
 			</div>
 		</div>
 	</th:block>
