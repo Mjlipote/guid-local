@@ -20,14 +20,15 @@
 			th:action="@{/users}">
 			<div class="form-group form-line">
 
-				<label>使用者帳號：</label><input class="form-control" type="text"
-					name="username"></input> 
-				<label>Prefix 值：</label> <select
-					class="form-control" name="prefix">
+				<label>Prefix 值：</label> <select class="form-control" name="prefix">
 					<option value="TpeVGH">TpeVGH</option>
 					<option value="TSGH">TSGH</option>
 					<option value="NTUH">NTUH</option>
-				</select>
+				</select> <label>使用者權限：</label> <select class="form-control" name="role">
+					<option value="ROLE_ADMIN">系統管理者</option>
+					<option value="ROLE_USER">一般使用者</option>
+				</select> <label>使用者帳號：</label><input class="form-control" type="text"
+					name="username"></input>
 
 			</div>
 			<div class="form-group">

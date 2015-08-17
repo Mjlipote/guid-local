@@ -26,7 +26,6 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.sql.SQLException;
-import java.util.List;
 import java.util.Properties;
 
 import org.slf4j.Logger;
@@ -39,7 +38,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import tw.guid.local.helper.HttpActionHelper;
-import tw.guid.local.models.AccountUsersResponse;
 import tw.guid.local.models.Action;
 import tw.guid.local.models.repo.AccountUsersRepository;
 import tw.guid.local.models.repo.ActionAuditRepository;
@@ -77,18 +75,6 @@ public class ApiController {
         .toGet(new URI(prop.getProperty("central_server_url")), Action.VALIDATE,
             "?spguid=" + spguid, false)
         .getBody().equals("true") ? true : false;
-  }
-
-  /**
-   * 使用者名單
-   * 
-   * @return
-   */
-  @ResponseBody
-  @RequestMapping(value = "/users", method = RequestMethod.GET)
-  List<AccountUsersResponse> users() {
-
-    return AccountUsersResponse.getResponse(accUserRepo.findAll());
   }
 
   /**

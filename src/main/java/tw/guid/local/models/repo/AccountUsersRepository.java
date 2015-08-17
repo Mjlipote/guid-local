@@ -33,28 +33,38 @@ import tw.guid.local.models.entity.AccountUsers;
 public interface AccountUsersRepository
     extends JpaRepository<AccountUsers, Long> {
 
-  public Page<AccountUsers> findByUsernameAndPrefix(String username,
-      String prefix, Pageable pageable);
-
-  public AccountUsers findByUsernameAndPassword(String username,
-      String password);
-
+  // 一組
   public AccountUsers findByUsername(String username);
 
-  public AccountUsers findByUsernameAndRole(String username, Role role);
-
-  public AccountUsers findByUsernameAndPasswordAndRole(String username,
-      String password, Role role);
-
-  public Set<AccountUsers> findByPassword(String password);
-
-  public Set<AccountUsers> findByPrefix(String prefix);
+  public Page<AccountUsers> findByUsername(String username, Pageable pageable);
 
   public Set<AccountUsers> findByInstitute(String institute);
 
   public Set<AccountUsers> findByRole(Role role);
 
-  // public boolean findByUsernameAndPasswordExist(String username,
-  // String password);
+  public Set<AccountUsers> findByPassword(String password);
+
+  public Set<AccountUsers> findByPrefix(String prefix);
+
+  public Page<AccountUsers> findByRole(Role role, Pageable pageable);
+
+  // 兩組
+  public AccountUsers findByUsernameAndPassword(String username,
+      String password);
+
+  public AccountUsers findByUsernameAndRole(String username, Role role);
+
+  public Page<AccountUsers> findByRoleAndPrefix(Role role, String prefix,
+      Pageable pageable);
+
+  public Page<AccountUsers> findByUsernameAndPrefix(String username,
+      String prefix, Pageable pageable);
+
+  // 三組
+  public Page<AccountUsers> findByUsernameAndRoleAndPrefix(String username,
+      Role role, String prefix, Pageable pageable);
+
+  public AccountUsers findByUsernameAndPasswordAndRole(String username,
+      String password, Role role);
 
 }

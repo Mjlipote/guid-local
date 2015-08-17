@@ -22,7 +22,6 @@ package tw.guid.local.controllers;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.collect.Lists.newArrayList;
-import static com.google.common.collect.Sets.newHashSet;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -32,7 +31,6 @@ import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
-import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -286,32 +284,6 @@ public class WebController {
    * 
    * @return
    */
-
-  /**
-   * 搜尋使用者
-   * 
-   * @param map
-   * @param username
-   * @param prefix
-   * @param institute
-   * @return
-   */
-  @RequestMapping(value = "/user", method = RequestMethod.POST)
-  String user(ModelMap map, @RequestParam(value = "username") String username,
-      @RequestParam(value = "prefix") String prefix,
-      @RequestParam(value = "institute") String institute) {
-
-    Set<AccountUsers> aus = newHashSet();
-    if (username.equals("") && prefix.equals("") && institute.equals("")) {
-      return "null-error";
-    } else {
-      aus.add(acctUserRepo.findByUsername(username));
-      aus.addAll(acctUserRepo.findByInstitute(institute));
-      aus.addAll(acctUserRepo.findByPrefix(prefix));
-      map.addAttribute("accountUsersSet", aus);
-      return "search";
-    }
-  }
 
   /**
    * 在 Web 進行二次編碼比對

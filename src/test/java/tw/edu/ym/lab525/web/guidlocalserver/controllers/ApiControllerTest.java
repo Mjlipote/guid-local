@@ -20,7 +20,6 @@
  */
 package tw.edu.ym.lab525.web.guidlocalserver.controllers;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.io.FileInputStream;
@@ -100,16 +99,6 @@ public class ApiControllerTest {
     assertTrue(
         HttpActionHelper.toGet(new URI(localServerUrl), Action.API_VALIDATE,
             "?spguid=" + "YM-75be31f6kkp", true).getBody().equals("false"));
-  }
-
-  @Test
-  public void testUsers() throws URISyntaxException, IOException {
-    assertEquals(HttpActionHelper
-        .toGet(new URI(localServerUrl), Action.API_USERS, "", true).getBody(),
-        "[" + "{\"username\":\"admin\",\"prefix\":\"AdminTest\",\"email\":\"admin@ym.com\",\"institute\":\"國立陽明大學\",\"jobTitle\":\"系統管理員\",\"telephone\":\"0910777666\",\"address\":\"國立陽明大學\",\"role\":\"ROLE_ADMIN\"}"
-            + ","
-            + "{\"username\":\"user\",\"prefix\":\"UserTest\",\"email\":\"user@ym.com\",\"institute\":\"國立陽明大學\",\"jobTitle\":\"使用者\",\"telephone\":\"0910777000\",\"address\":\"國立陽明大學\",\"role\":\"ROLE_USER\"}"
-            + "]");
   }
 
   @Test
