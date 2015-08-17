@@ -23,7 +23,7 @@ package tw.guid.local.helper;
 
 import java.util.zip.CRC32;
 
-public class Crc32HashcodeCreator {
+public final class Crc32HashcodeCreator {
 
   private Crc32HashcodeCreator() {}
 
@@ -33,7 +33,6 @@ public class Crc32HashcodeCreator {
    * @return
    */
   public static String getCrc32(String str) {
-
     byte[] bytes = (str).getBytes();
     CRC32 x = new CRC32();
     x.update(bytes);

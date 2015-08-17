@@ -37,7 +37,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import tw.guid.local.models.Action;
 
-public class HttpActionHelper {
+public final class HttpActionHelper {
 
   private static final String API_ROOT = "guid";
 
@@ -47,9 +47,7 @@ public class HttpActionHelper {
 
   private static ObjectMapper mapper = new ObjectMapper();
 
-  private HttpActionHelper() {
-
-  }
+  private HttpActionHelper() {}
 
   /**
    * 
@@ -134,7 +132,6 @@ public class HttpActionHelper {
    * @return
    */
   private static HttpHeaders getHeaders(String username, String password) {
-
     HttpHeaders httpHeaders = new HttpHeaders();
     httpHeaders.setContentType(MediaType.APPLICATION_JSON);
     httpHeaders.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));

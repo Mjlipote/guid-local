@@ -13,11 +13,6 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>com.github.wnameless</groupId>
-			<artifactId>json-flattener</artifactId>
-			<version>0.1.0</version>
-		</dependency>
-		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
@@ -29,11 +24,11 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-thymeleaf</artifactId>
 		</dependency>
-
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-security</artifactId>
 		</dependency>
+
 		<!-- Testing -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -61,6 +56,12 @@
 			<artifactId>HikariCP-java6</artifactId>
 		</dependency>
 
+		<!-- Utility -->
+		<dependency>
+			<groupId>com.github.wnameless</groupId>
+			<artifactId>json-flattener</artifactId>
+			<version>0.1.0</version>
+		</dependency>
 		<dependency>
 			<groupId>com.github.wnameless</groupId>
 			<artifactId>workbook-accessor</artifactId>

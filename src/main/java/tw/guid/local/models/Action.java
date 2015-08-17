@@ -1,9 +1,4 @@
 /**
- * 
- */
-package tw.guid.local.models;
-
-/**
  *
  * @author Ming-Jheng Li
  *
@@ -23,6 +18,8 @@ package tw.guid.local.models;
  *         permissions and limitations under the License.
  *
  */
+package tw.guid.local.models;
+
 public enum Action {
 
   CREATE("create"), AUTHENTICATE("authenticate"), EXIST("exist"),

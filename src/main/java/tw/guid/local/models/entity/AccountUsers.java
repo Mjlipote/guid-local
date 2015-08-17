@@ -45,9 +45,7 @@ public class AccountUsers extends AbstractPersistable<Long> {
   @Column(nullable = true)
   private String address;
 
-  public AccountUsers() {
-
-  }
+  public AccountUsers() {}
 
   /**
    * @return the username
