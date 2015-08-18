@@ -261,7 +261,7 @@ public class WebController {
    * @return
    */
   // 應該使用 RequestMethod.DELETE，待確定用法後修正
-  @RequestMapping(value = "/user", method = RequestMethod.GET)
+  @RequestMapping(value = "/user", method = RequestMethod.DELETE)
   String deleteuser(ModelMap map,
       @RequestParam(value = "username") String username) {
 
