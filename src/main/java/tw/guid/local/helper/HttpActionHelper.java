@@ -57,8 +57,56 @@ public final class HttpActionHelper {
    * @return
    * @throws JsonProcessingException
    */
+  public static ResponseEntity<String> toPostWithoutApiRoot(URI url,
+      Action action, Object object, boolean authority)
+          throws JsonProcessingException {
+
+    return PostCreater(url, action, object, authority, false);
+  }
+
+  /**
+   * 
+   * @param url
+   * @param action
+   * @param object
+   * @return
+   */
+  public static ResponseEntity<String> toGetWithoutApiRoot(URI url,
+      Action action, String param, boolean authority) {
+
+    return getCreater(url, action, param, authority, false);
+  }
+
+  /**
+   * 
+   * @param url
+   * @param object
+   * @param action
+   * @return
+   * @throws JsonProcessingException
+   */
   public static ResponseEntity<String> toPost(URI url, Action action,
       Object object, boolean authority) throws JsonProcessingException {
+
+    return PostCreater(url, action, object, authority, true);
+  }
+
+  /**
+   * 
+   * @param url
+   * @param action
+   * @param object
+   * @return
+   */
+  public static ResponseEntity<String> toGet(URI url, Action action,
+      String param, boolean authority) {
+
+    return getCreater(url, action, param, authority, true);
+  }
+
+  private static ResponseEntity<String> PostCreater(URI url, Action action,
+      Object object, boolean authority, boolean apiRoot)
+          throws JsonProcessingException {
 
     if (authority == true) {
       headers = getHeaders("admin", Crc32HashcodeCreator.getCrc32("password"));
@@ -72,34 +120,18 @@ public final class HttpActionHelper {
 
     HttpEntity<String> jsonRequest =
         new HttpEntity<String>(mapper.writeValueAsString(object), headers);
-    ResponseEntity<String> response =
-        restTemplate.exchange(
-            http[0] + "://" + url.getHost() + ":" + url.getPort() + "/"
-                + API_ROOT + "/" + action,
-            HttpMethod.POST, jsonRequest, String.class);
-
-    // HttpEntity<String> jsonRequest = new
-    // HttpEntity<String>(mapper.writeValueAsString(object), headers);
-    //
-    // ResponseEntity<String> response =
-    // restTemplate
-    // .postForEntity(
-    // http[0] + "://" + url.getHost() + ":" + url.getPort() + "/"
-    // + API_ROOT + "/" + action,
-    // jsonRequest, String.class);
+    String urlStr = apiRoot == true
+        ? http[0] + "://" + url.getHost() + ":" + url.getPort() + "/" + API_ROOT
+            + "/" + action
+        : http[0] + "://" + url.getHost() + ":" + url.getPort() + "/" + action;
+    ResponseEntity<String> response = restTemplate.exchange(urlStr,
+        HttpMethod.POST, jsonRequest, String.class);
 
     return response;
   }
 
-  /**
-   * 
-   * @param url
-   * @param action
-   * @param object
-   * @return
-   */
-  public static ResponseEntity<String> toGet(URI url, Action action,
-      String param, boolean authority) {
+  private static ResponseEntity<String> getCreater(URI url, Action action,
+      String param, boolean authority, boolean apiRoot) {
 
     if (authority == true) {
       headers = getHeaders("admin", Crc32HashcodeCreator.getCrc32("password"));
@@ -111,15 +143,14 @@ public final class HttpActionHelper {
 
     String http[] = url.toString().split("://");
 
-    // ResponseEntity<String> response = restTemplate.getForEntity(
-    // http[0] + "://" + url.getHost() + ":" + url.getPort() + "/"
-    // + API_ROOT + "/" + action + param, String.class);
-
     HttpEntity<String> jsonRequest = new HttpEntity<String>(headers);
     ResponseEntity<String> response =
         restTemplate.exchange(
-            http[0] + "://" + url.getHost() + ":" + url.getPort() + "/"
-                + API_ROOT + "/" + action + param,
+            apiRoot == true
+                ? http[0] + "://" + url.getHost() + ":" + url.getPort() + "/"
+                    + API_ROOT + "/" + action + param
+                : http[0] + "://" + url.getHost() + ":" + url.getPort() + "/"
+                    + action + param,
             HttpMethod.GET, jsonRequest, String.class);
 
     return response;
