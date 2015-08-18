@@ -54,6 +54,9 @@ public interface AccountUsersRepository
 
   public AccountUsers findByUsernameAndRole(String username, Role role);
 
+  public Page<AccountUsers> findByUsernameAndRole(String username, Role role,
+      Pageable pageable);
+
   public Page<AccountUsers> findByRoleAndPrefix(Role role, String prefix,
       Pageable pageable);
 

@@ -17,14 +17,10 @@
 
 	<div class="container">
 		<form class="col-md-4 col-md-offset-4" method="get"
-			th:action="@{/users}">
+			th:action="@{/users/lookup}">
 			<div class="form-group form-line">
-
-				<label>Prefix 值：</label> <select class="form-control" name="prefix">
-					<option value="TpeVGH">TpeVGH</option>
-					<option value="TSGH">TSGH</option>
-					<option value="NTUH">NTUH</option>
-				</select> <label>使用者權限：</label> <select class="form-control" name="role">
+				<label>使用者權限：</label> <select class="form-control" name="role">
+					<option value="">---------</option>
 					<option value="ROLE_ADMIN">系統管理者</option>
 					<option value="ROLE_USER">一般使用者</option>
 				</select> <label>使用者帳號：</label><input class="form-control" type="text"

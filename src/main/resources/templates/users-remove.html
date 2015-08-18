@@ -15,16 +15,15 @@
 	<h1 class="text-center">刪除使用者</h1>
 
 	<div class="container">
-		<form class="form-horizontal" method="post"
-			th:action="@{guid/web/user}">
+		<form class="form-horizontal" method="post" th:action="@{users}">
 
 			<div class="form-group">
 				<div class="col-md-4 col-md-offset-4">
 					姓名：<input class="form-control" type="text" name="username"></input>
 				</div>
 			</div>
-  <input type="hidden" name="_method" value="DELETE"/> 
-  
+			<input type="hidden" name="_method" value="DELETE" />
+
 			<div class="form-group">
 				<div class="col-md-4 col-md-offset-4">
 					<input class="btn btn-primary btn-block btn-lg" type="submit"

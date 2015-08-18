@@ -16,14 +16,14 @@
 
 	<div class="container">
 		<form class="col-md-4 col-md-offset-4" method="post"
-			th:action="@{guid/web/create}">
-			<div class="form-group">
+			th:action="@{guids/new}">
+			<div class="form-group col-lg-12">
 
 				<label>姓名：</label> <input class="form-control" type="text"
 					name="name"></input>
 
 			</div>
-			<div class="form-group">
+			<div class="form-group col-lg-12">
 
 				<label>性別：</label> <select class="form-control" name="gender">
 					<option value="M">男</option>
@@ -31,13 +31,13 @@
 				</select>
 
 			</div>
-			<div class="form-group">
+			<div class="form-group col-lg-12">
 
 				<label>出生年：</label> <input class="form-control" type="text"
 					name="birthOfYear"></input>
 
 			</div>
-			<div class="form-group">
+			<div class="form-group col-lg-12">
 
 				<label>出生月：</label> <select class="form-control" name="birthOfMonth">
 					<option value="1">1</option>
@@ -55,7 +55,7 @@
 				</select>
 
 			</div>
-			<div class="form-group">
+			<div class="form-group col-lg-12">
 
 				<label>出生日：</label> <select class="form-control" name="birthOfDay">
 					<option value="1">1</option>
@@ -92,15 +92,16 @@
 				</select>
 
 			</div>
-			<div class="form-group">
+			<div class="form-group col-lg-12">
 
 				<label>身份證字號：</label><input class="form-control" type="text"
 					name="sid"></input>
 
 			</div>
-			<div class="form-group">
+			<div class="form-group col-lg-12">
 
-				<input class="btn btn-primary btn-block btn-lg" type="submit" value="產生二次編碼"></input>
+				<input class="btn btn-primary btn-block btn-lg" type="submit"
+					value="產生二次編碼"></input>
 
 			</div>
 		</form>

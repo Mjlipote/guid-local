@@ -13,9 +13,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 
-import tw.guid.local.models.Role;
 import tw.guid.local.models.entity.AccountUsers;
 import tw.guid.local.models.repo.AccountUsersRepository;
 
@@ -54,49 +52,37 @@ public class MainController {
 
   @RequestMapping("/register")
 
-  String register() {
+  String usersRegister() {
     return "register";
   }
 
-  @RequestMapping("/create")
+  @RequestMapping("/guids")
 
-  String create() {
-    return "create";
+  String guidsNew() {
+    return "guids";
   }
 
   @RequestMapping("/comparison")
 
-  String comparison() {
+  String guidsComparison() {
     return "comparison";
   }
 
-  @RequestMapping("/deleteuser")
+  @RequestMapping("/remove")
 
-  String deleteuser() {
-    return "deleteuser";
+  String usersRemove() {
+    return "users-remove";
   }
 
-  @RequestMapping(value = "/users", method = RequestMethod.GET)
-  String users(ModelMap map, @Param("username") String username,
-      @Param("prefix") String prefix, @Param("role") String role,
-      @Param("page") Integer page) {
+  @RequestMapping("/users")
+  String usersList(ModelMap map, @Param("page") Integer page) {
 
     PageRequest pageReq =
         new PageRequest(0, 10, new Sort(new Order(Direction.ASC, "username")));
 
     Page<AccountUsers> accPage;
 
-    if (username != null) {
-      if (username.equals("")) {
-        accPage = acctUserRepo.findByRoleAndPrefix(
-            role.equals("ROLE_ADMIN") ? Role.ROLE_ADMIN : Role.ROLE_USER,
-            prefix, pageReq);
-      } else {
-        accPage = acctUserRepo.findByUsername(username, pageReq);
-      }
-    } else {
-      accPage = acctUserRepo.findAll(pageReq);
-    }
+    accPage = acctUserRepo.findAll(pageReq);
 
     map.addAttribute("accPage", accPage);
     return "users";

@@ -11,7 +11,7 @@
 				<ul class="nav nav-tabs nav-justified">
 					<li class="active"><a th:href="@{/home}" data-toggle="tab1">首頁</a></li>
 
-					<li class="active"><a th:href="@{/create}" data-toggle="tab2">產生
+					<li class="active"><a th:href="@{/guids}" data-toggle="tab2">產生
 							GUID 頁面</a></li>
 
 					<li class="active" sec:authorize="hasRole('ROLE_ADMIN')"><a
@@ -24,7 +24,7 @@
 						th:href="@{/users}" data-toggle="tab5">使用者清單頁面</a></li>
 
 					<li class="active" sec:authorize="hasRole('ROLE_ADMIN')"><a
-						th:href="@{/deleteuser}" data-toggle="tab6">刪除使用者頁面</a></li>
+						th:href="@{/remove}" data-toggle="tab6">刪除使用者頁面</a></li>
 
 				</ul>
 			</div>

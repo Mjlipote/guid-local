@@ -35,11 +35,16 @@ import java.util.Properties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
+import org.springframework.data.domain.Sort.Order;
+import org.springframework.data.repository.query.Param;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -63,7 +68,6 @@ import tw.guid.local.models.repo.ActionAuditRepository;
 import tw.guid.local.models.repo.SubprimeGuidRepository;
 import tw.guid.local.util.NameSplitter;
 
-@RequestMapping("/guid/web")
 @Controller
 public class WebController {
 
@@ -73,48 +77,11 @@ public class WebController {
   @Autowired
   ActionAuditRepository actionAuditRepo;
   @Autowired
-  SubprimeGuidRepository spguidRepo;
+  SubprimeGuidRepository subprimeGuidRepo;
   @Autowired
   AccountUsersRepository acctUserRepo;
   @Autowired
   CustomAuthenticationProvider customAuthenticationProvider;
-
-  /**
-   * 批次產生 GUID
-   * 
-   * @param spGuidCreateRequestList
-   * @return
-   * @throws JsonProcessingException
-   * @throws URISyntaxException
-   */
-  @RequestMapping(value = "/batch", method = RequestMethod.POST)
-  List<String> batch(
-      @RequestBody List<SubprimeGuidRequest> spGuidCreateRequestList)
-          throws JsonProcessingException, URISyntaxException {
-    Properties prop = new Properties();
-    try {
-      prop.load(new FileInputStream("serverhost.properties"));
-    } catch (FileNotFoundException e) {
-      log.error(e.getMessage(), e);
-    } catch (IOException e) {
-      log.error(e.getMessage(), e);
-    }
-    Map<String, Object> flattenJson =
-        JsonFlattener
-            .flattenAsMap(
-                HttpActionHelper
-                    .toPost(new URI(prop.getProperty("central_server_url")),
-                        Action.CREATE, spGuidCreateRequestList, false)
-                    .getBody());
-
-    List<String> list = newArrayList();
-
-    for (int i = 0; i < flattenJson.size(); i++) {
-      if (flattenJson.get("[" + i + "].spguid") != null)
-        list.add(flattenJson.get("[" + i + "].spguid").toString());
-    }
-    return list;
-  }
 
   /**
    * 網頁版產生 GUID
@@ -127,16 +94,18 @@ public class WebController {
    * @param sid
    * @param name
    * @return
+   * @throws FileNotFoundException
    * @throws URISyntaxException
    * @throws IOException
    */
-  @RequestMapping(value = "/create", method = RequestMethod.POST)
-  String webCreate(ModelMap map, @RequestParam(value = "gender") String gender,
+  @RequestMapping(value = "/guids/new", method = RequestMethod.POST)
+  String guidsNew(ModelMap map, @RequestParam(value = "gender") String gender,
       @RequestParam(value = "birthOfYear") String birthOfYear,
       @RequestParam(value = "birthOfMonth") String birthOfMonth,
       @RequestParam(value = "birthOfDay") String birthOfDay,
       @RequestParam(value = "sid") String sid,
-      @RequestParam(value = "name") String name) {
+      @RequestParam(value = "name") String name)
+          throws FileNotFoundException, IOException {
     if (gender.equals("") || birthOfYear.equals("") || birthOfMonth.equals("")
         || birthOfDay.equals("") || sid.equals("") || name.equals("")) {
       return "null-error";
@@ -152,13 +121,13 @@ public class WebController {
 
       String prefix = acctUserRepo.findByUsername(auth.getName()).getPrefix();
       SubprimeGuid sg =
-          spguidRepo.findByHashcode1AndHashcode2AndHashcode3AndPrefix(
+          subprimeGuidRepo.findByHashcode1AndHashcode2AndHashcode3AndPrefix(
               pii.getHashcodes().get(0), pii.getHashcodes().get(1),
               pii.getHashcodes().get(2), prefix);
 
       if (sg != null) {
         map.addAttribute("spguids", "REPEAT:" + sg.getSpguid());
-        return "create-result";
+        return "guids-new-result";
       } else {
 
         List<SubprimeGuidRequest> sgrs = newArrayList();
@@ -169,13 +138,8 @@ public class WebController {
         sgrs.add(sgr);
 
         Properties prop = new Properties();
-        try {
-          prop.load(new FileInputStream("serverhost.properties"));
-        } catch (FileNotFoundException e) {
-          log.error(e.getMessage(), e);
-        } catch (IOException e) {
-          log.error(e.getMessage(), e);
-        }
+        prop.load(new FileInputStream("serverhost.properties"));
+
         Map<String, Object> flattenJson = null;
         try {
           flattenJson = JsonFlattener.flattenAsMap(HttpActionHelper
@@ -196,11 +160,43 @@ public class WebController {
         spGuid.setHashcode2(pii.getHashcodes().get(1));
         spGuid.setHashcode3(pii.getHashcodes().get(2));
         spGuid.setPrefix(prefix);
-        spguidRepo.save(spGuid);
+        subprimeGuidRepo.save(spGuid);
 
-        return "create-result";
+        return "guids-new-result";
       }
     }
+  }
+
+  @RequestMapping(value = "/users/lookup", method = RequestMethod.GET)
+  String usersLookup(ModelMap map, @Param("username") String username,
+      @Param("role") String role, @Param("page") Integer page) {
+
+    PageRequest pageReq =
+        new PageRequest(0, 10, new Sort(new Order(Direction.ASC, "username")));
+
+    Page<AccountUsers> accPage;
+
+    if (username != null) {
+      if (username.equals("") && role.equals("")) {
+        accPage = acctUserRepo.findAll(pageReq);
+      } else if (username.equals("") && role != null) {
+        accPage = acctUserRepo.findByRole(
+            role.equals("ROLE_ADMIN") ? Role.ROLE_ADMIN : Role.ROLE_USER,
+            pageReq);
+      } else if (!username.equals("") && role != null) {
+        accPage = acctUserRepo.findByUsernameAndRole(username,
+            role.equals("ROLE_ADMIN") ? Role.ROLE_ADMIN : Role.ROLE_USER,
+            pageReq);
+      } else {
+        accPage = acctUserRepo.findByUsername(username, pageReq);
+      }
+    } else {
+      accPage = acctUserRepo.findAll(pageReq);
+    }
+
+    map.addAttribute("accPage", accPage);
+    return "users";
+
   }
 
   /**
@@ -217,8 +213,8 @@ public class WebController {
    * @param prefix
    * @return
    */
-  @RequestMapping(value = "/register", method = RequestMethod.POST)
-  String register(ModelMap map,
+  @RequestMapping(value = "/users/new", method = RequestMethod.POST)
+  String usersNew(ModelMap map,
       @RequestParam(value = "username") String username,
       @RequestParam(value = "password") String password,
       @RequestParam(value = "email") String email,
@@ -248,7 +244,7 @@ public class WebController {
       acctUserRepo.save(user);
       map.addAttribute("users", user);
 
-      return "register-success";
+      return "users-new-success";
     }
   }
 
@@ -260,9 +256,8 @@ public class WebController {
    * @param username
    * @return
    */
-  // 應該使用 RequestMethod.DELETE，待確定用法後修正
-  @RequestMapping(value = "/user", method = RequestMethod.DELETE)
-  String deleteuser(ModelMap map,
+  @RequestMapping(value = "/users", method = RequestMethod.DELETE)
+  String usersRemove(ModelMap map,
       @RequestParam(value = "username") String username) {
 
     if (username.equals("")) {
@@ -274,7 +269,7 @@ public class WebController {
       // 待補！！應該使用下拉選單，以避免找不到要刪除的 User
       acctUserRepo.delete(acctUser);
       map.addAttribute("users", acctUser);
-      return "deleteuser-success";
+      return "users-remove-success";
 
     }
   }
@@ -291,12 +286,15 @@ public class WebController {
    * @param map
    * @param subprimeGuids
    * @return
+   * @throws IOException
+   * @throws FileNotFoundException
    * @throws JsonProcessingException
    * @throws URISyntaxException
    */
-  @RequestMapping(value = "/comparison", method = RequestMethod.POST)
-  String comparison(ModelMap map,
-      @RequestParam(value = "subprimeGuids") String subprimeGuids) {
+  @RequestMapping(value = "/guids/comparison", method = RequestMethod.POST)
+  String guidsComparison(ModelMap map,
+      @RequestParam(value = "subprimeGuids") String subprimeGuids)
+          throws FileNotFoundException, IOException, URISyntaxException {
 
     if (subprimeGuids.equals("")) {
       return "null-error";
@@ -307,24 +305,28 @@ public class WebController {
         list.add(s);
       }
       Properties prop = new Properties();
-      try {
-        prop.load(new FileInputStream("serverhost.properties"));
-      } catch (FileNotFoundException e) {
-        log.error(e.getMessage(), e);
-      } catch (IOException e) {
-        log.error(e.getMessage(), e);
+      prop.load(new FileInputStream("serverhost.properties"));
+
+      Map<String, Object> flattenJson =
+          JsonFlattener.flattenAsMap(HttpActionHelper
+              .toPost(new URI(prop.getProperty("central_server_url")),
+                  Action.COMPARISON, list, false)
+              .getBody());
+
+      List<List<String>> lls = newArrayList();
+
+      for (int i = 0; i < flattenJson.size(); i++) {
+        List<String> ls = newArrayList();
+        for (int j = 0; j < flattenJson.size(); j++) {
+          if (flattenJson.get("[" + i + "]" + "[" + j + "]") != null) {
+            ls.add(flattenJson.get("[" + i + "]" + "[" + j + "]").toString());
+          }
+        }
+        if (ls.size() > 0) lls.add(ls);
       }
-      try {
-        map.addAttribute("result",
-            HttpActionHelper
-                .toPost(new URI(prop.getProperty("central_server_url")),
-                    Action.COMPARISON, list, false)
-                .getBody());
-      } catch (JsonProcessingException e) {
-        log.error(e.getMessage(), e);
-      } catch (URISyntaxException e) {
-        log.error(e.getMessage(), e);
-      }
+      map.addAttribute("result", lls);
+      map.addAttribute("number", lls.size());
+
       return "comparison-result";
     }
   }
