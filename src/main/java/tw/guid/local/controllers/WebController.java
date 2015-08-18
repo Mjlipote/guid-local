@@ -287,14 +287,12 @@ public class WebController {
    * @param subprimeGuids
    * @return
    * @throws IOException
-   * @throws FileNotFoundException
-   * @throws JsonProcessingException
    * @throws URISyntaxException
    */
   @RequestMapping(value = "/guids/comparison", method = RequestMethod.POST)
   String guidsComparison(ModelMap map,
       @RequestParam(value = "subprimeGuids") String subprimeGuids)
-          throws FileNotFoundException, IOException, URISyntaxException {
+          throws IOException, URISyntaxException {
 
     if (subprimeGuids.equals("")) {
       return "null-error";
