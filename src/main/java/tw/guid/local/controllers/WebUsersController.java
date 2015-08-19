@@ -153,6 +153,28 @@ public class WebUsersController {
   }
 
   /**
+   * Get all user list
+   * 
+   * @param map
+   * @param page
+   * @return
+   */
+  @RequestMapping(value = "", method = RequestMethod.GET)
+  String usersList(ModelMap map, @Param("page") Integer page) {
+
+    PageRequest pageReq =
+        new PageRequest(0, 10, new Sort(new Order(Direction.ASC, "username")));
+
+    Page<AccountUsers> accPage;
+
+    accPage = acctUserRepo.findAll(pageReq);
+
+    map.addAttribute("accPage", accPage);
+    return "users";
+
+  }
+
+  /**
    * 刪除一般使用者
    * 
    * 
@@ -160,7 +182,7 @@ public class WebUsersController {
    * @param username
    * @return
    */
-  @RequestMapping(value = "/", method = RequestMethod.DELETE)
+  @RequestMapping(value = "", method = RequestMethod.DELETE)
   String usersRemove(ModelMap map,
       @RequestParam(value = "username") String username) {
 
@@ -178,7 +200,22 @@ public class WebUsersController {
   }
 
   /**
+   * Get users's presonal information
    * 
+   * 
+   * @param map
+   * @param username
+   * @return
+   */
+  @RequestMapping(value = "/changepassword", method = RequestMethod.GET)
+  String usersPasswordChange() {
+
+    return "change-password";
+
+  }
+
+  /**
+   * Get users's presonal information
    * 
    * 
    * @param map
@@ -205,13 +242,13 @@ public class WebUsersController {
    */
   @RequestMapping(value = "/{username}", method = RequestMethod.PUT)
   String usersPut(ModelMap map, @PathVariable("username") String username,
-      @RequestParam(value = "username") String usernameRequest,
-      @RequestParam(value = "email") String email,
-      @RequestParam(value = "jobTitle") String jobTitle,
-      @RequestParam(value = "telephone") String telephone,
-      @RequestParam(value = "address") String address) {
+      @Param(value = "username") String usernameRequest,
+      @Param(value = "email") String email,
+      @Param(value = "jobTitle") String jobTitle,
+      @Param(value = "telephone") String telephone,
+      @Param(value = "address") String address) {
 
-    if (usernameRequest.equals("")) {
+    if (username.equals("")) {
       return "null-error";
     } else {
       AccountUsers acctUser = acctUserRepo.findByUsername(username);

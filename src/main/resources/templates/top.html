@@ -35,7 +35,8 @@
 						class="text-center" th:inline="text">
 							[[${#httpServletRequest.remoteUser}]]</span><span class="caret"></span></a>
 					<ul class="dropdown-menu">
-						<li><a th:inline="text" th:href="@{/users/'${request.remoteUser }'}">個人資料編輯</a></li>
+						<li><a th:inline="text" th:href="@{/users/admin}">個人資料編輯</a></li>
+						<li><a th:inline="text" th:href="@{/users/changepassword}">修改登入密碼</a></li>
 						<li role="separator" class="divider"></li>
 						<li><a th:href="@{/logout}">登出</a></li>
 					</ul></li>

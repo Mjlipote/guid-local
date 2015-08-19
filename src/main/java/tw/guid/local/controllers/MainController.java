@@ -4,17 +4,9 @@
 package tw.guid.local.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.domain.Sort.Direction;
-import org.springframework.data.domain.Sort.Order;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import tw.guid.local.models.entity.AccountUsers;
 import tw.guid.local.models.repo.AccountUsersRepository;
 
 /**
@@ -72,21 +64,6 @@ public class MainController {
 
   String usersRemove() {
     return "users-remove";
-  }
-
-  @RequestMapping("/users")
-  String usersList(ModelMap map, @Param("page") Integer page) {
-
-    PageRequest pageReq =
-        new PageRequest(0, 10, new Sort(new Order(Direction.ASC, "username")));
-
-    Page<AccountUsers> accPage;
-
-    accPage = acctUserRepo.findAll(pageReq);
-
-    map.addAttribute("accPage", accPage);
-    return "users";
-
   }
 
   @RequestMapping("/login")
