@@ -33,10 +33,12 @@ import org.springframework.data.domain.Sort.Order;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import tw.guid.local.helper.Crc32HashcodeCreator;
 import tw.guid.local.models.CustomAuthenticationProvider;
 import tw.guid.local.models.Role;
 import tw.guid.local.models.entity.AccountUsers;
@@ -96,7 +98,8 @@ public class WebUsersController {
       accPage = acctUserRepo.findAll(pageReq);
     }
 
-    map.addAttribute("accPage", accPage);
+    map.addAttribute("contactsPage", accPage);
+
     return "users";
 
   }
@@ -171,6 +174,60 @@ public class WebUsersController {
       acctUserRepo.delete(acctUser);
       map.addAttribute("users", acctUser);
       return "users-remove-success";
+
+    }
+  }
+
+  /**
+   * 
+   * 
+   * 
+   * @param map
+   * @param username
+   * @return
+   */
+  @RequestMapping(value = "/{username}", method = RequestMethod.GET)
+  String usersInfo(ModelMap map, @PathVariable("username") String username) {
+
+    AccountUsers acctUser = acctUserRepo.findByUsername(username);
+
+    map.addAttribute("usersInfo", acctUser);
+    return "users-info";
+
+  }
+
+  /**
+   * 
+   * 
+   * 
+   * @param map
+   * @param username
+   * @return
+   */
+  @RequestMapping(value = "/{username}", method = RequestMethod.PUT)
+  String usersPut(ModelMap map, @PathVariable("username") String username,
+      @RequestParam(value = "username") String usernameRequest,
+      @RequestParam(value = "password") String password,
+      @RequestParam(value = "email") String email,
+      @RequestParam(value = "jobTitle") String jobTitle,
+      @RequestParam(value = "telephone") String telephone,
+      @RequestParam(value = "address") String address) {
+
+    if (usernameRequest.equals("")) {
+      return "null-error";
+    } else {
+      AccountUsers acctUser =
+          acctUserRepo.findByUsernameAndRole(usernameRequest, Role.ROLE_USER);
+
+      acctUser.setPassword(Crc32HashcodeCreator.getCrc32(password));
+      acctUser.setEmail(email);
+      acctUser.setJobTitle(jobTitle);
+      acctUser.setTelephone(telephone);
+      acctUser.setAddress(address);
+
+      acctUserRepo.saveAndFlush(acctUser);
+      map.addAttribute("users", acctUser);
+      return "users-edit-success";
 
     }
   }
