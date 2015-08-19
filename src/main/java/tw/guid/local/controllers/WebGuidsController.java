@@ -20,7 +20,6 @@
  */
 package tw.guid.local.controllers;
 
-import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.collect.Lists.newArrayList;
 
 import java.io.FileInputStream;
@@ -35,12 +34,6 @@ import java.util.Properties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.domain.Sort.Direction;
-import org.springframework.data.domain.Sort.Order;
-import org.springframework.data.repository.query.Param;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -59,20 +52,19 @@ import tw.edu.ym.guid.client.field.TWNationalId;
 import tw.guid.local.helper.HttpActionHelper;
 import tw.guid.local.models.Action;
 import tw.guid.local.models.CustomAuthenticationProvider;
-import tw.guid.local.models.Role;
 import tw.guid.local.models.SubprimeGuidRequest;
-import tw.guid.local.models.entity.AccountUsers;
 import tw.guid.local.models.entity.SubprimeGuid;
 import tw.guid.local.models.repo.AccountUsersRepository;
 import tw.guid.local.models.repo.ActionAuditRepository;
 import tw.guid.local.models.repo.SubprimeGuidRepository;
 import tw.guid.local.util.NameSplitter;
 
+@RequestMapping("/guids")
 @Controller
-public class WebController {
+public class WebGuidsController {
 
   private static final Logger log =
-      LoggerFactory.getLogger(WebController.class);
+      LoggerFactory.getLogger(WebGuidsController.class);
 
   @Autowired
   ActionAuditRepository actionAuditRepo;
@@ -98,7 +90,7 @@ public class WebController {
    * @throws URISyntaxException
    * @throws IOException
    */
-  @RequestMapping(value = "/guids/new", method = RequestMethod.POST)
+  @RequestMapping(value = "/new", method = RequestMethod.POST)
   String guidsNew(ModelMap map, @RequestParam(value = "gender") String gender,
       @RequestParam(value = "birthOfYear") String birthOfYear,
       @RequestParam(value = "birthOfMonth") String birthOfMonth,
@@ -167,119 +159,6 @@ public class WebController {
     }
   }
 
-  @RequestMapping(value = "/users/lookup", method = RequestMethod.GET)
-  String usersLookup(ModelMap map, @Param("username") String username,
-      @Param("role") String role, @Param("page") Integer page) {
-
-    PageRequest pageReq =
-        new PageRequest(0, 10, new Sort(new Order(Direction.ASC, "username")));
-
-    Page<AccountUsers> accPage;
-
-    if (username != null) {
-      if (username.equals("") && role.equals("")) {
-        accPage = acctUserRepo.findAll(pageReq);
-      } else if (username.equals("") && role != null) {
-        accPage = acctUserRepo.findByRole(
-            role.equals("ROLE_ADMIN") ? Role.ROLE_ADMIN : Role.ROLE_USER,
-            pageReq);
-      } else if (!username.equals("") && role != null) {
-        accPage = acctUserRepo.findByUsernameAndRole(username,
-            role.equals("ROLE_ADMIN") ? Role.ROLE_ADMIN : Role.ROLE_USER,
-            pageReq);
-      } else {
-        accPage = acctUserRepo.findByUsername(username, pageReq);
-      }
-    } else {
-      accPage = acctUserRepo.findAll(pageReq);
-    }
-
-    map.addAttribute("accPage", accPage);
-    return "users";
-
-  }
-
-  /**
-   * 新增使用者
-   * 
-   * @param map
-   * @param username
-   * @param password
-   * @param email
-   * @param jobTitle
-   * @param institute
-   * @param telephone
-   * @param address
-   * @param prefix
-   * @return
-   */
-  @RequestMapping(value = "/users/new", method = RequestMethod.POST)
-  String usersNew(ModelMap map,
-      @RequestParam(value = "username") String username,
-      @RequestParam(value = "password") String password,
-      @RequestParam(value = "email") String email,
-      @RequestParam(value = "jobTitle") String jobTitle,
-      @RequestParam(value = "institute") String institute,
-      @RequestParam(value = "telephone") String telephone,
-      @RequestParam(value = "address") String address,
-      @RequestParam(value = "prefix") String prefix,
-      @RequestParam(value = "authority") String authority) {
-
-    if (username.equals("") || password.equals("") || institute.equals("")
-        || email.equals("") || prefix.equals("")) {
-      return "null-error";
-    } else {
-      AccountUsers user = new AccountUsers();
-      user.setUsername(checkNotNull(username));
-      user.setPassword(checkNotNull(password));
-      user.setInstitute(checkNotNull(institute));
-      user.setEmail(checkNotNull(email));
-      user.setPrefix(checkNotNull(prefix));
-      user.setTelephone(telephone);
-      user.setJobTitle(jobTitle);
-      user.setAddress(address);
-      user.setRole(
-          authority.equals("ROLE_ADMIN") ? Role.ROLE_ADMIN : Role.ROLE_USER);
-
-      acctUserRepo.save(user);
-      map.addAttribute("users", user);
-
-      return "users-new-success";
-    }
-  }
-
-  /**
-   * 刪除一般使用者
-   * 
-   * 
-   * @param map
-   * @param username
-   * @return
-   */
-  @RequestMapping(value = "/users", method = RequestMethod.DELETE)
-  String usersRemove(ModelMap map,
-      @RequestParam(value = "username") String username) {
-
-    if (username.equals("")) {
-      return "null-error";
-    } else {
-      AccountUsers acctUser =
-          acctUserRepo.findByUsernameAndRole(username, Role.ROLE_USER);
-
-      // 待補！！應該使用下拉選單，以避免找不到要刪除的 User
-      acctUserRepo.delete(acctUser);
-      map.addAttribute("users", acctUser);
-      return "users-remove-success";
-
-    }
-  }
-
-  /**
-   * 使用者名單
-   * 
-   * @return
-   */
-
   /**
    * 在 Web 進行二次編碼比對
    * 
@@ -289,7 +168,7 @@ public class WebController {
    * @throws IOException
    * @throws URISyntaxException
    */
-  @RequestMapping(value = "/guids/comparison", method = RequestMethod.POST)
+  @RequestMapping(value = "/comparison", method = RequestMethod.POST)
   String guidsComparison(ModelMap map,
       @RequestParam(value = "subprimeGuids") String subprimeGuids)
           throws IOException, URISyntaxException {
