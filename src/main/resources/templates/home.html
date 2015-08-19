@@ -12,7 +12,7 @@
 </head>
 
 <body>
-
+<div class="jumbotron">
 	<h1 class="text-center" th:inline="text"> 您好！
 		[[${#httpServletRequest.remoteUser}]]</h1>
 	<div class="container">
@@ -22,6 +22,7 @@
 				value="登出" />
 				</div>
 		</form>
+	</div>
 	</div>
 </body>
 </html>
