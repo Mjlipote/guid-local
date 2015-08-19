@@ -84,5 +84,32 @@
 		</div>
 	</th:block>
 
+
+
+
+	
+<div class="table-pagination">
+    <ul class="pagination">
+        <li th:class="${number == 0} ? 'disabled' : ''">
+            <a th:if="!${isFirst}" th:href="@{${'/users'}}">Previous</a>
+            <a th:if="${isFirst}" href="javascript:void(0);">Previous</a>
+        </li>
+
+        <li th:each="pageNo : ${#numbers.sequence(0, totalPages - 1)}" th:class="${number == pageNo}? 'active' : ''">
+            <a th:if="${number == pageNo}" href="javascript:void(0);">
+                <span th:text="${pageNo + 1}"></span>
+            </a>
+            <a th:if="${not (number == pageNo)}" th:href="@{${'/users'}}">
+                <span th:text="${pageNo + 1}"></span>
+            </a>
+
+        </li>
+        <li th:class="${number + 1 ge totalPages} ? 'disabled' : ''">
+            <a th:if="${!isLast}" th:href="@{${'/users'}}">Next</a>
+            <a th:if="${isLast}" href="javascript:void(0);">Next</a>
+        </li>
+    </ul>
+</div>
+	
 </body>
 </html>
