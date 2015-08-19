@@ -42,7 +42,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.github.wnameless.json.flattener.JsonFlattener;
 import com.google.common.io.BaseEncoding;
 import com.google.gson.Gson;
@@ -79,7 +78,8 @@ public class LegacyGuidClientController {
   @RequestMapping(value = "/create", method = RequestMethod.POST)
   @ResponseBody
   String create(@RequestParam("prefix") String prefix,
-      @RequestParam("hashes") String jsonHashes, HttpServletRequest request) {
+      @RequestParam("hashes") String jsonHashes, HttpServletRequest request)
+          throws URISyntaxException, FileNotFoundException, IOException {
 
     if (prefix.equals("") && isValidate(request) == true) {
       prefix = getAccountUsers(request).getPrefix();
@@ -90,25 +90,13 @@ public class LegacyGuidClientController {
     List<SubprimeGuidRequest> sgrs = buildRequests(prefix, jsonHashes);
 
     Properties prop = new Properties();
-    try {
-      prop.load(new FileInputStream("serverhost.properties"));
-    } catch (FileNotFoundException e) {
-      log.error(e.getMessage(), e);
-    } catch (IOException e) {
-      log.error(e.getMessage(), e);
-    }
+    prop.load(new FileInputStream("serverhost.properties"));
 
-    Map<String, Object> flattenJson = null;
-    try {
-      flattenJson = JsonFlattener.flattenAsMap(HttpActionHelper
-          .toPost(new URI(prop.getProperty("central_server_url")),
-              Action.CREATE, sgrs, false)
-          .getBody());
-    } catch (JsonProcessingException e) {
-      log.error(e.getMessage(), e);
-    } catch (URISyntaxException e) {
-      log.error(e.getMessage(), e);
-    }
+    Map<String, Object> flattenJson;
+
+    flattenJson = JsonFlattener.flattenAsMap(
+        HttpActionHelper.toPost(new URI(prop.getProperty("central_server_url")),
+            Action.CREATE, sgrs, false).getBody());
 
     if (sgrs.size() == 1) {
       return "[" + flattenJson.get("[0].spguid").toString() + "]";
@@ -119,7 +107,6 @@ public class LegacyGuidClientController {
           guids.add(flattenJson.get(key).toString());
         }
       }
-
       return new Gson().toJson(guids);
     }
   }

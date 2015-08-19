@@ -178,6 +178,7 @@ public class WebGuidsController {
     } else {
       List<String> list = newArrayList();
       String[] str = subprimeGuids.trim().split(",");
+
       for (String s : str) {
         list.add(s);
       }
@@ -204,7 +205,7 @@ public class WebGuidsController {
       map.addAttribute("result", lls);
       map.addAttribute("number", lls.size());
 
-      return "comparison-result";
+      return "comparison";
     }
   }
 
