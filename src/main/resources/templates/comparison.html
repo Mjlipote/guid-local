@@ -16,7 +16,7 @@
 
 	<div class="container">
 		<form class="col-md-8 col-md-offset-2" method="post"
-			th:action="@{guids/comparison}">
+			th:action="@{/guids/comparison}">
 
 			<div class="text-center">填入二次編碼字串列（以 "," 做區隔）：</div>
 
@@ -31,6 +31,21 @@
 			</div>
 		</form>
 
+		<div class="container col-xs-12 col-sm-12 col-md-12">
+			<h1 class="text-center">
+				二次編碼比對結果：共有 <span th:text="${number}"></span> 組相同
+			</h1>
+
+			<th:block th:each="pairs : ${result}">
+				<div class="row">
+
+					<div class="col-xs-12 col-sm-12 col-md-12 text-center">
+						<span th:text="${pairs}"></span>
+					</div>
+
+				</div>
+			</th:block>
+		</div>
 	</div>
 </body>
 </html>
