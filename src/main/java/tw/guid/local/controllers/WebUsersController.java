@@ -38,7 +38,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import tw.guid.local.helper.Crc32HashcodeCreator;
 import tw.guid.local.models.CustomAuthenticationProvider;
 import tw.guid.local.models.Role;
 import tw.guid.local.models.entity.AccountUsers;
@@ -207,7 +206,6 @@ public class WebUsersController {
   @RequestMapping(value = "/{username}", method = RequestMethod.PUT)
   String usersPut(ModelMap map, @PathVariable("username") String username,
       @RequestParam(value = "username") String usernameRequest,
-      @RequestParam(value = "password") String password,
       @RequestParam(value = "email") String email,
       @RequestParam(value = "jobTitle") String jobTitle,
       @RequestParam(value = "telephone") String telephone,
@@ -216,10 +214,8 @@ public class WebUsersController {
     if (usernameRequest.equals("")) {
       return "null-error";
     } else {
-      AccountUsers acctUser =
-          acctUserRepo.findByUsernameAndRole(usernameRequest, Role.ROLE_USER);
+      AccountUsers acctUser = acctUserRepo.findByUsername(username);
 
-      acctUser.setPassword(Crc32HashcodeCreator.getCrc32(password));
       acctUser.setEmail(email);
       acctUser.setJobTitle(jobTitle);
       acctUser.setTelephone(telephone);
