@@ -20,6 +20,8 @@
  */
 package tw.guid.local.controllers;
 
+import static com.google.common.collect.Sets.newHashSet;
+
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -27,6 +29,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.sql.SQLException;
 import java.util.Properties;
+import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,6 +42,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import tw.guid.local.helper.HttpActionHelper;
 import tw.guid.local.models.Action;
+import tw.guid.local.models.entity.AccountUsers;
 import tw.guid.local.models.repo.AccountUsersRepository;
 import tw.guid.local.models.repo.ActionAuditRepository;
 import tw.guid.local.models.repo.SubprimeGuidRepository;
@@ -57,6 +61,22 @@ public class ApiController {
   SubprimeGuidRepository spguidRepo;
   @Autowired
   AccountUsersRepository accUserRepo;
+
+  /**
+   * Get all prefix List
+   * 
+   * @return
+   */
+  @ResponseBody
+  @RequestMapping(value = "/prefix", method = RequestMethod.GET)
+  Set<String> prefixLookup() {
+    Set<String> prefixSet = newHashSet();
+
+    for (AccountUsers acctUser : accUserRepo.findAll()) {
+      prefixSet.add(acctUser.getPrefix());
+    }
+    return prefixSet;
+  }
 
   @ResponseBody
   @RequestMapping(value = "/validate", method = RequestMethod.GET)

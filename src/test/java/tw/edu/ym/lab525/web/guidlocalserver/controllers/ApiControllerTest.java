@@ -20,6 +20,7 @@
  */
 package tw.edu.ym.lab525.web.guidlocalserver.controllers;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.io.FileInputStream;
@@ -120,4 +121,11 @@ public class ApiControllerTest {
 
   }
 
+  @Test
+  public void testGetAllPrefixListInLocalServer()
+      throws URISyntaxException, IOException {
+    assertEquals(HttpActionHelper
+        .toGet(new URI(localServerUrl), Action.API_PREFIX, "", true).getBody(),
+        "[" + "\"UserTest\"" + "," + "\"AdminTest\"" + "]");
+  }
 }

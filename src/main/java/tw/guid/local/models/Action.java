@@ -25,7 +25,8 @@ public enum Action {
   CREATE("create"), AUTHENTICATE("authenticate"), EXIST("exist"),
   COMPARISON("comparison"), VALIDATE("validate"), USERS("users"),
   GUIDS_NEW("guids/new"), GUIDS_COMPARISON("guids/comparison"),
-  API_USERS("api/users"), API_EXIST("api/exist"), API_VALIDATE("api/validate");
+  API_USERS("api/users"), API_EXIST("api/exist"), API_VALIDATE("api/validate"),
+  API_PREFIX("api/prefix");
 
   private String action;
 
