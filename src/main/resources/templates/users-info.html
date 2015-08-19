@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head>
+<meta charset="UTF-8" />
+<title>編輯個人資料</title>
+<th:block th:include="head :: bootstrap" />
+<style type="text/css">
+</style>
+
+</head>
+
+<body>
+	<th:block th:include="top :: navigation" />
+	<h1 class="text-center">編輯基本個人資料</h1>
+
+	<div class="container">
+		<form class="col-md-6 col-md-offset-3" method="post"
+			th:action="@{/users/admin}">
+
+			<div class="form-group col-lg-12">
+				<label>姓名：</label><input class="form-control" type="text"
+					name="username" th:value ="${usersInfo.username}" ></input>
+
+			</div>
+			<div class="form-group col-lg-12">
+				<label>密碼：</label><input class="form-control" type="password"
+					placeholder="Password" name="password" th:value ="${usersInfo.password}"></input>
+
+			</div>
+			<div class="form-group col-lg-12">
+				<label>E-Mail：</label><input type="email" class="form-control"
+					placeholder="Sample@mail.com" name="email" th:value ="${usersInfo.email}"></input>
+
+			</div>
+
+			<div class="form-group col-lg-12">
+				<label>工作職銜：</label><input class="form-control" type="text"
+					name="jobTitle" th:value ="${usersInfo.jobTitle}"></input>
+
+			</div>
+			<div class="form-group col-lg-12">
+				<label>聯絡電話：</label><input class="form-control" type="text"
+					placeholder="0910xxxxxx" name="telephone" th:value ="${usersInfo.telephone}"></input>
+
+			</div>
+			<div class="form-group col-lg-12">
+				<label>聯絡住址：</label><input class="form-control" type="text"
+					name="address" th:value ="${usersInfo.address}"></input>
+
+      <input type="hidden" name="_method" value="PUT" />
+			</div>
+			<div class="form-group col-lg-12">
+				<input class="btn btn-primary btn-block btn-lg" type="submit"
+					value="編輯個人資料"></input>
+			</div>
+
+		</form>
+	</div>
+</body>
+</html>
