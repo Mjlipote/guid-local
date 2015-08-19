@@ -97,7 +97,7 @@ public class WebUsersController {
       accPage = acctUserRepo.findAll(pageReq);
     }
 
-    map.addAttribute("contactsPage", accPage);
+    map.addAttribute("accPage", accPage);
 
     return "users";
 
