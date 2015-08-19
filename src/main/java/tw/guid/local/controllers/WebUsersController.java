@@ -74,8 +74,8 @@ public class WebUsersController {
   String usersLookup(ModelMap map, @Param("username") String username,
       @Param("role") String role, @Param("page") Integer page) {
 
-    PageRequest pageReq =
-        new PageRequest(0, 10, new Sort(new Order(Direction.ASC, "username")));
+    PageRequest pageReq = new PageRequest(page - 1, 10,
+        new Sort(new Order(Direction.ASC, "username")));
 
     Page<AccountUsers> accPage;
 
@@ -100,7 +100,6 @@ public class WebUsersController {
     map.addAttribute("accPage", accPage);
 
     return "users";
-
   }
 
   /**

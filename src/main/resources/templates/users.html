@@ -2,7 +2,6 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:th="http://www.thymeleaf.org"
 	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
-
 <head>
 <title>使用者清單</title>
 <th:block th:include="head :: bootstrap" />
@@ -10,9 +9,25 @@
 </style>
 <th:block th:include="top :: navigation" class="container-fluid" />
 </head>
+<script type="text/javascript">
+	$(function() {
+		$(pages).pagination({
+			items : 100,
+			itemsOnPage : 10,
+			cssStyle : 'light-theme',
+			onPageClick : function(pageNumber, event) {
+				var currentUrl = $(location).attr('href');
+				var parsedUrl = $.url(currentUrl);
+				var params = parsedUrl.param();
+				params["page"] = pageNumber;
+				var newUrl = "?" + $.param(params);
 
+				window.location.href = newUrl;
+			}
+		});
+	});
+</script>
 <body>
-
 	<h1 class="text-center">使用者</h1>
 
 	<div class="container">
@@ -28,15 +43,11 @@
 
 			</div>
 			<div class="form-group">
-
 				<input class="btn btn-primary btn-block btn-lg" type="submit"
 					value="搜尋使用者"></input>
-
 			</div>
 		</form>
 	</div>
-
-
 	<div class="row">
 		<div class="col-xs-12 col-sm-12 col-md-12">
 			<div class="col-xs-2 col-sm-2 col-md-2">
@@ -83,11 +94,7 @@
 			</div>
 		</div>
 	</th:block>
+	<div id="pages"></div>
 
-
-
-
-	
-	
 </body>
 </html>
