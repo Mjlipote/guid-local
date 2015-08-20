@@ -74,12 +74,12 @@ public class WebUsersController {
   String usersLookup(ModelMap map, @Param("username") String username,
       @Param("role") String role, @Param("page") Integer page) {
 
-    PageRequest pageReq = new PageRequest(page - 1, 10,
+    PageRequest pageReq = new PageRequest(page - 1, 3,
         new Sort(new Order(Direction.ASC, "username")));
 
     Page<AccountUsers> accPage;
 
-    if (username != null) {
+    if (username != null && page != null) {
       if (username.equals("") && role.equals("")) {
         accPage = acctUserRepo.findAll(pageReq);
       } else if (username.equals("") && role != null) {
@@ -130,7 +130,8 @@ public class WebUsersController {
 
     if (username.equals("") || password.equals("") || institute.equals("")
         || email.equals("") || prefix.equals("")) {
-      return "null-error";
+      map.addAttribute("errorMessage", "請確實填寫資料，切勿留空值！！");
+      return "error";
     } else {
       AccountUsers user = new AccountUsers();
       user.setUsername(checkNotNull(username));
@@ -145,9 +146,9 @@ public class WebUsersController {
           authority.equals("ROLE_ADMIN") ? Role.ROLE_ADMIN : Role.ROLE_USER);
 
       acctUserRepo.save(user);
-      map.addAttribute("users", user);
+      map.addAttribute("successMessage", "已成功新增一筆使用者：" + user.getUsername());
 
-      return "users-new-success";
+      return "success";
     }
   }
 
@@ -186,14 +187,16 @@ public class WebUsersController {
       @RequestParam(value = "username") String username) {
 
     if (username.equals("")) {
-      return "null-error";
+      map.addAttribute("errorMessage", "請確實填寫資料，切勿留空值！！");
+      return "error";
     } else {
       AccountUsers acctUser =
           acctUserRepo.findByUsernameAndRole(username, Role.ROLE_USER);
 
       acctUserRepo.delete(acctUser);
-      map.addAttribute("users", acctUser);
-      return "users-remove-success";
+      map.addAttribute("successMessage",
+          "已成功刪除一筆使用者：" + acctUser.getUsername());
+      return "success";
 
     }
   }
@@ -248,7 +251,8 @@ public class WebUsersController {
       @Param(value = "address") String address) {
 
     if (username.equals("")) {
-      return "null-error";
+      map.addAttribute("errorMessage", "請確實填寫資料，切勿留空值！！");
+      return "error";
     } else {
       AccountUsers acctUser = acctUserRepo.findByUsername(username);
 
@@ -258,8 +262,9 @@ public class WebUsersController {
       acctUser.setAddress(address);
 
       acctUserRepo.saveAndFlush(acctUser);
-      map.addAttribute("users", acctUser);
-      return "users-edit-success";
+      map.addAttribute("successMessage",
+          "已成功修改 " + acctUser.getUsername() + " 的個人資料");
+      return "success";
 
     }
   }

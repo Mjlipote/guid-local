@@ -100,7 +100,8 @@ public class WebGuidsController {
           throws FileNotFoundException, IOException {
     if (gender.equals("") || birthOfYear.equals("") || birthOfMonth.equals("")
         || birthOfDay.equals("") || sid.equals("") || name.equals("")) {
-      return "null-error";
+      map.addAttribute("errorMessage", "請確實填寫資料，切勿留空值！！");
+      return "error";
     } else {
       PII pii = new PII.Builder(NameSplitter.split(name),
           gender.equals("M") ? Sex.MALE : Sex.FEMALE,
@@ -174,7 +175,8 @@ public class WebGuidsController {
           throws IOException, URISyntaxException {
 
     if (subprimeGuids.equals("")) {
-      return "null-error";
+      map.addAttribute("errorMessage", "請確實填寫資料，切勿留空值！！");
+      return "error";
     } else {
       List<String> list = newArrayList();
       String[] str = subprimeGuids.trim().split(",");

@@ -3,7 +3,7 @@
 	xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta charset="UTF-8"></meta>
-<title>新增使用者</title>
+<title>Success Page</title>
 <th:block th:include="head :: bootstrap" />
 <style type="text/css">
 </style>
@@ -11,8 +11,7 @@
 </head>
 
 <body>
-	<h1 class="text-center">
-		已成功新增使用者：<span th:text="${users.username}"></span>
+	<h1 class="text-center" th:text= "${successMessage}">
 	</h1>
 
 </body>
