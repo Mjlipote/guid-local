@@ -38,6 +38,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import tw.guid.local.helper.Crc32HashcodeCreator;
 import tw.guid.local.models.CustomAuthenticationProvider;
 import tw.guid.local.models.Role;
 import tw.guid.local.models.entity.AccountUsers;
@@ -202,7 +203,7 @@ public class WebUsersController {
   }
 
   /**
-   * Get users's presonal information
+   * Change users's password
    * 
    * 
    * @param map
@@ -217,7 +218,7 @@ public class WebUsersController {
   }
 
   /**
-   * Get users's presonal information
+   * Get users's personal information
    * 
    * 
    * @param map
@@ -225,7 +226,8 @@ public class WebUsersController {
    * @return
    */
   @RequestMapping(value = "/{username}", method = RequestMethod.GET)
-  String usersInfo(ModelMap map, @PathVariable("username") String username) {
+  String usersGetPersonalInfo(ModelMap map,
+      @PathVariable("username") String username) {
 
     AccountUsers acctUser = acctUserRepo.findByUsername(username);
 
@@ -235,7 +237,7 @@ public class WebUsersController {
   }
 
   /**
-   * 
+   * Edit user's personal information
    * 
    * 
    * @param map
@@ -243,7 +245,7 @@ public class WebUsersController {
    * @return
    */
   @RequestMapping(value = "/{username}", method = RequestMethod.PUT)
-  String usersPut(ModelMap map, @PathVariable("username") String username,
+  String usersEdit(ModelMap map, @PathVariable("username") String username,
       @Param(value = "username") String usernameRequest,
       @Param(value = "email") String email,
       @Param(value = "jobTitle") String jobTitle,
@@ -266,6 +268,32 @@ public class WebUsersController {
           "已成功修改 " + acctUser.getUsername() + " 的個人資料");
       return "success";
 
+    }
+  }
+
+  @RequestMapping(value = "/changepassword/{username}",
+      method = RequestMethod.PUT)
+  String usersChangePassword(ModelMap map,
+      @PathVariable("username") String username,
+      @Param(value = "oldpassword") String oldpassword,
+      @Param(value = "checkpassword") String checkpassword,
+      @Param(value = "newpassword") String newpassword) {
+
+    if (username.equals("") || oldpassword.equals("")
+        || checkpassword.equals("") || newpassword.equals("")) {
+      map.addAttribute("errorMessage", "請確實填寫資料，切勿留空值！！");
+      return "error";
+    } else if (acctUserRepo.findByUsernameAndPassword(username,
+        Crc32HashcodeCreator.getCrc32(oldpassword)) == null) {
+      map.addAttribute("errorMessage", "所填寫的舊密碼有誤，請您再次確認！！");
+      return "error";
+    } else {
+      AccountUsers acctUser = acctUserRepo.findByUsername(username);
+      acctUser.setPassword(newpassword);
+      acctUserRepo.saveAndFlush(acctUser);
+      map.addAttribute("successMessage",
+          "已成功修改 " + acctUser.getUsername() + " 的登入密碼");
+      return "success";
     }
   }
 

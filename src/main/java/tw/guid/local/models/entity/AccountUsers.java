@@ -63,13 +63,6 @@ public class AccountUsers extends AbstractPersistable<Long> {
   }
 
   /**
-   * @return the password
-   */
-  public String getPassword() {
-    return password;
-  }
-
-  /**
    * @param password
    *          the password to set
    */
