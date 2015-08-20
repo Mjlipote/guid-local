@@ -119,7 +119,7 @@ public class WebGuidsController {
               pii.getHashcodes().get(2), prefix);
 
       if (sg != null) {
-        map.addAttribute("spguids", "REPEAT:" + sg.getSpguid());
+        map.addAttribute("spguids", "(REPEAT): " + sg.getSpguid());
         return "guids-new-result";
       } else {
 
