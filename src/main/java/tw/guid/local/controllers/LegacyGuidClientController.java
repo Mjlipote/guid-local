@@ -29,6 +29,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.Properties;
@@ -113,21 +114,17 @@ public class LegacyGuidClientController {
             .getSubprimeGuidBySubprimeGuidRequest(bs.getValue());
       else {
         String result = null;
-        
-        List<SubprimeGuidRequest> list = newArrayList();
-        list.add(bs.getValue());
+
         try {
           result =
-              (String) JsonFlattener
-                  .flattenAsMap(HttpActionHelper
-                      .toPost(new URI(prop.getProperty("central_server_url")),
-                          Action.CREATE, list, false)
-                      .getBody())
-                  .get("[0].spguid");
+              (String) JsonFlattener.flattenAsMap(HttpActionHelper
+                  .toPost(new URI(prop.getProperty("central_server_url")),
+                      Action.CREATE, Arrays.asList(bs.getValue()), false)
+                  .getBody()).get("[0].spguid");
         } catch (Exception e) {
           log.error(e.getMessage(), e);
         }
-        
+
         SubprimeGuid subprimeGuid = new SubprimeGuid();
         subprimeGuid.setHashcode1(bs.getValue().getGuidHash().get(0));
         subprimeGuid.setHashcode2(bs.getValue().getGuidHash().get(1));
