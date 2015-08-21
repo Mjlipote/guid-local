@@ -5,8 +5,8 @@
 <head>
 <title>使用者清單</title>
 <th:block th:include="head :: bootstrap" />
-  <link rel="stylesheet" href="/simplePagination.css"></link>
-    <script src="/jquery.simplePagination.js"></script>
+<link rel="stylesheet" href="/simplePagination.css"></link>
+<script src="/jquery.simplePagination.js"></script>
 <style type="text/css">
 </style>
 <th:block th:include="top :: navigation" class="container-fluid" />
@@ -50,53 +50,32 @@
 			</div>
 		</form>
 	</div>
-	<div class="row">
-		<div class="col-xs-12 col-sm-12 col-md-12">
-			<div class="col-xs-2 col-sm-2 col-md-2">
-				<span>使用者權限</span>
-			</div>
-			<div class="col-xs-2 col-sm-2 col-md-2">
-				<span>使用者帳號</span>
-			</div>
-			<div class="col-xs-2 col-sm-2 col-md-2">
-				<span>Prefix 值</span>
-			</div>
-			<div class="col-xs-2 col-sm-2 col-md-2">
-				<span>服務單位</span>
-			</div>
-			<div class="col-xs-2 col-sm-2 col-md-2">
-				<span>工作職銜</span>
-			</div>
-			<div class="col-xs-2 col-sm-2 col-md-2">
-				<span>電子郵件 E-mail</span>
-			</div>
-		</div>
+
+	<div>
+		<table class="table table-responsive table-condensed table-hover">
+			<tr>
+				<td>使用者權限</td>
+				<td>使用者帳號</td>
+				<td>Prefix 值</td>
+				<td>服務單位</td>
+				<td>工作職銜</td>
+				<td>電子郵件 E-Mail</td>
+			</tr>
+			<th:block th:each="accuntusers : ${accPage}">
+				<tr>
+					<td th:text="${accuntusers.role}"></td>
+					<td th:text="${accuntusers.username}"></td>
+					<td th:text="${accuntusers.prefix}"></td>
+					<td th:text="${accuntusers.institute}"></td>
+					<td th:text="${accuntusers.jobTitle}"></td>
+					<td th:text="${accuntusers.email}"></td>
+
+				</tr>
+			</th:block>
+		</table>
 	</div>
-	<th:block th:each="accuntusers : ${accPage}">
-		<div class="row">
-			<div class="col-xs-12 col-sm-12 col-md-12">
-				<div class="col-xs-2 col-sm-2 col-md-2">
-					<span th:text="${accuntusers.role}"></span>
-				</div>
-				<div class="col-xs-2 col-sm-2 col-md-2">
-					<span th:text="${accuntusers.username}"></span>
-				</div>
-				<div class="col-xs-2 col-sm-2 col-md-2">
-					<span th:text="${accuntusers.prefix}"></span>
-				</div>
-				<div class="col-xs-2 col-sm-2 col-md-2">
-					<span th:text="${accuntusers.institute}"></span>
-				</div>
-				<div class="col-xs-2 col-sm-2 col-md-2">
-					<span th:text="${accuntusers.jobTitle}"></span>
-				</div>
-				<div class="col-xs-2 col-sm-2 col-md-2">
-					<span th:text="${accuntusers.email}"></span>
-				</div>
-			</div>
-		</div>
-	</th:block>
-	<div id="pages"></div>
+
+	<div class="text-justify" id="pages"></div>
 
 </body>
 </html>
