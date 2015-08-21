@@ -21,7 +21,6 @@
 package tw.edu.ym.lab525.web.guidlocalserver.controllers;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -32,17 +31,12 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
 
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.SpringApplicationConfiguration;
-import org.springframework.boot.test.TestRestTemplate;
 import org.springframework.boot.test.WebIntegrationTest;
-import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.web.client.RestTemplate;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 
@@ -64,29 +58,6 @@ public class MainControllerTest {
     prop.load(new FileInputStream("serverhost.properties"));
     localServerUrl = prop.getProperty("local_server_url");
     centralServerUrl = prop.getProperty("central_server_url");
-  }
-
-  @Test
-  public void testUsers() throws IOException, URISyntaxException {
-
-    RestTemplate restTemplate = new TestRestTemplate();
-
-    ResponseEntity<String> res = restTemplate
-        .getForEntity(localServerUrl + "/" + Action.USERS + "/" + "?username="
-            + "" + "&prefix=" + "" + "&role=" + "", String.class);
-
-    Document doc = Jsoup.parse(res.getBody());
-
-    assertTrue(
-        doc.getElementsByTag("span").get(6).text().contains("ROLE_ADMIN"));
-    assertTrue(doc.getElementsByTag("span").get(7).text().contains("admin"));
-    assertTrue(
-        doc.getElementsByTag("span").get(8).text().contains("AdminTest"));
-    assertTrue(doc.getElementsByTag("span").get(9).text().contains("國立陽明大學"));
-    assertTrue(doc.getElementsByTag("span").get(10).text().contains("系統管理員"));
-    assertTrue(
-        doc.getElementsByTag("span").get(11).text().contains("admin@ym.com"));
-
   }
 
   @Test

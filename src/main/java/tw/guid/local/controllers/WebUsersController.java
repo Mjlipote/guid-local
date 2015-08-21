@@ -22,12 +22,11 @@ package tw.guid.local.controllers;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
+import java.util.List;
+
+import javax.persistence.criteria.Predicate;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.domain.Sort.Direction;
-import org.springframework.data.domain.Sort.Order;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -65,16 +64,13 @@ public class WebUsersController {
    * @return
    */
   @RequestMapping(value = "", method = RequestMethod.GET)
-  String usersList(ModelMap map, @Param("page") Integer page) {
+  String usersList(ModelMap map) {
 
-    PageRequest pageReq = new PageRequest(page - 1, 5,
-        new Sort(new Order(Direction.ASC, "username")));
+    List<AccountUsers> acctUsers;
 
-    Page<AccountUsers> accPage;
+    acctUsers = acctUserRepo.findAll();
 
-    accPage = acctUserRepo.findAll(pageReq);
-
-    map.addAttribute("accPage", accPage);
+    map.addAttribute("acctUsers", acctUsers);
     return "users";
 
   }
@@ -90,32 +86,51 @@ public class WebUsersController {
    */
   @RequestMapping(value = "/lookup", method = RequestMethod.GET)
   String usersLookup(ModelMap map, @Param("username") String username,
-      @Param("role") String role, @Param("page") Integer page) {
+      @Param("role") String role, @Param("prefix") String prefix,
+      @Param("institute") String institute, @Param("jobTitle") String jobTitle,
+      @Param("email") String email, @Param("telephone") String telephone,
+      @Param("address") String address) {
 
-    PageRequest pageReq = new PageRequest(page - 1, 5,
-        new Sort(new Order(Direction.ASC, "username")));
+    List<AccountUsers> acctUsers = acctUserRepo.findAll((root, query, cb) -> {
+      Predicate finalPredicate = cb.and();
 
-    Page<AccountUsers> accPage;
-
-    if (username != null && page != null) {
-      if (username.equals("") && role.equals("")) {
-        accPage = acctUserRepo.findAll(pageReq);
-      } else if (username.equals("") && role != null) {
-        accPage = acctUserRepo.findByRole(
-            role.equals("ROLE_ADMIN") ? Role.ROLE_ADMIN : Role.ROLE_USER,
-            pageReq);
-      } else if (!username.equals("") && role != null) {
-        accPage = acctUserRepo.findByUsernameAndRole(username,
-            role.equals("ROLE_ADMIN") ? Role.ROLE_ADMIN : Role.ROLE_USER,
-            pageReq);
-      } else {
-        accPage = acctUserRepo.findByUsername(username, pageReq);
+      if (username != null && !username.equals("")) {
+        finalPredicate =
+            cb.and(finalPredicate, cb.equal(root.get("username"), username));
       }
-    } else {
-      accPage = acctUserRepo.findAll(pageReq);
-    }
+      if (role != null && !role.equals("")) {
+        finalPredicate = cb.and(finalPredicate, cb.equal(root.get("role"),
+            role.equals("ROLE_ADMIN") ? Role.ROLE_ADMIN : Role.ROLE_USER));
+      }
+      if (prefix != null && !prefix.equals("")) {
+        finalPredicate =
+            cb.and(finalPredicate, cb.equal(root.get("prefix"), prefix));
+      }
+      if (institute != null && !institute.equals("")) {
+        finalPredicate =
+            cb.and(finalPredicate, cb.equal(root.get("institute"), institute));
+      }
+      if (jobTitle != null && !jobTitle.equals("")) {
+        finalPredicate =
+            cb.and(finalPredicate, cb.equal(root.get("jobTitle"), jobTitle));
+      }
+      if (email != null && !email.equals("")) {
+        finalPredicate =
+            cb.and(finalPredicate, cb.equal(root.get("email"), email));
+      }
+      if (telephone != null && !telephone.equals("")) {
+        finalPredicate =
+            cb.and(finalPredicate, cb.equal(root.get("telephone"), telephone));
+      }
+      if (address != null && !address.equals("")) {
+        finalPredicate =
+            cb.and(finalPredicate, cb.equal(root.get("address"), address));
+      }
 
-    map.addAttribute("accPage", accPage);
+      return finalPredicate;
+    });
+
+    map.addAttribute("acctUsers", acctUsers);
 
     return "users";
   }
@@ -128,12 +143,15 @@ public class WebUsersController {
    * @param username
    * @return
    */
-  @RequestMapping(value = "", method = RequestMethod.DELETE)
-  String usersRemove(ModelMap map,
-      @RequestParam(value = "username") String username) {
+  @RequestMapping(value = "/{username}", method = RequestMethod.DELETE)
+  String usersRemove(ModelMap map, @PathVariable("username") String username) {
 
     if (username.equals("")) {
       map.addAttribute("errorMessage", "請確實填寫資料，切勿留空值！！");
+      return "error";
+    } else if (acctUserRepo.findByUsername(username).getRole()
+        .equals(Role.ROLE_ADMIN)) {
+      map.addAttribute("errorMessage", "無法刪除系統管理員帳號！！");
       return "error";
     } else {
       AccountUsers acctUser =

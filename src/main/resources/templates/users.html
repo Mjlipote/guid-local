@@ -10,72 +10,141 @@
 <style type="text/css">
 </style>
 <th:block th:include="top :: navigation" class="container-fluid" />
-</head>
+
 <script type="text/javascript">
 	$(function() {
-		$(pages).pagination({
-			items : 100,
-			itemsOnPage : 10,
-			cssStyle : 'light-theme',
-			onPageClick : function(pageNumber, event) {
-				var currentUrl = $(location).attr('href');
-				var parsedUrl = $.url(currentUrl);
-				var params = parsedUrl.param();
-				params["page"] = pageNumber;
-				var newUrl = "?" + $.param(params);
+		var items = $("table tbody tr");
+		var numItems = items.length;
+		var perPage = 5;
+		items.slice(perPage).hide();
 
-				window.location.href = newUrl;
+		$(pages).pagination({
+
+			items : numItems,
+			itemsOnPage : perPage,
+			cssStyle : "light-theme",
+
+			onPageClick : function(pageNumber) {
+
+				var showFrom = perPage * (pageNumber - 1);
+				var showTo = showFrom + perPage;
+
+				items.hide() // first hide everything, then show for the new page
+				.slice(showFrom, showTo).show();
 			}
 		});
+		var checkFragment = function() {
+			// if there's no hash, make sure we go to page 1
+			var hash = window.location.hash || "#page-1";
+
+			// we'll use regex to check the hash string
+			hash = hash.match(/^#page-(\d+)$/);
+
+			if (hash)
+				// the selectPage function is described in the documentation
+				// we've captured the page number in a regex group: (\d+)
+				$(pages).pagination("selectPage", parseInt(hash[1]));
+		};
+
+		// we'll call this function whenever the back/forward is pressed
+		$(window).bind("popstate", checkFragment);
+
+		// and we'll also call it to check right now!
+		checkFragment();
 	});
 </script>
+</head>
 <body>
-	<h1 class="text-center">使用者</h1>
+	<h1 class="text-center">使用者清單</h1>
 
-	<div class="container">
-		<form class="col-md-4 col-md-offset-4" method="get"
-			th:action="@{/users/lookup}">
-			<div class="form-group form-line">
-				<label>使用者權限：</label> <select class="form-control" name="role">
-					<option value="">---------</option>
+	<div class="container row">
+		<form class=" form-inline col-md-10 col-md-offset-1" method="get"
+			th:action="@{/users/lookup}" role="form">
+			<div class="form-group">
+				<label class="sr-only">使用者權限：</label> <select class="form-control"
+					name="role">
+					<option value="">使用者權限</option>
 					<option value="ROLE_ADMIN">系統管理者</option>
 					<option value="ROLE_USER">一般使用者</option>
-				</select> <label>使用者帳號：</label><input class="form-control" type="text"
-					name="username"></input>
+				</select>
+			</div>
+			<div class="form-group">
+				<label class="sr-only">使用者帳號：</label><input class="form-control"
+					type="text" name="username" placeholder="使用者帳號"></input>
+			</div>
+			<div class="form-group">
+				<label class="sr-only">Prefix 值：</label><select class="form-control" name="prefix">
+					<option value="">Prefix</option>
+					<option value="TpeVGH">TpeVGH</option>
+					<option value="TSGH">TSGH</option>
+					<option value="NTUH">NTUH</option>
+				</select>
 
 			</div>
 			<div class="form-group">
-				<input class="btn btn-primary btn-block btn-lg" type="submit"
+				<label class="sr-only">服務單位：</label><select class="form-control"
+					name="institute">
+					<option value="">服務單位</option>
+					<option value="北榮">北榮</option>
+					<option value="三總">三總</option>
+					<option value="台大">台大</option>
+				</select>
+			</div>
+			<div class="form-group">
+				<label class="sr-only">工作職銜：</label><input class="form-control"
+					type="text" name="jobTitle" placeholder="工作職銜"></input>
+			</div>
+			<div class="form-group">
+				<label class="sr-only">電子郵件 E-Mail：</label><input
+					class="form-control" type="text" name="email" placeholder="電子郵件 E-Mail"></input>
+			</div>
+
+			<div class="form-group">
+				<input class="btn btn-primary btn-block btn-default" type="submit"
 					value="搜尋使用者"></input>
 			</div>
 		</form>
 	</div>
 
+
+	<div class="container" id="pages"></div>
+
 	<div>
-		<table class="table table-responsive table-condensed table-hover">
-			<tr>
-				<td>使用者權限</td>
-				<td>使用者帳號</td>
-				<td>Prefix 值</td>
-				<td>服務單位</td>
-				<td>工作職銜</td>
-				<td>電子郵件 E-Mail</td>
-			</tr>
-			<th:block th:each="accuntusers : ${accPage}">
+		<table
+			class="table table-responsive table-bordered table-striped table-condensed table-hover">
+			 <thead>			
+			<th:tr>
+				<td>#</td>
+				<td><strong>使用者權限</strong></td>
+				<td><strong>使用者帳號</strong></td>
+				<td><strong>Prefix 值</strong></td>
+				<td><strong>服務單位</strong></td>
+				<td><strong>工作職銜</strong></td>
+				<td><strong>電子郵件 E-Mail</strong></td>
+			</th:tr>
+			 </thead>
+			<tbody>
+			<th:block th:each="accuntusers : ${acctUsers}">
 				<tr>
+					<td>
+						<form method="post"
+							th:action="@{${'/users/' + accuntusers.username }}">
+							<input type="hidden" name="_method" value="DELETE" /> <input
+								type="submit" name="${accuntusers.username}"
+								class="btn btn-block btn-sm btn-danger" value="刪除"></input>
+						</form>
+					</td>
 					<td th:text="${accuntusers.role}"></td>
 					<td th:text="${accuntusers.username}"></td>
 					<td th:text="${accuntusers.prefix}"></td>
 					<td th:text="${accuntusers.institute}"></td>
 					<td th:text="${accuntusers.jobTitle}"></td>
 					<td th:text="${accuntusers.email}"></td>
-
 				</tr>
 			</th:block>
+			</tbody>
 		</table>
 	</div>
-
-	<div class="text-justify" id="pages"></div>
-
+	<div class="container" id="pages"></div>
 </body>
 </html>
