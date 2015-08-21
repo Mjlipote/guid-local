@@ -92,8 +92,8 @@ public class LegacyGuidClientController {
     Properties prop = new Properties();
     prop.load(new FileInputStream("serverhost.properties"));
 
-    if (prefix.equals("") && isValidate(request) == true) {
-      prefix = getAccountUsers(request).getPrefix();
+    if (prefix.equals("") && isValidate(request)) {
+      prefix = getPrefixFromCurrentLoginUser(request);
     } else if (prefix.equals("")) {
       prefix = "PSEUDO";
     }
@@ -125,11 +125,12 @@ public class LegacyGuidClientController {
           log.error(e.getMessage(), e);
         }
 
+        String[] str = result.split("-");
         SubprimeGuid subprimeGuid = new SubprimeGuid();
         subprimeGuid.setHashcode1(bs.getValue().getGuidHash().get(0));
         subprimeGuid.setHashcode2(bs.getValue().getGuidHash().get(1));
         subprimeGuid.setHashcode3(bs.getValue().getGuidHash().get(2));
-        subprimeGuid.setPrefix(getPrefixFromCurrentLoginUser(request));
+        subprimeGuid.setPrefix(str[0]);
         subprimeGuid.setSpguid(result);
         subprimeGuidRepo.save(subprimeGuid);
 

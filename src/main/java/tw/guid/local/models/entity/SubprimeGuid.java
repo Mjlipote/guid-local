@@ -26,6 +26,8 @@ import javax.persistence.Entity;
 
 import org.springframework.data.jpa.domain.AbstractPersistable;
 
+import com.google.common.base.MoreObjects;
+
 @Entity
 public class SubprimeGuid extends AbstractPersistable<Long> {
 
@@ -119,6 +121,49 @@ public class SubprimeGuid extends AbstractPersistable<Long> {
    */
   public void setHashcode3(String hashcode3) {
     this.hashcode3 = hashcode3;
+  }
+
+  @Override
+  public int hashCode() {
+    final int prime = 31;
+    int result = 1;
+    result = prime * result + ((prefix == null) ? 0 : prefix.hashCode());
+    result = prime * result + ((spguid == null) ? 0 : spguid.hashCode());
+    result = prime * result + ((hashcode1 == null) ? 0 : hashcode1.hashCode());
+    result = prime * result + ((hashcode2 == null) ? 0 : hashcode2.hashCode());
+    result = prime * result + ((hashcode3 == null) ? 0 : hashcode3.hashCode());
+    return result;
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj) return true;
+    if (obj == null) return false;
+    if (getClass() != obj.getClass()) return false;
+    SubprimeGuid other = (SubprimeGuid) obj;
+    if (prefix == null) {
+      if (other.prefix != null) return false;
+    } else if (!prefix.equals(other.prefix)) return false;
+    if (spguid == null) {
+      if (other.spguid != null) return false;
+    } else if (!spguid.equals(other.spguid)) return false;
+    if (hashcode1 == null) {
+      if (other.hashcode1 != null) return false;
+    } else if (!hashcode1.equals(other.hashcode1)) return false;
+    if (hashcode2 == null) {
+      if (other.hashcode2 != null) return false;
+    } else if (!hashcode2.equals(other.hashcode2)) return false;
+    if (hashcode3 == null) {
+      if (other.hashcode3 != null) return false;
+    } else if (!hashcode3.equals(other.hashcode3)) return false;
+    return true;
+  }
+
+  @Override
+  public String toString() {
+    return MoreObjects.toStringHelper(this).add("spguid", spguid)
+        .add("prefix", prefix).add("hashcode1", hashcode1)
+        .add("hashcode2", hashcode2).add("hashcode3", hashcode3).toString();
   }
 
 }

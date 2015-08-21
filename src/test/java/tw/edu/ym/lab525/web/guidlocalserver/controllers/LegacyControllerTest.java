@@ -21,6 +21,7 @@
 package tw.edu.ym.lab525.web.guidlocalserver.controllers;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import java.io.FileInputStream;
@@ -35,6 +36,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.boot.test.WebIntegrationTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -46,6 +48,8 @@ import tw.edu.ym.guid.client.field.Name;
 import tw.edu.ym.guid.client.field.Sex;
 import tw.edu.ym.guid.client.field.TWNationalId;
 import tw.guid.local.Application;
+import tw.guid.local.models.SubprimeGuidRequest;
+import tw.guid.local.models.repo.SubprimeGuidRepository;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = Application.class)
@@ -69,6 +73,9 @@ public class LegacyControllerTest {
 
   private static final Logger log =
       LoggerFactory.getLogger(LegacyControllerTest.class);
+
+  @Autowired
+  SubprimeGuidRepository subprimeGuidRepo;
 
   private static String localServerUrl;
 
@@ -101,6 +108,27 @@ public class LegacyControllerTest {
         new Birthday(1979, 7, 21), new TWNationalId("E122371585")).build();
 
     assertEquals(gc.create(pii), "AdminTest-T8A37BPL");
+
+  }
+
+  @Test
+  public void testCreateRepeatSubprimeGuids()
+      throws IOException, URISyntaxException {
+
+    GuidClient gc =
+        new GuidClient(new URI(localServerUrl), "admin", "password", "Test");
+    PII pii = new PII.Builder(new Name("大頭", "王"), Sex.MALE,
+        new Birthday(2012, 1, 11), new TWNationalId("A123456789")).build();
+
+    SubprimeGuidRequest sgr = new SubprimeGuidRequest();
+    sgr.setPrefix("Test");
+    sgr.setGuidHash(pii.getHashcodes());
+
+    assertFalse(subprimeGuidRepo.isExist(sgr));
+
+    gc.create(pii);
+
+    assertTrue(subprimeGuidRepo.isExist(sgr));
 
   }
 
