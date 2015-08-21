@@ -21,6 +21,8 @@
 package tw.guid.local.controllers;
 
 import static com.google.common.collect.Lists.newArrayList;
+import static net.sf.rubycollect4j.RubyCollections.hp;
+import static net.sf.rubycollect4j.RubyCollections.ra;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -28,7 +30,7 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
-import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Properties;
 
 import javax.servlet.http.HttpServletRequest;
@@ -47,6 +49,7 @@ import com.google.common.io.BaseEncoding;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
+import net.sf.rubycollect4j.RubyArray;
 import tw.guid.local.helper.Crc32HashcodeCreator;
 import tw.guid.local.helper.HttpActionHelper;
 import tw.guid.local.models.Action;
@@ -54,6 +57,7 @@ import tw.guid.local.models.CustomAuthenticationProvider;
 import tw.guid.local.models.SubprimeGuidRequest;
 import tw.guid.local.models.entity.AccountUsers;
 import tw.guid.local.models.repo.AccountUsersRepository;
+import tw.guid.local.models.repo.SubprimeGuidRepository;
 
 @RequestMapping("/guid")
 @Controller
@@ -65,13 +69,15 @@ public class LegacyGuidClientController {
   @Autowired
   CustomAuthenticationProvider customAuthenticationProvider;
 
+  @Autowired
+  SubprimeGuidRepository subprimeGuidRepo;
+
   private static final Logger log =
       LoggerFactory.getLogger(LegacyGuidClientController.class);
 
   @RequestMapping(value = "/authenticate", method = RequestMethod.GET)
   @ResponseBody
   String authenticate(HttpServletRequest request) {
-
     return new Gson().toJson(isValidate(request), Boolean.class);
   }
 
@@ -81,6 +87,9 @@ public class LegacyGuidClientController {
       @RequestParam("hashes") String jsonHashes, HttpServletRequest request)
           throws URISyntaxException, FileNotFoundException, IOException {
 
+    Properties prop = new Properties();
+    prop.load(new FileInputStream("serverhost.properties"));
+
     if (prefix.equals("") && isValidate(request) == true) {
       prefix = getAccountUsers(request).getPrefix();
     } else if (prefix.equals("")) {
@@ -89,26 +98,37 @@ public class LegacyGuidClientController {
 
     List<SubprimeGuidRequest> sgrs = buildRequests(prefix, jsonHashes);
 
-    Properties prop = new Properties();
-    prop.load(new FileInputStream("serverhost.properties"));
+    RubyArray<Entry<Boolean, SubprimeGuidRequest>> boolSgrs =
+        ra(sgrs).map((sgq) -> {
+          if (subprimeGuidRepo.isExist(sgq))
+            return hp(true, sgq);
+          else
+            return hp(false, sgq);
+        });
 
-    Map<String, Object> flattenJson;
-
-    flattenJson = JsonFlattener.flattenAsMap(
-        HttpActionHelper.toPost(new URI(prop.getProperty("central_server_url")),
-            Action.CREATE, sgrs, false).getBody());
-
-    if (sgrs.size() == 1) {
-      return "[" + flattenJson.get("[0].spguid").toString() + "]";
-    } else {
-      List<String> guids = newArrayList();
-      for (String key : flattenJson.keySet()) {
-        if (key.matches("^\\[\\d+\\]\\.spguid$")) {
-          guids.add(flattenJson.get(key).toString());
+    List<String> correctGuids = boolSgrs.map((bs) -> {
+      if (bs.getKey())
+        return subprimeGuidRepo.getSubprimeGuidBySubprimeGuidRequestAndPrefix(
+            bs.getValue(), getPrefixFromCurrentLoginUser(request));
+      else {
+        String result = null;
+        try {
+          result =
+              (String) JsonFlattener
+                  .flattenAsMap(HttpActionHelper
+                      .toPost(new URI(prop.getProperty("central_server_url")),
+                          Action.CREATE, sgrs, false)
+                      .getBody())
+                  .get("[0].spguid");
+        } catch (Exception e) {
+          log.error(e.getMessage(), e);
         }
+        return result;
       }
-      return new Gson().toJson(guids);
-    }
+    });
+
+    return new Gson().toJson(correctGuids);
+
   }
 
   private List<SubprimeGuidRequest> buildRequests(String prefix,
@@ -153,6 +173,10 @@ public class LegacyGuidClientController {
   private boolean isValidate(HttpServletRequest request) {
 
     return getAccountUsers(request) != null ? true : false;
+  }
+
+  private String getPrefixFromCurrentLoginUser(HttpServletRequest request) {
+    return getAccountUsers(request).getPrefix();
   }
 
 }

@@ -25,6 +25,7 @@ import java.util.Set;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import tw.guid.local.models.SubprimeGuidRequest;
 import tw.guid.local.models.entity.SubprimeGuid;
 
 public interface SubprimeGuidRepository
@@ -35,5 +36,29 @@ public interface SubprimeGuidRepository
 
   public Set<SubprimeGuid> findByHashcode1AndHashcode2AndHashcode3(
       String hashcode1, String hashcode2, String hashcode3);
+
+  public default Set<SubprimeGuid> findBySubprimeGuidRequest(
+      SubprimeGuidRequest req) {
+    return findByHashcode1AndHashcode2AndHashcode3(req.getGuidHash().get(0),
+        req.getGuidHash().get(1), req.getGuidHash().get(2));
+  }
+
+  public default boolean isExist(SubprimeGuidRequest req) {
+    Set<SubprimeGuid> sets =
+        findByHashcode1AndHashcode2AndHashcode3(req.getGuidHash().get(0),
+            req.getGuidHash().get(1), req.getGuidHash().get(2));
+
+    return !sets.isEmpty();
+  }
+
+  public default String getSubprimeGuidBySubprimeGuidRequestAndPrefix(
+      SubprimeGuidRequest req, String prefix) {
+    String spguid = null;
+    for (SubprimeGuid subprimeGuid : findBySubprimeGuidRequest(req)) {
+      if (subprimeGuid.getPrefix().equals(prefix))
+        spguid = subprimeGuid.getSpguid();
+    }
+    return spguid;
+  }
 
 }

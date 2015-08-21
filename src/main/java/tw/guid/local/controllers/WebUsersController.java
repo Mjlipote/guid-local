@@ -22,8 +22,8 @@ package tw.guid.local.controllers;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import javax.persistence.criteria.Predicate;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -50,9 +50,6 @@ import tw.guid.local.models.repo.SubprimeGuidRepository;
 @Controller
 public class WebUsersController {
 
-  private static final Logger log =
-      LoggerFactory.getLogger(WebUsersController.class);
-
   @Autowired
   ActionAuditRepository actionAuditRepo;
   @Autowired
@@ -61,6 +58,55 @@ public class WebUsersController {
   AccountUsersRepository acctUserRepo;
   @Autowired
   CustomAuthenticationProvider customAuthenticationProvider;
+
+  /**
+   * Get all user list
+   * 
+   * @param map
+   * @param page
+   * @return
+   */
+  @RequestMapping(value = "", method = RequestMethod.GET)
+  String usersList(ModelMap map, @Param("page") Integer page) {
+
+    PageRequest pageReq = new PageRequest(page - 1, 10,
+        new Sort(new Order(Direction.ASC, "username")));
+
+    Page<AccountUsers> accPage;
+
+    accPage = acctUserRepo.findAll(pageReq);
+
+    map.addAttribute("accPage", accPage);
+    return "users";
+
+  }
+
+  /**
+   * 刪除一般使用者
+   * 
+   * 
+   * @param map
+   * @param username
+   * @return
+   */
+  @RequestMapping(value = "", method = RequestMethod.DELETE)
+  String usersRemove(ModelMap map,
+      @RequestParam(value = "username") String username) {
+
+    if (username.equals("")) {
+      map.addAttribute("errorMessage", "請確實填寫資料，切勿留空值！！");
+      return "error";
+    } else {
+      AccountUsers acctUser =
+          acctUserRepo.findByUsernameAndRole(username, Role.ROLE_USER);
+
+      acctUserRepo.delete(acctUser);
+      map.addAttribute("successMessage",
+          "已成功刪除一筆使用者：" + acctUser.getUsername());
+      return "success";
+
+    }
+  }
 
   /**
    * Users Lookup
@@ -133,6 +179,9 @@ public class WebUsersController {
         || email.equals("") || prefix.equals("")) {
       map.addAttribute("errorMessage", "請確實填寫資料，切勿留空值！！");
       return "error";
+    } else if (acctUserRepo.findByUsername(username) != null) {
+      map.addAttribute("errorMessage", "填寫的帳號名稱已被註冊，請替換使用者名稱！！");
+      return "error";
     } else {
       AccountUsers user = new AccountUsers();
       user.setUsername(checkNotNull(username));
@@ -150,55 +199,6 @@ public class WebUsersController {
       map.addAttribute("successMessage", "已成功新增一筆使用者：" + user.getUsername());
 
       return "success";
-    }
-  }
-
-  /**
-   * Get all user list
-   * 
-   * @param map
-   * @param page
-   * @return
-   */
-  @RequestMapping(value = "", method = RequestMethod.GET)
-  String usersList(ModelMap map, @Param("page") Integer page) {
-
-    PageRequest pageReq =
-        new PageRequest(0, 10, new Sort(new Order(Direction.ASC, "username")));
-
-    Page<AccountUsers> accPage;
-
-    accPage = acctUserRepo.findAll(pageReq);
-
-    map.addAttribute("accPage", accPage);
-    return "users";
-
-  }
-
-  /**
-   * 刪除一般使用者
-   * 
-   * 
-   * @param map
-   * @param username
-   * @return
-   */
-  @RequestMapping(value = "", method = RequestMethod.DELETE)
-  String usersRemove(ModelMap map,
-      @RequestParam(value = "username") String username) {
-
-    if (username.equals("")) {
-      map.addAttribute("errorMessage", "請確實填寫資料，切勿留空值！！");
-      return "error";
-    } else {
-      AccountUsers acctUser =
-          acctUserRepo.findByUsernameAndRole(username, Role.ROLE_USER);
-
-      acctUserRepo.delete(acctUser);
-      map.addAttribute("successMessage",
-          "已成功刪除一筆使用者：" + acctUser.getUsername());
-      return "success";
-
     }
   }
 
@@ -252,6 +252,33 @@ public class WebUsersController {
       @Param(value = "telephone") String telephone,
       @Param(value = "address") String address) {
 
+    acctUserRepo.findAll((root, query, cb) -> {
+      Predicate finalPredicate = cb.and();
+
+      if (usernameRequest != null) {
+        finalPredicate = cb.and(finalPredicate,
+            cb.equal(root.get("username"), usernameRequest));
+      }
+      if (email != null) {
+        finalPredicate =
+            cb.and(finalPredicate, cb.equal(root.get("email"), email));
+      }
+      if (jobTitle != null) {
+        finalPredicate =
+            cb.and(finalPredicate, cb.equal(root.get("jobTitle"), jobTitle));
+      }
+      if (telephone != null) {
+        finalPredicate =
+            cb.and(finalPredicate, cb.equal(root.get("telephone"), telephone));
+      }
+      if (address != null) {
+        finalPredicate =
+            cb.and(finalPredicate, cb.equal(root.get("address"), address));
+      }
+
+      return finalPredicate;
+    });
+
     if (username.equals("")) {
       map.addAttribute("errorMessage", "請確實填寫資料，切勿留空值！！");
       return "error";
@@ -284,7 +311,9 @@ public class WebUsersController {
       map.addAttribute("errorMessage", "請確實填寫資料，切勿留空值！！");
       return "error";
     } else if (acctUserRepo.findByUsernameAndPassword(username,
-        Crc32HashcodeCreator.getCrc32(oldpassword)) == null) {
+        Crc32HashcodeCreator.getCrc32(oldpassword)) == null
+        || acctUserRepo.findByUsernameAndPassword(username,
+            Crc32HashcodeCreator.getCrc32(checkpassword)) == null) {
       map.addAttribute("errorMessage", "所填寫的舊密碼有誤，請您再次確認！！");
       return "error";
     } else {

@@ -26,12 +26,13 @@ import java.util.Set;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
 import tw.guid.local.models.Role;
 import tw.guid.local.models.entity.AccountUsers;
 
-public interface AccountUsersRepository
-    extends JpaRepository<AccountUsers, Long> {
+public interface AccountUsersRepository extends
+    JpaRepository<AccountUsers, Long>, JpaSpecificationExecutor<AccountUsers> {
 
   // 一組
   public AccountUsers findByUsername(String username);
