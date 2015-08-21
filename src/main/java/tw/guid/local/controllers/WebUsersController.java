@@ -22,8 +22,6 @@ package tw.guid.local.controllers;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-import javax.persistence.criteria.Predicate;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -69,7 +67,7 @@ public class WebUsersController {
   @RequestMapping(value = "", method = RequestMethod.GET)
   String usersList(ModelMap map, @Param("page") Integer page) {
 
-    PageRequest pageReq = new PageRequest(page - 1, 10,
+    PageRequest pageReq = new PageRequest(page - 1, 5,
         new Sort(new Order(Direction.ASC, "username")));
 
     Page<AccountUsers> accPage;
@@ -79,6 +77,47 @@ public class WebUsersController {
     map.addAttribute("accPage", accPage);
     return "users";
 
+  }
+
+  /**
+   * Users Lookup
+   * 
+   * @param map
+   * @param username
+   * @param role
+   * @param page
+   * @return
+   */
+  @RequestMapping(value = "/lookup", method = RequestMethod.GET)
+  String usersLookup(ModelMap map, @Param("username") String username,
+      @Param("role") String role, @Param("page") Integer page) {
+
+    PageRequest pageReq = new PageRequest(page - 1, 5,
+        new Sort(new Order(Direction.ASC, "username")));
+
+    Page<AccountUsers> accPage;
+
+    if (username != null && page != null) {
+      if (username.equals("") && role.equals("")) {
+        accPage = acctUserRepo.findAll(pageReq);
+      } else if (username.equals("") && role != null) {
+        accPage = acctUserRepo.findByRole(
+            role.equals("ROLE_ADMIN") ? Role.ROLE_ADMIN : Role.ROLE_USER,
+            pageReq);
+      } else if (!username.equals("") && role != null) {
+        accPage = acctUserRepo.findByUsernameAndRole(username,
+            role.equals("ROLE_ADMIN") ? Role.ROLE_ADMIN : Role.ROLE_USER,
+            pageReq);
+      } else {
+        accPage = acctUserRepo.findByUsername(username, pageReq);
+      }
+    } else {
+      accPage = acctUserRepo.findAll(pageReq);
+    }
+
+    map.addAttribute("accPage", accPage);
+
+    return "users";
   }
 
   /**
@@ -106,47 +145,6 @@ public class WebUsersController {
       return "success";
 
     }
-  }
-
-  /**
-   * Users Lookup
-   * 
-   * @param map
-   * @param username
-   * @param role
-   * @param page
-   * @return
-   */
-  @RequestMapping(value = "/lookup", method = RequestMethod.GET)
-  String usersLookup(ModelMap map, @Param("username") String username,
-      @Param("role") String role, @Param("page") Integer page) {
-
-    PageRequest pageReq = new PageRequest(page - 1, 3,
-        new Sort(new Order(Direction.ASC, "username")));
-
-    Page<AccountUsers> accPage;
-
-    if (username != null && page != null) {
-      if (username.equals("") && role.equals("")) {
-        accPage = acctUserRepo.findAll(pageReq);
-      } else if (username.equals("") && role != null) {
-        accPage = acctUserRepo.findByRole(
-            role.equals("ROLE_ADMIN") ? Role.ROLE_ADMIN : Role.ROLE_USER,
-            pageReq);
-      } else if (!username.equals("") && role != null) {
-        accPage = acctUserRepo.findByUsernameAndRole(username,
-            role.equals("ROLE_ADMIN") ? Role.ROLE_ADMIN : Role.ROLE_USER,
-            pageReq);
-      } else {
-        accPage = acctUserRepo.findByUsername(username, pageReq);
-      }
-    } else {
-      accPage = acctUserRepo.findAll(pageReq);
-    }
-
-    map.addAttribute("accPage", accPage);
-
-    return "users";
   }
 
   /**
@@ -246,40 +244,12 @@ public class WebUsersController {
    */
   @RequestMapping(value = "/{username}", method = RequestMethod.PUT)
   String usersEdit(ModelMap map, @PathVariable("username") String username,
-      @Param(value = "username") String usernameRequest,
       @Param(value = "email") String email,
       @Param(value = "jobTitle") String jobTitle,
       @Param(value = "telephone") String telephone,
       @Param(value = "address") String address) {
 
-    acctUserRepo.findAll((root, query, cb) -> {
-      Predicate finalPredicate = cb.and();
-
-      if (usernameRequest != null) {
-        finalPredicate = cb.and(finalPredicate,
-            cb.equal(root.get("username"), usernameRequest));
-      }
-      if (email != null) {
-        finalPredicate =
-            cb.and(finalPredicate, cb.equal(root.get("email"), email));
-      }
-      if (jobTitle != null) {
-        finalPredicate =
-            cb.and(finalPredicate, cb.equal(root.get("jobTitle"), jobTitle));
-      }
-      if (telephone != null) {
-        finalPredicate =
-            cb.and(finalPredicate, cb.equal(root.get("telephone"), telephone));
-      }
-      if (address != null) {
-        finalPredicate =
-            cb.and(finalPredicate, cb.equal(root.get("address"), address));
-      }
-
-      return finalPredicate;
-    });
-
-    if (username.equals("")) {
+    if (username.equals("") || username.equals("")) {
       map.addAttribute("errorMessage", "請確實填寫資料，切勿留空值！！");
       return "error";
     } else {
