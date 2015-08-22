@@ -9,6 +9,15 @@
 <style type="text/css">
 </style>
 <th:block th:include="top :: navigation" class="container-fluid" />
+<script>
+.carousel img {
+	  position: absolute;
+	  top: 0;
+	  left: 0;
+	  min-width: 100%;
+	  height: 500px;
+	}
+</script>
 </head>
 
 <body>
@@ -28,20 +37,20 @@
   <!-- Wrapper for slides -->
   <div class="carousel-inner" role="listbox">
     <div class="item active">
-      <img th:src="@{${ '/home/home1.jpeg' }}" class="img-responsive" alt="Responsive image"/>
+      <img th:src="@{${ '/home/home1.jpeg' }}" style="width:1200px;height:433px" class="img-responsive" alt="Responsive image"/>
       <div class="carousel-caption">
    
       </div>
     </div>
     <div class="item">
-      <img th:src="@{${ '/home/home2.jpeg' }}" class="img-responsive" alt="Responsive image"/>
+      <img th:src="@{${ '/home/home2.jpeg' }}" style="width:1200px;height:433px" class="img-responsive" alt="Responsive image"/>
       
       <div class="carousel-caption">
         
       </div>
     </div>
         <div class="item">
-      <img th:src="@{${ '/home/home3.jpeg' }}" class="img-responsive" alt="Responsive image"/>
+      <img th:src="@{${ '/home/home3.jpeg' }}" style="width:1200px;height:433px" class="img-responsive" alt="Responsive image"/>
       
       <div class="carousel-caption">
         
