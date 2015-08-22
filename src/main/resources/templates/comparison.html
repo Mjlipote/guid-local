@@ -75,32 +75,33 @@
 			</div>
 		</form>
 
-
-<div th:if = "${number > 0}">
-		<div class="container" id="pages"></div>
-		<table
-			class="table table-responsive table-bordered table-striped table-condensed table-hover center">
-			<thead>
-				<tr>
-					<td>
-						<h2>
-							<strong>二次編碼比對結果：共有 <span th:text="${number}"></span>
-								組相同
-							</strong>
-						</h2>
-					</td>
-				</tr>
-			</thead>
-			<tbody>
-				<th:block th:each="pairs : ${result}">
+		<div th:if="${number > 0}">
+			<div class="container" id="pages"></div>
+			<table
+				class="table table-responsive table-bordered table-striped table-condensed table-hover center">
+				<thead>
 					<tr>
-						<td th:text="${pairs}"></td>
+
+						<td>
+							<h2>
+								<strong>二次編碼比對結果：共有 <span th:text="${number}"></span>
+									組相同
+								</strong>
+							</h2>
+						</td>
 					</tr>
-				</th:block>
-			</tbody>
-		</table>
-		<div class="container" id="pages"></div>
-</div>
+				</thead>
+				<tbody>
+
+					<th:block th:each="pairs : ${result}">
+						<tr>
+							<td th:text="${pairs}"></td>
+						</tr>
+					</th:block>
+				</tbody>
+			</table>
+			<div class="container" id="pages"></div>
+		</div>
 
 	</div>
 </body>
