@@ -24,6 +24,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -39,7 +40,7 @@ import tw.guid.local.models.RestfulAudit;
  * @link RestfulExceptionHandlerAdvice}separates exception handlers
  *       from/each*rest controller to here.
  **/
-@ControllerAdvice(annotations = { RestController.class })
+@ControllerAdvice(annotations = { Controller.class, RestController.class })
 public class RestfulExceptionHandlerAdvice {
 
   @Autowired

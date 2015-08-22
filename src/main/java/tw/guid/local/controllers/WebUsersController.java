@@ -66,11 +66,9 @@ public class WebUsersController {
   @RequestMapping(value = "", method = RequestMethod.GET)
   String usersList(ModelMap map) {
 
-    List<AccountUsers> acctUsers;
-
-    acctUsers = acctUserRepo.findAll();
-
-    map.addAttribute("acctUsers", acctUsers);
+    map.addAttribute("prefixs", acctUserRepo.getAllPrefix());
+    map.addAttribute("institutes", acctUserRepo.getAllInstitute());
+    map.addAttribute("acctUsers", acctUserRepo.findAll());
     return "users";
 
   }
@@ -130,6 +128,8 @@ public class WebUsersController {
       return finalPredicate;
     });
 
+    map.addAttribute("prefixs", acctUserRepo.getAllPrefix());
+    map.addAttribute("institutes", acctUserRepo.getAllInstitute());
     map.addAttribute("acctUsers", acctUsers);
 
     return "users";

@@ -21,6 +21,8 @@
 
 package tw.guid.local.models.repo;
 
+import static com.google.common.collect.Sets.newHashSet;
+
 import java.util.Set;
 
 import org.springframework.data.domain.Page;
@@ -48,6 +50,24 @@ public interface AccountUsersRepository extends
   public Set<AccountUsers> findByPrefix(String prefix);
 
   public Page<AccountUsers> findByRole(Role role, Pageable pageable);
+
+  public default Set<String> getAllPrefix() {
+    Set<String> prefixSet = newHashSet();
+
+    for (AccountUsers acctUser : findAll()) {
+      prefixSet.add(acctUser.getPrefix());
+    }
+    return prefixSet;
+  }
+
+  public default Set<String> getAllInstitute() {
+    Set<String> instituteSet = newHashSet();
+
+    for (AccountUsers acctUser : findAll()) {
+      instituteSet.add(acctUser.getInstitute());
+    }
+    return instituteSet;
+  }
 
   // 兩組
   public AccountUsers findByUsernameAndPassword(String username,
