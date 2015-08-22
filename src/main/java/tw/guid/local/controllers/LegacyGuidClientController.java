@@ -51,7 +51,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import net.sf.rubycollect4j.RubyArray;
-import tw.guid.local.helper.Crc32HashcodeCreator;
+import tw.guid.local.helper.HashcodeCreator;
 import tw.guid.local.helper.HttpActionHelper;
 import tw.guid.local.models.Action;
 import tw.guid.local.models.CustomAuthenticationProvider;
@@ -183,7 +183,7 @@ public class LegacyGuidClientController {
     final String[] values = credentials.split(":", 2);
 
     return acctUserRepo.findByUsernameAndPassword(values[0],
-        Crc32HashcodeCreator.getCrc32(values[1]));
+        HashcodeCreator.getSha512(values[1]));
   }
 
   private boolean isValidate(HttpServletRequest request) {

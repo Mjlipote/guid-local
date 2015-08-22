@@ -35,7 +35,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import tw.guid.local.helper.Crc32HashcodeCreator;
+import tw.guid.local.helper.HashcodeCreator;
 import tw.guid.local.models.CustomAuthenticationProvider;
 import tw.guid.local.models.RestfulAudit;
 import tw.guid.local.models.Role;
@@ -299,9 +299,9 @@ public class WebUsersController {
       map.addAttribute("errorMessage", "請確實填寫資料，切勿留空值！！");
       return "error";
     } else if (acctUserRepo.findByUsernameAndPassword(username,
-        Crc32HashcodeCreator.getCrc32(oldpassword)) == null
+        HashcodeCreator.getSha512(oldpassword)) == null
         || acctUserRepo.findByUsernameAndPassword(username,
-            Crc32HashcodeCreator.getCrc32(checkpassword)) == null) {
+            HashcodeCreator.getSha512(checkpassword)) == null) {
       map.addAttribute("errorMessage", "所填寫的舊密碼有誤，請您再次確認！！");
       return "error";
     } else {

@@ -109,7 +109,7 @@ public final class HttpActionHelper {
           throws JsonProcessingException {
 
     if (authority == true) {
-      headers = getHeaders("admin", Crc32HashcodeCreator.getCrc32("password"));
+      headers = getHeaders("admin", HashcodeCreator.getSha512("password"));
     } else {
       headers.setContentType(MediaType.APPLICATION_JSON);
       headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
@@ -134,7 +134,7 @@ public final class HttpActionHelper {
       String param, boolean authority, boolean apiRoot) {
 
     if (authority == true) {
-      headers = getHeaders("admin", Crc32HashcodeCreator.getCrc32("password"));
+      headers = getHeaders("admin", HashcodeCreator.getSha512("password"));
     } else {
       headers.setContentType(MediaType.APPLICATION_JSON);
       headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
