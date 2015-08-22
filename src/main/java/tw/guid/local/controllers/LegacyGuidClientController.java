@@ -23,6 +23,7 @@ package tw.guid.local.controllers;
 import static com.google.common.collect.Lists.newArrayList;
 import static net.sf.rubycollect4j.RubyCollections.hp;
 import static net.sf.rubycollect4j.RubyCollections.ra;
+import static org.springframework.http.HttpStatus.UNAUTHORIZED;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -55,6 +56,7 @@ import tw.guid.local.helper.HashcodeCreator;
 import tw.guid.local.helper.HttpActionHelper;
 import tw.guid.local.models.Action;
 import tw.guid.local.models.CustomAuthenticationProvider;
+import tw.guid.local.models.GuidException;
 import tw.guid.local.models.RestfulAudit;
 import tw.guid.local.models.SubprimeGuidRequest;
 import tw.guid.local.models.entity.AccountUsers;
@@ -93,6 +95,8 @@ public class LegacyGuidClientController {
   String create(@RequestParam("prefix") String prefix,
       @RequestParam("hashes") String jsonHashes, HttpServletRequest request)
           throws URISyntaxException, FileNotFoundException, IOException {
+
+    if (!isValidate(request)) throw new GuidException(UNAUTHORIZED);
 
     Properties prop = new Properties();
     prop.load(new FileInputStream("serverhost.properties"));
