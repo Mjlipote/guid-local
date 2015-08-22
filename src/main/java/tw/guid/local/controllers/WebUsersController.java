@@ -37,10 +37,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import tw.guid.local.helper.Crc32HashcodeCreator;
 import tw.guid.local.models.CustomAuthenticationProvider;
+import tw.guid.local.models.RestfulAudit;
 import tw.guid.local.models.Role;
 import tw.guid.local.models.entity.AccountUsers;
 import tw.guid.local.models.repo.AccountUsersRepository;
-import tw.guid.local.models.repo.ActionAuditRepository;
 import tw.guid.local.models.repo.SubprimeGuidRepository;
 
 @RequestMapping("/users")
@@ -48,7 +48,7 @@ import tw.guid.local.models.repo.SubprimeGuidRepository;
 public class WebUsersController {
 
   @Autowired
-  ActionAuditRepository actionAuditRepo;
+  RestfulAudit restfulAudit;
   @Autowired
   SubprimeGuidRepository subprimeGuidRepo;
   @Autowired

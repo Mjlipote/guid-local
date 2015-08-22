@@ -52,10 +52,10 @@ import tw.edu.ym.guid.client.field.TWNationalId;
 import tw.guid.local.helper.HttpActionHelper;
 import tw.guid.local.models.Action;
 import tw.guid.local.models.CustomAuthenticationProvider;
+import tw.guid.local.models.RestfulAudit;
 import tw.guid.local.models.SubprimeGuidRequest;
 import tw.guid.local.models.entity.SubprimeGuid;
 import tw.guid.local.models.repo.AccountUsersRepository;
-import tw.guid.local.models.repo.ActionAuditRepository;
 import tw.guid.local.models.repo.SubprimeGuidRepository;
 import tw.guid.local.util.NameSplitter;
 
@@ -67,7 +67,7 @@ public class WebGuidsController {
       LoggerFactory.getLogger(WebGuidsController.class);
 
   @Autowired
-  ActionAuditRepository actionAuditRepo;
+  RestfulAudit restfulAudit;
   @Autowired
   SubprimeGuidRepository subprimeGuidRepo;
   @Autowired

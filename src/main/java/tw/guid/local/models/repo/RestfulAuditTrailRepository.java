@@ -18,32 +18,13 @@
  * the License.
  *
  */
+package tw.guid.local.models.repo;
 
-package tw.guid.local.models;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
-import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.RequestMethod;
+import tw.guid.local.models.entity.RestfulAuditTrail;
 
-/****
- * {
- * 
- * @link RestfulAuditTrailService} is designed to record the activities of
- *       RESTful APIs.
- *
- */
-public interface RestfulAuditTrailService {
-
-  /**
-   * Records a RESTful request.
-   *
-   * @param action
-   *          of a RESTful request
-   * @param resource
-   *          of a RESTful request
-   * @param httpStatus
-   *          of a RESTful request
-   */
-  public void audit(RequestMethod action, String resource,
-      HttpStatus httpStatus);
-
-}
+@Repository
+public interface RestfulAuditTrailRepository
+    extends JpaRepository<RestfulAuditTrail, Long> {}

@@ -49,14 +49,12 @@ import tw.guid.local.models.Action;
 @WebIntegrationTest
 public class MainControllerTest {
 
-  private String localServerUrl;
   private String centralServerUrl;
 
   @Before
   public void setUp() throws FileNotFoundException, IOException {
     Properties prop = new Properties();
     prop.load(new FileInputStream("serverhost.properties"));
-    localServerUrl = prop.getProperty("local_server_url");
     centralServerUrl = prop.getProperty("central_server_url");
   }
 

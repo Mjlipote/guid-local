@@ -12,7 +12,6 @@ import tw.guid.local.models.Role;
 import tw.guid.local.models.entity.AccountUsers;
 import tw.guid.local.models.entity.SubprimeGuid;
 import tw.guid.local.models.repo.AccountUsersRepository;
-import tw.guid.local.models.repo.ActionAuditRepository;
 import tw.guid.local.models.repo.SubprimeGuidRepository;
 
 @Controller
@@ -23,9 +22,6 @@ public class SetupController {
 
   @Autowired
   AccountUsersRepository userRepo;
-
-  @Autowired
-  ActionAuditRepository actionAuditRepo;
 
   /**
    * 先將 Excel 的資料匯入

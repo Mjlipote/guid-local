@@ -42,9 +42,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import tw.guid.local.helper.HttpActionHelper;
 import tw.guid.local.models.Action;
+import tw.guid.local.models.RestfulAudit;
 import tw.guid.local.models.entity.AccountUsers;
 import tw.guid.local.models.repo.AccountUsersRepository;
-import tw.guid.local.models.repo.ActionAuditRepository;
 import tw.guid.local.models.repo.SubprimeGuidRepository;
 
 @RequestMapping("/guid/api")
@@ -56,7 +56,7 @@ public class ApiController {
       LoggerFactory.getLogger(ApiController.class);
 
   @Autowired
-  ActionAuditRepository actionAuditRepo;
+  RestfulAudit restfulAudit;
   @Autowired
   SubprimeGuidRepository spguidRepo;
   @Autowired

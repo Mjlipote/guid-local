@@ -55,6 +55,7 @@ import tw.guid.local.helper.Crc32HashcodeCreator;
 import tw.guid.local.helper.HttpActionHelper;
 import tw.guid.local.models.Action;
 import tw.guid.local.models.CustomAuthenticationProvider;
+import tw.guid.local.models.RestfulAudit;
 import tw.guid.local.models.SubprimeGuidRequest;
 import tw.guid.local.models.entity.AccountUsers;
 import tw.guid.local.models.entity.SubprimeGuid;
@@ -74,6 +75,9 @@ public class LegacyGuidClientController {
   @Autowired
   SubprimeGuidRepository subprimeGuidRepo;
 
+  @Autowired
+  RestfulAudit restfulAudit;
+
   private static final Logger log =
       LoggerFactory.getLogger(LegacyGuidClientController.class);
 
@@ -81,6 +85,7 @@ public class LegacyGuidClientController {
   @ResponseBody
   String authenticate(HttpServletRequest request) {
     return new Gson().toJson(isValidate(request), Boolean.class);
+
   }
 
   @RequestMapping(value = "/create", method = RequestMethod.POST)
