@@ -68,7 +68,7 @@ public class RestfulAuditAspect {
   @Pointcut("within(@org.springframework.stereotype.Controller *)")
   public void controllerBean() {}
 
-  @Pointcut("execution(* *(..))")
+  @Pointcut("execution(* *(..)) && !@annotation(javax.annotation.PostConstruct)")
   public void methodPointcut() {}
 
   @Before("(restControllerBean() || controllerBean()) && methodPointcut()")
