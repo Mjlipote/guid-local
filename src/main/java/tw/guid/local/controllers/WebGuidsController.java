@@ -93,77 +93,82 @@ public class WebGuidsController {
    */
   @RequestMapping(value = "/new", method = RequestMethod.POST)
   String guidsNew(ModelMap map, @RequestParam(value = "gender") String gender,
-      @RequestParam(value = "birthOfYear") String birthOfYear,
-      @RequestParam(value = "birthOfMonth") String birthOfMonth,
-      @RequestParam(value = "birthOfDay") String birthOfDay,
+      @RequestParam(value = "birthDay") String birthDay,
       @RequestParam(value = "sid") String sid,
       @RequestParam(value = "name") String name)
           throws FileNotFoundException, IOException {
-    BirthdayValidator birthdayValidator =
-        new BirthdayValidator(Integer.valueOf(birthOfYear),
-            Integer.valueOf(birthOfMonth), Integer.valueOf(birthOfDay));
 
-    if (gender.equals("") || birthOfYear.equals("") || birthOfMonth.equals("")
-        || birthOfDay.equals("") || sid.equals("") || name.equals("")) {
+    if (birthDay.equals("")) {
       map.addAttribute("errorMessage", "請確實填寫資料，切勿留空值！！");
       return "error";
-    } else if (!birthdayValidator.isValidate()) {
-      map.addAttribute("errorMessage", birthdayValidator.getMeg());
-      return "error";
     } else {
-      PII pii = new PII.Builder(NameSplitter.split(name),
-          gender.equals("M") ? Sex.MALE : Sex.FEMALE,
-          new Birthday(Integer.valueOf(birthOfYear),
-              Integer.valueOf(birthOfMonth), Integer.valueOf(birthOfDay)),
-          new TWNationalId(sid)).build();
+      String[] birthday = birthDay.split("/");
+      int birthOfYear = Integer.valueOf(birthday[0]);
+      int birthOfMonth = Integer.valueOf(birthday[1]);
+      int birthOfDay = Integer.valueOf(birthday[2]);
+      BirthdayValidator birthdayValidator =
+          new BirthdayValidator(birthOfYear, birthOfMonth, birthOfDay);
 
-      Authentication auth =
-          SecurityContextHolder.getContext().getAuthentication();
-
-      String prefix = acctUserRepo.findByUsername(auth.getName()).getPrefix();
-      SubprimeGuid sg =
-          subprimeGuidRepo.findByHashcode1AndHashcode2AndHashcode3AndPrefix(
-              pii.getHashcodes().get(0), pii.getHashcodes().get(1),
-              pii.getHashcodes().get(2), prefix);
-
-      if (sg != null) {
-        map.addAttribute("spguids", "(REPEAT): " + sg.getSpguid());
-        return "guids-new-result";
+      if (gender.equals("") || sid.equals("") || name.equals("")) {
+        map.addAttribute("errorMessage", "請確實填寫資料，切勿留空值！！");
+        return "error";
+      } else if (!birthdayValidator.isValidate()) {
+        map.addAttribute("errorMessage", birthdayValidator.getMeg());
+        return "error";
       } else {
+        PII pii = new PII.Builder(NameSplitter.split(name),
+            gender.equals("M") ? Sex.MALE : Sex.FEMALE,
+            new Birthday(birthOfYear, birthOfMonth, birthOfDay),
+            new TWNationalId(sid)).build();
 
-        List<SubprimeGuidRequest> sgrs = newArrayList();
-        SubprimeGuidRequest sgr = new SubprimeGuidRequest();
+        Authentication auth =
+            SecurityContextHolder.getContext().getAuthentication();
 
-        sgr.setGuidHash(pii.getHashcodes());
-        sgr.setPrefix(prefix);
-        sgrs.add(sgr);
+        String prefix = acctUserRepo.findByUsername(auth.getName()).getPrefix();
+        SubprimeGuid sg =
+            subprimeGuidRepo.findByHashcode1AndHashcode2AndHashcode3AndPrefix(
+                pii.getHashcodes().get(0), pii.getHashcodes().get(1),
+                pii.getHashcodes().get(2), prefix);
 
-        Properties prop = new Properties();
-        prop.load(new FileInputStream("serverhost.properties"));
+        if (sg != null) {
+          map.addAttribute("spguids", "(REPEAT): " + sg.getSpguid());
+          return "guids-new-result";
+        } else {
 
-        Map<String, Object> flattenJson = null;
-        try {
-          flattenJson = JsonFlattener.flattenAsMap(HttpActionHelper
-              .toPost(new URI(prop.getProperty("central_server_url")),
-                  Action.CREATE, sgrs, false)
-              .getBody());
-        } catch (JsonProcessingException e) {
-          log.error(e.getMessage(), e);
-        } catch (URISyntaxException e) {
-          log.error(e.getMessage(), e);
+          List<SubprimeGuidRequest> sgrs = newArrayList();
+          SubprimeGuidRequest sgr = new SubprimeGuidRequest();
+
+          sgr.setGuidHash(pii.getHashcodes());
+          sgr.setPrefix(prefix);
+          sgrs.add(sgr);
+
+          Properties prop = new Properties();
+          prop.load(new FileInputStream("serverhost.properties"));
+
+          Map<String, Object> flattenJson = null;
+          try {
+            flattenJson = JsonFlattener.flattenAsMap(HttpActionHelper
+                .toPost(new URI(prop.getProperty("central_server_url")),
+                    Action.CREATE, sgrs, false)
+                .getBody());
+          } catch (JsonProcessingException e) {
+            log.error(e.getMessage(), e);
+          } catch (URISyntaxException e) {
+            log.error(e.getMessage(), e);
+          }
+
+          map.addAttribute("spguids", flattenJson.get("[0].spguid").toString());
+
+          SubprimeGuid spGuid = new SubprimeGuid();
+          spGuid.setSpguid(flattenJson.get("[0].spguid").toString());
+          spGuid.setHashcode1(pii.getHashcodes().get(0));
+          spGuid.setHashcode2(pii.getHashcodes().get(1));
+          spGuid.setHashcode3(pii.getHashcodes().get(2));
+          spGuid.setPrefix(prefix);
+          subprimeGuidRepo.save(spGuid);
+
+          return "guids-new-result";
         }
-
-        map.addAttribute("spguids", flattenJson.get("[0].spguid").toString());
-
-        SubprimeGuid spGuid = new SubprimeGuid();
-        spGuid.setSpguid(flattenJson.get("[0].spguid").toString());
-        spGuid.setHashcode1(pii.getHashcodes().get(0));
-        spGuid.setHashcode2(pii.getHashcodes().get(1));
-        spGuid.setHashcode3(pii.getHashcodes().get(2));
-        spGuid.setPrefix(prefix);
-        subprimeGuidRepo.save(spGuid);
-
-        return "guids-new-result";
       }
     }
   }
