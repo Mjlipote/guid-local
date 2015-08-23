@@ -87,7 +87,6 @@ public class LegacyGuidClientController {
   @ResponseBody
   String authenticate(HttpServletRequest request) {
     return new Gson().toJson(isValidate(request), Boolean.class);
-
   }
 
   @RequestMapping(value = "/create", method = RequestMethod.POST)

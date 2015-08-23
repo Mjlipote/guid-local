@@ -22,11 +22,9 @@ package tw.guid.local.models;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.pac4j.core.profile.CommonProfile;
-import org.pac4j.core.profile.UserProfile;
-import org.pac4j.springframework.security.authentication.ClientAuthenticationToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -72,15 +70,10 @@ public class RestfulAuditTrailServiceImpl implements RestfulAuditTrailService {
   }
 
   private String getUserTypedId() {
-    ClientAuthenticationToken token =
-        (ClientAuthenticationToken) SecurityContextHolder.getContext()
-            .getAuthentication();
+    Authentication token =
+        (Authentication) SecurityContextHolder.getContext().getAuthentication();
 
-    if (token != null) {
-      UserProfile userProfile = token.getUserProfile();
-      CommonProfile commonProfile = (CommonProfile) userProfile;
-      return commonProfile.getTypedId();
-    }
+    if (token != null) return token.getName();
 
     return null;
   }

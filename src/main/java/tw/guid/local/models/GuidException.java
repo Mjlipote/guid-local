@@ -30,11 +30,10 @@ import org.springframework.http.HttpStatus;
 import com.google.common.base.MoreObjects;
 import com.google.common.collect.ImmutableList;
 
-/****
- * {
+/**
  * 
- * @link GuidException} is used to represent any exception happened in the /
- *       GUID web service.
+ * {@link GuidException} is used to represent any exception happened in the GUID
+ * web service.
  *
  */
 public final class GuidException extends RuntimeException {

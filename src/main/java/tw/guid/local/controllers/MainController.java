@@ -1,15 +1,4 @@
 /**
- * 
- */
-package tw.guid.local.controllers;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-
-import tw.guid.local.models.repo.AccountUsersRepository;
-
-/**
  *
  * @author Ming-Jheng Li
  *
@@ -29,6 +18,13 @@ import tw.guid.local.models.repo.AccountUsersRepository;
  *         permissions and limitations under the License.
  *
  */
+package tw.guid.local.controllers;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import tw.guid.local.models.repo.AccountUsersRepository;
 
 @Controller
 public class MainController {

@@ -24,11 +24,10 @@ package tw.guid.local.models;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-/****
- * {
+/**
  * 
- * @link RestfulAuditTrailService} is designed to record the activities of
- *       RESTful APIs.
+ * {@link RestfulAuditTrailService} is designed to record the activities of
+ * RESTful APIs.
  *
  */
 public interface RestfulAuditTrailService {

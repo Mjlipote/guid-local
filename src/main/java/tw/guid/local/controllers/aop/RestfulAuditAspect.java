@@ -49,12 +49,12 @@ import net.sf.rubycollect4j.RubyArray;
 import net.sf.rubycollect4j.block.TransformBlock;
 import tw.guid.local.models.RestfulAudit;
 
-/****
- * {
+/**
  * 
- * @link RestfulAuditAspect}uses Spring AOP to audit each request of
- *       RESTful*APIs activities.
- **/
+ * {@link RestfulAuditAspect} uses Spring AOP to audit each request of RESTful
+ * APIs activities.
+ *
+ */
 @Component
 @Aspect
 public class RestfulAuditAspect {
@@ -65,10 +65,13 @@ public class RestfulAuditAspect {
   @Pointcut("within(@org.springframework.web.bind.annotation.RestController *)")
   public void restControllerBean() {}
 
+  @Pointcut("within(@org.springframework.stereotype.Controller *)")
+  public void controllerBean() {}
+
   @Pointcut("execution(* *(..))")
   public void methodPointcut() {}
 
-  @Before("restControllerBean() && methodPointcut()")
+  @Before("(restControllerBean() || controllerBean()) && methodPointcut()")
   public void beforeMethodInRestController(JoinPoint joinPoint) {
     String resource = replacePathVariables(getResource(joinPoint), joinPoint);
     restfulAudit.start(getAction(joinPoint), resource);
@@ -153,7 +156,7 @@ public class RestfulAuditAspect {
     return requestMapping.value().length == 0 ? "" : requestMapping.value()[0];
   }
 
-  @AfterReturning("restControllerBean() && methodPointcut()")
+  @AfterReturning("(restControllerBean() || controllerBean()) && methodPointcut()")
   public void afterReturningMethodInRestController(JoinPoint joinPoint) {
     restfulAudit.end(getStatus(joinPoint));
   }

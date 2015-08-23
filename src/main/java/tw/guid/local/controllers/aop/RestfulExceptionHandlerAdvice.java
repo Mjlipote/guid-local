@@ -34,12 +34,12 @@ import tw.guid.local.models.GuidErrors;
 import tw.guid.local.models.GuidException;
 import tw.guid.local.models.RestfulAudit;
 
-/****
- * {
+/**
  * 
- * @link RestfulExceptionHandlerAdvice}separates exception handlers
- *       from/each*rest controller to here.
- **/
+ * {@link RestfulExceptionHandlerAdvice} separates exception handlers from each
+ * rest controller to here.
+ *
+ */
 @ControllerAdvice(annotations = { Controller.class, RestController.class })
 public class RestfulExceptionHandlerAdvice {
 

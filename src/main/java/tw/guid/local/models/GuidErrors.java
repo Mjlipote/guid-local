@@ -27,12 +27,12 @@ import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 import com.google.common.collect.ImmutableList;
 
-/****
- * {
+/**
  * 
- * @link GuidErrors}is designed to hold error messages of the GUID
- *       service./It*is immutable.
- **/
+ * {@link GuidErrors} is designed to hold error messages of the GUID service. It
+ * is immutable.
+ *
+ */
 public final class GuidErrors {
 
   private final List<String> errors;
