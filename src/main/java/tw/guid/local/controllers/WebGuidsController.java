@@ -58,6 +58,7 @@ import tw.guid.local.models.entity.SubprimeGuid;
 import tw.guid.local.models.repo.AccountUsersRepository;
 import tw.guid.local.models.repo.SubprimeGuidRepository;
 import tw.guid.local.util.NameSplitter;
+import tw.guid.local.validateion.BirthdayValidator;
 
 @RequestMapping("/guids")
 @Controller
@@ -98,9 +99,16 @@ public class WebGuidsController {
       @RequestParam(value = "sid") String sid,
       @RequestParam(value = "name") String name)
           throws FileNotFoundException, IOException {
+    BirthdayValidator birthdayValidator =
+        new BirthdayValidator(Integer.valueOf(birthOfYear),
+            Integer.valueOf(birthOfMonth), Integer.valueOf(birthOfDay));
+
     if (gender.equals("") || birthOfYear.equals("") || birthOfMonth.equals("")
         || birthOfDay.equals("") || sid.equals("") || name.equals("")) {
       map.addAttribute("errorMessage", "請確實填寫資料，切勿留空值！！");
+      return "error";
+    } else if (!birthdayValidator.isValidate()) {
+      map.addAttribute("errorMessage", birthdayValidator.getMeg());
       return "error";
     } else {
       PII pii = new PII.Builder(NameSplitter.split(name),
