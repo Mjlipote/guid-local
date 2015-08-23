@@ -190,6 +190,12 @@ public class WebGuidsController {
     if (subprimeGuids.equals("")) {
       map.addAttribute("errorMessage", "請確實填寫資料，切勿留空值！！");
       return "error";
+    } else if (!subprimeGuids.trim().contains(",")) {
+      map.addAttribute("errorMessage", "請遵照格式填寫 (需填入 \",\" 做為區隔)");
+      return "error";
+    } else if (!isValidateLength(subprimeGuids)) {
+      map.addAttribute("errorMessage", "填寫值不是 GUID 的標準格式，請您再次確認！！");
+      return "error";
     } else {
       List<String> list = newArrayList();
       String[] str = subprimeGuids.trim().split(",");
@@ -222,6 +228,18 @@ public class WebGuidsController {
 
       return "comparison";
     }
+  }
+
+  private boolean isValidateLength(String spguid) {
+    String[] str = spguid.split(",");
+    for (String s : str) {
+      if (!s.contains("-")) {
+        return false;
+      } else if (s.toUpperCase().split("-")[1].length() != 8) {
+        return false;
+      }
+    }
+    return true;
   }
 
 }
