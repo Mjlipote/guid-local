@@ -39,7 +39,6 @@ import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -55,7 +54,6 @@ import tw.guid.local.models.RestfulAudit;
  * APIs activities.
  *
  */
-@Component
 @Aspect
 public class RestfulAuditAspect {
 
@@ -129,7 +127,7 @@ public class RestfulAuditAspect {
     RequestMapping rm = m.getAnnotation(RequestMapping.class);
     if (rm == null) return null;
 
-    return rm.method().length > 0 ? rm.method()[0] : null;
+    return rm.method().length > 0 ? rm.method()[0] : RequestMethod.GET;
   }
 
   private String getResource(JoinPoint joinPoint) {
@@ -153,7 +151,11 @@ public class RestfulAuditAspect {
   }
 
   private String getRequestMappingValue(RequestMapping requestMapping) {
-    return requestMapping.value().length == 0 ? "" : requestMapping.value()[0];
+    if (requestMapping == null)
+      return "";
+    else
+      return requestMapping.value().length == 0 ? ""
+          : requestMapping.value()[0];
   }
 
   @AfterReturning("(restControllerBean() || controllerBean()) && methodPointcut()")

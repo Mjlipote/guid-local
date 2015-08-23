@@ -20,20 +20,25 @@
  */
 package tw.guid.local;
 
+import org.aspectj.lang.Aspects;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
+import tw.guid.local.controllers.aop.RestfulAuditAspect;
+
 @Configuration
-@EnableAspectJAutoProxy
 public class MvcConfig extends WebMvcConfigurerAdapter {
+
+  @Bean
+  public RestfulAuditAspect restfulAuditAspect() {
+    return Aspects.aspectOf(RestfulAuditAspect.class);
+  }
 
   @Override
   public void addViewControllers(ViewControllerRegistry registry) {
-
     registry.addViewController("/").setViewName("home");
-
   }
 
 }

@@ -33,38 +33,33 @@ public class MainController {
   AccountUsersRepository acctUserRepo;
 
   @RequestMapping("/home")
-
   String home() {
     return "home";
   }
 
   @RequestMapping("/register")
-
   String usersRegister() {
     return "register";
   }
 
   @RequestMapping("/guids")
-
   String guidsNew() {
     return "guids";
   }
 
   @RequestMapping("/comparison")
-
   String guidsComparison() {
     return "comparison";
   }
 
   @RequestMapping("/remove")
-
   String usersRemove() {
     return "users-remove";
   }
 
   @RequestMapping("/login")
-
   String login() {
     return "login";
   }
+
 }
