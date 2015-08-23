@@ -82,7 +82,6 @@ public class SetupController {
     spguid.setSpguid("TEST-Y3XZU2NG");
 
     spGuidRepo.save(spguid);
-
   }
 
 }

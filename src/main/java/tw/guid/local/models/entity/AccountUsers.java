@@ -2,12 +2,16 @@ package tw.guid.local.models.entity;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
+import java.util.Objects;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 
 import org.springframework.data.jpa.domain.AbstractPersistable;
+
+import com.google.common.base.MoreObjects;
 
 import tw.guid.local.helper.HashcodeCreator;
 import tw.guid.local.models.Role;
@@ -174,6 +178,37 @@ public class AccountUsers extends AbstractPersistable<Long> {
    */
   public void setAddress(String address) {
     this.address = address;
+  }
+
+  @Override
+  public boolean equals(final Object other) {
+    if (this == other) return true;
+    if (!(other instanceof AccountUsers)) return false;
+    AccountUsers castOther = (AccountUsers) other;
+    return Objects.equals(username, castOther.username)
+        && Objects.equals(password, castOther.password)
+        && Objects.equals(email, castOther.email)
+        && Objects.equals(institute, castOther.institute)
+        && Objects.equals(prefix, castOther.prefix)
+        && Objects.equals(role, castOther.role)
+        && Objects.equals(jobTitle, castOther.jobTitle)
+        && Objects.equals(telephone, castOther.telephone)
+        && Objects.equals(address, castOther.address);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(username, password, email, institute, prefix, role,
+        jobTitle, telephone, address);
+  }
+
+  @Override
+  public String toString() {
+    return MoreObjects.toStringHelper(this).add("username", username)
+        .add("password", password).add("email", email)
+        .add("institute", institute).add("prefix", prefix).add("role", role)
+        .add("jobTitle", jobTitle).add("telephone", telephone)
+        .add("address", address).toString();
   }
 
 }

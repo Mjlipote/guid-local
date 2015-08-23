@@ -190,7 +190,6 @@ public class LegacyGuidClientController {
   }
 
   private boolean isValidate(HttpServletRequest request) {
-
     return getAccountUsers(request) != null ? true : false;
   }
 

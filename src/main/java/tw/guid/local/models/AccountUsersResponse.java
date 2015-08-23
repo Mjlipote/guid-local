@@ -1,13 +1,3 @@
-package tw.guid.local.models;
-
-import static com.google.common.collect.Lists.newArrayList;
-
-import java.util.List;
-
-import com.google.common.base.MoreObjects;
-
-import tw.guid.local.models.entity.AccountUsers;
-
 /**
  *
  * @author Ming-Jheng Li
@@ -28,6 +18,17 @@ import tw.guid.local.models.entity.AccountUsers;
  *         permissions and limitations under the License.
  *
  */
+package tw.guid.local.models;
+
+import static com.google.common.collect.Lists.newArrayList;
+
+import java.util.List;
+import java.util.Objects;
+
+import com.google.common.base.MoreObjects;
+
+import tw.guid.local.models.entity.AccountUsers;
+
 public final class AccountUsersResponse {
 
   private String username;
@@ -46,13 +47,10 @@ public final class AccountUsersResponse {
 
   private Role role;
 
-  private AccountUsersResponse() {
-
-  }
+  private AccountUsersResponse() {}
 
   public static List<AccountUsersResponse> getResponse(
       List<AccountUsers> accountusers) {
-
     List<AccountUsersResponse> aurs = newArrayList();
 
     for (AccountUsers au : accountusers) {
@@ -67,6 +65,7 @@ public final class AccountUsersResponse {
       aur.role = au.getRole();
       aurs.add(aur);
     }
+
     return aurs;
   }
 
@@ -132,6 +131,27 @@ public final class AccountUsersResponse {
    */
   public void setRole(Role role) {
     this.role = role;
+  }
+
+  @Override
+  public boolean equals(final Object other) {
+    if (this == other) return true;
+    if (!(other instanceof AccountUsersResponse)) return false;
+    AccountUsersResponse castOther = (AccountUsersResponse) other;
+    return Objects.equals(username, castOther.username)
+        && Objects.equals(prefix, castOther.prefix)
+        && Objects.equals(email, castOther.email)
+        && Objects.equals(institute, castOther.institute)
+        && Objects.equals(jobTitle, castOther.jobTitle)
+        && Objects.equals(telephone, castOther.telephone)
+        && Objects.equals(address, castOther.address)
+        && Objects.equals(role, castOther.role);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(username, prefix, email, institute, jobTitle, telephone,
+        address, role);
   }
 
   @Override

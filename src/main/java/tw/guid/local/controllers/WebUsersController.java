@@ -49,10 +49,13 @@ public class WebUsersController {
 
   @Autowired
   RestfulAudit restfulAudit;
+
   @Autowired
   SubprimeGuidRepository subprimeGuidRepo;
+
   @Autowired
   AccountUsersRepository acctUserRepo;
+
   @Autowired
   CustomAuthenticationProvider customAuthenticationProvider;
 

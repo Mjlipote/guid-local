@@ -46,7 +46,6 @@ import tw.guid.local.models.repo.SubprimeGuidRepository;
 
 @RequestMapping("/guid/api")
 @RestController
-
 public class ApiController {
 
   private static final Logger log =

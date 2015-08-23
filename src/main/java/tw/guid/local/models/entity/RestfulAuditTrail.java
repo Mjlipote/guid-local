@@ -21,6 +21,7 @@
 package tw.guid.local.models.entity;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -28,7 +29,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
 import com.google.common.base.MoreObjects;
-import com.google.common.base.Objects;
 
 /**
  * 
@@ -183,22 +183,21 @@ public class RestfulAuditTrail extends Timestampable implements Serializable {
   }
 
   @Override
-  public final boolean equals(Object o) {
-    if (o instanceof RestfulAuditTrail) {
-      RestfulAuditTrail restfulAuditTrail = (RestfulAuditTrail) o;
-      return Objects.equal(userId, restfulAuditTrail.userId)
-          && Objects.equal(remoteAddr, restfulAuditTrail.remoteAddr)
-          && Objects.equal(action, restfulAuditTrail.action)
-          && Objects.equal(resource, restfulAuditTrail.resource)
-          && Objects.equal(statusCode, restfulAuditTrail.statusCode);
-    }
-
-    return false;
+  public boolean equals(final Object other) {
+    if (this == other) return true;
+    if (!(other instanceof RestfulAuditTrail)) return false;
+    RestfulAuditTrail castOther = (RestfulAuditTrail) other;
+    return Objects.equals(id, castOther.id)
+        && Objects.equals(userId, castOther.userId)
+        && Objects.equals(remoteAddr, castOther.remoteAddr)
+        && Objects.equals(action, castOther.action)
+        && Objects.equals(resource, castOther.resource)
+        && Objects.equals(statusCode, castOther.statusCode);
   }
 
   @Override
-  public final int hashCode() {
-    return Objects.hashCode(userId, remoteAddr, action, resource, statusCode);
+  public int hashCode() {
+    return Objects.hash(id, userId, remoteAddr, action, resource, statusCode);
   }
 
   @Override
