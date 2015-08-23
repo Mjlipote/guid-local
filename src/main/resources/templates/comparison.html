@@ -81,7 +81,7 @@
 				class="table table-responsive table-bordered table-striped table-condensed table-hover center">
 				<thead>
 					<tr>
-
+						<td>#</td>
 						<td>
 							<h2>
 								<strong>二次編碼比對結果：共有 <span th:text="${number}"></span>
@@ -93,16 +93,17 @@
 				</thead>
 				<tbody>
 
-					<th:block th:each="pairs : ${result}">
-						<tr>
-							<td th:text="${pairs}"></td>
-						</tr>
-					</th:block>
+					<tr th:each="pairs, iterationStatus : ${result}">
+						<td th:text="${iterationStatus.count}"></td>
+						<td th:text="${pairs}"></td>
+					</tr>
+
 				</tbody>
 			</table>
 			<div class="container" id="pages"></div>
 		</div>
 
 	</div>
+
 </body>
 </html>

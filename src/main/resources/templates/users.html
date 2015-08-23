@@ -73,10 +73,11 @@
 					type="text" name="username" placeholder="使用者帳號"></input>
 			</div>
 			<div class="form-group">
-				<label class="sr-only">Prefix 值：</label><select class="form-control" name="prefix">
+				<label class="sr-only">Prefix 值：</label><select class="form-control"
+					name="prefix">
 					<option value="">Prefix</option>
 					<th:block th:each="prefix : ${prefixs}">
-					<option th:value="${prefix}" th:text="${prefix}"></option>
+						<option th:value="${prefix}" th:text="${prefix}"></option>
 					</th:block>
 				</select>
 
@@ -85,9 +86,9 @@
 				<label class="sr-only">服務單位：</label><select class="form-control"
 					name="institute">
 					<option value="">服務單位</option>
-          <th:block th:each="institute : ${institutes}">
-          <option th:value="${institute}" th:text="${institute}"></option>
-          </th:block>
+					<th:block th:each="institute : ${institutes}">
+						<option th:value="${institute}" th:text="${institute}"></option>
+					</th:block>
 				</select>
 			</div>
 			<div class="form-group">
@@ -96,7 +97,8 @@
 			</div>
 			<div class="form-group">
 				<label class="sr-only">電子郵件 E-Mail：</label><input
-					class="form-control" type="text" name="email" placeholder="電子郵件 E-Mail"></input>
+					class="form-control" type="text" name="email"
+					placeholder="電子郵件 E-Mail"></input>
 			</div>
 
 			<div class="form-group">
@@ -112,20 +114,28 @@
 	<div>
 		<table
 			class="table table-responsive table-bordered table-striped table-condensed table-hover">
-			 <thead>			
-			<th:tr>
-				<td>#</td>
-				<td><strong>使用者權限</strong></td>
-				<td><strong>使用者帳號</strong></td>
-				<td><strong>Prefix 值</strong></td>
-				<td><strong>服務單位</strong></td>
-				<td><strong>工作職銜</strong></td>
-				<td><strong>電子郵件 E-Mail</strong></td>
-			</th:tr>
-			 </thead>
+			<thead>
+				<th:tr>
+					<td>#</td>
+					<td><strong>使用者權限</strong></td>
+					<td><strong>使用者帳號</strong></td>
+					<td><strong>Prefix 值</strong></td>
+					<td><strong>服務單位</strong></td>
+					<td><strong>工作職銜</strong></td>
+					<td><strong>電子郵件 E-Mail</strong></td>
+					<td></td>
+				</th:tr>
+			</thead>
 			<tbody>
-			<th:block th:each="accuntusers : ${acctUsers}">
-				<tr>
+
+				<tr th:each="accuntusers, iterationStatus: ${acctUsers}">
+					<td th:text="${iterationStatus.count}"></td>
+					<td th:text="${accuntusers.role}"></td>
+					<td th:text="${accuntusers.username}"></td>
+					<td th:text="${accuntusers.prefix}"></td>
+					<td th:text="${accuntusers.institute}"></td>
+					<td th:text="${accuntusers.jobTitle}"></td>
+					<td th:text="${accuntusers.email}"></td>
 					<td>
 						<form method="post"
 							th:action="@{${'/users/' + accuntusers.username }}">
@@ -134,14 +144,8 @@
 								class="btn btn-block btn-sm btn-danger" value="刪除"></input>
 						</form>
 					</td>
-					<td th:text="${accuntusers.role}"></td>
-					<td th:text="${accuntusers.username}"></td>
-					<td th:text="${accuntusers.prefix}"></td>
-					<td th:text="${accuntusers.institute}"></td>
-					<td th:text="${accuntusers.jobTitle}"></td>
-					<td th:text="${accuntusers.email}"></td>
 				</tr>
-			</th:block>
+
 			</tbody>
 		</table>
 	</div>
