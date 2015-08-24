@@ -139,9 +139,10 @@
 					<td>
 						<form method="post"
 							th:action="@{${'/users/' + accuntusers.username }}">
-							<input type="hidden" name="_method" value="DELETE" /> <input
+							<input type="hidden" name="_method" value="DELETE" /> <button
 								type="submit" name="${accuntusers.username}"
-								class="btn btn-block btn-sm btn-danger" value="刪除"></input>
+								class="btn btn-block btn-sm btn-danger" ><i
+								class='glyphicon glyphicon-trash' th:text="刪除"></i></button>
 						</form>
 					</td>
 				</tr>
