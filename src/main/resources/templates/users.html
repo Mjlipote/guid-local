@@ -57,9 +57,10 @@
 <body>
 	<h1 class="text-center">使用者清單</h1>
 
-	<div class="container row">
+	<div class="row">
 		<form class="form-inline col-md-12" method="get"
 			th:action="@{/users/lookup}" role="form">
+
 			<div class="form-group">
 				<label class="sr-only">使用者權限：</label> <select class="form-control"
 					name="role">
@@ -105,6 +106,7 @@
 				<input class="btn btn-primary btn-block btn-sm" type="submit"
 					value="搜尋使用者"></input>
 			</div>
+
 		</form>
 	</div>
 
@@ -139,10 +141,13 @@
 					<td>
 						<form method="post"
 							th:action="@{${'/users/' + accuntusers.username }}">
-							<input type="hidden" name="_method" value="DELETE" /> <button
-								type="submit" name="${accuntusers.username}"
-								class="btn btn-block btn-sm btn-danger" ><i
-								class='glyphicon glyphicon-trash' th:text="刪除"></i></button>
+							<input type="hidden" name="_method" value="DELETE" />
+							<button type="submit" name="${accuntusers.username}"
+								class="btn btn-block btn-sm btn-danger"><i class='glyphicon glyphicon-trash' th:text="刪除"></i></button>
+
+
+
+
 						</form>
 					</td>
 				</tr>

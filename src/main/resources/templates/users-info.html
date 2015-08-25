@@ -22,34 +22,34 @@
 
 			<div class="form-group col-lg-12">
 				<label>E-Mail：</label><input type="email" class="form-control"
-					placeholder="Sample@mail.com" name="email" th:value ="${usersInfo.email}"></input>
+					placeholder="Sample@mail.com" name="email"
+					th:value="${usersInfo.email}"></input>
 
 			</div>
 
 			<div class="form-group col-lg-12">
 				<label>工作職銜：</label><input class="form-control" type="text"
-					name="jobTitle" th:value ="${usersInfo.jobTitle}"></input>
+					name="jobTitle" th:value="${usersInfo.jobTitle}"></input>
 
 			</div>
 			<div class="form-group col-lg-12">
 				<label>聯絡電話：</label><input class="form-control" type="text"
-					placeholder="0910xxxxxx" name="telephone" th:value ="${usersInfo.telephone}"></input>
+					placeholder="0910xxxxxx" name="telephone"
+					th:value="${usersInfo.telephone}"></input>
 
 			</div>
 			<div class="form-group col-lg-12">
 				<label>聯絡住址：</label><input class="form-control" type="text"
-					name="address" th:value ="${usersInfo.address}"></input>
-
-      <input type="hidden" name="_method" value="PUT" />
+					name="address" th:value="${usersInfo.address}"></input> <input
+					type="hidden" name="_method" value="PUT" />
 			</div>
 			<div class="form-group col-lg-12">
 				<input class="btn btn-primary btn-block btn-lg" type="submit"
 					value="編輯個人資料"></input>
 			</div>
 		</form>
-		
-		
-		
+
+
 	</div>
 </body>
 </html>

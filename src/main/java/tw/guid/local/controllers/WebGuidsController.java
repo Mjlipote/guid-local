@@ -237,6 +237,8 @@ public class WebGuidsController {
         return false;
       } else if (s.toUpperCase().split("-")[1].length() != 8) {
         return false;
+      } else {
+        return true;
       }
     }
     return true;
