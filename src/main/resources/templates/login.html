@@ -13,10 +13,7 @@
 <body>
 	<h1>使用者登入</h1>
 	<div class="text-center" th:if="${param.error}">錯誤的使用者帳號與密碼</div>
-	<div class="text-center" th:if="${param.logout}">您已進行登出</div>
-	<div class="stand">
-		<div class="outer-screen">
-			<div class="inner-screen">
+	<div class="text-center" th:if="${param.logout}">您已進行登出</div><div class="inner-screen">
 				<form class="form" th:action="@{/login}" method="post">
 					<input type="text" class="zocial-dribbble" name="username"
 						placeholder=" 請輸入您的帳號" /> <input type="text"
@@ -24,7 +21,6 @@
 					<input type="submit" value="登入" /> <a href="">忘記密碼？</a>
 				</form>
 			</div>
-		</div>
-	</div>
+
 </body>
 </html>
