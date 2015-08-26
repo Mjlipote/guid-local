@@ -57,25 +57,22 @@
 <body>
 	<h1 class="text-center">使用者清單</h1>
 
-	<div class="row">
-		<form class="form-inline col-md-12" method="get"
-			th:action="@{/users/lookup}" role="form">
 
+	<form class="form-inline col-md-6 col-md-offset-3" method="get"
+		th:action="@{/users/lookup}" role="form">
+		<div class="row">
 			<div class="form-group">
-				<label class="sr-only">使用者權限：</label> <select class="form-control"
-					name="role">
+				<label class="sr-only">使用者權限：</label> <select data-toggle="select"
+					class="form-control select select-primary mrs mbm" name="role">
 					<option value="">使用者權限</option>
 					<option value="ROLE_ADMIN">系統管理者</option>
 					<option value="ROLE_USER">一般使用者</option>
 				</select>
 			</div>
+
 			<div class="form-group">
-				<label class="sr-only">使用者帳號：</label><input class="form-control"
-					type="text" name="username" placeholder="使用者帳號"></input>
-			</div>
-			<div class="form-group">
-				<label class="sr-only">Prefix 值：</label><select class="form-control"
-					name="prefix">
+				<label class="sr-only">Prefix 值：</label><select data-toggle="select"
+					class="form-control select select-primary mrs mbm" name="prefix">
 					<option value="">Prefix</option>
 					<th:block th:each="prefix : ${prefixs}">
 						<option th:value="${prefix}" th:text="${prefix}"></option>
@@ -84,14 +81,22 @@
 
 			</div>
 			<div class="form-group">
-				<label class="sr-only">服務單位：</label><select class="form-control"
-					name="institute">
+				<label class="sr-only">服務單位：</label><select data-toggle="select"
+					class="form-control select select-primary mrs mbm" name="institute">
 					<option value="">服務單位</option>
 					<th:block th:each="institute : ${institutes}">
 						<option th:value="${institute}" th:text="${institute}"></option>
 					</th:block>
 				</select>
 			</div>
+		</div>
+
+		<div class="row">
+			<div class="form-group">
+				<label class="sr-only">使用者帳號：</label><input class="form-control"
+					type="text" name="username" placeholder="使用者帳號"></input>
+			</div>
+
 			<div class="form-group">
 				<label class="sr-only">工作職銜：</label><input class="form-control"
 					type="text" name="jobTitle" placeholder="工作職銜"></input>
@@ -106,9 +111,9 @@
 				<input class="btn btn-primary btn-block btn-sm" type="submit"
 					value="搜尋使用者"></input>
 			</div>
+		</div>
+	</form>
 
-		</form>
-	</div>
 
 
 	<div class="container" id="pages"></div>
@@ -144,6 +149,8 @@
 							<input type="hidden" name="_method" value="DELETE" />
 							<button type="submit" name="${accuntusers.username}"
 								class="btn btn-block btn-sm btn-danger"><i class='glyphicon glyphicon-trash' th:text="刪除"></i></button>
+
+
 
 
 

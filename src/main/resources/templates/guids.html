@@ -43,7 +43,8 @@
 			</div>
 			<div class="form-group col-lg-12">
 
-				<label>性別：</label> <select class="form-control" name="gender">
+				<label>性別：</label> <select data-toggle="select"
+					class="form-control select select-primary mrs mbm" name="gender">
 					<option value="M">男</option>
 					<option value="F">女</option>
 				</select>
@@ -53,6 +54,7 @@
 			<div class="form-group col-lg-12 date">
 				<label>出生年月日：</label> <input type="text" class="form-control"
 					name="birthDay" />
+
 
 				<script type="text/javascript">
 					$(function() {
@@ -89,7 +91,7 @@
 		<script type="text/javascript">
 			$('.create').click(function() {
 				swal({
-					title : "確定產生？",
+					title : "確定已填寫完畢？",
 					type : "info",
 					showCancelButton : true,
 					confirmButtonClass : 'btn-info',
@@ -100,62 +102,55 @@
 				});
 			});
 		</script>
-<script>
-$(document).ready(function() {
-    $('#createForm')
-        .formValidation({
-            framework: 'bootstrap',
-            excluded: ':disabled',
-            icon: {
-                valid: 'glyphicon glyphicon-ok',
-                invalid: 'glyphicon glyphicon-remove',
-                validating: 'glyphicon glyphicon-refresh'
-            },
-            fields: {
-                title: {
-                    validators: {
-                        notEmpty: {
-                            message: 'The title is required'
-                        }
-                    }
-                },
-                description: {
-                    validators: {
-                        notEmpty: {
-                            message: 'The description is required'
-                        },
-                        stringLength: {
-                            min: 50,
-                            max: 1000,
-                            message: 'The description must be more than 50 and less than 1000 characters'
-                        }
-                    }
-                },
-                priority: {
-                    row: '.col-xs-6',
-                    validators: {
-                        notEmpty: {
-                            message: 'The priority is required'
-                        }
-                    }
-                },
-                category: {
-                    row: '.col-xs-6',
-                    validators: {
-                        notEmpty: {
-                            message: 'The category is required'
-                        }
-                    }
-                }
-            }
-        })
-        // Using Flat UI's select component
-        .find('[name="priority"], [name="category"]')
-            .select2({
-                dropdownCssClass: 'select-inverse-dropdown'
-            });
-});
-</script>
+		<script>
+			$(document)
+					.ready(
+							function() {
+								$('#createForm')
+										.formValidation(
+												{
+													framework : 'bootstrap',
+													excluded : ':disabled',
+													icon : {
+														valid : 'glyphicon glyphicon-ok',
+														invalid : 'glyphicon glyphicon-remove',
+														validating : 'glyphicon glyphicon-refresh'
+													},
+													fields : {
+														name : {
+															validators : {
+																notEmpty : {
+																	message : 'The name is required'
+																}
+															}
+														},
+														birthDay : {
+															validators : {
+																notEmpty : {
+																	message : 'The birthDay is required'
+																}
+															}
+														},
+														sid : {
+															row : '.col-xs-6',
+															validators : {
+																notEmpty : {
+																	message : 'The sid is required'
+																}
+															}
+														}
+													}
+												})
+										// Using Flat UI's select component
+										.find(
+												'[name="gender"]')
+										.select2(
+												{
+													dropdownCssClass : 'select-inverse-dropdown'
+							});
+		</script>
+
 	</div>
+
 </body>
 </html>
