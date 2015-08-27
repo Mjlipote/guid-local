@@ -28,6 +28,8 @@ import javax.persistence.criteria.Predicate;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -37,6 +39,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import tw.guid.local.helper.HashcodeCreator;
 import tw.guid.local.models.Gender;
+import tw.guid.local.models.Role;
 import tw.guid.local.models.entity.Association;
 import tw.guid.local.models.repo.AccountUsersRepository;
 import tw.guid.local.models.repo.AssociationRepository;
@@ -69,27 +72,55 @@ public class WebAssociationController {
 
     checkNotNull(username, "username can't be bull");
     checkNotNull(password, "password can't be bull");
+    Authentication auth =
+        SecurityContextHolder.getContext().getAuthentication();
 
-    if (username.equals("") || password.equals("")) {
-      map.addAttribute("errorMessage", "請確實填寫必填資料，切勿留空值！！");
-      map.addAttribute("link", "/association/login");
-      return "error";
-    } else if (!username.equals("super")) {
-      map.addAttribute("errorMessage", "填寫的帳號有誤！！");
-      map.addAttribute("link", "/association/login");
-      return "error";
-    } else if (username.equals("super") && !HashcodeCreator.getSha512(password)
-        .equals(acctUserRepo.findByUsername(username).getPassword())) {
-      map.addAttribute("errorMessage", "填寫的密碼有誤！！");
-      map.addAttribute("link", "/association/login");
-      return "error";
-    } else if (username.equals("super") && HashcodeCreator.getSha512(password)
-        .equals(acctUserRepo.findByUsername(username).getPassword())) {
-      return "redirect:/association";
+    if (!auth.getName().equals("super")) {
+      if (username.equals("") || password.equals("")) {
+        map.addAttribute("errorMessage", "請確實填寫必填資料，切勿留空值！！");
+        map.addAttribute("link", "/association/login");
+        return "error";
+      } else if (!username.equals("super")) {
+        map.addAttribute("errorMessage", "填寫的帳號有誤！！");
+        map.addAttribute("link", "/association/login");
+        return "error";
+      } else if (!HashcodeCreator.getSha512(password)
+          .equals(acctUserRepo.findByUsername("super").getPassword())) {
+        map.addAttribute("errorMessage", "填寫的密碼有誤！！");
+        map.addAttribute("link", "/association/login");
+        return "error";
+      } else if (username.equals("super") && HashcodeCreator.getSha512(password)
+          .equals(acctUserRepo.findByUsername(username).getPassword())) {
+        return "redirect:/association";
+      } else {
+        map.addAttribute("errorMessage", "填寫的帳號密碼有誤！！");
+        map.addAttribute("link", "/association/login");
+        return "error";
+      }
     } else {
-      map.addAttribute("errorMessage", "填寫的帳號密碼有誤！！");
-      map.addAttribute("link", "/association/login");
-      return "error";
+      if (username.equals("") || password.equals("")) {
+        map.addAttribute("errorMessage", "請確實填寫必填資料，切勿留空值！！");
+        map.addAttribute("link", "/association/login");
+        return "error";
+      } else if (acctUserRepo.findByUsername(username) == null || !acctUserRepo
+          .findByUsername(username).getRole().equals(Role.ROLE_ADMIN)) {
+        map.addAttribute("errorMessage", "填寫的帳號有誤，或是權限不足！！");
+        map.addAttribute("link", "/association/login");
+        return "error";
+      } else if (!HashcodeCreator.getSha512(password)
+          .equals(acctUserRepo.findByUsername(username).getPassword())) {
+        map.addAttribute("errorMessage", "填寫的密碼有誤！！");
+        map.addAttribute("link", "/association/login");
+        return "error";
+      } else
+        if (!username.equals("super") && HashcodeCreator.getSha512(password)
+            .equals(acctUserRepo.findByUsername(username).getPassword())) {
+        return "redirect:/association";
+      } else {
+        map.addAttribute("errorMessage", "填寫的帳號密碼有誤！！");
+        map.addAttribute("link", "/association/login");
+        return "error";
+      }
     }
 
   }
