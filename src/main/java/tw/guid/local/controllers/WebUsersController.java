@@ -151,10 +151,12 @@ public class WebUsersController {
 
     if (username.equals("")) {
       map.addAttribute("errorMessage", "請確實填寫資料，切勿留空值！！");
+      map.addAttribute("link", "/users");
       return "error";
     } else if (acctUserRepo.findByUsername(username).getRole()
         .equals(Role.ROLE_ADMIN)) {
       map.addAttribute("errorMessage", "無法刪除系統管理員帳號！！");
+      map.addAttribute("link", "/users");
       return "error";
     } else {
       AccountUsers acctUser =
@@ -163,6 +165,7 @@ public class WebUsersController {
       acctUserRepo.delete(acctUser);
       map.addAttribute("successMessage",
           "已成功刪除一筆使用者：" + acctUser.getUsername());
+      map.addAttribute("link", "/users");
       return "success";
 
     }
@@ -197,9 +200,11 @@ public class WebUsersController {
     if (username.equals("") || password.equals("") || institute.equals("")
         || email.equals("") || prefix.equals("")) {
       map.addAttribute("errorMessage", "請確實填寫資料，切勿留空值！！");
+      map.addAttribute("link", "/register");
       return "error";
     } else if (acctUserRepo.findByUsername(username) != null) {
       map.addAttribute("errorMessage", "填寫的帳號名稱已被註冊，請替換使用者名稱！！");
+      map.addAttribute("link", "/register");
       return "error";
     } else {
       AccountUsers user = new AccountUsers();
@@ -216,7 +221,7 @@ public class WebUsersController {
 
       acctUserRepo.save(user);
       map.addAttribute("successMessage", "已成功新增一筆使用者：" + user.getUsername());
-
+      map.addAttribute("link", "/register");
       return "success";
     }
   }
@@ -272,6 +277,7 @@ public class WebUsersController {
 
     if (username.equals("") || username.equals("")) {
       map.addAttribute("errorMessage", "請確實填寫資料，切勿留空值！！");
+      map.addAttribute("link", "/users/" + "username");
       return "error";
     } else {
       AccountUsers acctUser = acctUserRepo.findByUsername(username);
@@ -284,6 +290,7 @@ public class WebUsersController {
       acctUserRepo.saveAndFlush(acctUser);
       map.addAttribute("successMessage",
           "已成功修改 " + acctUser.getUsername() + " 的個人資料");
+      map.addAttribute("link", "/users");
       return "success";
 
     }
@@ -300,12 +307,14 @@ public class WebUsersController {
     if (username.equals("") || oldpassword.equals("")
         || checkpassword.equals("") || newpassword.equals("")) {
       map.addAttribute("errorMessage", "請確實填寫資料，切勿留空值！！");
+      map.addAttribute("link", "/users/changepassword");
       return "error";
     } else if (acctUserRepo.findByUsernameAndPassword(username,
         HashcodeCreator.getSha512(oldpassword)) == null
         || acctUserRepo.findByUsernameAndPassword(username,
             HashcodeCreator.getSha512(checkpassword)) == null) {
       map.addAttribute("errorMessage", "所填寫的舊密碼有誤，請您再次確認！！");
+      map.addAttribute("link", "/users/changepassword");
       return "error";
     } else {
       AccountUsers acctUser = acctUserRepo.findByUsername(username);
@@ -313,6 +322,7 @@ public class WebUsersController {
       acctUserRepo.saveAndFlush(acctUser);
       map.addAttribute("successMessage",
           "已成功修改 " + acctUser.getUsername() + " 的登入密碼");
+      map.addAttribute("link", "/users");
       return "success";
     }
   }

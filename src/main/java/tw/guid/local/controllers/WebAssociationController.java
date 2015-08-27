@@ -43,7 +43,7 @@ import tw.guid.local.models.repo.AssociationRepository;
 
 @RequestMapping("/association")
 @Controller
-public class AssociationController {
+public class WebAssociationController {
 
   @Autowired
   AssociationRepository associationRepo;
@@ -72,19 +72,23 @@ public class AssociationController {
 
     if (username.equals("") || password.equals("")) {
       map.addAttribute("errorMessage", "請確實填寫必填資料，切勿留空值！！");
+      map.addAttribute("link", "/association/login");
       return "error";
     } else if (!username.equals("super")) {
       map.addAttribute("errorMessage", "填寫的帳號有誤！！");
+      map.addAttribute("link", "/association/login");
       return "error";
     } else if (username.equals("super") && !HashcodeCreator.getSha512(password)
         .equals(acctUserRepo.findByUsername(username).getPassword())) {
       map.addAttribute("errorMessage", "填寫的密碼有誤！！");
+      map.addAttribute("link", "/association/login");
       return "error";
     } else if (username.equals("super") && HashcodeCreator.getSha512(password)
         .equals(acctUserRepo.findByUsername(username).getPassword())) {
       return "redirect:/association";
     } else {
       map.addAttribute("errorMessage", "填寫的帳號密碼有誤！！");
+      map.addAttribute("link", "/association/login");
       return "error";
     }
 
@@ -179,6 +183,7 @@ public class AssociationController {
     associationRepo.saveAndFlush(associationUser);
     map.addAttribute("successMessage",
         "已成功修改 " + associationUser.getName() + " 的個人資料");
+    map.addAttribute("link", "/association");
     return "success";
 
   }

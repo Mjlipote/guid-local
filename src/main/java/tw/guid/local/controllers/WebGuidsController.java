@@ -120,6 +120,7 @@ public class WebGuidsController {
     if (birthDay.equals("") || gender.equals("") || sid.equals("")
         || name.equals("") || subjectId.equals("") || mrn.equals("")) {
       map.addAttribute("errorMessage", "請確實填寫必填資料，切勿留空值！！");
+      map.addAttribute("link", "/guids");
       return "error";
     } else {
       String[] birthday = birthDay.split("/");
@@ -131,6 +132,7 @@ public class WebGuidsController {
 
       if (!birthdayValidator.isValidate()) {
         map.addAttribute("errorMessage", birthdayValidator.getMeg());
+        map.addAttribute("link", "/guids");
         return "error";
       } else {
         PII pii = new PII.Builder(NameSplitter.split(name),
@@ -223,12 +225,15 @@ public class WebGuidsController {
 
     if (subprimeGuids.equals("")) {
       map.addAttribute("errorMessage", "請確實填寫資料，切勿留空值！！");
+      map.addAttribute("link", "/comparison");
       return "error";
     } else if (!subprimeGuids.trim().contains(",")) {
       map.addAttribute("errorMessage", "請遵照格式填寫 (需填入 \",\" 做為區隔)");
+      map.addAttribute("link", "/comparison");
       return "error";
     } else if (!isValidateLength(subprimeGuids)) {
       map.addAttribute("errorMessage", "填寫值不是 GUID 的標準格式，請您再次確認！！");
+      map.addAttribute("link", "/comparison");
       return "error";
     } else {
       List<String> list = newArrayList();
