@@ -20,6 +20,8 @@
  */
 package tw.guid.local.controllers;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -70,8 +72,8 @@ public class ApiController {
   }
 
   @ResponseBody
-  @RequestMapping(value = "/validate", method = RequestMethod.GET)
-  boolean validate(@RequestParam(value = "spguid") String spguid)
+  @RequestMapping(value = "/validation", method = RequestMethod.GET)
+  boolean validation(@RequestParam(value = "spguid") String spguid)
       throws URISyntaxException {
     Properties prop = new Properties();
     try {
@@ -83,8 +85,8 @@ public class ApiController {
     }
 
     return HttpActionHelper
-        .toGet(new URI(prop.getProperty("central_server_url")), Action.VALIDATE,
-            "?spguid=" + spguid, false)
+        .toGet(new URI(prop.getProperty("central_server_url")),
+            Action.VALIDATION, "?spguid=" + spguid, false)
         .getBody().equals("true") ? true : false;
   }
 
@@ -98,17 +100,19 @@ public class ApiController {
    * @throws SQLException
    * @throws URISyntaxException
    */
-  @RequestMapping(value = "/exist", method = RequestMethod.GET)
-  boolean exist(@RequestParam("hashcode1") String hashcode1,
+  @RequestMapping(value = "/existence", method = RequestMethod.GET)
+  boolean existence(@RequestParam("hashcode1") String hashcode1,
       @RequestParam("hashcode2") String hashcode2,
       @RequestParam("hashcode3") String hashcode3)
           throws SQLException, URISyntaxException {
 
-    boolean b;
+    checkNotNull(hashcode1, "hashcode1 can't be null");
+    checkNotNull(hashcode2, "hashcode2 can't be null");
+    checkNotNull(hashcode3, "hashcode3 can't be null");
 
     if (spguidRepo.findByHashcode1AndHashcode2AndHashcode3(hashcode1, hashcode2,
         hashcode3).size() > 0) {
-      b = true;
+      return true;
     } else {
       Properties prop = new Properties();
       try {
@@ -118,15 +122,15 @@ public class ApiController {
       } catch (IOException e) {
         log.error(e.getMessage(), e);
       }
-      b = HttpActionHelper
-          .toGet(new URI(prop.getProperty("central_server_url")), Action.EXIST,
+      return HttpActionHelper
+          .toGet(new URI(prop.getProperty("central_server_url")),
+              Action.EXISTENCE,
               "?hashcode1=" + hashcode1 + "&hashcode2=" + hashcode2
                   + "&hashcode3=" + hashcode3,
               false)
           .getBody().equals("true") ? true : false;
     }
 
-    return b;
   }
 
 }

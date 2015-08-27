@@ -93,7 +93,7 @@ public class LegacyControllerTest {
   }
 
   @Test
-  public void testAuthenticate() throws IOException, URISyntaxException {
+  public void testAuthentication() throws IOException, URISyntaxException {
     GuidClient gc =
         new GuidClient(new URI(localServerUrl), "admin", "password");
     assertTrue(gc.authenticate());
@@ -101,7 +101,7 @@ public class LegacyControllerTest {
   }
 
   @Test
-  public void testCreate() throws IOException, URISyntaxException {
+  public void testGuidNew() throws IOException, URISyntaxException {
     GuidClient gc = new GuidClient(new URI(localServerUrl), "admin", "password",
         "AdminTest");
     PII pii = new PII.Builder(new Name("明政", "李"), Sex.MALE,
@@ -112,7 +112,7 @@ public class LegacyControllerTest {
   }
 
   @Test
-  public void testCreateRepeatSubprimeGuids()
+  public void testNewRepeatSubprimeGuids()
       throws IOException, URISyntaxException {
 
     GuidClient gc =

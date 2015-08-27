@@ -149,7 +149,7 @@ public class WebGuidsController {
           try {
             flattenJson = JsonFlattener.flattenAsMap(HttpActionHelper
                 .toPost(new URI(prop.getProperty("central_server_url")),
-                    Action.CREATE, sgrs, false)
+                    Action.NEW, sgrs, false)
                 .getBody());
           } catch (JsonProcessingException e) {
             log.error(e.getMessage(), e);

@@ -127,7 +127,7 @@ public class LegacyGuidClientController {
           result =
               (String) JsonFlattener.flattenAsMap(HttpActionHelper
                   .toPost(new URI(prop.getProperty("central_server_url")),
-                      Action.CREATE, Arrays.asList(bs.getValue()), false)
+                      Action.NEW, Arrays.asList(bs.getValue()), false)
                   .getBody()).get("[0].spguid");
         } catch (Exception e) {
           log.error(e.getMessage(), e);
