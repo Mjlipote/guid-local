@@ -29,34 +29,34 @@
 </head>
 
 <body>
+	<div id="wrap">
+		<h1 class="text-center">輸入 PII</h1>
 
-	<h1 class="text-center">輸入 PII</h1>
+		<div class="container ">
+			<form id="createForm" class="col-lg-12" method="post"
+				th:action="@{/guids/new}">
+				<div class="form-group col-lg-12">
 
-	<div class="container ">
-		<form id="createForm" class="col-lg-12" method="post"
-			th:action="@{/guids/new}">
-			<div class="form-group col-lg-12">
+					<input class="form-control" type="text" name="name"
+						placeholder="姓名（必填，請填寫全名）"></input>
 
-				<input class="form-control" type="text" name="name"
-					placeholder="姓名（必填，請填寫全名）"></input>
+				</div>
+				<div class="form-group col-lg-12">
 
-			</div>
-			<div class="form-group col-lg-12">
+					<select data-toggle="select"
+						class="form-control select select-primary mrs mbm" name="gender">
+						<option value="M">男</option>
+						<option value="F">女</option>
+					</select>
 
-				<select data-toggle="select"
-					class="form-control select select-primary mrs mbm" name="gender">
-					<option value="M">男</option>
-					<option value="F">女</option>
-				</select>
+				</div>
 
-			</div>
-
-			<div class="form-group col-lg-12 date">
-				<input type="text" class="form-control" name="birthDay"
-					placeholder="出生年/月/日（必填）" />
+				<div class="form-group col-lg-12 date">
+					<input type="text" class="form-control" name="birthDay"
+						placeholder="出生年/月/日（必填）" />
 
 
-				<script type="text/javascript">
+					<script type="text/javascript">
 					$(function() {
 						$('input[name="birthDay"]').daterangepicker({
 
@@ -73,58 +73,58 @@
 						});
 					});
 				</script>
-			</div>
+				</div>
 
-			<div class="form-group col-lg-12">
-				<input class="form-control" type="text" name="sid"
-					placeholder="身份證字號（必填）"></input>
+				<div class="form-group col-lg-12">
+					<input class="form-control" type="text" name="sid"
+						placeholder="身份證字號（必填）"></input>
 
-			</div>
+				</div>
 
-			<div class="form-group col-lg-6">
-				<input class="form-control" type="text" name="subjectId"
-					placeholder="Subject ID（必填）"></input>
+				<div class="form-group col-lg-6">
+					<input class="form-control" type="text" name="subjectId"
+						placeholder="Subject ID（必填）"></input>
 
-			</div>
+				</div>
 
-			<div class="form-group col-lg-6">
-				<input class="form-control" type="text" name="mrn"
-					placeholder="病歷編號 (MRN，必填)"></input>
+				<div class="form-group col-lg-6">
+					<input class="form-control" type="text" name="mrn"
+						placeholder="病歷編號 (MRN，必填)"></input>
 
-			</div>
+				</div>
 
-			<div class="form-group col-lg-6">
-				<input class="form-control" type="text" name="hospital"
-					placeholder="收案醫院"></input>
+				<div class="form-group col-lg-6">
+					<input class="form-control" type="text" name="hospital"
+						placeholder="收案醫院"></input>
 
-			</div>
+				</div>
 
-			<div class="form-group col-lg-6">
-				<input class="form-control" type="text" name="doctor"
-					placeholder="收案醫師"></input>
+				<div class="form-group col-lg-6">
+					<input class="form-control" type="text" name="doctor"
+						placeholder="收案醫師"></input>
 
-			</div>
+				</div>
 
-			<div class="form-group col-lg-6">
-				<input class="form-control" type="text" name="telephone"
-					placeholder="聯絡電話"></input>
+				<div class="form-group col-lg-6">
+					<input class="form-control" type="text" name="telephone"
+						placeholder="聯絡電話"></input>
 
-			</div>
+				</div>
 
-			<div class="form-group col-lg-6">
-				<input class="form-control" type="text" name="address"
-					placeholder="聯絡地址"></input>
+				<div class="form-group col-lg-6">
+					<input class="form-control" type="text" name="address"
+						placeholder="聯絡地址"></input>
 
-			</div>
-			<div class="form-group col-lg-12">
+				</div>
+				<div class="form-group col-lg-12">
 
-				<input class="btn btn-inverse btn-block btn-lg create"
-					value="產生二次編碼"></input>
+					<input class="btn btn-inverse btn-block btn-lg create"
+						value="產生二次編碼"></input>
 
-			</div>
-		</form>
+				</div>
+			</form>
 
-		<script type="text/javascript">
+			<script type="text/javascript">
 			$('.create').click(function() {
 				swal({
 					title : "確定已填寫完畢？",
@@ -138,7 +138,7 @@
 				});
 			});
 		</script>
-		<script>
+			<script>
 			$(document)
 					.ready(
 							function() {
@@ -185,8 +185,8 @@
 													dropdownCssClass : 'select-inverse-dropdown'
 							});
 		</script>
-
+		</div>
 	</div>
-
+	<th:block th:include="footer :: footer" class="container-fluid" />
 </body>
 </html>

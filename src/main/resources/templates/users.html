@@ -55,108 +55,116 @@
 </script>
 </head>
 <body>
-	<h1 class="text-center">使用者清單</h1>
+	<div id="wrap">
+		<h1 class="text-center">使用者清單</h1>
+		<form class="form-inline col-md-6 col-md-offset-3" method="get"
+			th:action="@{/users/lookup}" role="form">
+			<div class="row">
+				<div class="form-group">
+					<label class="sr-only">使用者權限：</label> <select data-toggle="select"
+						class="form-control select select-primary mrs mbm" name="role">
+						<option value="">使用者權限</option>
+						<option value="ROLE_ADMIN">系統管理者</option>
+						<option value="ROLE_USER">一般使用者</option>
+					</select>
+				</div>
 
+				<div class="form-group">
+					<label class="sr-only">Prefix 值：</label><select
+						data-toggle="select"
+						class="form-control select select-primary mrs mbm" name="prefix">
+						<option value="">Prefix</option>
+						<th:block th:each="prefix : ${prefixs}">
+							<option th:value="${prefix}" th:text="${prefix}"></option>
+						</th:block>
+					</select>
 
-	<form class="form-inline col-md-6 col-md-offset-3" method="get"
-		th:action="@{/users/lookup}" role="form">
-		<div class="row">
-			<div class="form-group">
-				<label class="sr-only">使用者權限：</label> <select data-toggle="select"
-					class="form-control select select-primary mrs mbm" name="role">
-					<option value="">使用者權限</option>
-					<option value="ROLE_ADMIN">系統管理者</option>
-					<option value="ROLE_USER">一般使用者</option>
-				</select>
+				</div>
+				<div class="form-group">
+					<label class="sr-only">服務單位：</label><select data-toggle="select"
+						class="form-control select select-primary mrs mbm"
+						name="institute">
+						<option value="">服務單位</option>
+						<th:block th:each="institute : ${institutes}">
+							<option th:value="${institute}" th:text="${institute}"></option>
+						</th:block>
+					</select>
+				</div>
 			</div>
 
-			<div class="form-group">
-				<label class="sr-only">Prefix 值：</label><select data-toggle="select"
-					class="form-control select select-primary mrs mbm" name="prefix">
-					<option value="">Prefix</option>
-					<th:block th:each="prefix : ${prefixs}">
-						<option th:value="${prefix}" th:text="${prefix}"></option>
-					</th:block>
-				</select>
+			<div class="row">
+				<div class="form-group">
+					<label class="sr-only">使用者帳號：</label><input class="form-control"
+						type="text" name="username" placeholder="使用者帳號"></input>
+				</div>
 
+				<div class="form-group">
+					<label class="sr-only">工作職銜：</label><input class="form-control"
+						type="text" name="jobTitle" placeholder="工作職銜"></input>
+				</div>
+				<div class="form-group">
+					<label class="sr-only">電子郵件 E-Mail：</label><input
+						class="form-control" type="text" name="email"
+						placeholder="電子郵件 E-Mail"></input>
+				</div>
+
+				<div class="form-group">
+					<input class="btn btn-inverse btn-block btn-sm" type="submit"
+						value="搜尋使用者"></input>
+				</div>
 			</div>
-			<div class="form-group">
-				<label class="sr-only">服務單位：</label><select data-toggle="select"
-					class="form-control select select-primary mrs mbm" name="institute">
-					<option value="">服務單位</option>
-					<th:block th:each="institute : ${institutes}">
-						<option th:value="${institute}" th:text="${institute}"></option>
-					</th:block>
-				</select>
-			</div>
+		</form>
+
+
+
+		<div class="container" id="pages"></div>
+
+		<div>
+			<table
+				class="table table-responsive table-bordered table-striped table-condensed table-hover">
+				<thead>
+					<th:tr>
+						<td>#</td>
+						<td><strong>使用者權限</strong></td>
+						<td><strong>使用者帳號</strong></td>
+						<td><strong>Prefix 值</strong></td>
+						<td><strong>服務單位</strong></td>
+						<td><strong>工作職銜</strong></td>
+						<td><strong>電子郵件 E-Mail</strong></td>
+						<td><strong>聯絡電話</strong></td>
+						<td><strong>聯絡地址</strong></td>
+						<td></td>
+					</th:tr>
+				</thead>
+				<tbody>
+
+					<tr th:each="accuntusers, iterationStatus: ${acctUsers}">
+						<td th:text="${iterationStatus.count}"></td>
+						<td th:text="${accuntusers.role}"></td>
+						<td th:text="${accuntusers.username}"></td>
+						<td th:text="${accuntusers.prefix}"></td>
+						<td th:text="${accuntusers.institute}"></td>
+						<td th:text="${accuntusers.jobTitle}"></td>
+						<td th:text="${accuntusers.email}"></td>
+						<td th:text="${accuntusers.telephone}"></td>
+						<td th:text="${accuntusers.address}"></td>
+						<td>
+							<form method="post"
+								th:action="@{${'/users/' + accuntusers.username }}">
+								<input type="hidden" name="_method" value="DELETE" />
+								<button type="submit" name="${accuntusers.username}"
+									class="btn btn-block btn-sm btn-danger">
+									<i class='glyphicon glyphicon-trash' th:text="刪除"></i>
+								</button>
+							</form>
+						</td>
+					</tr>
+
+				</tbody>
+			</table>
 		</div>
-
-		<div class="row">
-			<div class="form-group">
-				<label class="sr-only">使用者帳號：</label><input class="form-control"
-					type="text" name="username" placeholder="使用者帳號"></input>
-			</div>
-
-			<div class="form-group">
-				<label class="sr-only">工作職銜：</label><input class="form-control"
-					type="text" name="jobTitle" placeholder="工作職銜"></input>
-			</div>
-			<div class="form-group">
-				<label class="sr-only">電子郵件 E-Mail：</label><input
-					class="form-control" type="text" name="email"
-					placeholder="電子郵件 E-Mail"></input>
-			</div>
-
-			<div class="form-group">
-				<input class="btn btn-inverse btn-block btn-sm" type="submit"
-					value="搜尋使用者"></input>
-			</div>
-		</div>
-	</form>
-
-
-
-	<div class="container" id="pages"></div>
-
-	<div>
-		<table
-			class="table table-responsive table-bordered table-striped table-condensed table-hover">
-			<thead>
-				<th:tr>
-					<td>#</td>
-					<td><strong>使用者權限</strong></td>
-					<td><strong>使用者帳號</strong></td>
-					<td><strong>Prefix 值</strong></td>
-					<td><strong>服務單位</strong></td>
-					<td><strong>工作職銜</strong></td>
-					<td><strong>電子郵件 E-Mail</strong></td>
-					<td></td>
-				</th:tr>
-			</thead>
-			<tbody>
-
-				<tr th:each="accuntusers, iterationStatus: ${acctUsers}">
-					<td th:text="${iterationStatus.count}"></td>
-					<td th:text="${accuntusers.role}"></td>
-					<td th:text="${accuntusers.username}"></td>
-					<td th:text="${accuntusers.prefix}"></td>
-					<td th:text="${accuntusers.institute}"></td>
-					<td th:text="${accuntusers.jobTitle}"></td>
-					<td th:text="${accuntusers.email}"></td>
-					<td>
-						<form method="post"
-							th:action="@{${'/users/' + accuntusers.username }}">
-							<input type="hidden" name="_method" value="DELETE" />
-							<button type="submit" name="${accuntusers.username}"
-								class="btn btn-block btn-sm btn-danger">
-								<i class='glyphicon glyphicon-trash' th:text="刪除"></i></button>
-						</form>
-					</td>
-				</tr>
-
-			</tbody>
-		</table>
+		<div class="container" id="pages"></div>
 	</div>
-	<div class="container" id="pages"></div>
+	<th:block th:include="footer :: footer" class="container-fluid" />
 </body>
 </html>

@@ -11,22 +11,24 @@
 <style type="text/css">
 </style>
 <body>
-	<h1 class="text-center">已成功產生二次編碼 GUIDs：</h1>
+	<div id="wrap">
+		<h1 class="text-center">已成功產生二次編碼 GUIDs：</h1>
 
-	<div class="text-center">
+		<div class="text-center">
 
-		<input id="paste-input" type="text" th:value="${spguids}" size="50"></input>
-		<button class="btn btn-primary" id="copy-button" data-clipboard-text="" title="按我複製">按我複製
-			GUID</button>
+			<input id="paste-input" type="text" th:value="${spguids}" size="50"></input>
+			<button class="btn btn-primary" id="copy-button"
+				data-clipboard-text="" title="按我複製">按我複製 GUID</button>
 
-		<script src="/zclip/js/ZeroClipboard.js"></script>
-		<script src="/zclip/js/main.js"></script>
-		<script type="text/javascript">
-			$('#copy-button').attr('data-clipboard-text',
-					$('#paste-input').val());
-		</script>
-		    <a th:href="@{/guids}" class="btn btn-inverse">繼續產生</a>
+			<script src="/zclip/js/ZeroClipboard.js"></script>
+			<script src="/zclip/js/main.js"></script>
+			<script type="text/javascript">
+				$('#copy-button').attr('data-clipboard-text',
+						$('#paste-input').val());
+			</script>
+			<a th:href="@{/guids}" class="btn btn-inverse">繼續產生</a>
+		</div>
 	</div>
-
+	<th:block th:include="footer :: footer" class="container-fluid" />
 </body>
 </html>

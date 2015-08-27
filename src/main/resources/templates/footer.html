@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<th:block th:fragment="footer" class="container-fluid">
+	<style type="text/css">
+html, body, #wrap {height: 100%;}
+body > #wrap {height: auto; min-height: 100%;}
+#main {padding-bottom: 90px;}  /* 必须使用和footer相同的高度 */
+#footer {
+position: relative;
+ margin-top: -90px; /* footer高度的负值 */
+ height:90px;
+ clear:both;
+ }
+ .clearfix:after {
+ content: ".";
+ display: block;
+ height: 0;
+ clear: both;
+ visibility: hidden;
+ }
+.clearfix {display: inline-block;}
+* html .clearfix { height: 1%;}
+.clearfix {display: block;}
+</style>
+
+
+	<footer id="footer" class="midnight-blue">
+		<div class="container">
+			<div class="row">
+				<div class="col-sm-6">
+					&copy; 2015 <a target="_blank" href="https://www.cims.tw/"
+						title="GUID SERVER">CIMS</a>.
+					All Rights Reserved（版權所有）.
+				</div>
+				<div class="col-sm-6">
+					<ul class="pull-right">
+						<li><a th:href="@{/home}">Home</a></li>
+						<li><a th:href="@{https://www.cims.tw/ch}">About Us</a></li>
+						<li><a th:href="@{#}">Faq</a></li>
+						<li><a th:href="@{https://www.cims.tw/ch/contact}">Contact Us</a></li>
+						<li><a id="gototop" class="gototop" href="#"><i
+								class="icon-chevron-up"></i></a></li>
+						<!--#gototop-->
+					</ul>
+				</div>
+			</div>
+		</div>
+	</footer>
+	<!--/#footer-->
+
+</th:block>
+</html>

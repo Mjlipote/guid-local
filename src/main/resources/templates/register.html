@@ -8,76 +8,75 @@
 <th:block th:include="head :: bootstrap" />
 <style type="text/css">
 </style>
-
+<th:block th:include="top :: navigation" />
 </head>
 
 <body>
-	<th:block th:include="top :: navigation" />
-	<h1 class="text-center">新增使用者</h1>
-
-	<div class="container">
-		<form class="col-md-6 col-md-offset-3" method="post"
-			th:action="@{/users/new}">
-			<div class="form-group col-lg-12">
-				<select data-toggle="select"
-					class="form-control select select-primary mrs mbm" name="authority">
-					<option value="ROLE_ADMIN">系統管理者</option>
-					<option value="ROLE_USER">一般使用者</option>
-				</select>
-			</div>
-
-			<div class="form-group col-lg-12">
-				<input class="form-control" type="text" name="username"
-					placeholder="登入帳號"></input>
-
-			</div>
-			<div class="form-group col-lg-12">
-				<input class="form-control" type="password"
-					name="password" placeholder="密碼（Password）"></input>
-			</div>
-
-			<div class="form-group col-lg-12">
-				<div class="input-group">
-					<span class="input-group-addon">@</span><input type="email"
-						class="form-control" placeholder="E-Mail:Sample@mail.com"
-						name="email"></input>
+	<div id="wrap">
+		<h1 class="text-center">新增使用者</h1>
+		<div class="container">
+			<form class="col-md-6 col-md-offset-3" method="post"
+				th:action="@{/users/new}">
+				<div class="form-group col-lg-12">
+					<select data-toggle="select"
+						class="form-control select select-primary mrs mbm"
+						name="authority">
+						<option value="ROLE_ADMIN">系統管理者</option>
+						<option value="ROLE_USER">一般使用者</option>
+					</select>
 				</div>
-			</div>
 
-			<div class="form-group col-lg-12">
-				<input class="form-control" type="text"
-					name="institute" placeholder="服務單位"></input>
-			</div>
+				<div class="form-group col-lg-12">
+					<input class="form-control" type="text" name="username"
+						placeholder="登入帳號"></input>
 
-			<div class="form-group col-lg-12">
-				<input class="form-control" type="text"
-					name="prefix" placeholder="Prefix 值"></input>
-			</div>
+				</div>
+				<div class="form-group col-lg-12">
+					<input class="form-control" type="password" name="password"
+						placeholder="密碼（Password）"></input>
+				</div>
 
+				<div class="form-group col-lg-12">
+					<div class="input-group">
+						<span class="input-group-addon">@</span><input type="email"
+							class="form-control" placeholder="E-Mail:Sample@mail.com"
+							name="email"></input>
+					</div>
+				</div>
 
-			<div class="form-group col-lg-12">
-				<input class="form-control" type="text" name="jobTitle"
-					placeholder="工作職銜"></input>
-			</div>
+				<div class="form-group col-lg-12">
+					<input class="form-control" type="text" name="institute"
+						placeholder="服務單位"></input>
+				</div>
 
-			<div class="form-group col-lg-12">
-				<input class="form-control" type="text"
-					placeholder="聯絡電話（例）：0910xxxxxx" name="telephone"></input>
-			</div>
-
-			<div class="form-group col-lg-12">
-				<input class="form-control" type="text" name="address"
-					placeholder="聯絡住址"></input>
-			</div>
-
-			<div class="form-group col-lg-12">
-				<input class="btn btn-inverse btn-block btn-lg" type="submit"
-					value="新增使用者"></input>
-			</div>
-
-		</form>
+				<div class="form-group col-lg-12">
+					<input class="form-control" type="text" name="prefix"
+						placeholder="Prefix 值"></input>
+				</div>
 
 
+				<div class="form-group col-lg-12">
+					<input class="form-control" type="text" name="jobTitle"
+						placeholder="工作職銜"></input>
+				</div>
+
+				<div class="form-group col-lg-12">
+					<input class="form-control" type="text"
+						placeholder="聯絡電話（例）：0910xxxxxx" name="telephone"></input>
+				</div>
+
+				<div class="form-group col-lg-12">
+					<input class="form-control" type="text" name="address"
+						placeholder="聯絡住址"></input>
+				</div>
+
+				<div class="form-group col-lg-12">
+					<input class="btn btn-inverse btn-block btn-lg" type="submit"
+						value="新增使用者"></input>
+				</div>
+			</form>
+		</div>
 	</div>
+	<th:block th:include="footer :: footer" class="container-fluid" />
 </body>
 </html>

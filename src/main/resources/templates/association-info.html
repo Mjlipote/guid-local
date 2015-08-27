@@ -8,77 +8,89 @@
 <th:block th:include="head :: bootstrap" />
 <style type="text/css">
 </style>
-
+<th:block th:include="top :: navigation" />
 </head>
 
 <body>
-	<th:block th:include="top :: navigation" />
-	<h1 class="text-center">編輯受試者之通訊資料</h1>
+	<div id="wrap">
+		<h1 class="text-center">編輯受試者之通訊資料</h1>
+		<div class="container">
+			<form id="association-infoForm" class="col-md-8 col-md-offset-2"
+				method="post"
+				th:action="@{${'/association/' + associationUserInfo.spguid }}">
 
-	<div class="container">
-		<form id="association-infoForm" class="col-md-6 col-md-offset-3"
-			method="post"
-			th:action="@{${'/association/' + associationUserInfo.spguid }}">
+				<div class="form-group row col-lg-12">
+					<div class="form-group col-lg-4">
+						<label>姓名：</label><input type="text" class="form-control"
+							placeholder="姓名" name="name"
+							th:value="${associationUserInfo.name}" disabled="disabled"></input>
+					</div>
 
-      <div class="form-group col-lg-12">
-          <label>姓名：</label><input type="text" class="form-control"
-            placeholder="姓名" name="name"
-            th:value="${associationUserInfo.name}" disabled="disabled" ></input>
-      </div>
-      
-            <div class="form-group col-lg-12">
-          <label>Subject ID：</label><input type="text" class="form-control"
-            placeholder="Subject ID" name="subjectId"
-            th:value="${associationUserInfo.subjectId}" disabled="disabled" ></input>
-      </div>
-      
-               <div class="form-group col-lg-12">
-          <label>病例編號：</label><input type="text" class="form-control"
-            placeholder="病歷編號（MRN）" name="mrn"
-            th:value="${associationUserInfo.mrn}"></input>
-      </div>
+					<div class="form-group col-lg-4">
+						<label>Subject ID：</label><input type="text" class="form-control"
+							placeholder="Subject ID" name="subjectId"
+							th:value="${associationUserInfo.subjectId}" disabled="disabled"></input>
+					</div>
 
-			<div class="form-group col-lg-12">
-					<label>收案醫院：</label><input type="text" class="form-control"
-						placeholder="收案醫院" name="hospital"
-						th:value="${associationUserInfo.hospital}" ></input>
-			</div>
+					<div class="form-group col-lg-4">
+						<label>病例編號：</label><input type="text" class="form-control"
+							placeholder="病歷編號（MRN）" name="mrn"
+							th:value="${associationUserInfo.mrn}"></input>
+					</div>
+				</div>
 
-			<div class="form-group col-lg-12">
-				<label>收案醫師：</label><input class="form-control" type="text"
-					name="doctor" th:value="${associationUserInfo.doctor}"></input>
+				<div class="form-group row col-lg-12">
+					<div class="form-group col-lg-6">
+						<label>收案醫院：</label><input type="text" class="form-control"
+							placeholder="收案醫院" name="hospital"
+							th:value="${associationUserInfo.hospital}"></input>
+					</div>
 
-			</div>
-			<div class="form-group col-lg-12">
-				<label>聯絡電話：</label><input class="form-control" type="text"
-					placeholder="0910xxxxxx" name="telephone"
-					th:value="${associationUserInfo.telephone}"></input>
+					<div class="form-group col-lg-6">
+						<label>收案醫師：</label><input class="form-control" type="text"
+							name="doctor" th:value="${associationUserInfo.doctor}"></input>
 
-			</div>
-			<div class="form-group col-lg-12">
-				<label>聯絡住址：</label><input class="form-control" type="text"
-					name="address" th:value="${associationUserInfo.address}"></input> <input
-					type="hidden" name="_method" value="PUT" />
-			</div>
-			<div class="form-group col-lg-12 association-info">
-				<input class="btn btn-inverse btn-block btn-lg" value="編輯聯絡資料"></input>
-			</div>
-		</form>
+					</div>
+				</div>
 
-		<script type="text/javascript">
-			$('.association-info').click(function() {
-				swal({
-					title : "確定編輯完成？",
-					type : "warning",
-					showCancelButton : true,
-					confirmButtonClass : 'btn-danger',
-					confirmButtonText : 'YES',
-					closeOnConfirm : true
-				}, function() {
-					$('#association-infoForm').submit();
+				<div class="form-group row col-lg-12">
+					<div class="form-group col-lg-6">
+						<label>聯絡電話：</label><input class="form-control" type="text"
+							placeholder="0910xxxxxx" name="telephone"
+							th:value="${associationUserInfo.telephone}"></input>
+
+					</div>
+					<div class="form-group col-lg-6">
+						<label>聯絡住址：</label><input class="form-control" type="text"
+							name="address" th:value="${associationUserInfo.address}"></input>
+						<input type="hidden" name="_method" value="PUT" />
+					</div>
+				</div>
+
+				<div class="form-group row col-lg-12">
+					<div class="form-group col-lg-12 association-info">
+						<input class="btn btn-inverse btn-block btn-lg" value="編輯聯絡資料"></input>
+					</div>
+				</div>
+
+			</form>
+
+			<script type="text/javascript">
+				$('.association-info').click(function() {
+					swal({
+						title : "確定編輯完成？",
+						type : "warning",
+						showCancelButton : true,
+						confirmButtonClass : 'btn-danger',
+						confirmButtonText : 'YES',
+						closeOnConfirm : true
+					}, function() {
+						$('#association-infoForm').submit();
+					});
 				});
-			});
-		</script>
+			</script>
+		</div>
 	</div>
+	<th:block th:include="footer :: footer" class="container-fluid" />
 </body>
 </html>

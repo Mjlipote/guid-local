@@ -12,56 +12,59 @@
 </head>
 
 <body>
-	<th:block th:include="top :: navigation" />
-	<h1 class="text-center">編輯個人基本資料</h1>
+	<div id="wrap">
+		<th:block th:include="top :: navigation" />
+		<h1 class="text-center">編輯個人基本資料</h1>
 
-	<div class="container">
-		<form id="user-infoForm" class="col-md-6 col-md-offset-3"
-			method="post" th:action="@{${'/users/' + #authentication.name }}">
+		<div class="container">
+			<form id="user-infoForm" class="col-md-6 col-md-offset-3"
+				method="post" th:action="@{${'/users/' + #authentication.name }}">
 
 
-			<div class="form-group col-lg-12">
-				<label>E-Mail：</label><input type="email" class="form-control"
-					placeholder="Sample@mail.com" name="email"
-					th:value="${usersInfo.email}"></input>
+				<div class="form-group col-lg-12">
+					<label>E-Mail：</label><input type="email" class="form-control"
+						placeholder="Sample@mail.com" name="email"
+						th:value="${usersInfo.email}"></input>
 
-			</div>
+				</div>
 
-			<div class="form-group col-lg-12">
-				<label>工作職銜：</label><input class="form-control" type="text"
-					name="jobTitle" th:value="${usersInfo.jobTitle}"></input>
+				<div class="form-group col-lg-12">
+					<label>工作職銜：</label><input class="form-control" type="text"
+						name="jobTitle" th:value="${usersInfo.jobTitle}"></input>
 
-			</div>
-			<div class="form-group col-lg-12">
-				<label>聯絡電話：</label><input class="form-control" type="text"
-					placeholder="0910xxxxxx" name="telephone"
-					th:value="${usersInfo.telephone}"></input>
+				</div>
+				<div class="form-group col-lg-12">
+					<label>聯絡電話：</label><input class="form-control" type="text"
+						placeholder="0910xxxxxx" name="telephone"
+						th:value="${usersInfo.telephone}"></input>
 
-			</div>
-			<div class="form-group col-lg-12">
-				<label>聯絡住址：</label><input class="form-control" type="text"
-					name="address" th:value="${usersInfo.address}"></input> <input
-					type="hidden" name="_method" value="PUT" />
-			</div>
-			<div class="form-group col-lg-12 user-info">
-				<input class="btn btn-inverse btn-block btn-lg" value="編輯個人資料"></input>
-			</div>
-		</form>
+				</div>
+				<div class="form-group col-lg-12">
+					<label>聯絡住址：</label><input class="form-control" type="text"
+						name="address" th:value="${usersInfo.address}"></input> <input
+						type="hidden" name="_method" value="PUT" />
+				</div>
+				<div class="form-group col-lg-12 user-info">
+					<input class="btn btn-inverse btn-block btn-lg" value="編輯個人資料"></input>
+				</div>
+			</form>
 
-		<script type="text/javascript">
-			$('.user-info').click(function() {
-				swal({
-					title : "確定編輯完成？",
-					type : "warning",
-					showCancelButton : true,
-					confirmButtonClass : 'btn-danger',
-					confirmButtonText : 'YES',
-					closeOnConfirm : true
-				}, function() {
-					$('#user-infoForm').submit();
+			<script type="text/javascript">
+				$('.user-info').click(function() {
+					swal({
+						title : "確定編輯完成？",
+						type : "warning",
+						showCancelButton : true,
+						confirmButtonClass : 'btn-danger',
+						confirmButtonText : 'YES',
+						closeOnConfirm : true
+					}, function() {
+						$('#user-infoForm').submit();
+					});
 				});
-			});
-		</script>
+			</script>
+		</div>
 	</div>
+	<th:block th:include="footer :: footer" class="container-fluid" />
 </body>
 </html>

@@ -74,130 +74,131 @@
 <script src="/jquery.simplePagination.js"></script>
 </head>
 <body>
-	<h1 class="text-center">編碼關聯表</h1>
+	<div id="wrap">
+		<h1 class="text-center">編碼關聯表</h1>
 
 
-	<form class="form-inline col-md-8 col-md-offset-2" method="get"
-		th:action="@{/association/lookup}" role="form">
-		<div class="row">
-			<div class="form-group col-md-4">
-				<label class="sr-only">性別：</label> <select data-toggle="select"
-					class="form-control select select-primary mrs mbm" name="gender">
-					<option value="">性別</option>
-					<option value="M">男</option>
-					<option value="F">女</option>
-				</select>
+		<form class="form-inline col-md-8 col-md-offset-2" method="get"
+			th:action="@{/association/lookup}" role="form">
+			<div class="row">
+				<div class="form-group col-md-4">
+					<label class="sr-only">性別：</label> <select data-toggle="select"
+						class="form-control select select-primary mrs mbm" name="gender">
+						<option value="">性別</option>
+						<option value="M">男</option>
+						<option value="F">女</option>
+					</select>
+				</div>
+
+				<div class="form-group col-md-4">
+					<label class="sr-only">收案醫院：</label><select data-toggle="select"
+						class="form-control select select-primary mrs mbm" name="hospital">
+						<option value="">Prefix</option>
+						<th:block th:each="hospital : ${hospitals}">
+							<option th:value="${hospital}" th:text="${hospital}"></option>
+						</th:block>
+					</select>
+
+				</div>
+				<div class="form-group col-md-4">
+					<label class="sr-only">收案醫師：</label><select data-toggle="select"
+						class="form-control select select-primary mrs mbm" name="doctor">
+						<option value="">服務單位</option>
+						<th:block th:each="doctor : ${doctors}">
+							<option th:value="${doctor}" th:text="${doctor}"></option>
+						</th:block>
+					</select>
+				</div>
 			</div>
 
-			<div class="form-group col-md-4">
-				<label class="sr-only">收案醫院：</label><select data-toggle="select"
-					class="form-control select select-primary mrs mbm" name="hospital">
-					<option value="">Prefix</option>
-					<th:block th:each="hospital : ${hospitals}">
-						<option th:value="${hospital}" th:text="${hospital}"></option>
-					</th:block>
-				</select>
+			<div class="row col-md-12">
+				<div class="form-group">
+					<label class="sr-only">姓名：</label><input class="form-control"
+						type="text" name="name" placeholder="姓名"></input>
+				</div>
 
+				<div class="form-group">
+					<label class="sr-only">Subject ID：</label><input
+						class="form-control" type="text" name="subjectId"
+						placeholder="Subject ID"></input>
+				</div>
+				<div class="form-group">
+					<label class="sr-only">病例編號 (MRN)：</label><input
+						class="form-control" type="text" name="mrn"
+						placeholder="病例編號 (MRN)"></input>
+				</div>
+
+				<div class="form-group">
+					<label class="sr-only">聯絡電話：</label><input class="form-control"
+						type="text" name="telephone" placeholder="聯絡電話"></input>
+				</div>
+				<div class="form-group">
+					<label class="sr-only">聯絡地址：</label><input class="form-control"
+						type="text" name="address" placeholder="聯絡地址"></input>
+				</div>
+
+				<div class="form-group">
+					<input class="btn btn-inverse btn-block btn-sm" type="submit"
+						value="搜尋"></input>
+				</div>
 			</div>
-			<div class="form-group col-md-4">
-				<label class="sr-only">收案醫師：</label><select data-toggle="select"
-					class="form-control select select-primary mrs mbm" name="doctor">
-					<option value="">服務單位</option>
-					<th:block th:each="doctor : ${doctors}">
-						<option th:value="${doctor}" th:text="${doctor}"></option>
-					</th:block>
-				</select>
-			</div>
+		</form>
+
+
+
+		<div class="container" id="pages"></div>
+
+		<div>
+			<table
+				class="table table-responsive table-bordered table-striped table-condensed table-hover">
+				<thead>
+					<th:tr>
+						<td>#</td>
+						<td><strong>Guid</strong></td>
+						<td><strong>姓名</strong></td>
+						<td><strong>Subject ID</strong></td>
+						<td><strong>病例編號 (MRN)</strong></td>
+						<td><strong>身分證字號</strong></td>
+						<td><strong>生日</strong></td>
+						<td><strong>性別</strong></td>
+						<td><strong>收案醫院</strong></td>
+						<td><strong>收案醫師</strong></td>
+						<td><strong>聯絡電話</strong></td>
+						<td><strong>聯絡地址</strong></td>
+						<td></td>
+					</th:tr>
+				</thead>
+				<tbody>
+
+					<tr th:each="association, iterationStatus: ${associationUsers}">
+						<td th:text="${iterationStatus.count}"></td>
+						<td th:text="${association.spguid}"></td>
+						<td th:text="${association.name}"></td>
+						<td th:text="${association.subjectId}"></td>
+						<td th:text="${association.mrn}"></td>
+						<td th:text="${association.sid}"></td>
+						<td
+							th:text="${association.birthOfYear + '/' + association.birthOfMonth + '/' + association.birthOfDay}"></td>
+						<td th:text="${association.gender}"></td>
+						<td th:text="${association.hospital}"></td>
+						<td th:text="${association.doctor}"></td>
+						<td th:text="${association.telephone}"></td>
+						<td th:text="${association.address}"></td>
+						<td>
+							<form method="get"
+								th:action="@{${'/association/' + association.spguid }}">
+								<button type="submit" name="${association.spguid}"
+									class="btn btn-block btn-sm btn-info">
+									<i class='glyphicon glyphicon-pencil' th:text="編輯"></i>
+								</button>
+							</form>
+						</td>
+					</tr>
+				</tbody>
+			</table>
 		</div>
-
-		<div class="row col-md-12">
-			<div class="form-group">
-				<label class="sr-only">姓名：</label><input class="form-control"
-					type="text" name="name" placeholder="姓名"></input>
-			</div>
-
-			<div class="form-group">
-				<label class="sr-only">Subject ID：</label><input
-					class="form-control" type="text" name="subjectId"
-					placeholder="Subject ID"></input>
-			</div>
-			<div class="form-group">
-				<label class="sr-only">病例編號 (MRN)：</label><input
-					class="form-control" type="text" name="mrn"
-					placeholder="病例編號 (MRN)"></input>
-			</div>
-
-			<div class="form-group">
-				<label class="sr-only">聯絡電話：</label><input class="form-control"
-					type="text" name="telephone" placeholder="聯絡電話"></input>
-			</div>
-			<div class="form-group">
-				<label class="sr-only">聯絡地址：</label><input class="form-control"
-					type="text" name="address" placeholder="聯絡地址"></input>
-			</div>
-
-			<div class="form-group">
-				<input class="btn btn-inverse btn-block btn-sm" type="submit"
-					value="搜尋"></input>
-			</div>
-		</div>
-	</form>
-
-
-
-	<div class="container" id="pages"></div>
-
-	<div>
-		<table
-			class="table table-responsive table-bordered table-striped table-condensed table-hover">
-			<thead>
-				<th:tr>
-					<td>#</td>
-					<td><strong>Guid</strong></td>
-					<td><strong>姓名</strong></td>
-					<td><strong>Subject ID</strong></td>
-					<td><strong>病例編號 (MRN)</strong></td>
-					<td><strong>身分證字號</strong></td>
-					<td><strong>生日</strong></td>
-					<td><strong>性別</strong></td>
-					<td><strong>收案醫院</strong></td>
-					<td><strong>收案醫師</strong></td>
-					<td><strong>聯絡電話</strong></td>
-					<td><strong>聯絡地址</strong></td>
-					<td></td>
-				</th:tr>
-			</thead>
-			<tbody>
-
-				<tr th:each="association, iterationStatus: ${associationUsers}">
-					<td th:text="${iterationStatus.count}"></td>
-					<td th:text="${association.spguid}"></td>
-					<td th:text="${association.name}"></td>
-					<td th:text="${association.subjectId}"></td>
-					<td th:text="${association.mrn}"></td>
-					<td th:text="${association.sid}"></td>
-					<td
-						th:text="${association.birthOfYear + '/' + association.birthOfMonth + '/' + association.birthOfDay}"></td>
-					<td th:text="${association.gender}"></td>
-					<td th:text="${association.hospital}"></td>
-					<td th:text="${association.doctor}"></td>
-					<td th:text="${association.telephone}"></td>
-					<td th:text="${association.address}"></td>
-					<td>
-						<form method="get"
-							th:action="@{${'/association/' + association.spguid }}">
-							<button type="submit" name="${association.spguid}"
-								class="btn btn-block btn-sm btn-info">
-								<i class='glyphicon glyphicon-pencil' th:text="編輯"></i>
-							</button>
-
-						</form>
-					</td>
-				</tr>
-
-			</tbody>
-		</table>
+		<div class="container" id="pages"></div>
 	</div>
-	<div class="container" id="pages"></div>
+	<th:block th:include="footer :: footer" class="container-fluid" />
 </body>
 </html>

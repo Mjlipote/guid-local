@@ -55,54 +55,55 @@
 </head>
 
 <body>
+	<div id="wrap">
+		<h1 class="text-center">比對二次編碼</h1>
 
-	<h1 class="text-center">比對二次編碼</h1>
+		<div class="container">
+			<form class="col-md-8 col-md-offset-2" method="post"
+				th:action="@{/guids/comparison}">
 
-	<div class="container">
-		<form class="col-md-8 col-md-offset-2" method="post"
-			th:action="@{/guids/comparison}">
-
-			<div class="form-group">
-				<textarea class="form-control" rows="5" name="subprimeGuids"
-					placeholder="填入二次編碼字串列（以 , 做區隔）"></textarea>
-			</div>
-			<div class="form-group">
-				<div class="col-md-6 col-md-offset-3">
-					<input class="btn btn-inverse btn-block btn-lg" type="submit"
-						value="進行比對"></input>
+				<div class="form-group">
+					<textarea class="form-control" rows="5" name="subprimeGuids"
+						placeholder="填入二次編碼字串列（以 , 做區隔）"></textarea>
 				</div>
+				<div class="form-group">
+					<div class="col-md-6 col-md-offset-3">
+						<input class="btn btn-inverse btn-block btn-lg" type="submit"
+							value="進行比對"></input>
+					</div>
+				</div>
+			</form>
+
+			<div th:if="${number >= 0}">
+				<div class="container" id="pages"></div>
+				<table
+					class="table table-responsive table-bordered table-striped table-condensed table-hover center">
+					<thead>
+						<tr>
+							<td>#</td>
+							<td>
+								<h2>
+									<strong>二次編碼比對結果：共有 <span th:text="${number}"></span>
+										組相同
+									</strong>
+								</h2>
+							</td>
+						</tr>
+					</thead>
+					<tbody>
+
+						<tr th:each="pairs, iterationStatus : ${result}">
+							<td th:text="${iterationStatus.count}"></td>
+							<td th:text="${pairs}"></td>
+						</tr>
+
+					</tbody>
+				</table>
+				<div class="container" id="pages"></div>
 			</div>
-		</form>
 
-		<div th:if="${number >= 0}">
-			<div class="container" id="pages"></div>
-			<table
-				class="table table-responsive table-bordered table-striped table-condensed table-hover center">
-				<thead>
-					<tr>
-						<td>#</td>
-						<td>
-							<h2>
-								<strong>二次編碼比對結果：共有 <span th:text="${number}"></span>
-									組相同
-								</strong>
-							</h2>
-						</td>
-					</tr>
-				</thead>
-				<tbody>
-
-					<tr th:each="pairs, iterationStatus : ${result}">
-						<td th:text="${iterationStatus.count}"></td>
-						<td th:text="${pairs}"></td>
-					</tr>
-
-				</tbody>
-			</table>
-			<div class="container" id="pages"></div>
 		</div>
-
 	</div>
-
+	<th:block th:include="footer :: footer" class="container-fluid" />
 </body>
 </html>
