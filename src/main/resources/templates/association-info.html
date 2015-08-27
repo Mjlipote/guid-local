@@ -20,11 +20,28 @@
 			method="post"
 			th:action="@{${'/association/' + associationUserInfo.spguid }}">
 
+      <div class="form-group col-lg-12">
+          <label>姓名：</label><input type="text" class="form-control"
+            placeholder="姓名" name="name"
+            th:value="${associationUserInfo.name}" disabled="disabled" ></input>
+      </div>
+      
+            <div class="form-group col-lg-12">
+          <label>Subject ID：</label><input type="text" class="form-control"
+            placeholder="Subject ID" name="subjectId"
+            th:value="${associationUserInfo.subjectId}" disabled="disabled" ></input>
+      </div>
+      
+               <div class="form-group col-lg-12">
+          <label>病例編號：</label><input type="text" class="form-control"
+            placeholder="病歷編號（MRN）" name="mrn"
+            th:value="${associationUserInfo.mrn}"></input>
+      </div>
 
 			<div class="form-group col-lg-12">
 					<label>收案醫院：</label><input type="text" class="form-control"
 						placeholder="收案醫院" name="hospital"
-						th:value="${associationUserInfo.hospital}"></input>
+						th:value="${associationUserInfo.hospital}" ></input>
 			</div>
 
 			<div class="form-group col-lg-12">

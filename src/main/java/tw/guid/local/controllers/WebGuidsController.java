@@ -151,6 +151,15 @@ public class WebGuidsController {
 
         if (sg != null) {
           map.addAttribute("spguids", "(REPEAT): " + sg.getSpguid());
+          Association existAssociation =
+              associationRepo.findBySpguid(sg.getSpguid());
+          existAssociation.setMrn(mrn);
+          existAssociation.setHospital(hospital);
+          existAssociation.setDoctor(doctor);
+          existAssociation.setTelephone(telephone);
+          existAssociation.setAddress(address);
+          associationRepo.saveAndFlush(existAssociation);
+
           return "guids-new-result";
         } else {
 
