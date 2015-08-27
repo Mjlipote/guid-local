@@ -8,18 +8,16 @@
 <th:block th:include="head :: bootstrap" />
 <style type="text/css">
 </style>
-
+<th:block th:include="top :: navigation" />
 </head>
 
 <body>
 	<div id="wrap">
-		<th:block th:include="top :: navigation" />
 		<h1 class="text-center">編輯個人基本資料</h1>
-
-		<div class="container">
+		
+		<div id="wrap" class="container">
 			<form id="user-infoForm" class="col-md-6 col-md-offset-3"
 				method="post" th:action="@{${'/users/' + #authentication.name }}">
-
 
 				<div class="form-group col-lg-12">
 					<label>E-Mail：</label><input type="email" class="form-control"

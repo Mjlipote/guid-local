@@ -19,7 +19,6 @@
 	  height: 500px;
 	}
 </script>
-
 </head>
 
 <body>
@@ -27,7 +26,7 @@
 		<div class="jumbotron col-md-12">
 			<h1 class="text-center" th:inline="text">您好！
 				[[${#httpServletRequest.remoteUser}]]</h1>
-			<div class="container">
+			<div id="wrap" class="container">
 
 				<div id="carousel-example-generic" class="carousel slide"
 					data-ride="carousel">
