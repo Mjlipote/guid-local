@@ -37,13 +37,13 @@
 			th:action="@{/guids/new}">
 			<div class="form-group col-lg-12">
 
-				<label>姓名：</label> <input class="form-control" type="text"
-					name="name"></input>
+				<input class="form-control" type="text" name="name"
+					placeholder="姓名（請填寫全名）"></input>
 
 			</div>
 			<div class="form-group col-lg-12">
 
-				<label>性別：</label> <select data-toggle="select"
+				<select data-toggle="select"
 					class="form-control select select-primary mrs mbm" name="gender">
 					<option value="M">男</option>
 					<option value="F">女</option>
@@ -52,8 +52,8 @@
 			</div>
 
 			<div class="form-group col-lg-12 date">
-				<label>出生年月日：</label> <input type="text" class="form-control"
-					name="birthDay" />
+				<input type="text" class="form-control" name="birthDay"
+					placeholder="出生年/月/日" />
 
 
 				<script type="text/javascript">
@@ -74,15 +74,15 @@
 					});
 				</script>
 			</div>
-			<div class="form-group col-lg-12">
 
-				<label>身份證字號：</label><input class="form-control" type="text"
-					name="sid"></input>
+			<div class="form-group col-lg-12">
+				<input class="form-control" type="text" name="sid"
+					placeholder="身份證字號"></input>
 
 			</div>
 			<div class="form-group col-lg-12">
 
-				<input class="btn btn-primary btn-block btn-lg create"
+				<input class="btn btn-inverse btn-block btn-lg create"
 					value="產生二次編碼"></input>
 
 			</div>

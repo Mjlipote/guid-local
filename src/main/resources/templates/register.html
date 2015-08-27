@@ -19,7 +19,7 @@
 		<form class="col-md-6 col-md-offset-3" method="post"
 			th:action="@{/users/new}">
 			<div class="form-group col-lg-12">
-				<label>使用者權限</label>：<select data-toggle="select"
+				<select data-toggle="select"
 					class="form-control select select-primary mrs mbm" name="authority">
 					<option value="ROLE_ADMIN">系統管理者</option>
 					<option value="ROLE_USER">一般使用者</option>
@@ -27,51 +27,51 @@
 			</div>
 
 			<div class="form-group col-lg-12">
-				<label>姓名：</label><input class="form-control" type="text"
-					name="username"></input>
+				<input class="form-control" type="text" name="username"
+					placeholder="登入帳號"></input>
 
 			</div>
 			<div class="form-group col-lg-12">
-				<label>密碼：</label><input class="form-control" type="password"
-					placeholder="Password" name="password"></input>
+				<input class="form-control" type="password"
+					name="password" placeholder="密碼（Password"></input>
 			</div>
 
 			<div class="form-group col-lg-12">
-				<label>E-Mail：</label>
 				<div class="input-group">
 					<span class="input-group-addon">@</span><input type="email"
-						class="form-control" placeholder="Sample@mail.com" name="email"></input>
+						class="form-control" placeholder="E-Mail:Sample@mail.com"
+						name="email"></input>
 				</div>
 			</div>
 
 			<div class="form-group col-lg-12">
-				<label>單位：</label><input class="form-control" type="text"
-					placeholder="服務單位" name="institute"></input>
+				<input class="form-control" type="text"
+					name="institute" placeholder="服務單位"></input>
 			</div>
 
 			<div class="form-group col-lg-12">
-				<label>Prefix 值：</label><input class="form-control" type="text"
-					placeholder="Prefix" name="prefix"></input>
+				<input class="form-control" type="text"
+					name="prefix" placeholder="Prefix 值"></input>
 			</div>
 
 
 			<div class="form-group col-lg-12">
-				<label>工作職銜：</label><input class="form-control" type="text"
-					name="jobTitle"></input>
+				<input class="form-control" type="text" name="jobTitle"
+					placeholder="工作職銜"></input>
 			</div>
 
 			<div class="form-group col-lg-12">
-				<label>聯絡電話：</label><input class="form-control" type="text"
-					placeholder="0910xxxxxx" name="telephone"></input>
+				<input class="form-control" type="text"
+					placeholder="聯絡電話（例）：0910xxxxxx" name="telephone"></input>
 			</div>
 
 			<div class="form-group col-lg-12">
-				<label>聯絡住址：</label><input class="form-control" type="text"
-					name="address"></input>
+				<input class="form-control" type="text" name="address"
+					placeholder="聯絡住址"></input>
 			</div>
 
 			<div class="form-group col-lg-12">
-				<input class="btn btn-primary btn-block btn-lg" type="submit"
+				<input class="btn btn-inverse btn-block btn-lg" type="submit"
 					value="新增使用者"></input>
 			</div>
 

@@ -108,7 +108,7 @@
 			</div>
 
 			<div class="form-group">
-				<input class="btn btn-primary btn-block btn-sm" type="submit"
+				<input class="btn btn-inverse btn-block btn-sm" type="submit"
 					value="搜尋使用者"></input>
 			</div>
 		</div>
@@ -148,12 +148,8 @@
 							th:action="@{${'/users/' + accuntusers.username }}">
 							<input type="hidden" name="_method" value="DELETE" />
 							<button type="submit" name="${accuntusers.username}"
-								class="btn btn-block btn-sm btn-danger"><i class='glyphicon glyphicon-trash' th:text="刪除"></i></button>
-
-
-
-
-
+								class="btn btn-block btn-sm btn-danger">
+								<i class='glyphicon glyphicon-trash' th:text="刪除"></i></button>
 
 						</form>
 					</td>
