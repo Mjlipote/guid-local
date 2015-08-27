@@ -74,9 +74,13 @@ public class AssociationController {
       map.addAttribute("errorMessage", "請確實填寫必填資料，切勿留空值！！");
       return "error";
     } else if (!username.equals("super")) {
-      map.addAttribute("errorMessage", "填寫的帳號密碼有誤！！");
+      map.addAttribute("errorMessage", "填寫的帳號有誤！！");
       return "error";
-    } else if (username.equals("super") || HashcodeCreator.getSha512(password)
+    } else if (username.equals("super") && !HashcodeCreator.getSha512(password)
+        .equals(acctUserRepo.findByUsername(username).getPassword())) {
+      map.addAttribute("errorMessage", "填寫的密碼有誤！！");
+      return "error";
+    } else if (username.equals("super") && HashcodeCreator.getSha512(password)
         .equals(acctUserRepo.findByUsername(username).getPassword())) {
       return "redirect:/association";
     } else {
