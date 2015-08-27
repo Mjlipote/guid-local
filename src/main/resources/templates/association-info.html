@@ -4,7 +4,7 @@
 	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
 <head>
 <meta charset="UTF-8" />
-<title>編輯個人基本資料</title>
+<title>編輯受試者之通訊資料</title>
 <th:block th:include="head :: bootstrap" />
 <style type="text/css">
 </style>
@@ -13,43 +13,43 @@
 
 <body>
 	<th:block th:include="top :: navigation" />
-	<h1 class="text-center">編輯個人基本資料</h1>
+	<h1 class="text-center">編輯受試者之通訊資料</h1>
 
 	<div class="container">
-		<form id="user-infoForm" class="col-md-6 col-md-offset-3"
-			method="post" th:action="@{${'/users/' + #authentication.name }}">
+		<form id="association-infoForm" class="col-md-6 col-md-offset-3"
+			method="post"
+			th:action="@{${'/association/' + associationUserInfo.spguid }}">
 
 
 			<div class="form-group col-lg-12">
-				<label>E-Mail：</label><input type="email" class="form-control"
-					placeholder="Sample@mail.com" name="email"
-					th:value="${usersInfo.email}"></input>
-
+					<label>收案醫院：</label><input type="text" class="form-control"
+						placeholder="收案醫院" name="hospital"
+						th:value="${associationUserInfo.hospital}"></input>
 			</div>
 
 			<div class="form-group col-lg-12">
-				<label>工作職銜：</label><input class="form-control" type="text"
-					name="jobTitle" th:value="${usersInfo.jobTitle}"></input>
+				<label>收案醫師：</label><input class="form-control" type="text"
+					name="doctor" th:value="${associationUserInfo.doctor}"></input>
 
 			</div>
 			<div class="form-group col-lg-12">
 				<label>聯絡電話：</label><input class="form-control" type="text"
 					placeholder="0910xxxxxx" name="telephone"
-					th:value="${usersInfo.telephone}"></input>
+					th:value="${associationUserInfo.telephone}"></input>
 
 			</div>
 			<div class="form-group col-lg-12">
 				<label>聯絡住址：</label><input class="form-control" type="text"
-					name="address" th:value="${usersInfo.address}"></input> <input
+					name="address" th:value="${associationUserInfo.address}"></input> <input
 					type="hidden" name="_method" value="PUT" />
 			</div>
-			<div class="form-group col-lg-12 user-info">
-				<input class="btn btn-inverse btn-block btn-lg" value="編輯個人資料"></input>
+			<div class="form-group col-lg-12 association-info">
+				<input class="btn btn-inverse btn-block btn-lg" value="編輯聯絡資料"></input>
 			</div>
 		</form>
 
 		<script type="text/javascript">
-			$('.user-info').click(function() {
+			$('.association-info').click(function() {
 				swal({
 					title : "確定編輯完成？",
 					type : "warning",
@@ -58,7 +58,7 @@
 					confirmButtonText : 'YES',
 					closeOnConfirm : true
 				}, function() {
-					$('#user-infoForm').submit();
+					$('#association-infoForm').submit();
 				});
 			});
 		</script>

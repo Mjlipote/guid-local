@@ -20,6 +20,7 @@
  */
 package tw.guid.local.controllers;
 
+import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.collect.Lists.newArrayList;
 
 import java.io.FileInputStream;
@@ -52,10 +53,13 @@ import tw.edu.ym.guid.client.field.TWNationalId;
 import tw.guid.local.helper.HttpActionHelper;
 import tw.guid.local.models.Action;
 import tw.guid.local.models.CustomAuthenticationProvider;
+import tw.guid.local.models.Gender;
 import tw.guid.local.models.RestfulAudit;
 import tw.guid.local.models.SubprimeGuidRequest;
+import tw.guid.local.models.entity.Association;
 import tw.guid.local.models.entity.SubprimeGuid;
 import tw.guid.local.models.repo.AccountUsersRepository;
+import tw.guid.local.models.repo.AssociationRepository;
 import tw.guid.local.models.repo.SubprimeGuidRepository;
 import tw.guid.local.util.NameSplitter;
 import tw.guid.local.validateion.BirthdayValidator;
@@ -75,6 +79,8 @@ public class WebGuidsController {
   AccountUsersRepository acctUserRepo;
   @Autowired
   CustomAuthenticationProvider customAuthenticationProvider;
+  @Autowired
+  AssociationRepository associationRepo;
 
   /**
    * 網頁版產生 GUID
@@ -95,11 +101,25 @@ public class WebGuidsController {
   String guidsNew(ModelMap map, @RequestParam(value = "gender") String gender,
       @RequestParam(value = "birthDay") String birthDay,
       @RequestParam(value = "sid") String sid,
-      @RequestParam(value = "name") String name)
+      @RequestParam(value = "name") String name,
+      @RequestParam(value = "subjectId") String subjectId,
+      @RequestParam(value = "mrn") String mrn,
+      @RequestParam(value = "hospital") String hospital,
+      @RequestParam(value = "doctor") String doctor,
+      @RequestParam(value = "telephone") String telephone,
+      @RequestParam(value = "address") String address)
           throws FileNotFoundException, IOException {
 
-    if (birthDay.equals("")) {
-      map.addAttribute("errorMessage", "請確實填寫資料，切勿留空值！！");
+    checkNotNull(gender, "gender can't be null");
+    checkNotNull(birthDay, "birthDay can't be null");
+    checkNotNull(sid, "sid can't be null");
+    checkNotNull(name, "name can't be null");
+    checkNotNull(subjectId, "subjectId can't be null");
+    checkNotNull(mrn, "mrn can't be null");
+
+    if (birthDay.equals("") || gender.equals("") || sid.equals("")
+        || name.equals("") || subjectId.equals("") || mrn.equals("")) {
+      map.addAttribute("errorMessage", "請確實填寫必填資料，切勿留空值！！");
       return "error";
     } else {
       String[] birthday = birthDay.split("/");
@@ -109,10 +129,7 @@ public class WebGuidsController {
       BirthdayValidator birthdayValidator =
           new BirthdayValidator(birthOfYear, birthOfMonth, birthOfDay);
 
-      if (gender.equals("") || sid.equals("") || name.equals("")) {
-        map.addAttribute("errorMessage", "請確實填寫資料，切勿留空值！！");
-        return "error";
-      } else if (!birthdayValidator.isValidate()) {
+      if (!birthdayValidator.isValidate()) {
         map.addAttribute("errorMessage", birthdayValidator.getMeg());
         return "error";
       } else {
@@ -166,6 +183,23 @@ public class WebGuidsController {
           spGuid.setHashcode3(pii.getHashcodes().get(2));
           spGuid.setPrefix(prefix);
           subprimeGuidRepo.save(spGuid);
+
+          Association association = new Association();
+          association.setSpguid(flattenJson.get("[0].spguid").toString());
+          association.setSubjectId(subjectId);
+          association.setMrn(mrn);
+          association.setName(name);
+          association.setSid(sid);
+          association.setBirthOfYear(Integer.valueOf(birthday[0]));
+          association.setBirthOfMonth(Integer.valueOf(birthday[1]));
+          association.setBirthOfDay(Integer.valueOf(birthday[2]));
+          association
+              .setGender(gender.equals("M") ? Gender.MALE : Gender.FEMALE);
+          association.setHospital(hospital);
+          association.setDoctor(doctor);
+          association.setTelephone(telephone);
+          association.setAddress(address);
+          associationRepo.save(association);
 
           return "guids-new-result";
         }

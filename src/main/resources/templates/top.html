@@ -32,6 +32,7 @@
 						<li><a th:href="@{/users}">使用者清單<span class="badge"></span></a></li>
 						<li><a th:href="@{/register}">新增使用者</a></li>
 					</ul></li>
+				<li sec:authorize="hasRole('ROLE_ADMIN')"><a th:href="@{/association/login}">關聯比對表</a></li>
 				<li><a th:href="@{https://www.cims.tw/}">關於我們</a></li>
 				<li><a th:href="@{#}">使用教學</a></li>
 			</ul>

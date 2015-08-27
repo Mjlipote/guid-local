@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>Spring Security</title>
+<th:block th:include="head :: bootstrap" />
+<style type="text/css">
+</style>
+<script src="http://s.codepen.io/assets/libs/modernizr.js"
+	type="text/javascript"></script>
+<link rel="stylesheet" href="/login/css/style.css"></link>
+</head>
+<body>
+	<h1>關聯比對驗證</h1>
+	<div class="inner-screen">
+				<form class="form" th:action="@{/association}" method="post">
+					<input type="text" class="zocial-dribbble" name="username"
+						placeholder=" 第二組驗證者帳號" /> <input type="text"
+						class="zocial-dribbble" name="password" placeholder="第二組驗證者密碼" />
+					<input type="submit" value="確定" /> <a href="">忘記密碼？</a>
+				</form>
+			</div>
+
+</body>
+</html>

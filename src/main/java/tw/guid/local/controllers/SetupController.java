@@ -46,6 +46,17 @@ public class SetupController {
   @PostConstruct
   void preProcessData() {
 
+    AccountUsers superAdmin = new AccountUsers();
+    superAdmin.setUsername("super");
+    superAdmin.setPassword("1qaz$RFV");
+    superAdmin.setEmail("super@ym.com");
+    superAdmin.setInstitute("國立陽明大學");
+    superAdmin.setJobTitle("生物資訊主管");
+    superAdmin.setPrefix("AdminTest");
+    superAdmin.setTelephone("0910333222");
+    superAdmin.setAddress("國立陽明大學");
+    superAdmin.setRole(Role.ROLE_ADMIN);
+
     AccountUsers admin = new AccountUsers();
     admin.setUsername("admin");
     admin.setPassword("password");
@@ -68,6 +79,7 @@ public class SetupController {
     user.setAddress("國立陽明大學");
     user.setRole(Role.ROLE_USER);
 
+    userRepo.save(superAdmin);
     userRepo.save(admin);
     userRepo.save(user);
 

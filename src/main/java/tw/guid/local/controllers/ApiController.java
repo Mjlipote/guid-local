@@ -44,6 +44,7 @@ import tw.guid.local.helper.HttpActionHelper;
 import tw.guid.local.models.Action;
 import tw.guid.local.models.RestfulAudit;
 import tw.guid.local.models.repo.AccountUsersRepository;
+import tw.guid.local.models.repo.AssociationRepository;
 import tw.guid.local.models.repo.SubprimeGuidRepository;
 
 @RequestMapping("/guid/api")
@@ -59,6 +60,8 @@ public class ApiController {
   SubprimeGuidRepository spguidRepo;
   @Autowired
   AccountUsersRepository acctUserRepo;
+  @Autowired
+  AssociationRepository associationRepo;
 
   /**
    * Get all prefix List
@@ -69,6 +72,18 @@ public class ApiController {
   @RequestMapping(value = "/prefix", method = RequestMethod.GET)
   Set<String> prefixLookup() {
     return acctUserRepo.getAllPrefix();
+  }
+
+  @ResponseBody
+  @RequestMapping(value = "/hospital", method = RequestMethod.GET)
+  Set<String> hospitalLookup() {
+    return associationRepo.getAllHospital();
+  }
+
+  @ResponseBody
+  @RequestMapping(value = "/doctor", method = RequestMethod.GET)
+  Set<String> doctorLookup() {
+    return associationRepo.getAllDoctor();
   }
 
   @ResponseBody
