@@ -27,13 +27,15 @@
 				</div>
 
 				<div class="form-group col-lg-12">
-					<input class="form-control" type="text" name="username"
-						placeholder="登入帳號"></input>
+					<input class="form-control"
+						onkeyup="value=value.replace(/[^-_a-zA-Z0-9]/g,'')" type="text"
+						name="username" placeholder="登入帳號"></input>
 
 				</div>
 				<div class="form-group col-lg-12">
-					<input class="form-control" type="password" name="password"
-						placeholder="密碼（Password）"></input>
+					<input class="form-control"
+						onkeyup="value=value.replace(/[^-_a-zA-Z0-9]/g,'')" type="password"
+						name="password" placeholder="登入密碼（Password）"></input>
 				</div>
 
 				<div class="form-group col-lg-12">
@@ -50,8 +52,9 @@
 				</div>
 
 				<div class="form-group col-lg-12">
-					<input class="form-control" type="text" name="prefix"
-						placeholder="Prefix 值"></input>
+					<input class="form-control"
+						onkeyup="value=value.replace(/[^-_a-zA-Z0-9]/g,'')" type="text"
+						name="prefix" placeholder="Prefix 值"></input>
 				</div>
 
 
@@ -61,7 +64,8 @@
 				</div>
 
 				<div class="form-group col-lg-12">
-					<input class="form-control" type="text"
+					<input class="form-control"
+						onkeyup="value=value.replace(/[^-_0-9]/g,'')" type="text"
 						placeholder="聯絡電話（例）：0910xxxxxx" name="telephone"></input>
 				</div>
 

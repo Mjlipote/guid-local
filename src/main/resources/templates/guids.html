@@ -76,20 +76,23 @@
 				</div>
 
 				<div class="form-group col-lg-12">
-					<input class="form-control" type="text" name="sid"
-						placeholder="身份證字號（必填）"></input>
+					<input class="form-control"
+						onkeyup="value=value.replace(/[^A-Z0-9]/g,'')" type="text"
+						name="sid" placeholder="身份證字號（必填）"></input>
 
 				</div>
 
 				<div class="form-group col-lg-6">
-					<input class="form-control" type="text" name="subjectId"
-						placeholder="Subject ID（必填）"></input>
+					<input class="form-control"
+						onkeyup="value=value.replace(/[^-_a-zA-Z0-9]/g,'')" type="text"
+						name="subjectId" placeholder="Subject ID（必填）"></input>
 
 				</div>
 
 				<div class="form-group col-lg-6">
-					<input class="form-control" type="text" name="mrn"
-						placeholder="病歷編號 (MRN，必填)"></input>
+					<input class="form-control"
+						onkeyup="value=value.replace(/[^-_a-zA-Z0-9]/g,'')" type="text"
+						name="mrn" placeholder="病歷編號 (MRN，必填)"></input>
 
 				</div>
 
@@ -106,8 +109,9 @@
 				</div>
 
 				<div class="form-group col-lg-6">
-					<input class="form-control" type="text" name="telephone"
-						placeholder="聯絡電話"></input>
+					<input class="form-control"
+						onkeyup="value=value.replace(/[^-_0-9]/g,'')" type="text"
+						name="telephone" placeholder="聯絡電話"></input>
 
 				</div>
 
@@ -127,11 +131,11 @@
 			<script type="text/javascript">
 			$('.create').click(function() {
 				swal({
-					title : "確定已填寫完畢？",
+					title : "確定填寫完畢？",
 					type : "info",
 					showCancelButton : true,
 					confirmButtonClass : 'btn-info',
-					confirmButtonText : '是的',
+					confirmButtonText : 'YES',
 					closeOnConfirm : true
 				}, function() {
 					$('#createForm').submit();

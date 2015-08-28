@@ -119,18 +119,21 @@
 
 				<div class="form-group">
 					<label class="sr-only">Subject ID：</label><input
-						class="form-control" type="text" name="subjectId"
-						placeholder="Subject ID"></input>
+						class="form-control"
+						onkeyup="value=value.replace(/[^-_a-zA-Z0-9]/g,'')" type="text"
+						name="subjectId" placeholder="Subject ID"></input>
 				</div>
 				<div class="form-group">
 					<label class="sr-only">病例編號 (MRN)：</label><input
-						class="form-control" type="text" name="mrn"
-						placeholder="病例編號 (MRN)"></input>
+						class="form-control"
+						onkeyup="value=value.replace(/[^-_a-zA-Z0-9]/g,'')" type="text"
+						name="mrn" placeholder="病例編號 (MRN)"></input>
 				</div>
 
 				<div class="form-group">
 					<label class="sr-only">聯絡電話：</label><input class="form-control"
-						type="text" name="telephone" placeholder="聯絡電話"></input>
+						type="text" onkeyup="value=value.replace(/[^-_0-9]/g,'')"
+						name="telephone" placeholder="聯絡電話"></input>
 				</div>
 				<div class="form-group">
 					<label class="sr-only">聯絡地址：</label><input class="form-control"

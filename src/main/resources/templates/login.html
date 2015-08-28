@@ -16,10 +16,13 @@
 	<div class="text-center" th:if="${param.logout}">您已進行登出</div>
 	<div class="inner-screen">
 		<form class="form" th:action="@{/login}" method="post">
-			<input type="text" class="zocial-dribbble" name="username"
-				placeholder=" 請輸入您的帳號" /> <input type="text"
-				class="zocial-dribbble" name="password" placeholder="請輸入您的密碼" /> <input
-				type="submit" value="登入" /> <a href="">忘記密碼？</a>
+			<input type="text"
+				onkeyup="value=value.replace(/[^-_a-zA-Z0-9]/g,'')"
+				class="zocial-dribbble" name="username" placeholder=" 請輸入您的帳號" /> <input
+				type="password" 
+				onkeyup="value=value.replace(/[^-_a-zA-Z0-9]/g,'')" name="password"
+				placeholder="請輸入您的密碼" /> <input type="submit" value="登入" /> <a
+				href="">忘記密碼？</a>
 		</form>
 	</div>
 </body>
