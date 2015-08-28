@@ -93,7 +93,7 @@
 				<div class="form-group col-md-4">
 					<label class="sr-only">收案醫院：</label><select data-toggle="select"
 						class="form-control select select-primary mrs mbm" name="hospital">
-						<option value="">Prefix</option>
+						<option value="">收案醫院</option>
 						<th:block th:each="hospital : ${hospitals}">
 							<option th:value="${hospital}" th:text="${hospital}"></option>
 						</th:block>
@@ -103,7 +103,7 @@
 				<div class="form-group col-md-4">
 					<label class="sr-only">收案醫師：</label><select data-toggle="select"
 						class="form-control select select-primary mrs mbm" name="doctor">
-						<option value="">服務單位</option>
+						<option value="">收案醫師</option>
 						<th:block th:each="doctor : ${doctors}">
 							<option th:value="${doctor}" th:text="${doctor}"></option>
 						</th:block>

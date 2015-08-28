@@ -54,8 +54,10 @@ public class WebAssociationController {
   AccountUsersRepository acctUserRepo;
 
   @RequestMapping("")
-  String association(ModelMap map) {
+  String associationList(ModelMap map) {
     map.addAttribute("associationUsers", associationRepo.findAll());
+    map.addAttribute("hospitals", associationRepo.getAllHospital());
+    map.addAttribute("doctors", associationRepo.getAllDoctor());
     return "association";
   }
 
