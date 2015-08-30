@@ -100,6 +100,11 @@
 			<artifactId>rubycollect4j</artifactId>
 			<version>1.8.1</version>
 		</dependency>
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi</artifactId>
+			<version>3.12</version>
+		</dependency>
 	</dependencies>
 
 	<properties>
