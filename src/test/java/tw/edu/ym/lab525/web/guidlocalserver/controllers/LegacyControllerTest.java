@@ -24,21 +24,17 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.Properties;
 
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.boot.test.WebIntegrationTest;
+import org.springframework.core.env.Environment;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import tw.edu.ym.guid.client.GuidClient;
@@ -71,26 +67,14 @@ public class LegacyControllerTest {
         });
   }
 
-  private static final Logger log =
-      LoggerFactory.getLogger(LegacyControllerTest.class);
+  @Autowired
+  Environment env;
 
   @Autowired
   SubprimeGuidRepository subprimeGuidRepo;
 
-  private static String localServerUrl;
-
-  @Before
-  public void setUp() {
-    Properties prop = new Properties();
-    try {
-      prop.load(new FileInputStream("serverhost.properties"));
-      localServerUrl = prop.getProperty("local_server_url");
-    } catch (FileNotFoundException e) {
-      log.error(e.getMessage(), e);
-    } catch (IOException e) {
-      log.error(e.getMessage(), e);
-    }
-  }
+  @Value("${local_server_url}")
+  String localServerUrl;
 
   @Test
   public void testAuthentication() throws IOException, URISyntaxException {

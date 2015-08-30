@@ -23,18 +23,21 @@ package tw.guid.local.controllers;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.collect.Lists.newArrayList;
 
-import java.io.FileInputStream;
+import java.io.ByteArrayInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Map;
-import java.util.Properties;
 
+import org.apache.poi.openxml4j.exceptions.OpenXML4JException;
+import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.env.Environment;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -42,9 +45,11 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.github.wnameless.json.flattener.JsonFlattener;
+import com.github.wnameless.workbookaccessor.WorkbookReader;
 
 import tw.edu.ym.guid.client.PII;
 import tw.edu.ym.guid.client.field.Birthday;
@@ -81,6 +86,11 @@ public class WebGuidsController {
   CustomAuthenticationProvider customAuthenticationProvider;
   @Autowired
   AssociationRepository associationRepo;
+  @Autowired
+  Environment env;
+
+  @Value("${central_server_url}")
+  String centralServerUrl;
 
   /**
    * 網頁版產生 GUID
@@ -107,8 +117,7 @@ public class WebGuidsController {
       @RequestParam(value = "hospital") String hospital,
       @RequestParam(value = "doctor") String doctor,
       @RequestParam(value = "telephone") String telephone,
-      @RequestParam(value = "address") String address)
-          throws FileNotFoundException, IOException {
+      @RequestParam(value = "address") String address) {
 
     checkNotNull(gender, "gender can't be null");
     checkNotNull(birthDay, "birthDay can't be null");
@@ -170,14 +179,10 @@ public class WebGuidsController {
           sgr.setPrefix(prefix);
           sgrs.add(sgr);
 
-          Properties prop = new Properties();
-          prop.load(new FileInputStream("serverhost.properties"));
-
           Map<String, Object> flattenJson = null;
           try {
             flattenJson = JsonFlattener.flattenAsMap(HttpActionHelper
-                .toPost(new URI(prop.getProperty("central_server_url")),
-                    Action.NEW, sgrs, false)
+                .toPost(new URI(centralServerUrl), Action.NEW, sgrs, false)
                 .getBody());
           } catch (JsonProcessingException e) {
             log.error(e.getMessage(), e);
@@ -218,6 +223,19 @@ public class WebGuidsController {
     }
   }
 
+  @RequestMapping(value = "/batchcomparison", method = RequestMethod.POST)
+  String guidsBatchComparison(ModelMap map,
+      @RequestParam("file") MultipartFile file)
+          throws IOException, OpenXML4JException {
+
+    WorkbookReader reader = WorkbookReader.open(
+        WorkbookFactory.create(new ByteArrayInputStream(file.getBytes())));
+
+    // 待補
+
+    return "comparison";
+  }
+
   /**
    * 在 Web 進行二次編碼比對
    * 
@@ -251,13 +269,10 @@ public class WebGuidsController {
       for (String s : str) {
         list.add(s);
       }
-      Properties prop = new Properties();
-      prop.load(new FileInputStream("serverhost.properties"));
 
       Map<String, Object> flattenJson =
           JsonFlattener.flattenAsMap(HttpActionHelper
-              .toPost(new URI(prop.getProperty("central_server_url")),
-                  Action.COMPARISON, list, false)
+              .toPost(new URI(centralServerUrl), Action.COMPARISON, list, false)
               .getBody());
 
       List<List<String>> lls = newArrayList();

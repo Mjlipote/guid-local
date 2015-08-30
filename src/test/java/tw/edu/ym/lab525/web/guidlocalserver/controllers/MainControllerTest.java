@@ -22,20 +22,18 @@ package tw.edu.ym.lab525.web.guidlocalserver.controllers;
 
 import static org.junit.Assert.assertEquals;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Properties;
 
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.boot.test.WebIntegrationTest;
+import org.springframework.core.env.Environment;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -49,14 +47,14 @@ import tw.guid.local.models.Action;
 @WebIntegrationTest
 public class MainControllerTest {
 
-  private String centralServerUrl;
+  @Autowired
+  Environment env;
 
-  @Before
-  public void setUp() throws FileNotFoundException, IOException {
-    Properties prop = new Properties();
-    prop.load(new FileInputStream("serverhost.properties"));
-    centralServerUrl = prop.getProperty("central_server_url");
-  }
+  @Value("${local_server_url}")
+  String localServerUrl;
+
+  @Value("${central_server_url}")
+  String centralServerUrl;
 
   @Test
   public void testComparison()

@@ -25,21 +25,18 @@ import static net.sf.rubycollect4j.RubyCollections.hp;
 import static net.sf.rubycollect4j.RubyCollections.ra;
 import static org.springframework.http.HttpStatus.UNAUTHORIZED;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map.Entry;
-import java.util.Properties;
 
 import javax.servlet.http.HttpServletRequest;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -70,15 +67,17 @@ public class LegacyGuidClientController {
 
   @Autowired
   AccountUsersRepository acctUserRepo;
-
   @Autowired
   CustomAuthenticationProvider customAuthenticationProvider;
-
   @Autowired
   SubprimeGuidRepository subprimeGuidRepo;
-
   @Autowired
   RestfulAudit restfulAudit;
+  @Autowired
+  Environment env;
+
+  @Value("${central_server_url}")
+  String centralServerUrl;
 
   private static final Logger log =
       LoggerFactory.getLogger(LegacyGuidClientController.class);
@@ -92,13 +91,9 @@ public class LegacyGuidClientController {
   @RequestMapping(value = "/create", method = RequestMethod.POST)
   @ResponseBody
   String create(@RequestParam("prefix") String prefix,
-      @RequestParam("hashes") String jsonHashes, HttpServletRequest request)
-          throws URISyntaxException, FileNotFoundException, IOException {
+      @RequestParam("hashes") String jsonHashes, HttpServletRequest request) {
 
     if (!isValidate(request)) throw new GuidException(UNAUTHORIZED);
-
-    Properties prop = new Properties();
-    prop.load(new FileInputStream("serverhost.properties"));
 
     if (prefix.equals("") && isValidate(request)) {
       prefix = getPrefixFromCurrentLoginUser(request);
@@ -124,11 +119,10 @@ public class LegacyGuidClientController {
         String result = null;
 
         try {
-          result =
-              (String) JsonFlattener.flattenAsMap(HttpActionHelper
-                  .toPost(new URI(prop.getProperty("central_server_url")),
-                      Action.NEW, Arrays.asList(bs.getValue()), false)
-                  .getBody()).get("[0].spguid");
+          result = (String) JsonFlattener
+              .flattenAsMap(HttpActionHelper.toPost(new URI(centralServerUrl),
+                  Action.NEW, Arrays.asList(bs.getValue()), false).getBody())
+              .get("[0].spguid");
         } catch (Exception e) {
           log.error(e.getMessage(), e);
         }

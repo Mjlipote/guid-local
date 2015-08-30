@@ -22,18 +22,14 @@ package tw.guid.local.controllers;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.sql.SQLException;
-import java.util.Properties;
 import java.util.Set;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.env.Environment;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -51,9 +47,6 @@ import tw.guid.local.models.repo.SubprimeGuidRepository;
 @RestController
 public class ApiController {
 
-  private static final Logger log =
-      LoggerFactory.getLogger(ApiController.class);
-
   @Autowired
   RestfulAudit restfulAudit;
   @Autowired
@@ -62,6 +55,11 @@ public class ApiController {
   AccountUsersRepository acctUserRepo;
   @Autowired
   AssociationRepository associationRepo;
+  @Autowired
+  Environment env;
+
+  @Value("${central_server_url}")
+  String centralServerUrl;
 
   /**
    * Get all prefix List
@@ -90,19 +88,9 @@ public class ApiController {
   @RequestMapping(value = "/validation", method = RequestMethod.GET)
   boolean validation(@RequestParam(value = "spguid") String spguid)
       throws URISyntaxException {
-    Properties prop = new Properties();
-    try {
-      prop.load(new FileInputStream("serverhost.properties"));
-    } catch (FileNotFoundException e) {
-      log.error(e.getMessage(), e);
-    } catch (IOException e) {
-      log.error(e.getMessage(), e);
-    }
 
-    return HttpActionHelper
-        .toGet(new URI(prop.getProperty("central_server_url")),
-            Action.VALIDATION, "?spguid=" + spguid, false)
-        .getBody().equals("true") ? true : false;
+    return HttpActionHelper.toGet(new URI(centralServerUrl), Action.VALIDATION,
+        "?spguid=" + spguid, false).getBody().equals("true") ? true : false;
   }
 
   /**
@@ -129,21 +117,10 @@ public class ApiController {
         hashcode3).size() > 0) {
       return true;
     } else {
-      Properties prop = new Properties();
-      try {
-        prop.load(new FileInputStream("serverhost.properties"));
-      } catch (FileNotFoundException e) {
-        log.error(e.getMessage(), e);
-      } catch (IOException e) {
-        log.error(e.getMessage(), e);
-      }
-      return HttpActionHelper
-          .toGet(new URI(prop.getProperty("central_server_url")),
-              Action.EXISTENCE,
-              "?hashcode1=" + hashcode1 + "&hashcode2=" + hashcode2
-                  + "&hashcode3=" + hashcode3,
-              false)
-          .getBody().equals("true") ? true : false;
+      return HttpActionHelper.toGet(new URI(centralServerUrl),
+          Action.EXISTENCE, "?hashcode1=" + hashcode1 + "&hashcode2="
+              + hashcode2 + "&hashcode3=" + hashcode3,
+          false).getBody().equals("true") ? true : false;
     }
 
   }
