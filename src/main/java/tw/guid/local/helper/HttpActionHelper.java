@@ -35,7 +35,7 @@ import org.springframework.web.client.RestTemplate;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import tw.guid.local.models.Action;
+import tw.guid.local.model.Action;
 
 public final class HttpActionHelper {
 

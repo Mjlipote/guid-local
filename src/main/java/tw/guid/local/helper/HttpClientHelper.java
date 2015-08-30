@@ -36,7 +36,7 @@ import org.apache.http.message.BasicNameValuePair;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
-import tw.guid.local.models.Action;
+import tw.guid.local.model.Action;
 import wmw.util.InputStreamUtil;
 
 public final class HttpClientHelper {
