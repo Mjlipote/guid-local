@@ -52,6 +52,11 @@ public class MainController {
     return "comparison";
   }
 
+  @RequestMapping("/batch/comparison")
+  String guidsBatchComparison() {
+    return "batch-comparison";
+  }
+
   @RequestMapping("/remove")
   String usersRemove() {
     return "users-remove";

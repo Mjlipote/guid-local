@@ -223,17 +223,52 @@ public class WebGuidsController {
     }
   }
 
-  @RequestMapping(value = "/batchcomparison", method = RequestMethod.POST)
+  @RequestMapping(value = "/batch/comparison", method = RequestMethod.POST)
   String guidsBatchComparison(ModelMap map,
       @RequestParam("file") MultipartFile file)
-          throws IOException, OpenXML4JException {
+          throws IOException, OpenXML4JException, URISyntaxException {
 
-    WorkbookReader reader = WorkbookReader.open(
-        WorkbookFactory.create(new ByteArrayInputStream(file.getBytes())));
+    if (!file.getOriginalFilename().endsWith("xlsx")
+        && !file.getOriginalFilename().endsWith("xls")) {
+      map.addAttribute("errorMessage", "上傳檔案必須為 Excel (.xlsx 或 .xls)");
+      map.addAttribute("link", "/batch/comparison");
+      return "error";
+    } else {
 
-    // 待補
+      WorkbookReader reader = WorkbookReader.open(
+          WorkbookFactory.create(new ByteArrayInputStream(file.getBytes())));
 
-    return "comparison";
+      List<String> list = newArrayList();
+
+      for (List<String> str : reader.withoutHeader().toLists()) {
+        list.addAll(str);
+      }
+
+      if (!isValidateLength(list)) {
+        map.addAttribute("errorMessage", "填寫值不是 GUID 的標準格式，請您再次確認！！");
+        map.addAttribute("link", "/batch/comparison");
+        return "error";
+      } else {
+        Map<String, Object> flattenJson = JsonFlattener
+            .flattenAsMap(HttpActionHelper.toPost(new URI(centralServerUrl),
+                Action.COMPARISON, list, false).getBody());
+
+        List<List<String>> lls = newArrayList();
+
+        for (int i = 0; i < flattenJson.size(); i++) {
+          List<String> ls = newArrayList();
+          for (int j = 0; j < flattenJson.size(); j++) {
+            if (flattenJson.get("[" + i + "]" + "[" + j + "]") != null) {
+              ls.add(flattenJson.get("[" + i + "]" + "[" + j + "]").toString());
+            }
+          }
+          if (ls.size() > 0) lls.add(ls);
+        }
+        map.addAttribute("result", lls);
+        map.addAttribute("number", lls.size());
+        return "batch-comparison";
+      }
+    }
   }
 
   /**
@@ -291,6 +326,19 @@ public class WebGuidsController {
 
       return "comparison";
     }
+  }
+
+  private boolean isValidateLength(List<String> spguids) {
+    for (String s : spguids) {
+      if (!s.contains("-")) {
+        return false;
+      } else if (s.toUpperCase().split("-")[1].length() != 8) {
+        return false;
+      } else {
+        return true;
+      }
+    }
+    return true;
   }
 
   private boolean isValidateLength(String spguid) {

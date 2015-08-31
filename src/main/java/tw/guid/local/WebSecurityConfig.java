@@ -39,10 +39,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
   @Override
   protected void configure(HttpSecurity http) throws Exception {
     http.authorizeRequests()
-        .antMatchers("/register", "/comparison", "/remove", "/users",
-            "/association", "/association/*")
+        .antMatchers("/register", "/comparison", "/batch/comparison", "/remove",
+            "/users", "/association", "/association/*")
         .hasAuthority("ROLE_ADMIN")
-        .antMatchers("/*", "/users/*", "/users/changepassword/*")
+        .antMatchers("/*", "/guids/*", "/users/*", "/users/changepassword/*")
         .hasAnyAuthority("ROLE_ADMIN", "ROLE_USER").antMatchers("/guid/**/*")
         .permitAll().and().formLogin().loginPage("/login").permitAll().and()
         .logout().permitAll();
