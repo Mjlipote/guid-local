@@ -18,7 +18,7 @@
 			<a class="btn btn-default col-md-6" th:href="@{/home}" th:text="回首頁"></a>
 			<a class="btn btn-inverse col-md-6" th:href="@{${link}}" th:text="繼續"></a>
 		</div>
+		<th:block th:include="footer :: footer" class="container-fluid" />
 	</div>
-	<th:block th:include="footer :: footer" class="container-fluid" />
 </body>
 </html>

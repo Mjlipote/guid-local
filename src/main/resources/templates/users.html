@@ -116,9 +116,8 @@
 			</div>
 		</form>
 
-		<div class="container" id="pages"></div>
-
-		<div>
+		<div id="wrap">
+			<div class="container" id="pages"></div>
 			<table
 				class="table table-responsive table-bordered table-striped table-condensed table-hover">
 				<thead>
@@ -161,9 +160,11 @@
 
 				</tbody>
 			</table>
+
+			<div class="container" id="pages"></div>
 		</div>
-		<div class="container" id="pages"></div>
+
+		<th:block th:include="footer :: footer" class="container-fluid" />
 	</div>
-	<th:block th:include="footer :: footer" class="container-fluid" />
 </body>
 </html>
