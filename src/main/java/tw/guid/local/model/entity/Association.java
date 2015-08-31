@@ -44,7 +44,7 @@ public class Association extends AbstractPersistable<Long>
   @Column(unique = true, nullable = false)
   private String spguid;
 
-  @Column(unique = true, nullable = false)
+  @Column(nullable = false)
   private String subjectId;
 
   @Column(nullable = false)

@@ -22,9 +22,9 @@ package tw.guid.local.model;
 
 public enum Action {
 
-  NEW("new"), AUTHENTICATION("authentication"), EXISTENCE("existence"),
+  NEW(""), AUTHENTICATION("authentication"), EXISTENCE("existence"),
   COMPARISON("comparison"), VALIDATION("validation"), USERS("users"),
-  GUIDS_NEW("guids/new"), GUIDS_COMPARISON("guids/comparison"),
+  GUIDS_NEW("guids"), GUIDS_COMPARISON("guids/comparison"),
   API_USERS("api/users"), API_EXISTENCE("api/existence"),
   API_VALIDATION("api/validation"), API_PREFIX("api/prefix");
 

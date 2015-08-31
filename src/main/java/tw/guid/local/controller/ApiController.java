@@ -20,11 +20,7 @@
  */
 package tw.guid.local.controller;
 
-import static com.google.common.base.Preconditions.checkNotNull;
-
-import java.net.URI;
 import java.net.URISyntaxException;
-import java.sql.SQLException;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,12 +32,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import tw.guid.local.helper.HttpActionHelper;
-import tw.guid.local.model.Action;
 import tw.guid.local.model.RestfulAudit;
 import tw.guid.local.model.repo.AccountUsersRepository;
 import tw.guid.local.model.repo.AssociationRepository;
 import tw.guid.local.model.repo.SubprimeGuidRepository;
+import tw.guid.local.model.service.ApiService;
 
 @RequestMapping("/guid/api")
 @RestController
@@ -56,32 +51,29 @@ public class ApiController {
   @Autowired
   AssociationRepository associationRepo;
   @Autowired
+  ApiService apiService;
+  @Autowired
   Environment env;
 
   @Value("${central_server_url}")
   String centralServerUrl;
 
-  /**
-   * Get all prefix List
-   * 
-   * @return
-   */
   @ResponseBody
   @RequestMapping(value = "/prefix", method = RequestMethod.GET)
   Set<String> prefixLookup() {
-    return acctUserRepo.getAllPrefix();
+    return apiService.prefixLookup();
   }
 
   @ResponseBody
   @RequestMapping(value = "/hospital", method = RequestMethod.GET)
   Set<String> hospitalLookup() {
-    return associationRepo.getAllHospital();
+    return apiService.hospitalLookup();
   }
 
   @ResponseBody
   @RequestMapping(value = "/doctor", method = RequestMethod.GET)
   Set<String> doctorLookup() {
-    return associationRepo.getAllDoctor();
+    return apiService.doctorLookup();
   }
 
   @ResponseBody
@@ -89,39 +81,15 @@ public class ApiController {
   boolean validation(@RequestParam(value = "spguid") String spguid)
       throws URISyntaxException {
 
-    return HttpActionHelper.toGet(new URI(centralServerUrl), Action.VALIDATION,
-        "?spguid=" + spguid, false).getBody().equals("true") ? true : false;
+    return apiService.validation(spguid);
   }
 
-  /**
-   * 確認是否存在於 local server 資料庫
-   * 
-   * @param hashcode1
-   * @param hashcode2
-   * @param hashcode3
-   * @return
-   * @throws SQLException
-   * @throws URISyntaxException
-   */
   @RequestMapping(value = "/existence", method = RequestMethod.GET)
   boolean existence(@RequestParam("hashcode1") String hashcode1,
       @RequestParam("hashcode2") String hashcode2,
-      @RequestParam("hashcode3") String hashcode3)
-          throws SQLException, URISyntaxException {
+      @RequestParam("hashcode3") String hashcode3) throws URISyntaxException {
 
-    checkNotNull(hashcode1, "hashcode1 can't be null");
-    checkNotNull(hashcode2, "hashcode2 can't be null");
-    checkNotNull(hashcode3, "hashcode3 can't be null");
-
-    if (spguidRepo.findByHashcode1AndHashcode2AndHashcode3(hashcode1, hashcode2,
-        hashcode3).size() > 0) {
-      return true;
-    } else {
-      return HttpActionHelper.toGet(new URI(centralServerUrl),
-          Action.EXISTENCE, "?hashcode1=" + hashcode1 + "&hashcode2="
-              + hashcode2 + "&hashcode3=" + hashcode3,
-          false).getBody().equals("true") ? true : false;
-    }
+    return apiService.existence(hashcode1, hashcode2, hashcode3);
 
   }
 

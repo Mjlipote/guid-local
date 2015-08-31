@@ -107,7 +107,7 @@ public class WebGuidsController {
    * @throws URISyntaxException
    * @throws IOException
    */
-  @RequestMapping(value = "/new", method = RequestMethod.POST)
+  @RequestMapping(method = RequestMethod.POST)
   String guidsNew(ModelMap map, @RequestParam(value = "gender") String gender,
       @RequestParam(value = "birthDay") String birthDay,
       @RequestParam(value = "sid") String sid,
@@ -169,7 +169,7 @@ public class WebGuidsController {
           existAssociation.setAddress(address);
           associationRepo.saveAndFlush(existAssociation);
 
-          return "guids-new-result";
+          return "guids-result";
         } else {
 
           List<SubprimeGuidRequest> sgrs = newArrayList();
@@ -217,7 +217,7 @@ public class WebGuidsController {
           association.setAddress(address);
           associationRepo.save(association);
 
-          return "guids-new-result";
+          return "guids-result";
         }
       }
     }
