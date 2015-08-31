@@ -62,7 +62,8 @@
 
 			<form class="col-md-8 col-md-offset-2" enctype="multipart/form-data"
 				method="post" th:action="@{/guids/batch/comparison}">
-				<input name="file" type="file"></input>
+				<input name="file" type="file"
+					accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"></input>
 				<div class="col-md-6 col-md-offset-3">
 					<input class="btn btn-inverse btn-block btn-lg" type="submit"
 						value="批次比對"></input>
