@@ -4,25 +4,44 @@
 	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
 <th:block th:fragment="footer" class="container-fluid">
 	<style type="text/css">
-html, body, #wrap {height: 100%;}
-body > #wrap {height: auto; height: 100%; min-height: 100%;}
-#main {padding-bottom: 100px;}  /* 必须使用和footer相同的高度 */
+html, body, #wrap {
+	height: 100%;
+}
+
+body>#wrap {
+	height: auto;
+	min-height: 100%;
+}
+
+#main {
+	padding-bottom: 150px;
+} /* 必须使用和footer相同的高度 */
 #footer {
-position: relative;
- margin-top: -200px; /* footer高度的负值 */
- height:100px;
- clear:both;
- }
- .clearfix:after {
- content: ".";
- display: block;
- height: 0;
- clear: both;
- visibility: hidden;
- }
-.clearfix {display: inline-block;}
-* html .clearfix { height: 1%;}
-.clearfix {display: block;}
+	position: relative;
+	margin-top: -150px; /* footer高度的负值 */
+	height: 150px;
+	clear: both;
+}
+
+.clearfix:after {
+	content: ".";
+	display: block;
+	height: 0;
+	clear: both;
+	visibility: hidden;
+}
+
+.clearfix {
+	display: inline-block;
+}
+
+* html .clearfix {
+	height: 1%;
+}
+
+.clearfix {
+	display: block;
+}
 </style>
 
 

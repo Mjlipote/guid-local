@@ -15,7 +15,7 @@
 	<div id="wrap">
 		<h1 class="text-center">編輯個人基本資料</h1>
 
-		<div id="wrap" class="container">
+		<div id="main" class="container">
 			<form id="user-infoForm" class="col-md-6 col-md-offset-3"
 				method="post" th:action="@{${'/users/' + #authentication.name }}">
 
@@ -63,7 +63,7 @@
 				});
 			</script>
 		</div>
-		<th:block th:include="footer :: footer" class="container-fluid" />
 	</div>
+	<th:block th:include="footer :: footer" class="container-fluid" />
 </body>
 </html>

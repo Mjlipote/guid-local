@@ -76,8 +76,7 @@
 <body>
 	<div id="wrap">
 		<h1 class="text-center">編碼關聯表</h1>
-
-
+<div id="main">
 		<form class="form-inline col-md-8 col-md-offset-2" method="get"
 			th:action="@{/association/lookup}" role="form">
 			<div class="row">
@@ -147,11 +146,9 @@
 			</div>
 		</form>
 
-
-
 		<div class="container" id="pages"></div>
 
-		<div id="wrap">
+		
 			<table
 				class="table table-responsive table-bordered table-striped table-condensed table-hover">
 				<thead>
@@ -201,8 +198,8 @@
 			</table>
 
 			<div class="container" id="pages"></div>
-		</div>
-		<th:block th:include="footer :: footer" class="container-fluid" />
 	</div>
+	</div>
+	<th:block th:include="footer :: footer" class="container-fluid" />
 </body>
 </html>

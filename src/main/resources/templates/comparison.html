@@ -58,7 +58,7 @@
 	<div id="wrap">
 
 		<h1 class="text-center">比對二次編碼</h1>
-		<div id="wrap" class="container">
+		<div id="main" class="container">
 
 			<form class="col-md-8 col-md-offset-2" method="post"
 				th:action="@{/guids/comparison}">
@@ -104,7 +104,8 @@
 				<div class="container" id="pages"></div>
 			</div>
 		</div>
-		<th:block th:include="footer :: footer" class="container-fluid" />
 	</div>
+	<th:block th:include="footer :: footer" class="container-fluid" />
+
 </body>
 </html>

@@ -32,7 +32,7 @@
 	<div id="wrap">
 		<h1 class="text-center">輸入 PII</h1>
 
-		<div id="wrap" class="container">
+		<div id="main" class="container">
 			<form id="createForm" class="col-lg-12" method="post"
 				th:action="@{/guids}">
 				<div class="form-group col-lg-12">
@@ -190,7 +190,7 @@
 							});
 		</script>
 		</div>
-		<th:block th:include="footer :: footer" class="container-fluid" />
 	</div>
+	<th:block th:include="footer :: footer" class="container-fluid" />
 </body>
 </html>

@@ -58,7 +58,7 @@
 	<div id="wrap">
 
 		<h1 class="text-center">二次編碼批次比對</h1>
-		<div id="wrap" class="container">
+		<div id="main" class="container">
 
 			<form class="col-md-8 col-md-offset-2" enctype="multipart/form-data"
 				method="post" th:action="@{/guids/batch/comparison}">
@@ -99,7 +99,8 @@
 			</div>
 
 		</div>
-		<th:block th:include="footer :: footer" class="container-fluid" />
 	</div>
+	<th:block th:include="footer :: footer" class="container-fluid" />
+
 </body>
 </html>
