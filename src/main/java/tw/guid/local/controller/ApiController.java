@@ -32,7 +32,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import tw.guid.local.model.RestfulAudit;
 import tw.guid.local.model.repo.AccountUsersRepository;
 import tw.guid.local.model.repo.AssociationRepository;
 import tw.guid.local.model.repo.SubprimeGuidRepository;
@@ -42,8 +41,6 @@ import tw.guid.local.model.service.ApiService;
 @RestController
 public class ApiController {
 
-  @Autowired
-  RestfulAudit restfulAudit;
   @Autowired
   SubprimeGuidRepository spguidRepo;
   @Autowired

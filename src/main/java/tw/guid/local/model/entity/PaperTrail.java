@@ -1,9 +1,9 @@
 /**
  *
- * @author Wei-Ming Wu
+ * @author Ming-Jheng Li
  *
  *
- * Copyright 2014 Wei-Ming Wu
+ * Copyright 2015 Ming-Jheng Li
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -18,13 +18,15 @@
  * the License.
  *
  */
-package tw.guid.local.model.repo;
+package tw.guid.local.model.entity;
 
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
+import javax.persistence.Entity;
 
-import tw.guid.local.model.entity.RestfulAuditTrail;
+import com.github.wnameless.spring.papertrail.AbstractJpaPaperTrail;
 
-@Repository
-public interface RestfulAuditTrailRepository
-    extends JpaRepository<RestfulAuditTrail, Long> {}
+@Entity
+public class PaperTrail extends AbstractJpaPaperTrail {
+
+  private static final long serialVersionUID = 1L;
+
+}

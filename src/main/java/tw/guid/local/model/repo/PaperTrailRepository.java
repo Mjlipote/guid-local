@@ -18,23 +18,11 @@
  * the License.
  *
  */
-package tw.guid.local;
+package tw.guid.local.model.repo;
 
-import org.springframework.context.annotation.Configuration;
-import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
-
-import com.github.wnameless.spring.papertrail.EnablePaperTrail;
+import com.github.wnameless.spring.papertrail.PaperTrailCrudRepository;
 
 import tw.guid.local.model.entity.PaperTrail;
 
-@EnablePaperTrail(PaperTrail.class)
-@Configuration
-public class MvcConfig extends WebMvcConfigurerAdapter {
-
-  @Override
-  public void addViewControllers(ViewControllerRegistry registry) {
-    registry.addViewController("/").setViewName("home");
-  }
-
-}
+public interface PaperTrailRepository
+    extends PaperTrailCrudRepository<PaperTrail, Long> {}

@@ -49,7 +49,6 @@ import tw.guid.local.helper.HttpActionHelper;
 import tw.guid.local.model.Action;
 import tw.guid.local.model.CustomAuthenticationProvider;
 import tw.guid.local.model.GuidException;
-import tw.guid.local.model.RestfulAudit;
 import tw.guid.local.model.SubprimeGuidRequest;
 import tw.guid.local.model.entity.AccountUsers;
 import tw.guid.local.model.entity.SubprimeGuid;
@@ -64,8 +63,6 @@ public class LegacyServiceImpl implements LegacyService {
   CustomAuthenticationProvider customAuthenticationProvider;
   @Autowired
   SubprimeGuidRepository subprimeGuidRepo;
-  @Autowired
-  RestfulAudit restfulAudit;
   @Autowired
   Environment env;
 

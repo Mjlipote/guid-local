@@ -68,6 +68,11 @@
 			<version>1.2.1</version>
 		</dependency>
 		<dependency>
+			<groupId>com.github.wnameless</groupId>
+			<artifactId>spring-paper-trail</artifactId>
+			<version>0.1.0</version>
+		</dependency>
+		<dependency>
 			<groupId>tw.edu.ym.guid</groupId>
 			<artifactId>guid-client</artifactId>
 			<version>1.3.1</version>

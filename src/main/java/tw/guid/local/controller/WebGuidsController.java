@@ -59,7 +59,6 @@ import tw.guid.local.helper.HttpActionHelper;
 import tw.guid.local.model.Action;
 import tw.guid.local.model.CustomAuthenticationProvider;
 import tw.guid.local.model.Gender;
-import tw.guid.local.model.RestfulAudit;
 import tw.guid.local.model.SubprimeGuidRequest;
 import tw.guid.local.model.entity.Association;
 import tw.guid.local.model.entity.SubprimeGuid;
@@ -76,8 +75,6 @@ public class WebGuidsController {
   private static final Logger log =
       LoggerFactory.getLogger(WebGuidsController.class);
 
-  @Autowired
-  RestfulAudit restfulAudit;
   @Autowired
   SubprimeGuidRepository subprimeGuidRepo;
   @Autowired
