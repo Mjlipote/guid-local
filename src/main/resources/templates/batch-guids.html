@@ -62,8 +62,10 @@
 
 			<form class="col-md-8 col-md-offset-2" enctype="multipart/form-data"
 				method="post" th:action="@{/guids/batch}">
-				<input name="file" type="file"
-					accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"></input>
+				<span class="btn btn-default btn-file col-md-6 col-md-offset-3">
+					<input name="file" type="file"
+						accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"></input>
+				</span>
 				<div class="col-md-6 col-md-offset-3">
 					<input class="btn btn-inverse btn-block btn-lg" type="submit"
 						value="批次產生"></input>
@@ -79,7 +81,9 @@
 							<td>#</td>
 							<td>
 								<h2>
-									<strong>二次編碼批次產生結果：共產生 <span th:text="${number}"></span>
+									<strong>
+										二次編碼批次產生結果：共產生
+										<span th:text="${number}"></span>
 										組
 									</strong>
 								</h2>
