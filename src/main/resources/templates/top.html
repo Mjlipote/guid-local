@@ -21,11 +21,11 @@
 					aria-expanded="false">GUID 管理<span class="caret"></span></a>
 					<ul class="dropdown-menu">
 						<li><a th:href="@{/guids}">產生 GUID<span class="badge"></span></a></li>
-						<li><a th:href="@{/guids/batch}">批次產生 GUID<span class="badge"></span></a></li>
+						<li><a th:href="@{/guids/batch}">批次產生 GUIDs<span class="badge"></span></a></li>
 						<li><a sec:authorize="hasRole('ROLE_ADMIN')"
-							th:href="@{/comparison}">二次編碼比對</a></li>
+							th:href="@{/comparison}">比對 GUIDs</a></li>
 							<li><a sec:authorize="hasRole('ROLE_ADMIN')"
-              th:href="@{/batch/comparison}">批次二次編碼比對</a></li>
+              th:href="@{/batch/comparison}">批次比對 GUIDs</a></li>
 					</ul></li>
 				<li class="dropdown" sec:authorize="hasRole('ROLE_ADMIN')"><a
 					href="#" class="dropdown-toggle" data-toggle="dropdown"
