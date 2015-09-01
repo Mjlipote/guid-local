@@ -124,7 +124,15 @@ public class WebGuidController {
       List<String> correctGuids = newArrayList();
 
       for (Map<String, String> row : reader.toMaps()) {
-        if (!BatchSubprimeGuidCreator.isEmptyOnEachRow(row)) {
+        if (BatchSubprimeGuidCreator.isEmptyOnEachRow(row)) {
+          map.addAttribute("errorMessage", "填寫的欄位不可有空格");
+          map.addAttribute("link", "/guids/batch");
+          return "error";
+        } else if (!BatchSubprimeGuidCreator.isValidateSocialId(row)) {
+          map.addAttribute("errorMessage", "請填入合法的身份證字號");
+          map.addAttribute("link", "/guids/batch");
+          return "error";
+        } else {
           PII pii = BatchSubprimeGuidCreator.rowToPII(row);
           SubprimeGuid sg =
               subprimeGuidRepo.findByHashcode1AndHashcode2AndHashcode3AndPrefix(
@@ -184,10 +192,6 @@ public class WebGuidController {
             association.setDoctor(row.get("Dr"));
             associationRepo.save(association);
           }
-        } else {
-          map.addAttribute("errorMessage", "填寫的欄位不可有空格");
-          map.addAttribute("link", "/guids/batch");
-          return "error";
         }
       }
 

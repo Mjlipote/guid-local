@@ -60,9 +60,16 @@ public class BatchSubprimeGuidCreator {
         || row.get("FULLNAME").isEmpty() || row.get("MOB").isEmpty()
         || row.get("DOB").isEmpty() || row.get("YOB").isEmpty()
         || row.get("GIID").isEmpty() || row.get("GIIDCOUNTRY").isEmpty()
-        || row.get("SEX").isEmpty()
-        || (!TWNationalIdValidator.validate(row.get("GIID"))
-            && row.get("GIIDCOUNTRY").equals("TW"))) {
+        || row.get("SEX").isEmpty()) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  public static boolean isValidateSocialId(Map<String, String> row) {
+    if (TWNationalIdValidator.validate(row.get("GIID"))
+        && row.get("GIIDCOUNTRY").equals("TW")) {
       return true;
     } else {
       return false;
