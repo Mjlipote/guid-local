@@ -44,7 +44,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import net.sf.rubycollect4j.RubyArray;
-import tw.guid.local.entity.AccountUsers;
+import tw.guid.local.entity.AccountUser;
 import tw.guid.local.entity.SubprimeGuid;
 import tw.guid.local.helper.HashcodeCreator;
 import tw.guid.local.helper.HttpActionHelper;
@@ -159,7 +159,7 @@ public class LegacyServiceImpl implements LegacyService {
     return sgrs;
   }
 
-  private AccountUsers getAccountUsers(HttpServletRequest request) {
+  private AccountUser getAccountUsers(HttpServletRequest request) {
     String base64Credentials = request.getHeader("Authorization");
     String credentials = new String(BaseEncoding.base64()
         .decode(base64Credentials.replaceFirst("^Basic\\s+", "")));

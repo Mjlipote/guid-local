@@ -38,7 +38,7 @@ import tw.guid.local.helper.HashcodeCreator;
 import tw.guid.local.web.Role;
 
 @Entity
-public class AccountUsers extends AbstractPersistable<Long> {
+public class AccountUser extends AbstractPersistable<Long> {
 
   private static final long serialVersionUID = 1L;
 
@@ -70,7 +70,7 @@ public class AccountUsers extends AbstractPersistable<Long> {
   @Column(nullable = true)
   private String address;
 
-  public AccountUsers() {}
+  public AccountUser() {}
 
   /**
    * @return the username
@@ -211,8 +211,8 @@ public class AccountUsers extends AbstractPersistable<Long> {
   @Override
   public boolean equals(final Object other) {
     if (this == other) return true;
-    if (!(other instanceof AccountUsers)) return false;
-    AccountUsers castOther = (AccountUsers) other;
+    if (!(other instanceof AccountUser)) return false;
+    AccountUser castOther = (AccountUser) other;
     return Objects.equals(username, castOther.username)
         && Objects.equals(password, castOther.password)
         && Objects.equals(email, castOther.email)

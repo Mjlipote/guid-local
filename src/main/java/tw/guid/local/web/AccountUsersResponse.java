@@ -27,7 +27,7 @@ import java.util.Objects;
 
 import com.google.common.base.MoreObjects;
 
-import tw.guid.local.entity.AccountUsers;
+import tw.guid.local.entity.AccountUser;
 
 public final class AccountUsersResponse {
 
@@ -50,10 +50,10 @@ public final class AccountUsersResponse {
   private AccountUsersResponse() {}
 
   public static List<AccountUsersResponse> getResponse(
-      List<AccountUsers> accountusers) {
+      List<AccountUser> accountusers) {
     List<AccountUsersResponse> aurs = newArrayList();
 
-    for (AccountUsers au : accountusers) {
+    for (AccountUser au : accountusers) {
       AccountUsersResponse aur = new AccountUsersResponse();
       aur.username = au.getUsername();
       aur.prefix = au.getPrefix();

@@ -30,31 +30,31 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
-import tw.guid.local.entity.AccountUsers;
+import tw.guid.local.entity.AccountUser;
 import tw.guid.local.web.Role;
 
 public interface AccountUsersRepository extends
-    JpaRepository<AccountUsers, Long>, JpaSpecificationExecutor<AccountUsers> {
+    JpaRepository<AccountUser, Long>, JpaSpecificationExecutor<AccountUser> {
 
   // 一組
-  public AccountUsers findByUsername(String username);
+  public AccountUser findByUsername(String username);
 
-  public Page<AccountUsers> findByUsername(String username, Pageable pageable);
+  public Page<AccountUser> findByUsername(String username, Pageable pageable);
 
-  public Set<AccountUsers> findByInstitute(String institute);
+  public Set<AccountUser> findByInstitute(String institute);
 
-  public Set<AccountUsers> findByRole(Role role);
+  public Set<AccountUser> findByRole(Role role);
 
-  public Set<AccountUsers> findByPassword(String password);
+  public Set<AccountUser> findByPassword(String password);
 
-  public Set<AccountUsers> findByPrefix(String prefix);
+  public Set<AccountUser> findByPrefix(String prefix);
 
-  public Page<AccountUsers> findByRole(Role role, Pageable pageable);
+  public Page<AccountUser> findByRole(Role role, Pageable pageable);
 
   public default Set<String> getAllPrefix() {
     Set<String> prefixSet = newHashSet();
 
-    for (AccountUsers acctUser : findAll()) {
+    for (AccountUser acctUser : findAll()) {
       prefixSet.add(acctUser.getPrefix());
     }
     return prefixSet;
@@ -63,32 +63,32 @@ public interface AccountUsersRepository extends
   public default Set<String> getAllInstitute() {
     Set<String> instituteSet = newHashSet();
 
-    for (AccountUsers acctUser : findAll()) {
+    for (AccountUser acctUser : findAll()) {
       instituteSet.add(acctUser.getInstitute());
     }
     return instituteSet;
   }
 
   // 兩組
-  public AccountUsers findByUsernameAndPassword(String username,
+  public AccountUser findByUsernameAndPassword(String username,
       String password);
 
-  public AccountUsers findByUsernameAndRole(String username, Role role);
+  public AccountUser findByUsernameAndRole(String username, Role role);
 
-  public Page<AccountUsers> findByUsernameAndRole(String username, Role role,
+  public Page<AccountUser> findByUsernameAndRole(String username, Role role,
       Pageable pageable);
 
-  public Page<AccountUsers> findByRoleAndPrefix(Role role, String prefix,
+  public Page<AccountUser> findByRoleAndPrefix(Role role, String prefix,
       Pageable pageable);
 
-  public Page<AccountUsers> findByUsernameAndPrefix(String username,
+  public Page<AccountUser> findByUsernameAndPrefix(String username,
       String prefix, Pageable pageable);
 
   // 三組
-  public Page<AccountUsers> findByUsernameAndRoleAndPrefix(String username,
+  public Page<AccountUser> findByUsernameAndRoleAndPrefix(String username,
       Role role, String prefix, Pageable pageable);
 
-  public AccountUsers findByUsernameAndPasswordAndRole(String username,
+  public AccountUser findByUsernameAndPasswordAndRole(String username,
       String password, Role role);
 
 }

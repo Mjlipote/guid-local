@@ -35,7 +35,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import tw.guid.local.entity.AccountUsers;
+import tw.guid.local.entity.AccountUser;
 import tw.guid.local.helper.HashcodeCreator;
 import tw.guid.local.repository.AccountUsersRepository;
 import tw.guid.local.repository.SubprimeGuidRepository;
@@ -86,7 +86,7 @@ public class WebUsersController {
       @Param("email") String email, @Param("telephone") String telephone,
       @Param("address") String address) {
 
-    List<AccountUsers> acctUsers = acctUserRepo.findAll((root, query, cb) -> {
+    List<AccountUser> acctUsers = acctUserRepo.findAll((root, query, cb) -> {
       Predicate finalPredicate = cb.and();
 
       if (username != null && !username.equals("")) {
@@ -153,7 +153,7 @@ public class WebUsersController {
       map.addAttribute("link", "/users");
       return "error";
     } else {
-      AccountUsers acctUser =
+      AccountUser acctUser =
           acctUserRepo.findByUsernameAndRole(username, Role.ROLE_USER);
 
       acctUserRepo.delete(acctUser);
@@ -201,7 +201,7 @@ public class WebUsersController {
       map.addAttribute("link", "/register");
       return "error";
     } else {
-      AccountUsers user = new AccountUsers();
+      AccountUser user = new AccountUser();
       user.setUsername(checkNotNull(username));
       user.setPassword(checkNotNull(password));
       user.setInstitute(checkNotNull(institute));
@@ -247,7 +247,7 @@ public class WebUsersController {
   String usersGetPersonalInfo(ModelMap map,
       @PathVariable("username") String username) {
 
-    AccountUsers acctUser = acctUserRepo.findByUsername(username);
+    AccountUser acctUser = acctUserRepo.findByUsername(username);
 
     map.addAttribute("usersInfo", acctUser);
     return "users-info";
@@ -274,7 +274,7 @@ public class WebUsersController {
       map.addAttribute("link", "/users/" + "username");
       return "error";
     } else {
-      AccountUsers acctUser = acctUserRepo.findByUsername(username);
+      AccountUser acctUser = acctUserRepo.findByUsername(username);
 
       acctUser.setEmail(email);
       acctUser.setJobTitle(jobTitle);
@@ -311,7 +311,7 @@ public class WebUsersController {
       map.addAttribute("link", "/users/changepassword");
       return "error";
     } else {
-      AccountUsers acctUser = acctUserRepo.findByUsername(username);
+      AccountUser acctUser = acctUserRepo.findByUsername(username);
       acctUser.setPassword(newpassword);
       acctUserRepo.saveAndFlush(acctUser);
       map.addAttribute("successMessage",

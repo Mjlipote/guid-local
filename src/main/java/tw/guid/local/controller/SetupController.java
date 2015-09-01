@@ -25,7 +25,7 @@ import javax.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
-import tw.guid.local.entity.AccountUsers;
+import tw.guid.local.entity.AccountUser;
 import tw.guid.local.entity.SubprimeGuid;
 import tw.guid.local.repository.AccountUsersRepository;
 import tw.guid.local.repository.SubprimeGuidRepository;
@@ -46,7 +46,7 @@ public class SetupController {
   @PostConstruct
   void preProcessData() {
 
-    AccountUsers superAdmin = new AccountUsers();
+    AccountUser superAdmin = new AccountUser();
     superAdmin.setUsername("super");
     superAdmin.setPassword("1qaz$RFV");
     superAdmin.setEmail("super@ym.com");
@@ -57,7 +57,7 @@ public class SetupController {
     superAdmin.setAddress("國立陽明大學");
     superAdmin.setRole(Role.ROLE_ADMIN);
 
-    AccountUsers admin = new AccountUsers();
+    AccountUser admin = new AccountUser();
     admin.setUsername("admin");
     admin.setPassword("password");
     admin.setEmail("admin@ym.com");
@@ -68,7 +68,7 @@ public class SetupController {
     admin.setAddress("國立陽明大學");
     admin.setRole(Role.ROLE_ADMIN);
 
-    AccountUsers user = new AccountUsers();
+    AccountUser user = new AccountUser();
     user.setUsername("user");
     user.setPassword("password");
     user.setEmail("user@ym.com");
