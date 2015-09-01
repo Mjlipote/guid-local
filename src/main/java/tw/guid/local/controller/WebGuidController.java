@@ -31,6 +31,7 @@ import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.openxml4j.exceptions.OpenXML4JException;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.slf4j.Logger;
@@ -58,6 +59,7 @@ import tw.edu.ym.guid.client.field.TWNationalId;
 import tw.guid.local.entity.Association;
 import tw.guid.local.entity.Association.Gender;
 import tw.guid.local.entity.SubprimeGuid;
+import tw.guid.local.helper.BatchSubprimeGuidCreator;
 import tw.guid.local.helper.HttpActionHelper;
 import tw.guid.local.repository.AccountUsersRepository;
 import tw.guid.local.repository.AssociationRepository;
@@ -70,10 +72,10 @@ import tw.guid.local.web.SubprimeGuidRequest;
 
 @RequestMapping("/guids")
 @Controller
-public class WebGuidsController {
+public class WebGuidController {
 
   private static final Logger log =
-      LoggerFactory.getLogger(WebGuidsController.class);
+      LoggerFactory.getLogger(WebGuidController.class);
 
   @Autowired
   SubprimeGuidRepository subprimeGuidRepo;
@@ -88,6 +90,112 @@ public class WebGuidsController {
 
   @Value("${central_server_url}")
   String centralServerUrl;
+
+  /**
+   * 網頁版批次產生 GUID
+   * 
+   * @param map
+   * @param file
+   * @return
+   * @throws IOException
+   * @throws InvalidFormatException
+   */
+  @RequestMapping(value = "/batch", method = RequestMethod.POST)
+  String guidsBatchNew(ModelMap map, @RequestParam("file") MultipartFile file)
+      throws OpenXML4JException, IOException {
+    if (!file.getOriginalFilename().endsWith("xlsx")
+        && !file.getOriginalFilename().endsWith("xls")) {
+      map.addAttribute("errorMessage", "上傳檔案必須為 Excel (.xlsx 或 .xls)");
+      map.addAttribute("link", "/guids/batch");
+      return "error";
+    } else {
+      WorkbookReader reader = WorkbookReader.open(
+          WorkbookFactory.create(new ByteArrayInputStream(file.getBytes())));
+
+      if (!BatchSubprimeGuidCreator.isContainsItem(reader)) {
+        map.addAttribute("errorMessage", "上傳檔案內的標頭格式有誤");
+        map.addAttribute("link", "/guids/batch");
+        return "error";
+      }
+
+      Authentication auth =
+          SecurityContextHolder.getContext().getAuthentication();
+      String prefix = acctUserRepo.findByUsername(auth.getName()).getPrefix();
+      List<String> correctGuids = newArrayList();
+
+      for (Map<String, String> row : reader.toMaps()) {
+        if (!BatchSubprimeGuidCreator.isEmptyOnEachRow(row)) {
+          PII pii = BatchSubprimeGuidCreator.rowToPII(row);
+          SubprimeGuid sg =
+              subprimeGuidRepo.findByHashcode1AndHashcode2AndHashcode3AndPrefix(
+                  pii.getHashcodes().get(0), pii.getHashcodes().get(1),
+                  pii.getHashcodes().get(2), prefix);
+
+          if (sg != null) {
+            correctGuids.add(sg.getSpguid());
+            Association existAssociation =
+                associationRepo.findBySpguid(sg.getSpguid());
+            existAssociation.setMrn(row.get("MRN"));
+            existAssociation.setHospital(row.get("HP"));
+            existAssociation.setDoctor(row.get("Dr"));
+            associationRepo.saveAndFlush(existAssociation);
+          } else {
+
+            List<SubprimeGuidRequest> sgrs = newArrayList();
+            SubprimeGuidRequest sgr = new SubprimeGuidRequest();
+
+            sgr.setGuidHash(pii.getHashcodes());
+            sgr.setPrefix(prefix);
+            sgrs.add(sgr);
+
+            Map<String, Object> flattenJson = null;
+            try {
+              flattenJson = JsonFlattener.flattenAsMap(HttpActionHelper
+                  .toPost(new URI(centralServerUrl), Action.NEW, sgrs, false)
+                  .getBody());
+            } catch (JsonProcessingException e) {
+              log.error(e.getMessage(), e);
+            } catch (URISyntaxException e) {
+              log.error(e.getMessage(), e);
+            }
+
+            correctGuids.add(flattenJson.get("[0].spguid").toString());
+
+            SubprimeGuid spGuid = new SubprimeGuid();
+            spGuid.setSpguid(flattenJson.get("[0].spguid").toString());
+            spGuid.setHashcode1(pii.getHashcodes().get(0));
+            spGuid.setHashcode2(pii.getHashcodes().get(1));
+            spGuid.setHashcode3(pii.getHashcodes().get(2));
+            spGuid.setPrefix(prefix);
+            subprimeGuidRepo.save(spGuid);
+
+            Association association = new Association();
+            association.setSpguid(flattenJson.get("[0].spguid").toString());
+            association.setSubjectId(row.get("SUBJECTID"));
+            association.setMrn(row.get("MRN"));
+            association.setName(row.get("FULLNAME"));
+            association.setSid(row.get("GIID"));
+            association.setBirthOfYear(Integer.valueOf(row.get("YOB")));
+            association.setBirthOfMonth(Integer.valueOf(row.get("MOB")));
+            association.setBirthOfDay(Integer.valueOf(row.get("DOB")));
+            association.setGender(
+                row.get("SEX").equals("M") ? Gender.MALE : Gender.FEMALE);
+            association.setHospital(row.get("HP"));
+            association.setDoctor(row.get("Dr"));
+            associationRepo.save(association);
+          }
+        } else {
+          map.addAttribute("errorMessage", "填寫的欄位不可有空格");
+          map.addAttribute("link", "/guids/batch");
+          return "error";
+        }
+      }
+
+      map.addAttribute("number", correctGuids.size());
+      map.addAttribute("spguids", correctGuids);
+      return "batch-guids";
+    }
+  }
 
   /**
    * 網頁版產生 GUID
@@ -159,6 +267,7 @@ public class WebGuidsController {
           map.addAttribute("spguids", "(REPEAT): " + sg.getSpguid());
           Association existAssociation =
               associationRepo.findBySpguid(sg.getSpguid());
+          existAssociation.setSubjectId(subjectId);
           existAssociation.setMrn(mrn);
           existAssociation.setHospital(hospital);
           existAssociation.setDoctor(doctor);
@@ -238,7 +347,13 @@ public class WebGuidsController {
       List<String> list = newArrayList();
 
       for (List<String> str : reader.withoutHeader().toLists()) {
-        list.addAll(str);
+        if (!str.contains("")) {
+          list.addAll(str);
+        } else {
+          map.addAttribute("errorMessage", "上傳檔案內容欄位不可空白");
+          map.addAttribute("link", "/batch/comparison");
+          return "error";
+        }
       }
 
       if (!isValidateLength(list)) {

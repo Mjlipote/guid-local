@@ -44,7 +44,7 @@ import tw.guid.local.web.Role;
 
 @RequestMapping("/users")
 @Controller
-public class WebUsersController {
+public class WebUserController {
 
   @Autowired
   SubprimeGuidRepository subprimeGuidRepo;

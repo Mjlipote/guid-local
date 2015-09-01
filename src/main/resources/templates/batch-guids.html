@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8" />
+<title>二次編碼批次產生</title>
+<th:block th:include="head :: bootstrap" />
+<style type="text/css">
+</style>
+<link rel="stylesheet" href="/simplePagination.css"></link>
+<script src="/jquery.simplePagination.js"></script>
+<th:block th:include="top :: navigation" />
+<script type="text/javascript">
+	$(function() {
+		var items = $("table tbody tr");
+		var numItems = items.length;
+		var perPage = 5;
+		items.slice(perPage).hide();
+
+		$(pages).pagination({
+
+			items : numItems,
+			itemsOnPage : perPage,
+			cssStyle : "light-theme",
+
+			onPageClick : function(pageNumber) {
+
+				var showFrom = perPage * (pageNumber - 1);
+				var showTo = showFrom + perPage;
+
+				items.hide() // first hide everything, then show for the new page
+				.slice(showFrom, showTo).show();
+			}
+		});
+		var checkFragment = function() {
+			// if there's no hash, make sure we go to page 1
+			var hash = window.location.hash || "#page-1";
+
+			// we'll use regex to check the hash string
+			hash = hash.match(/^#page-(\d+)$/);
+
+			if (hash)
+				// the selectPage function is described in the documentation
+				// we've captured the page number in a regex group: (\d+)
+				$(pages).pagination("selectPage", parseInt(hash[1]));
+		};
+
+		// we'll call this function whenever the back/forward is pressed
+		$(window).bind("popstate", checkFragment);
+
+		// and we'll also call it to check right now!
+		checkFragment();
+	});
+</script>
+</head>
+
+<body>
+	<div id="wrap">
+
+		<h1 class="text-center">二次編碼批次產生</h1>
+		<div id="main" class="container">
+
+			<form class="col-md-8 col-md-offset-2" enctype="multipart/form-data"
+				method="post" th:action="@{/guids/batch}">
+				<input name="file" type="file"
+					accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"></input>
+				<div class="col-md-6 col-md-offset-3">
+					<input class="btn btn-inverse btn-block btn-lg" type="submit"
+						value="批次產生"></input>
+				</div>
+			</form>
+
+			<div th:if="${number >= 0}">
+				<div class="container" id="pages"></div>
+				<table
+					class="table table-responsive table-bordered table-striped table-condensed table-hover center">
+					<thead>
+						<tr>
+							<td>#</td>
+							<td>
+								<h2>
+									<strong>二次編碼批次產生結果：共產生 <span th:text="${number}"></span>
+										組
+									</strong>
+								</h2>
+							</td>
+						</tr>
+					</thead>
+					<tbody>
+
+						<tr th:each="spguid, iterationStatus : ${spguids}">
+							<td th:text="${iterationStatus.count}"></td>
+							<td th:text="${spguid}"></td>
+						</tr>
+
+					</tbody>
+				</table>
+				<div class="container" id="pages"></div>
+			</div>
+
+		</div>
+	</div>
+	<th:block th:include="footer :: footer" class="container-fluid" />
+
+</body>
+</html>
