@@ -18,7 +18,7 @@
  *         permissions and limitations under the License.
  * 
  */
-package tw.guid.local.model;
+package tw.guid.local.web;
 
 import static com.google.common.collect.Lists.newArrayList;
 
@@ -34,7 +34,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Component;
 
 import tw.guid.local.helper.HashcodeCreator;
-import tw.guid.local.model.repo.AccountUsersRepository;
+import tw.guid.local.repository.AccountUsersRepository;
 
 @Component
 public class CustomAuthenticationProvider implements AuthenticationProvider {

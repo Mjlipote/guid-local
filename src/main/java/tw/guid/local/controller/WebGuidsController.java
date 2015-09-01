@@ -55,18 +55,18 @@ import tw.edu.ym.guid.client.PII;
 import tw.edu.ym.guid.client.field.Birthday;
 import tw.edu.ym.guid.client.field.Sex;
 import tw.edu.ym.guid.client.field.TWNationalId;
+import tw.guid.local.entity.Association;
+import tw.guid.local.entity.Association.Gender;
+import tw.guid.local.entity.SubprimeGuid;
 import tw.guid.local.helper.HttpActionHelper;
-import tw.guid.local.model.Action;
-import tw.guid.local.model.CustomAuthenticationProvider;
-import tw.guid.local.model.Gender;
-import tw.guid.local.model.SubprimeGuidRequest;
-import tw.guid.local.model.entity.Association;
-import tw.guid.local.model.entity.SubprimeGuid;
-import tw.guid.local.model.repo.AccountUsersRepository;
-import tw.guid.local.model.repo.AssociationRepository;
-import tw.guid.local.model.repo.SubprimeGuidRepository;
+import tw.guid.local.repository.AccountUsersRepository;
+import tw.guid.local.repository.AssociationRepository;
+import tw.guid.local.repository.SubprimeGuidRepository;
 import tw.guid.local.util.NameSplitter;
 import tw.guid.local.validateion.BirthdayValidator;
+import tw.guid.local.web.Action;
+import tw.guid.local.web.CustomAuthenticationProvider;
+import tw.guid.local.web.SubprimeGuidRequest;
 
 @RequestMapping("/guids")
 @Controller

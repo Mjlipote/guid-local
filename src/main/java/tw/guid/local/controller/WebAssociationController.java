@@ -37,12 +37,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import tw.guid.local.entity.Association;
+import tw.guid.local.entity.Association.Gender;
 import tw.guid.local.helper.HashcodeCreator;
-import tw.guid.local.model.Gender;
-import tw.guid.local.model.Role;
-import tw.guid.local.model.entity.Association;
-import tw.guid.local.model.repo.AccountUsersRepository;
-import tw.guid.local.model.repo.AssociationRepository;
+import tw.guid.local.repository.AccountUsersRepository;
+import tw.guid.local.repository.AssociationRepository;
+import tw.guid.local.web.Role;
 
 @RequestMapping("/association")
 @Controller

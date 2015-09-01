@@ -19,7 +19,7 @@
  *
  */
 
-package tw.guid.local.model.entity;
+package tw.guid.local.entity;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -35,7 +35,7 @@ import org.springframework.data.jpa.domain.AbstractPersistable;
 import com.google.common.base.MoreObjects;
 
 import tw.guid.local.helper.HashcodeCreator;
-import tw.guid.local.model.Role;
+import tw.guid.local.web.Role;
 
 @Entity
 public class AccountUsers extends AbstractPersistable<Long> {

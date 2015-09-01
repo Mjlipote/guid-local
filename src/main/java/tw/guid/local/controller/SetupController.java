@@ -25,11 +25,11 @@ import javax.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
-import tw.guid.local.model.Role;
-import tw.guid.local.model.entity.AccountUsers;
-import tw.guid.local.model.entity.SubprimeGuid;
-import tw.guid.local.model.repo.AccountUsersRepository;
-import tw.guid.local.model.repo.SubprimeGuidRepository;
+import tw.guid.local.entity.AccountUsers;
+import tw.guid.local.entity.SubprimeGuid;
+import tw.guid.local.repository.AccountUsersRepository;
+import tw.guid.local.repository.SubprimeGuidRepository;
+import tw.guid.local.web.Role;
 
 @Controller
 public class SetupController {

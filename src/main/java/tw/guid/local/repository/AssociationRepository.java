@@ -19,7 +19,7 @@
 *
 */
 
-package tw.guid.local.model.repo;
+package tw.guid.local.repository;
 
 import static com.google.common.collect.Sets.newHashSet;
 
@@ -28,7 +28,7 @@ import java.util.Set;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
-import tw.guid.local.model.entity.Association;
+import tw.guid.local.entity.Association;
 
 public interface AssociationRepository extends JpaRepository<Association, Long>,
     JpaSpecificationExecutor<Association> {

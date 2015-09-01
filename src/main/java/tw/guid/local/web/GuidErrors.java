@@ -19,7 +19,7 @@
  *
  */
 
-package tw.guid.local.model;
+package tw.guid.local.web;
 
 import java.util.List;
 

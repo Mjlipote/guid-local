@@ -19,14 +19,14 @@
 *
 */
 
-package tw.guid.local.model.repo;
+package tw.guid.local.repository;
 
 import java.util.Set;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import tw.guid.local.model.SubprimeGuidRequest;
-import tw.guid.local.model.entity.SubprimeGuid;
+import tw.guid.local.entity.SubprimeGuid;
+import tw.guid.local.web.SubprimeGuidRequest;
 
 public interface SubprimeGuidRepository
     extends JpaRepository<SubprimeGuid, Long> {

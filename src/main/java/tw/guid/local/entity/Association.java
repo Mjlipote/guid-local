@@ -19,7 +19,7 @@
  *
  */
 
-package tw.guid.local.model.entity;
+package tw.guid.local.entity;
 
 import java.util.Objects;
 
@@ -33,11 +33,13 @@ import org.springframework.data.jpa.domain.AbstractPersistable;
 import com.google.common.base.MoreObjects;
 import com.google.common.collect.ComparisonChain;
 
-import tw.guid.local.model.Gender;
-
 @Entity
 public class Association extends AbstractPersistable<Long>
     implements Comparable<Association> {
+
+  public enum Gender {
+    MALE, FEMALE;
+  }
 
   private static final long serialVersionUID = 1L;
 

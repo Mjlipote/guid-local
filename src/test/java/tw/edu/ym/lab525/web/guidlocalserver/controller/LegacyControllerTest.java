@@ -44,8 +44,8 @@ import tw.edu.ym.guid.client.field.Name;
 import tw.edu.ym.guid.client.field.Sex;
 import tw.edu.ym.guid.client.field.TWNationalId;
 import tw.guid.local.Application;
-import tw.guid.local.model.SubprimeGuidRequest;
-import tw.guid.local.model.repo.SubprimeGuidRepository;
+import tw.guid.local.repository.SubprimeGuidRepository;
+import tw.guid.local.web.SubprimeGuidRequest;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = Application.class)

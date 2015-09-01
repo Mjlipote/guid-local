@@ -18,7 +18,7 @@
  *         permissions and limitations under the License.
  *
  */
-package tw.guid.local.model;
+package tw.guid.local.web;
 
 import static com.google.common.collect.Lists.newArrayList;
 
@@ -27,7 +27,7 @@ import java.util.Objects;
 
 import com.google.common.base.MoreObjects;
 
-import tw.guid.local.model.entity.AccountUsers;
+import tw.guid.local.entity.AccountUsers;
 
 public final class AccountUsersResponse {
 

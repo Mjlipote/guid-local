@@ -18,7 +18,7 @@
  * the License.
  *
  */
-package tw.guid.local.model.service;
+package tw.guid.local.service;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -32,10 +32,10 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.env.Environment;
 
 import tw.guid.local.helper.HttpActionHelper;
-import tw.guid.local.model.Action;
-import tw.guid.local.model.repo.AccountUsersRepository;
-import tw.guid.local.model.repo.AssociationRepository;
-import tw.guid.local.model.repo.SubprimeGuidRepository;
+import tw.guid.local.repository.AccountUsersRepository;
+import tw.guid.local.repository.AssociationRepository;
+import tw.guid.local.repository.SubprimeGuidRepository;
+import tw.guid.local.web.Action;
 
 public class ApiServiceImpl implements ApiService {
 

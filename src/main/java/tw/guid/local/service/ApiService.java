@@ -19,15 +19,21 @@
  *
  */
 
-package tw.guid.local.model.service;
+package tw.guid.local.service;
 
-import javax.servlet.http.HttpServletRequest;
+import java.net.URISyntaxException;
+import java.util.Set;
 
-public interface LegacyService {
+public interface ApiService {
 
-  public String authenticate(HttpServletRequest request);
+  public Set<String> prefixLookup();
 
-  public String create(String prefix, String jsonHashes,
-      HttpServletRequest request);
+  public Set<String> hospitalLookup();
 
+  public Set<String> doctorLookup();
+
+  public boolean validation(String spguid) throws URISyntaxException;
+
+  public boolean existence(String hashcode1, String hashcode2, String hashcode3)
+      throws URISyntaxException;
 }

@@ -18,7 +18,7 @@
  * the License.
  *
  */
-package tw.guid.local.model.service;
+package tw.guid.local.service;
 
 import static com.google.common.collect.Lists.newArrayList;
 import static net.sf.rubycollect4j.RubyCollections.hp;
@@ -44,16 +44,16 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import net.sf.rubycollect4j.RubyArray;
+import tw.guid.local.entity.AccountUsers;
+import tw.guid.local.entity.SubprimeGuid;
 import tw.guid.local.helper.HashcodeCreator;
 import tw.guid.local.helper.HttpActionHelper;
-import tw.guid.local.model.Action;
-import tw.guid.local.model.CustomAuthenticationProvider;
-import tw.guid.local.model.GuidException;
-import tw.guid.local.model.SubprimeGuidRequest;
-import tw.guid.local.model.entity.AccountUsers;
-import tw.guid.local.model.entity.SubprimeGuid;
-import tw.guid.local.model.repo.AccountUsersRepository;
-import tw.guid.local.model.repo.SubprimeGuidRepository;
+import tw.guid.local.repository.AccountUsersRepository;
+import tw.guid.local.repository.SubprimeGuidRepository;
+import tw.guid.local.web.Action;
+import tw.guid.local.web.CustomAuthenticationProvider;
+import tw.guid.local.web.GuidException;
+import tw.guid.local.web.SubprimeGuidRequest;
 
 public class LegacyServiceImpl implements LegacyService {
 

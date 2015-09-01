@@ -26,7 +26,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 
 import com.github.wnameless.spring.papertrail.EnablePaperTrail;
 
-import tw.guid.local.model.entity.PaperTrail;
+import tw.guid.local.entity.PaperTrail;
 
 @EnablePaperTrail(PaperTrail.class)
 @Configuration

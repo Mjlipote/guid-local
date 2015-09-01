@@ -19,7 +19,7 @@
  *
  */
 
-package tw.guid.local.model.entity;
+package tw.guid.local.entity;
 
 import java.util.Objects;
 

@@ -32,10 +32,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import tw.guid.local.model.repo.AccountUsersRepository;
-import tw.guid.local.model.repo.AssociationRepository;
-import tw.guid.local.model.repo.SubprimeGuidRepository;
-import tw.guid.local.model.service.ApiService;
+import tw.guid.local.repository.AccountUsersRepository;
+import tw.guid.local.repository.AssociationRepository;
+import tw.guid.local.repository.SubprimeGuidRepository;
+import tw.guid.local.service.ApiService;
 
 @RequestMapping("/guid/api")
 @RestController

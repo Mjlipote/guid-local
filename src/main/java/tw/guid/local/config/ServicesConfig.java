@@ -23,10 +23,10 @@ package tw.guid.local.config;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import tw.guid.local.model.service.ApiService;
-import tw.guid.local.model.service.ApiServiceImpl;
-import tw.guid.local.model.service.LegacyService;
-import tw.guid.local.model.service.LegacyServiceImpl;
+import tw.guid.local.service.ApiService;
+import tw.guid.local.service.ApiServiceImpl;
+import tw.guid.local.service.LegacyService;
+import tw.guid.local.service.LegacyServiceImpl;
 
 @Configuration
 public class ServicesConfig {

@@ -29,7 +29,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import tw.guid.local.model.service.LegacyService;
+import tw.guid.local.service.LegacyService;
 
 @RequestMapping("/guid")
 @Controller

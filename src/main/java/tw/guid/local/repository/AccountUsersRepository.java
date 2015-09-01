@@ -19,7 +19,7 @@
 *
 */
 
-package tw.guid.local.model.repo;
+package tw.guid.local.repository;
 
 import static com.google.common.collect.Sets.newHashSet;
 
@@ -30,8 +30,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
-import tw.guid.local.model.Role;
-import tw.guid.local.model.entity.AccountUsers;
+import tw.guid.local.entity.AccountUsers;
+import tw.guid.local.web.Role;
 
 public interface AccountUsersRepository extends
     JpaRepository<AccountUsers, Long>, JpaSpecificationExecutor<AccountUsers> {

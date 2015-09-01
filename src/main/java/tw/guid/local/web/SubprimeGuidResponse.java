@@ -18,7 +18,7 @@
 * the License.
 *
 */
-package tw.guid.local.model;
+package tw.guid.local.web;
 
 import com.google.common.base.MoreObjects;
 

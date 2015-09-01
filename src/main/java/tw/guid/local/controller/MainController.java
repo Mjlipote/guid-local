@@ -24,7 +24,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import tw.guid.local.model.repo.AccountUsersRepository;
+import tw.guid.local.repository.AccountUsersRepository;
 
 @Controller
 public class MainController {

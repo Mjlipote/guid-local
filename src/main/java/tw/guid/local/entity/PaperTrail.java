@@ -18,11 +18,15 @@
  * the License.
  *
  */
-package tw.guid.local.model.repo;
+package tw.guid.local.entity;
 
-import com.github.wnameless.spring.papertrail.PaperTrailCrudRepository;
+import javax.persistence.Entity;
 
-import tw.guid.local.model.entity.PaperTrail;
+import com.github.wnameless.spring.papertrail.AbstractJpaPaperTrail;
 
-public interface PaperTrailRepository
-    extends PaperTrailCrudRepository<PaperTrail, Long> {}
+@Entity
+public class PaperTrail extends AbstractJpaPaperTrail {
+
+  private static final long serialVersionUID = 1L;
+
+}

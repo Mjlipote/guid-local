@@ -27,14 +27,12 @@ import org.apache.tomcat.util.descriptor.web.SecurityCollection;
 import org.apache.tomcat.util.descriptor.web.SecurityConstraint;
 import org.springframework.boot.context.embedded.EmbeddedServletContainerFactory;
 import org.springframework.boot.context.embedded.tomcat.TomcatEmbeddedServletContainerFactory;
-import org.springframework.boot.orm.jpa.EntityScan;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 
 @Configuration
 @PropertySource("file:${user.dir}/serverhost.properties")
-@EntityScan
 public class PersistenceConfig {
 
   @Bean

@@ -38,7 +38,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import tw.guid.local.Application;
 import tw.guid.local.helper.HttpActionHelper;
-import tw.guid.local.model.Action;
+import tw.guid.local.web.Action;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = Application.class)
