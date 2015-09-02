@@ -60,7 +60,7 @@ public class WebUserController {
    * @param page
    * @return
    */
-  @RequestMapping(value = "", method = RequestMethod.GET)
+  @RequestMapping(method = RequestMethod.GET)
   String usersList(ModelMap map) {
 
     map.addAttribute("prefixs", acctUserRepo.getAllPrefix());
