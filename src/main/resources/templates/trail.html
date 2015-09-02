@@ -53,6 +53,22 @@
 		checkFragment();
 	});
 </script>
+<!-- Include Required Prerequisites -->
+<script type="text/javascript"
+	src="//cdn.jsdelivr.net/jquery/1/jquery.min.js"></script>
+<script type="text/javascript"
+	src="//cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+
+
+<!-- Include Date Range Picker -->
+<script type="text/javascript"
+	src="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.js"></script>
+<link rel="stylesheet" type="text/css"
+	href="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.css" />
+
+<script type="text/javascript">
+	$('input[name="daterange"]').daterangepicker();
+</script>
 </head>
 <body>
 	<div id="wrap">
@@ -61,60 +77,53 @@
 		<div id="main">
 			<form class="form-inline col-md-8 col-md-offset-2" method="get"
 				th:action="@{/trail/lookup}" role="form">
-				<div class="row">
-					<div class="form-group col-md-3">
-						<label class="sr-only">User ID：</label><select
-							data-toggle="select"
-							class="form-control select select-primary mrs mbm" name="userId">
-							<option value="">User ID</option>
-							<th:block th:each="userId : ${userIds}">
-								<option th:value="${userId}" th:text="${userId}"></option>
-							</th:block>
-						</select>
-					</div>
-					<div class="form-group col-md-3">
-						<label class="sr-only">Remote Address：</label><select
-							data-toggle="select"
-							class="form-control select select-primary mrs mbm"
-							name="remoteAddr">
-							<option value="">Remote Address</option>
-							<th:block th:each="remoteAddr : ${remoteAddrs}">
-								<option th:value="${remoteAddr}" th:text="${remoteAddr}"></option>
-							</th:block>
-						</select>
-					</div>
-					<div class="form-group col-md-3">
-						<label class="sr-only">Request URL：</label><select
-							data-toggle="select"
-							class="form-control select select-primary mrs mbm"
-							name="requestUri">
-							<option value="">Request URL</option>
-							<th:block th:each="requestURI : ${requestURIs}">
-								<option th:value="${requestURI}" th:text="${requestURI}"></option>
-							</th:block>
-						</select>
-					</div>
-					<div class="form-group col-md-3">
-						<label class="sr-only">HTTP Status：</label><select
-							data-toggle="select"
-							class="form-control select select-primary mrs mbm"
-							name="httpStatus">
-							<option value="">HTTP Status</option>
-							<th:block th:each="httpStatus : ${httpStatuses}">
-								<option th:value="${httpStatus}" th:text="${httpStatus}"></option>
-							</th:block>
-						</select>
-					</div>
+
+				<div class="form-group col-md-4">
+
+					<label class="sr-only">User ID：</label><select data-toggle="select"
+						class="form-control select select-primary mrs mbm" name="userId">
+
+						<option value="">User ID</option>
+
+						<th:block th:each="userId : ${userIds}">
+
+							<option th:value="${userId}" th:text="${userId}"></option>
+
+						</th:block>
+
+					</select>
+
 				</div>
 
+				<div class="form-group date">
+					<input type="text" class="form-control" name="createdAt"
+						placeholder="日期" />
 
-				<div class="row col-md-12">
+
+					<script type="text/javascript">
+						$(function() {
+							$('input[name="createdAt"]').daterangepicker({
+
+								locale : {
+									format : 'YYYY/MM/DD'
+								},
+								minDate : '1910/01/01',
+								maxDate : '2100/12/31',
+								autoApply : true,
+								singleDatePicker : true,
+								showDropdowns : true
+							});
+						});
+					</script>
+				</div>
+
 
 					<div class="form-group">
 						<input class="btn btn-inverse btn-block btn-sm" type="submit"
 							value="搜尋操作記錄"></input>
 					</div>
-				</div>
+
+
 			</form>
 
 			<div class="container" id="pages"></div>

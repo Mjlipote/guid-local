@@ -22,6 +22,7 @@ package tw.guid.local.repository;
 
 import static com.google.common.collect.Sets.newHashSet;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
@@ -36,6 +37,11 @@ public interface PaperTrailRepository
     JpaSpecificationExecutor<PaperTrail> {
 
   public List<PaperTrail> findByUserId(String userId);
+
+  public List<PaperTrail> findByUserIdAndCreatedAtBetween(String userId,
+      Date startDate, Date endDate);
+
+  public List<PaperTrail> findByCreatedAtBetween(Date startDate, Date endDate);
 
   public default Set<String> getAllUserId() {
     Set<String> userId = newHashSet();

@@ -20,9 +20,8 @@
  */
 package tw.guid.local.controller;
 
-import java.util.List;
-
-import javax.persistence.criteria.Predicate;
+import java.text.ParseException;
+import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
@@ -31,7 +30,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import tw.guid.local.entity.PaperTrail;
+import net.sf.rubycollect4j.RubyCollections;
 import tw.guid.local.repository.AccountUsersRepository;
 import tw.guid.local.repository.PaperTrailRepository;
 
@@ -56,38 +55,22 @@ public class PaperTrailController {
   }
 
   @RequestMapping(value = "/lookup", method = RequestMethod.GET)
-  String usersLookup(ModelMap map, @Param("userId") String userId,
-      @Param("remoteAddr") String remoteAddr,
-      @Param("requestUri") String requestUri,
-      @Param("httpStatus") String httpStatus) {
+  String trailLookup(ModelMap map, @Param("userId") String userId,
+      @Param("createdAt") String createdAt) throws ParseException {
 
-    List<PaperTrail> paperTrails = paperTrailRepo.findAll((root, query, cb) -> {
-      Predicate finalPredicate = cb.and();
+    int year = Integer.valueOf(createdAt.split("/")[0]);
+    int month = Integer.valueOf(createdAt.split("/")[1]);
+    int day = Integer.valueOf(createdAt.split("/")[2]);
 
-      if (userId != null && !userId.equals("")) {
-        finalPredicate =
-            cb.and(finalPredicate, cb.equal(root.get("userId"), userId));
-      }
-      if (remoteAddr != null && !remoteAddr.equals("")) {
-        finalPredicate = cb.and(finalPredicate,
-            cb.equal(root.get("remoteAddr"), remoteAddr));
-      }
-      if (requestUri != null && !requestUri.equals("")) {
-        finalPredicate = cb.and(finalPredicate,
-            cb.equal(root.get("requestUri"), requestUri));
-      }
-      if (httpStatus != null && !httpStatus.equals("")) {
-        finalPredicate = cb.and(finalPredicate,
-            cb.equal(root.get("httpStatus"), Integer.valueOf(httpStatus)));
-      }
-      return finalPredicate;
-    });
+    Date startDate = RubyCollections.date(year, month, day).beginningOfDay();
+    Date endDate = RubyCollections.date(year, month, day).endOfDay();
 
     map.addAttribute("userIds", paperTrailRepo.getAllUserId());
-    map.addAttribute("remoteAddrs", paperTrailRepo.getAllRemoteAddr());
-    map.addAttribute("requestURIs", paperTrailRepo.getAllRequestURI());
-    map.addAttribute("httpStatuses", paperTrailRepo.getAllHttpStatus());
-    map.addAttribute("paperTrails", paperTrails);
+    map.addAttribute("paperTrails",
+        userId.equals("")
+            ? paperTrailRepo.findByCreatedAtBetween(startDate, endDate)
+            : paperTrailRepo.findByUserIdAndCreatedAtBetween(userId, startDate,
+                endDate));
 
     return "trail";
   }
