@@ -22,15 +22,19 @@ package tw.guid.local.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import tw.guid.local.repository.AccountUsersRepository;
+import tw.guid.local.repository.PaperTrailRepository;
 
 @Controller
 public class MainController {
 
   @Autowired
   AccountUsersRepository acctUserRepo;
+  @Autowired
+  PaperTrailRepository paperTrailRepo;
 
   @RequestMapping("/home")
   String home() {
@@ -70,6 +74,12 @@ public class MainController {
   @RequestMapping("/login")
   String login() {
     return "login";
+  }
+
+  @RequestMapping("/trail")
+  String trail(ModelMap map) {
+    map.addAttribute("paperTrails", paperTrailRepo.findAll());
+    return "trail";
   }
 
 }
