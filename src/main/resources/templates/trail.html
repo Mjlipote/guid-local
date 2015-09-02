@@ -59,6 +59,63 @@
 		<h1 class="text-center">操作記錄追蹤</h1>
 
 		<div id="main">
+			<form class="form-inline col-md-8 col-md-offset-2" method="get"
+				th:action="@{/trail/lookup}" role="form">
+				<div class="row">
+					<div class="form-group col-md-3">
+						<label class="sr-only">User ID：</label><select
+							data-toggle="select"
+							class="form-control select select-primary mrs mbm" name="userId">
+							<option value="">User ID</option>
+							<th:block th:each="userId : ${userIds}">
+								<option th:value="${userId}" th:text="${userId}"></option>
+							</th:block>
+						</select>
+					</div>
+					<div class="form-group col-md-3">
+						<label class="sr-only">Remote Address：</label><select
+							data-toggle="select"
+							class="form-control select select-primary mrs mbm"
+							name="remoteAddr">
+							<option value="">Remote Address</option>
+							<th:block th:each="remoteAddr : ${remoteAddrs}">
+								<option th:value="${remoteAddr}" th:text="${remoteAddr}"></option>
+							</th:block>
+						</select>
+					</div>
+					<div class="form-group col-md-3">
+						<label class="sr-only">Request URL：</label><select
+							data-toggle="select"
+							class="form-control select select-primary mrs mbm"
+							name="requestUri">
+							<option value="">Request URL</option>
+							<th:block th:each="requestURI : ${requestURIs}">
+								<option th:value="${requestURI}" th:text="${requestURI}"></option>
+							</th:block>
+						</select>
+					</div>
+					<div class="form-group col-md-3">
+						<label class="sr-only">HTTP Status：</label><select
+							data-toggle="select"
+							class="form-control select select-primary mrs mbm"
+							name="httpStatus">
+							<option value="">HTTP Status</option>
+							<th:block th:each="httpStatus : ${httpStatuses}">
+								<option th:value="${httpStatus}" th:text="${httpStatus}"></option>
+							</th:block>
+						</select>
+					</div>
+				</div>
+
+
+				<div class="row col-md-12">
+
+					<div class="form-group">
+						<input class="btn btn-inverse btn-block btn-sm" type="submit"
+							value="搜尋操作記錄"></input>
+					</div>
+				</div>
+			</form>
 
 			<div class="container" id="pages"></div>
 
@@ -67,27 +124,13 @@
 					class="table table-responsive table-bordered table-striped table-condensed table-hover">
 					<thead>
 						<th:tr>
-							<td>
-								<strong>#</strong>
-							</td>
-							<td>
-								<strong>User ID</strong>
-							</td>
-							<td>
-								<strong>Remote Address</strong>
-							</td>
-							<td>
-								<strong>HTTP Method</strong>
-							</td>
-							<td>
-								<strong>Request URL</strong>
-							</td>
-							<td>
-								<strong>HTTP Status</strong>
-							</td>
-							<td>
-								<strong>Created At</strong>
-							</td>
+							<td><strong>#</strong></td>
+							<td><strong>User ID</strong></td>
+							<td><strong>Remote Address</strong></td>
+							<td><strong>HTTP Method</strong></td>
+							<td><strong>Request URL</strong></td>
+							<td><strong>HTTP Status</strong></td>
+							<td><strong>Created At</strong></td>
 
 						</th:tr>
 					</thead>
@@ -100,9 +143,7 @@
 							<td th:text="${paperTrail.httpMethod}"></td>
 							<td th:text="${paperTrail.requestURI}"></td>
 							<td th:text="${paperTrail.httpStatus}"></td>
-							<td
-								th:text="${paperTrail.createdAt}">
-							</td>
+							<td th:text="${paperTrail.createdAt}"></td>
 						</tr>
 					</tbody>
 				</table>
