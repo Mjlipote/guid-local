@@ -25,7 +25,6 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -38,13 +37,13 @@ public class LegacyGuidClientController {
   @Autowired
   LegacyService legacyService;
 
-  @RequestMapping(value = "/authenticate", method = RequestMethod.GET)
+  @RequestMapping("/authenticate")
   @ResponseBody
   String authenticate(HttpServletRequest request) {
     return legacyService.authenticate(request);
   }
 
-  @RequestMapping(value = "/create", method = RequestMethod.POST)
+  @RequestMapping("/create")
   @ResponseBody
   String create(@RequestParam("prefix") String prefix,
       @RequestParam("hashes") String jsonHashes, HttpServletRequest request) {
