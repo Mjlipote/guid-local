@@ -116,11 +116,11 @@ public class LegacyServiceImpl implements LegacyService {
 
         String[] str = result.split("-");
         SubprimeGuid subprimeGuid = new SubprimeGuid();
+        subprimeGuid.setSpguid(result);
+        subprimeGuid.setPrefix(str[0]);
         subprimeGuid.setHashcode1(bs.getValue().getGuidHash().get(0));
         subprimeGuid.setHashcode2(bs.getValue().getGuidHash().get(1));
         subprimeGuid.setHashcode3(bs.getValue().getGuidHash().get(2));
-        subprimeGuid.setPrefix(str[0]);
-        subprimeGuid.setSpguid(result);
         subprimeGuidRepo.save(subprimeGuid);
 
         return result;
