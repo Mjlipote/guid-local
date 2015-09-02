@@ -21,7 +21,6 @@
 package tw.guid.local;
 
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
@@ -29,7 +28,7 @@ import com.github.wnameless.spring.papertrail.EnablePaperTrail;
 
 import tw.guid.local.entity.PaperTrail;
 
-@EnablePaperTrail(value = PaperTrail.class, targetMethods = { HttpMethod.GET })
+@EnablePaperTrail(PaperTrail.class)
 @Configuration
 public class MvcConfig extends WebMvcConfigurerAdapter {
 
