@@ -27,7 +27,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.env.Environment;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -43,12 +42,16 @@ public class ApiController {
 
   @Autowired
   SubprimeGuidRepository spguidRepo;
+
   @Autowired
   AccountUsersRepository acctUserRepo;
+
   @Autowired
   AssociationRepository associationRepo;
+
   @Autowired
   ApiService apiService;
+
   @Autowired
   Environment env;
 
@@ -56,38 +59,35 @@ public class ApiController {
   String centralServerUrl;
 
   @ResponseBody
-  @RequestMapping(value = "/prefix", method = RequestMethod.GET)
+  @RequestMapping("/prefix")
   Set<String> prefixLookup() {
     return apiService.prefixLookup();
   }
 
   @ResponseBody
-  @RequestMapping(value = "/hospital", method = RequestMethod.GET)
+  @RequestMapping("/hospital")
   Set<String> hospitalLookup() {
     return apiService.hospitalLookup();
   }
 
   @ResponseBody
-  @RequestMapping(value = "/doctor", method = RequestMethod.GET)
+  @RequestMapping("/doctor")
   Set<String> doctorLookup() {
     return apiService.doctorLookup();
   }
 
   @ResponseBody
-  @RequestMapping(value = "/validation", method = RequestMethod.GET)
-  boolean validation(@RequestParam(value = "spguid") String spguid)
+  @RequestMapping("/validation")
+  boolean validation(@RequestParam("spguid") String spguid)
       throws URISyntaxException {
-
     return apiService.validation(spguid);
   }
 
-  @RequestMapping(value = "/existence", method = RequestMethod.GET)
+  @RequestMapping("/existence")
   boolean existence(@RequestParam("hashcode1") String hashcode1,
       @RequestParam("hashcode2") String hashcode2,
       @RequestParam("hashcode3") String hashcode3) throws URISyntaxException {
-
     return apiService.existence(hashcode1, hashcode2, hashcode3);
-
   }
 
 }

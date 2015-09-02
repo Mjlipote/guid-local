@@ -48,9 +48,7 @@ public class LegacyGuidClientController {
   @ResponseBody
   String create(@RequestParam("prefix") String prefix,
       @RequestParam("hashes") String jsonHashes, HttpServletRequest request) {
-
     return legacyService.create(prefix, jsonHashes, request);
-
   }
 
 }

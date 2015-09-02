@@ -50,6 +50,7 @@ public class WebAssociationController {
 
   @Autowired
   AssociationRepository associationRepo;
+
   @Autowired
   AccountUsersRepository acctUserRepo;
 
@@ -63,7 +64,6 @@ public class WebAssociationController {
 
   @RequestMapping("/login")
   String associationLogin() {
-
     return "association-login";
   }
 
@@ -71,7 +71,6 @@ public class WebAssociationController {
   String associationAuthentication(ModelMap map,
       @RequestParam(value = "username") String username,
       @RequestParam(value = "password") String password) {
-
     checkNotNull(username, "username can't be bull");
     checkNotNull(password, "password can't be bull");
     Authentication auth =
@@ -217,18 +216,16 @@ public class WebAssociationController {
     map.addAttribute("successMessage",
         "已成功修改 " + associationUser.getName() + " 的個人資料");
     map.addAttribute("link", "/association");
-    return "success";
 
+    return "success";
   }
 
   @RequestMapping(value = "/{spguid}", method = RequestMethod.GET)
   String associationEdit(ModelMap map, @PathVariable("spguid") String spguid) {
-
     map.addAttribute("associationUserInfo",
         associationRepo.findBySpguid(spguid));
 
     return "association-info";
-
   }
 
 }
