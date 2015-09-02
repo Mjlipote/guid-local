@@ -60,8 +60,6 @@
 
 		<div id="main">
 
-
-
 			<div class="container" id="pages"></div>
 
 			<div id="wrap">
@@ -69,27 +67,41 @@
 					class="table table-responsive table-bordered table-striped table-condensed table-hover">
 					<thead>
 						<th:tr>
-							<td><strong>#</strong></td>
-							<td><strong>User ID</strong></td>
-							<td><strong>Remote Address</strong></td>
-							<td><strong>HTTP Method</strong></td>
-							<td><strong>Request URL</strong></td>
-							<td><strong>HTTP Status</strong></td>
-							<td><strong>Created At</strong></td>
+							<td>
+								<strong>#</strong>
+							</td>
+							<td>
+								<strong>User ID</strong>
+							</td>
+							<td>
+								<strong>Remote Address</strong>
+							</td>
+							<td>
+								<strong>HTTP Method</strong>
+							</td>
+							<td>
+								<strong>Request URL</strong>
+							</td>
+							<td>
+								<strong>HTTP Status</strong>
+							</td>
+							<td>
+								<strong>Created At</strong>
+							</td>
 
 						</th:tr>
 					</thead>
 					<tbody>
 
-						<tr th:each="paperTrail, iterationStatus: ${paperTrails}">
-							<td th:text="${iterationStatus.count}"></td>
+						<tr th:each="paperTrail : ${paperTrails}">
+							<td th:text="${paperTrail.id}"></td>
 							<td th:text="${paperTrail.userId}"></td>
 							<td th:text="${paperTrail.remoteAddr}"></td>
 							<td th:text="${paperTrail.httpMethod}"></td>
 							<td th:text="${paperTrail.requestURI}"></td>
 							<td th:text="${paperTrail.httpStatus}"></td>
 							<td
-								th:text="${#dates.format(paperTrail.createdAt, 'yyyy-MM-dd HH:mm', 'PST')}">
+								th:text="${paperTrail.createdAt}">
 							</td>
 						</tr>
 					</tbody>
