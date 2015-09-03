@@ -1,178 +1,108 @@
-<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorator="layout">
 <head>
-<meta charset="UTF-8" />
-<title>輸入 PII</title>
-<th:block th:include="head :: bootstrap" />
 <script type="text/javascript">
-	$('input[name="daterange"]').daterangepicker();
+	$(function() {
+		$('input[name="birthDay"]').daterangepicker({
+
+			locale : {
+				format : 'YYYY/MM/DD'
+			},
+			startDate : '2015/01/01',
+			endDate : '2015/12/31',
+			minDate : '1910/01/01',
+			maxDate : '2100/12/31',
+			autoApply : true,
+			singleDatePicker : true,
+			showDropdowns : true
+		});
+
+		$('.create').click(function() {
+			swal({
+				title : "確定填寫完畢？",
+				type : "info",
+				showCancelButton : true,
+				confirmButtonClass : 'btn-info',
+				confirmButtonText : 'YES',
+				closeOnConfirm : true
+			}, function() {
+				$('#createForm').submit();
+			});
+		})
+	});
 </script>
 </head>
 <body>
-	<th:block th:include="top :: navigation" class="container-fluid" />
-	<div id="wrap">
+	<div layout:fragment="content" id="wrap">
 		<h1 class="text-center">輸入 PII</h1>
 
 		<div id="main" class="container">
 			<form id="createForm" class="col-lg-12" method="post"
 				th:action="@{/guids}">
 				<div class="form-group col-lg-12">
-
 					<input class="form-control" type="text" name="name"
 						placeholder="姓名（必填，請填寫全名）"></input>
-
 				</div>
-				<div class="form-group col-lg-12">
 
+				<div class="form-group col-lg-12">
 					<select data-toggle="select"
 						class="form-control select select-primary mrs mbm" name="gender">
 						<option value="M">男</option>
 						<option value="F">女</option>
 					</select>
-
 				</div>
 
 				<div class="form-group col-lg-12 date">
 					<input type="text" class="form-control" name="birthDay"
 						placeholder="出生年/月/日（必填）" />
-
-
-					<script type="text/javascript">
-					$(function() {
-						$('input[name="birthDay"]').daterangepicker({
-
-							locale : {
-								format : 'YYYY/MM/DD'
-							},
-							startDate : '2015/01/01',
-							endDate : '2015/12/31',
-							minDate : '1910/01/01',
-							maxDate : '2100/12/31',
-							autoApply : true,
-							singleDatePicker : true,
-							showDropdowns : true
-						});
-					});
-				</script>
 				</div>
 
 				<div class="form-group col-lg-12">
 					<input class="form-control"
 						onkeyup="value=value.replace(/[^A-Z0-9]/g,'')" type="text"
 						name="sid" placeholder="身份證字號（必填）"></input>
-
 				</div>
 
 				<div class="form-group col-lg-6">
 					<input class="form-control"
 						onkeyup="value=value.replace(/[^-_a-zA-Z0-9]/g,'')" type="text"
 						name="subjectId" placeholder="Subject ID（必填）"></input>
-
 				</div>
 
 				<div class="form-group col-lg-6">
 					<input class="form-control"
 						onkeyup="value=value.replace(/[^-_a-zA-Z0-9]/g,'')" type="text"
 						name="mrn" placeholder="病歷編號 (MRN，必填)"></input>
-
 				</div>
 
 				<div class="form-group col-lg-6">
 					<input class="form-control" type="text" name="hospital"
 						placeholder="收案醫院"></input>
-
 				</div>
 
 				<div class="form-group col-lg-6">
 					<input class="form-control" type="text" name="doctor"
 						placeholder="收案醫師"></input>
-
 				</div>
 
 				<div class="form-group col-lg-6">
 					<input class="form-control"
 						onkeyup="value=value.replace(/[^-_0-9]/g,'')" type="text"
 						name="telephone" placeholder="聯絡電話"></input>
-
 				</div>
 
 				<div class="form-group col-lg-6">
 					<input class="form-control" type="text" name="address"
 						placeholder="聯絡地址"></input>
-
 				</div>
-				<div class="form-group col-lg-12">
 
+				<div class="form-group col-lg-12">
 					<input class="btn btn-inverse btn-block btn-lg create"
 						value="產生二次編碼"></input>
-
 				</div>
 			</form>
-
-			<script type="text/javascript">
-			$('.create').click(function() {
-				swal({
-					title : "確定填寫完畢？",
-					type : "info",
-					showCancelButton : true,
-					confirmButtonClass : 'btn-info',
-					confirmButtonText : 'YES',
-					closeOnConfirm : true
-				}, function() {
-					$('#createForm').submit();
-				});
-			});
-		</script>
-			<script>
-			$(document)
-					.ready(
-							function() {
-								$('#createForm')
-										.formValidation(
-												{
-													framework : 'bootstrap',
-													excluded : ':disabled',
-													icon : {
-														valid : 'glyphicon glyphicon-ok',
-														invalid : 'glyphicon glyphicon-remove',
-														validating : 'glyphicon glyphicon-refresh'
-													},
-													fields : {
-														name : {
-															validators : {
-																notEmpty : {
-																	message : 'The name is required'
-																}
-															}
-														},
-														birthDay : {
-															validators : {
-																notEmpty : {
-																	message : 'The birthDay is required'
-																}
-															}
-														},
-														sid : {
-															row : '.col-xs-6',
-															validators : {
-																notEmpty : {
-																	message : 'The sid is required'
-																}
-															}
-														}
-													}
-												})
-										// Using Flat UI's select component
-										.find(
-												'[name="gender"]')
-										.select2(
-												{
-													dropdownCssClass : 'select-inverse-dropdown'
-							});
-		</script>
 		</div>
 	</div>
-	<th:block th:include="footer :: footer" class="container-fluid" />
 </body>
 </html>
