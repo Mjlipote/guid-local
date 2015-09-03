@@ -150,6 +150,8 @@
 								th:text="單筆產生GUID：成功"></font> <font color="blue"
 								th:if="${paperTrail.httpMethod.toString().equals('POST') and paperTrail.requestURI == '/guids/batch' and paperTrail.httpStatus == 200}"
 								th:text="批次產生GUID：成功"></font> <font color="blue"
+								th:if="${paperTrail.httpMethod.toString().equals('POST') and paperTrail.requestURI == '/guid/create' and paperTrail.httpStatus == 200}"
+								th:text="[Client程式]產生GUID：成功"></font><font color="blue"
 								th:if="${paperTrail.httpMethod.toString().equals('POST') and paperTrail.requestURI == '/guids/comparison' and paperTrail.httpStatus == 200}"
 								th:text="比對GUIDs：成功"></font> <font color="blue"
 								th:if="${paperTrail.httpMethod.toString().equals('POST') and paperTrail.requestURI == '/guids/batch/comparison' and paperTrail.httpStatus == 200}"
