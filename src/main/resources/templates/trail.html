@@ -158,13 +158,13 @@
 								th:text="新增使用者：成功"></font><font color="blue"
 								th:if="${paperTrail.httpMethod.toString().equals('POST') and paperTrail.requestURI == '/association' and paperTrail.httpStatus == 200}"
 								th:text="關聯比對查詢：成功"></font> <font color="red"
-								th:if="${paperTrail.httpMethod.toString().equals('DELETE') and paperTrail.requestURI == '/users//[^-_a-zA-Z0-9]/g' and paperTrail.httpStatus == 200}"
+								th:if="${paperTrail.httpMethod.toString().equals('DELETE') and paperTrail.requestURI.startsWith('/users/') and paperTrail.httpStatus == 200}"
 								th:text="刪除使用者：成功"></font> <font color="green"
-								th:if="${paperTrail.httpMethod.toString().equals('PUT') and paperTrail.requestURI == '/association//[^-_a-zA-Z0-9]/g' and paperTrail.httpStatus == 200}"
+								th:if="${paperTrail.httpMethod.toString().equals('PUT') and paperTrail.requestURI.startsWith('/association/') and paperTrail.httpStatus == 200}"
 								th:text="關聯比對資料編輯：成功"></font> <font color="green"
-								th:if="${paperTrail.httpMethod.toString().equals('PUT') and paperTrail.requestURI == '/users//[^-_a-zA-Z0-9]/g' and paperTrail.httpStatus == 200}"
+								th:if="${paperTrail.httpMethod.toString().equals('PUT') and paperTrail.requestURI.startsWith('/users/') and paperTrail.httpStatus == 200}"
 								th:text="編輯個人資料：成功"></font> <font color="blue"
-								th:if="${paperTrail.httpMethod.toString().equals('POST') and paperTrail.requestURI == '/users/changepassword//[^-_a-zA-Z0-9]/g' and paperTrail.httpStatus == 200}"
+								th:if="${paperTrail.httpMethod.toString().equals('POST') and paperTrail.requestURI.startsWith('/users/changepassword/') and paperTrail.httpStatus == 200}"
 								th:text="編輯個人密碼：成功"></font></td>
 						</tr>
 					</tbody>
