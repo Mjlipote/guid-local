@@ -39,7 +39,7 @@ import tw.edu.ym.guid.client.field.TWNationalId;
 import tw.guid.local.util.NameSplitter;
 import wmw.validate.TWNationalIdValidator;
 
-public class BatchSubprimeGuidCreator {
+public final class BatchSubprimeGuidCreator {
 
   public static final List<String> EXCEL_HEADER =
       ra("ID", "SUBJECTID", "MRN", "GIID", "GIIDCOUNTRY", "SEX", "MOB", "DOB",
@@ -55,7 +55,6 @@ public class BatchSubprimeGuidCreator {
   }
 
   public static boolean isEmptyOnEachRow(Map<String, String> row) {
-
     if (row.get("ID").isEmpty() || row.get("SUBJECTID").isEmpty()
         || row.get("FULLNAME").isEmpty() || row.get("MOB").isEmpty()
         || row.get("DOB").isEmpty() || row.get("YOB").isEmpty()
@@ -77,7 +76,6 @@ public class BatchSubprimeGuidCreator {
   }
 
   public static PII rowToPII(Map<String, String> row) {
-
     Name name = NameSplitter.split(row.get("FULLNAME"));
     Sex sex = row.get("SEX").equals("M") ? MALE : FEMALE;
     Birthday birthday = new Birthday(Integer.valueOf(row.get("YOB")),

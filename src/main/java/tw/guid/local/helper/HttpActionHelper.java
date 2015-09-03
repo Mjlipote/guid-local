@@ -42,11 +42,9 @@ public final class HttpActionHelper {
 
   private static final String API_ROOT = "guid";
 
-  private static RestTemplate restTemplate = new RestTemplate();
+  private static final RestTemplate restTemplate = new RestTemplate();
 
-  private static HttpHeaders headers = new HttpHeaders();
-
-  private static ObjectMapper mapper = new ObjectMapper();
+  private static final ObjectMapper mapper = new ObjectMapper();
 
   private HttpActionHelper() {}
 
@@ -63,7 +61,6 @@ public final class HttpActionHelper {
 
   public static ResponseEntity<String> toPost(URI url, Action action,
       Object object, boolean authority) throws JsonProcessingException {
-
     return PostCreater(url, action, object, authority, true);
   }
 
@@ -75,6 +72,7 @@ public final class HttpActionHelper {
   private static ResponseEntity<String> PostCreater(URI url, Action action,
       Object object, boolean authority, boolean apiRoot)
           throws JsonProcessingException {
+    HttpHeaders headers = new HttpHeaders();
     if (authority == true) {
       headers = getHeaders("admin", HashcodeCreator.getSha512("password"));
     } else {
@@ -86,10 +84,9 @@ public final class HttpActionHelper {
     HttpEntity<String> jsonRequest =
         new HttpEntity<>(mapper.writeValueAsString(object), headers);
     String urlStr = apiRoot == true
-        ? url.getScheme() + "://" + url.getHost() + ":" + url.getPort() + "/"
-            + API_ROOT + "/" + action
-        : url.getScheme() + "://" + url.getHost() + ":" + url.getPort() + "/"
-            + action;
+        ? url.getScheme() + "://" + url.getAuthority() + "/" + API_ROOT + "/"
+            + action
+        : url.getScheme() + "://" + url.getAuthority() + "/" + action;
     ResponseEntity<String> response = restTemplate.exchange(urlStr,
         HttpMethod.POST, jsonRequest, String.class);
 
@@ -98,6 +95,7 @@ public final class HttpActionHelper {
 
   private static ResponseEntity<String> getCreater(URI url, Action action,
       String param, boolean authority, boolean apiRoot) {
+    HttpHeaders headers = new HttpHeaders();
     if (authority == true) {
       headers = getHeaders("admin", HashcodeCreator.getSha512("password"));
     } else {
@@ -108,22 +106,14 @@ public final class HttpActionHelper {
 
     HttpEntity<String> jsonRequest = new HttpEntity<>(headers);
     ResponseEntity<String> response = restTemplate.exchange(
-        apiRoot == true
-            ? url.getScheme() + "://" + url.getHost() + ":" + url.getPort()
-                + "/" + API_ROOT + "/" + action + param
-            : url.getScheme() + "://" + url.getHost() + ":" + url.getPort()
-                + "/" + action + param,
+        apiRoot == true ? url.getScheme() + "://" + url.getAuthority() + "/"
+            + API_ROOT + "/" + action + param
+        : url.getScheme() + "://" + url.getAuthority() + "/" + action + param,
         HttpMethod.GET, jsonRequest, String.class);
 
     return response;
   }
 
-  /**
-   * 
-   * @param username
-   * @param password
-   * @return
-   */
   private static HttpHeaders getHeaders(String username, String password) {
     HttpHeaders httpHeaders = new HttpHeaders();
     httpHeaders.setContentType(APPLICATION_JSON);

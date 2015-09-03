@@ -44,11 +44,9 @@ public final class HttpClientHelper {
   private static final String API_ROOT = "guid";
 
   private final HttpClient httpClient = createSelfSignedHttpsClient();
-
   private final URI uri;
   private final String username;
   private final String password;
-
   private final Action action;
 
   public HttpClientHelper(URI url, String username, String password,
@@ -64,9 +62,8 @@ public final class HttpClientHelper {
   }
 
   public String toGet(String param) throws IOException {
-    HttpGet httpGet = new HttpGet("https://" + uri.getHost()
-        + (uri.getPort() == -1 ? "" : ":" + uri.getPort()) + "/" + API_ROOT
-        + "/" + action + param);
+    HttpGet httpGet = new HttpGet("https://" + uri.getAuthority() + "/"
+        + API_ROOT + "/" + action + param);
 
     HttpResponse response = checkStatusCode(httpClient.execute(httpGet));
     HttpEntity entity = response.getEntity();
@@ -79,9 +76,8 @@ public final class HttpClientHelper {
 
   public List<String> toPsot(List<Map<String, String>> listmap)
       throws IOException {
-    HttpPost httpPost = new HttpPost("https://" + uri.getHost()
-        + (uri.getPort() == -1 ? "" : ":" + uri.getPort()) + "/" + API_ROOT
-        + "/" + action);
+    HttpPost httpPost = new HttpPost(
+        "https://" + uri.getAuthority() + "/" + API_ROOT + "/" + action);
 
     List<NameValuePair> nvps = newArrayList();
 

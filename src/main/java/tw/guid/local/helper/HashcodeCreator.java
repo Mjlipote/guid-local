@@ -11,7 +11,9 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.zip.CRC32;
 
-public class HashcodeCreator {
+public final class HashcodeCreator {
+
+  private HashcodeCreator() {}
 
   public static String convertToHex(byte[] data) {
     StringBuffer buf = new StringBuffer();
@@ -46,11 +48,6 @@ public class HashcodeCreator {
     return convertToHex(sha512hash);
   }
 
-  /**
-   * 
-   * @param str
-   * @return
-   */
   public static String getCrc32(String str) {
     byte[] bytes = (str).getBytes();
     CRC32 x = new CRC32();
@@ -64,4 +61,5 @@ public class HashcodeCreator {
 
     return crc;
   }
+
 }
