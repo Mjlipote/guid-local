@@ -149,37 +149,40 @@
 							<td>
 								<font color="blue"
 									th:if="${paperTrail.httpMethod.toString().equals('POST') and paperTrail.requestURI == '/guids' and paperTrail.httpStatus == 200}"
-									th:text="單筆產生GUID：成功"></font>
+									th:text="單筆產生GUID"></font>
 								<font color="blue"
 									th:if="${paperTrail.httpMethod.toString().equals('POST') and paperTrail.requestURI == '/guids/batch' and paperTrail.httpStatus == 200}"
-									th:text="批次產生GUID：成功"></font>
+									th:text="批次產生GUID"></font>
 								<font color="blue"
 									th:if="${paperTrail.httpMethod.toString().equals('POST') and paperTrail.requestURI == '/guid/create' and paperTrail.httpStatus == 200}"
-									th:text="[Client程式]產生GUID：成功"></font>
+									th:text="[Client程式]產生GUID"></font>
 								<font color="blue"
 									th:if="${paperTrail.httpMethod.toString().equals('POST') and paperTrail.requestURI == '/guids/comparison' and paperTrail.httpStatus == 200}"
-									th:text="比對GUIDs：成功"></font>
+									th:text="比對GUIDs"></font>
 								<font color="blue"
 									th:if="${paperTrail.httpMethod.toString().equals('POST') and paperTrail.requestURI == '/guids/batch/comparison' and paperTrail.httpStatus == 200}"
-									th:text="批次比對GUIDs：成功"></font>
+									th:text="批次比對GUIDs"></font>
 								<font color="blue"
 									th:if="${paperTrail.httpMethod.toString().equals('POST') and paperTrail.requestURI == '/users/new' and paperTrail.httpStatus == 200}"
-									th:text="新增使用者：成功"></font>
+									th:text="新增使用者"></font>
 								<font color="blue"
 									th:if="${paperTrail.httpMethod.toString().equals('POST') and paperTrail.requestURI == '/association' and paperTrail.httpStatus == 200}"
-									th:text="關聯比對查詢：成功"></font>
+									th:text="關聯比對查詢"></font>
 								<font color="red"
 									th:if="${paperTrail.httpMethod.toString().equals('DELETE') and paperTrail.requestURI.startsWith('/users/') and paperTrail.httpStatus == 200}"
-									th:text="刪除使用者：成功"></font>
+									th:text="刪除使用者"></font>
 								<font color="green"
 									th:if="${paperTrail.httpMethod.toString().equals('PUT') and paperTrail.requestURI.startsWith('/association/') and paperTrail.httpStatus == 200}"
-									th:text="關聯比對資料編輯：成功"></font>
+									th:text="關聯比對資料編輯"></font>
 								<font color="green"
 									th:if="${paperTrail.httpMethod.toString().equals('PUT') and paperTrail.requestURI.startsWith('/users/') and paperTrail.httpStatus == 200}"
-									th:text="編輯個人資料：成功"></font>
+									th:text="編輯個人資料"></font>
 								<font color="blue"
 									th:if="${paperTrail.httpMethod.toString().equals('POST') and paperTrail.requestURI.startsWith('/users/changepassword/') and paperTrail.httpStatus == 200}"
-									th:text="編輯個人密碼：成功"></font>
+									th:text="編輯個人密碼"></font>
+									<font color="red"
+                  th:if="${paperTrail.httpMethod.toString().equals('POST') and paperTrail.requestURI.startsWith('/error') and paperTrail.httpStatus == 500}"
+                  th:text="系統服務錯誤"></font>
 							</td>
 						</tr>
 					</tbody>
