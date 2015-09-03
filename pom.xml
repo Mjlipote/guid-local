@@ -11,6 +11,10 @@
 		<version>1.2.5.RELEASE</version>
 	</parent>
 
+	<properties>
+		<java.version>1.8</java.version>
+	</properties>
+
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -112,10 +116,6 @@
 		</dependency>
 	</dependencies>
 
-	<properties>
-		<java.version>1.8</java.version>
-	</properties>
-
 	<build>
 		<plugins>
 			<plugin>
@@ -134,11 +134,15 @@
 
 	<repositories>
 		<repository>
-			<id>spring-releases</id>
-			<name>Spring Releases</name>
-			<url>https://repo.spring.io/libs-release</url>
+			<id>guid-client-mvn-repo</id>
+			<url>https://raw.github.com/twbinfo/guid-client/mvn-repo/</url>
+			<snapshots>
+				<enabled>true</enabled>
+				<updatePolicy>always</updatePolicy>
+			</snapshots>
 		</repository>
 	</repositories>
+
 	<pluginRepositories>
 		<pluginRepository>
 			<id>spring-releases</id>
