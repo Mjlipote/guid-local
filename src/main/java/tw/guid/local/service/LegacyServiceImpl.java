@@ -36,7 +36,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.env.Environment;
 
 import com.github.wnameless.json.flattener.JsonFlattener;
 import com.google.common.io.BaseEncoding;
@@ -51,26 +50,22 @@ import tw.guid.local.helper.HttpActionHelper;
 import tw.guid.local.repository.AccountUsersRepository;
 import tw.guid.local.repository.SubprimeGuidRepository;
 import tw.guid.local.web.Action;
-import tw.guid.local.web.CustomAuthenticationProvider;
 import tw.guid.local.web.GuidException;
 import tw.guid.local.web.SubprimeGuidRequest;
 
 public class LegacyServiceImpl implements LegacyService {
 
-  @Autowired
-  AccountUsersRepository acctUserRepo;
-  @Autowired
-  CustomAuthenticationProvider customAuthenticationProvider;
-  @Autowired
-  SubprimeGuidRepository subprimeGuidRepo;
-  @Autowired
-  Environment env;
-
-  @Value("${guid.central.server.url}")
-  String centralServerUrl;
-
   private static final Logger log =
       LoggerFactory.getLogger(LegacyServiceImpl.class);
+
+  @Value("${guid.central.server.url}")
+  private String centralServerUrl;
+
+  @Autowired
+  private AccountUsersRepository acctUserRepo;
+
+  @Autowired
+  private SubprimeGuidRepository subprimeGuidRepo;
 
   @Override
   public String authenticate(HttpServletRequest request) {
@@ -128,7 +123,6 @@ public class LegacyServiceImpl implements LegacyService {
     });
 
     return new Gson().toJson(correctGuids);
-
   }
 
   private List<SubprimeGuidRequest> buildRequests(String prefix,
@@ -137,7 +131,6 @@ public class LegacyServiceImpl implements LegacyService {
 
     List<String> hash = null;
     List<List<String>> hashes = null;
-
     try {
       hash = new Gson().fromJson(jsonHashes,
           new TypeToken<List<String>>() {}.getType());
@@ -177,4 +170,5 @@ public class LegacyServiceImpl implements LegacyService {
   private String getPrefixFromCurrentLoginUser(HttpServletRequest request) {
     return getAccountUsers(request).getPrefix();
   }
+
 }

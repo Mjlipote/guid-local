@@ -29,7 +29,6 @@ import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.env.Environment;
 
 import tw.guid.local.helper.HttpActionHelper;
 import tw.guid.local.repository.AccountUsersRepository;
@@ -39,17 +38,17 @@ import tw.guid.local.web.Action;
 
 public class ApiServiceImpl implements ApiService {
 
-  @Autowired
-  SubprimeGuidRepository spguidRepo;
-  @Autowired
-  AccountUsersRepository acctUserRepo;
-  @Autowired
-  AssociationRepository associationRepo;
-  @Autowired
-  Environment env;
-
   @Value("${guid.central.server.url}")
-  String centralServerUrl;
+  private String centralServerUrl;
+
+  @Autowired
+  private SubprimeGuidRepository spguidRepo;
+
+  @Autowired
+  private AccountUsersRepository acctUserRepo;
+
+  @Autowired
+  private AssociationRepository associationRepo;
 
   /**
    * Get all prefix List
