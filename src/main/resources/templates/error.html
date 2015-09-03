@@ -5,12 +5,9 @@
 <head>
 <title>Users Error</title>
 <th:block th:include="head :: bootstrap" />
-<style type="text/css">
-</style>
-<th:block th:include="top :: navigation" class="container-fluid" />
 </head>
-
 <body>
+	<th:block th:include="top :: navigation" class="container-fluid" />
 	<div id="wrap">
 		<h1 class="text-center" th:text="${errorMessage}"></h1>
 		<br></br>

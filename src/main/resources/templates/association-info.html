@@ -6,12 +6,9 @@
 <meta charset="UTF-8" />
 <title>編輯受試者之通訊資料</title>
 <th:block th:include="head :: bootstrap" />
-<style type="text/css">
-</style>
-<th:block th:include="top :: navigation" />
 </head>
-
 <body>
+	<th:block th:include="top :: navigation" />
 	<div id="wrap">
 		<h1 class="text-center">編輯受試者之通訊資料</h1>
 		<div id="main" class="container">
@@ -20,46 +17,52 @@
 				th:action="@{${'/association/' + associationUserInfo.spguid }}">
 
 				<div class="form-group col-lg-12">
-					<label>姓名：</label><input type="text" class="form-control"
-						placeholder="姓名" name="name"
-						th:value="${associationUserInfo.name}" disabled="disabled"></input>
+					<label>姓名：</label>
+					<input type="text" class="form-control" placeholder="姓名"
+						name="name" th:value="${associationUserInfo.name}"
+						disabled="disabled"></input>
 				</div>
 
 				<div class="form-group col-lg-12">
-					<label>Subject ID：</label><input type="text"
+					<label>Subject ID：</label>
+					<input type="text"
 						onkeyup="value=value.replace(/[^-_a-zA-Z0-9]/g,'')"
 						class="form-control" placeholder="Subject ID" name="subjectId"
 						th:value="${associationUserInfo.subjectId}"></input>
 				</div>
 
 				<div class="form-group col-lg-12">
-					<label>病例編號：</label><input type="text"
+					<label>病例編號：</label>
+					<input type="text"
 						onkeyup="value=value.replace(/[^-_a-zA-Z0-9]/g,'')"
 						class="form-control" placeholder="病歷編號（MRN）" name="mrn"
 						th:value="${associationUserInfo.mrn}"></input>
 				</div>
 
 				<div class="form-group col-lg-12">
-					<label>收案醫院：</label><input type="text" class="form-control"
-						placeholder="收案醫院" name="hospital"
-						th:value="${associationUserInfo.hospital}"></input>
+					<label>收案醫院：</label>
+					<input type="text" class="form-control" placeholder="收案醫院"
+						name="hospital" th:value="${associationUserInfo.hospital}"></input>
 				</div>
 
 				<div class="form-group col-lg-12">
-					<label>收案醫師：</label><input class="form-control" type="text"
-						name="doctor" th:value="${associationUserInfo.doctor}"></input>
+					<label>收案醫師：</label>
+					<input class="form-control" type="text" name="doctor"
+						th:value="${associationUserInfo.doctor}"></input>
 				</div>
 
 				<div class="form-group col-lg-12">
-					<label>聯絡電話：</label><input class="form-control"
+					<label>聯絡電話：</label>
+					<input class="form-control"
 						onkeyup="value=value.replace(/[^-_0-9]/g,'')" type="text"
 						placeholder="0910xxxxxx" name="telephone"
 						th:value="${associationUserInfo.telephone}"></input>
 				</div>
 
 				<div class="form-group col-lg-12">
-					<label>聯絡住址：</label><input class="form-control" type="text"
-						name="address" th:value="${associationUserInfo.address}"></input>
+					<label>聯絡住址：</label>
+					<input class="form-control" type="text" name="address"
+						th:value="${associationUserInfo.address}"></input>
 					<input type="hidden" name="_method" value="PUT" />
 				</div>
 

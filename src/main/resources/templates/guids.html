@@ -5,30 +5,12 @@
 <meta charset="UTF-8" />
 <title>輸入 PII</title>
 <th:block th:include="head :: bootstrap" />
-<style type="text/css">
-</style>
-
-<!-- Include Required Prerequisites -->
-<script type="text/javascript"
-	src="//cdn.jsdelivr.net/jquery/1/jquery.min.js"></script>
-<script type="text/javascript"
-	src="//cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
-
-
-<!-- Include Date Range Picker -->
-<script type="text/javascript"
-	src="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.js"></script>
-<link rel="stylesheet" type="text/css"
-	href="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.css" />
-
 <script type="text/javascript">
 	$('input[name="daterange"]').daterangepicker();
 </script>
-<th:block th:include="top :: navigation" class="container-fluid" />
-
 </head>
-
 <body>
+	<th:block th:include="top :: navigation" class="container-fluid" />
 	<div id="wrap">
 		<h1 class="text-center">輸入 PII</h1>
 

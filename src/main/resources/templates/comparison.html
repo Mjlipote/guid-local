@@ -5,11 +5,6 @@
 <meta charset="UTF-8" />
 <title>比對 GUIDs</title>
 <th:block th:include="head :: bootstrap" />
-<style type="text/css">
-</style>
-<link rel="stylesheet" href="/simplePagination.css"></link>
-<script src="/jquery.simplePagination.js"></script>
-<th:block th:include="top :: navigation" />
 <script type="text/javascript">
 	$(function() {
 		var items = $("table tbody tr");
@@ -53,8 +48,8 @@
 	});
 </script>
 </head>
-
 <body>
+	<th:block th:include="top :: navigation" />
 	<div id="wrap">
 
 		<h1 class="text-center">比對 GUIDs</h1>
@@ -85,7 +80,9 @@
 							<td>#</td>
 							<td>
 								<h2>
-									<strong>比對 GUIDs 結果：共有 <span th:text="${number}"></span>
+									<strong>
+										比對 GUIDs 結果：共有
+										<span th:text="${number}"></span>
 										組相同
 									</strong>
 								</h2>

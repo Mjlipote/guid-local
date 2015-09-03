@@ -2,18 +2,12 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:th="http://www.thymeleaf.org">
 <head>
-
 <meta charset="UTF-8" />
-
 <title>CodePen - Login Form</title>
-
 <link rel="stylesheet" href="/blue-login/css/style.css" media="screen"
 	type="text/css" />
-
 </head>
-
 <body>
-
 	<a href="#" class="button" id="toggle-login">Log in</a>
 
 	<div id="login">
@@ -22,8 +16,9 @@
 		<form class="form" th:action="@{/association}" method="post">
 			<input type="text"
 				onkeyup="value=value.replace(/[^-_a-zA-Z0-9]/g,'')" name="username"
-				placeholder=" 第二組驗證者帳號" /> <input type="password" name="password"
-				placeholder="第二組驗證者密碼" /> <input type="submit" value="確定" />
+				placeholder=" 第二組驗證者帳號" />
+			<input type="password" name="password" placeholder="第二組驗證者密碼" />
+			<input type="submit" value="確定" />
 		</form>
 	</div>
 

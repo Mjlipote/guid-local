@@ -2,8 +2,6 @@
 	xmlns:th="http://www.thymeleaf.org">
 
 <th:block th:fragment="bootstrap">
-
-
 	<script src="https://code.jquery.com/jquery-1.11.2.min.js"></script>
 	<script src="https://code.jquery.com/ui/1.11.3/jquery-ui.min.js"></script>
 	<link rel="stylesheet"
@@ -32,10 +30,18 @@
 		src="https://lipis.github.io/bootstrap-sweetalert/lib/sweet-alert.js"></script>
 	<script
 		src="https://cdnjs.cloudflare.com/ajax/libs/jquery-url-parser/2.3.1/purl.js"></script>
-	<script type="text/javascript">
-		$('[data-toggle="select"]').select2();
-	</script>
 
+	<!-- Include Date Range Picker -->
+	<script type="text/javascript"
+		src="//cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+	<script type="text/javascript"
+		src="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.js"></script>
+	<link rel="stylesheet" type="text/css"
+		href="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.css"></link>
+
+	<!-- Include Simple Pagination -->
+	<link rel="stylesheet" href="/simplePagination.css"></link>
+	<script src="/jquery.simplePagination.js"></script>
 </th:block>
 
 </html>
