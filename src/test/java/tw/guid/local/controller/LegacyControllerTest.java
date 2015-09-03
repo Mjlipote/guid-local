@@ -18,7 +18,7 @@
  * the License.
  *
  */
-package tw.edu.ym.lab525.web.guidlocalserver.controller;
+package tw.guid.local.controller;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -51,6 +51,7 @@ import tw.guid.local.web.SubprimeGuidRequest;
 @SpringApplicationConfiguration(classes = Application.class)
 @WebIntegrationTest
 public class LegacyControllerTest {
+
   static {
     // for localhost testing only
     javax.net.ssl.HttpsURLConnection
@@ -73,7 +74,7 @@ public class LegacyControllerTest {
   @Autowired
   SubprimeGuidRepository subprimeGuidRepo;
 
-  @Value("${local_server_url}")
+  @Value("${guid.local.server.url}")
   String localServerUrl;
 
   @Test

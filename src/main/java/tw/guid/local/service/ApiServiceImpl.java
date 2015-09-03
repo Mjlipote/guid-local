@@ -48,7 +48,7 @@ public class ApiServiceImpl implements ApiService {
   @Autowired
   Environment env;
 
-  @Value("${central_server_url}")
+  @Value("${guid.central.server.url}")
   String centralServerUrl;
 
   /**

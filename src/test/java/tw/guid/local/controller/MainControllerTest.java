@@ -18,7 +18,7 @@
  * the License.
  *
  */
-package tw.edu.ym.lab525.web.guidlocalserver.controller;
+package tw.guid.local.controller;
 
 import static org.junit.Assert.assertEquals;
 
@@ -50,10 +50,10 @@ public class MainControllerTest {
   @Autowired
   Environment env;
 
-  @Value("${local_server_url}")
+  @Value("${guid.local.server.url}")
   String localServerUrl;
 
-  @Value("${central_server_url}")
+  @Value("${guid.central.server.url}")
   String centralServerUrl;
 
   @Test

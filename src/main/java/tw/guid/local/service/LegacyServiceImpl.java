@@ -66,7 +66,7 @@ public class LegacyServiceImpl implements LegacyService {
   @Autowired
   Environment env;
 
-  @Value("${central_server_url}")
+  @Value("${guid.central.server.url}")
   String centralServerUrl;
 
   private static final Logger log =
