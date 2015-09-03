@@ -1,10 +1,8 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:th="http://www.thymeleaf.org"
-	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorator="layout">
 <head>
-<title>Welcome!</title>
-<th:block th:include="head :: bootstrap" />
 <script>
 .carousel img {
     position: absolute;
@@ -14,11 +12,9 @@
     height: 500px;
   }
 </script>
-
 </head>
 <body>
-	<th:block th:include="top :: navigation" class="container-fluid" />
-	<div id="wrap">
+	<div layout:fragment="content" id="wrap">
 		<div class="jumbotron col-md-12">
 			<h1 class="text-center" th:inline="text">您好！
 				[[${#httpServletRequest.remoteUser}]]</h1>
@@ -78,10 +74,8 @@
 							value="登出" />
 					</div>
 				</form>
-
 			</div>
 		</div>
 	</div>
-	<th:block th:include="footer :: footer" class="container-fluid" />
 </body>
 </html>

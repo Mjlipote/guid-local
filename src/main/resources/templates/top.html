@@ -1,9 +1,9 @@
-<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:th="http://www.thymeleaf.org"
-	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 <th:block th:fragment="navigation" class="container-fluid">
-	<nav class="navbar navbar-inverse navbar-embossed navbar-fixed-top"
+	<nav layout:fragment="nav-top"
+		class="navbar navbar-inverse navbar-embossed navbar-fixed-top"
 		role="navigation">
 		<div class="navbar-header">
 			<button type="button" class="navbar-toggle" data-toggle="collapse"
@@ -15,54 +15,104 @@
 		</div>
 		<div class="collapse navbar-collapse" id="navbar-collapse-01">
 			<ul class="nav navbar-nav">
-				<li class="dropdown"><a href="#" class="dropdown-toggle"
-					data-toggle="dropdown" role="button" aria-haspopup="true"
-					aria-expanded="false">GUID 管理<span class="caret"></span></a>
+				<li class="dropdown">
+					<a href="#" class="dropdown-toggle" data-toggle="dropdown"
+						role="button" aria-haspopup="true" aria-expanded="false">
+						GUID 管理
+						<span class="caret"></span>
+					</a>
 					<ul class="dropdown-menu">
-						<li><a th:href="@{/guids}">產生 GUID<span class="badge"></span></a></li>
-						<li><a th:href="@{/guids/batch}">批次產生 GUIDs<span
-								class="badge"></span></a></li>
-						<li><a sec:authorize="hasRole('ROLE_ADMIN')"
-							th:href="@{/comparison}">比對 GUIDs</a></li>
-						<li><a sec:authorize="hasRole('ROLE_ADMIN')"
-							th:href="@{/batch/comparison}">批次比對 GUIDs</a></li>
-					</ul></li>
-				<li class="dropdown" sec:authorize="hasRole('ROLE_ADMIN')"><a
-					href="#" class="dropdown-toggle" data-toggle="dropdown"
-					role="button" aria-haspopup="true" aria-expanded="false">使用者管理<span
-						class="caret"></span></a>
+						<li>
+							<a th:href="@{/guids}">
+								產生 GUID
+								<span class="badge"></span>
+							</a>
+						</li>
+						<li>
+							<a th:href="@{/guids/batch}">
+								批次產生 GUIDs
+								<span class="badge"></span>
+							</a>
+						</li>
+						<li>
+							<a sec:authorize="hasRole('ROLE_ADMIN')" th:href="@{/comparison}">比對
+								GUIDs</a>
+						</li>
+						<li>
+							<a sec:authorize="hasRole('ROLE_ADMIN')"
+								th:href="@{/batch/comparison}">批次比對 GUIDs</a>
+						</li>
+					</ul>
+				</li>
+				<li class="dropdown" sec:authorize="hasRole('ROLE_ADMIN')">
+					<a href="#" class="dropdown-toggle" data-toggle="dropdown"
+						role="button" aria-haspopup="true" aria-expanded="false">
+						使用者管理
+						<span class="caret"></span>
+					</a>
 					<ul class="dropdown-menu">
-						<li><a th:href="@{/users}">使用者清單<span class="badge"></span></a></li>
-						<li><a th:href="@{/register}">新增使用者</a></li>
-					</ul></li>
-				<li class="dropdown" sec:authorize="hasRole('ROLE_ADMIN')"><a
-					href="#" class="dropdown-toggle" data-toggle="dropdown"
-					role="button" aria-haspopup="true" aria-expanded="false">關聯比對管理<span
-						class="caret"></span></a>
+						<li>
+							<a th:href="@{/users}">
+								使用者清單
+								<span class="badge"></span>
+							</a>
+						</li>
+						<li>
+							<a th:href="@{/register}">新增使用者</a>
+						</li>
+					</ul>
+				</li>
+				<li class="dropdown" sec:authorize="hasRole('ROLE_ADMIN')">
+					<a href="#" class="dropdown-toggle" data-toggle="dropdown"
+						role="button" aria-haspopup="true" aria-expanded="false">
+						關聯比對管理
+						<span class="caret"></span>
+					</a>
 					<ul class="dropdown-menu">
-						<li><a th:href="@{/association/login}">關聯比對表</a></li>
-						<li><a th:href="@{#}">重複收案表</a></li>
-					</ul></li>
-				<li sec:authorize="hasRole('ROLE_ADMIN')"><a th:href="@{/trail}">操作記錄</a></li>
-				<li><a th:href="@{https://www.cims.tw/}">關於我們</a></li>
-				<li><a th:href="@{#}">使用教學</a></li>
+						<li>
+							<a th:href="@{/association/login}">關聯比對表</a>
+						</li>
+						<li>
+							<a th:href="@{#}">重複收案表</a>
+						</li>
+					</ul>
+				</li>
+				<li sec:authorize="hasRole('ROLE_ADMIN')">
+					<a th:href="@{/trail}">操作記錄</a>
+				</li>
+				<li>
+					<a th:href="@{https://www.cims.tw/}">關於我們</a>
+				</li>
+				<li>
+					<a th:href="@{#}">使用教學</a>
+				</li>
 			</ul>
 			<div class="collapse navbar-collapse navbar-right"
 				id="navbar-collapse-02">
 				<ul class="nav navbar-nav">
-					<li class="dropdown "><a href="#" class="dropdown-toggle"
-						data-toggle="dropdown" role="button" aria-haspopup="true"
-						aria-expanded="false"><span class="text-center"
-							th:inline="text"> <i class="glyphicon glyphicon-user"></i>
+					<li class="dropdown ">
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown"
+							role="button" aria-haspopup="true" aria-expanded="false">
+							<span class="text-center" th:inline="text">
+								<i class="glyphicon glyphicon-user"></i>
 								[[${#httpServletRequest.remoteUser}]]
-						</span><span class="caret"></span></a>
+							</span>
+							<span class="caret"></span>
+						</a>
 						<ul class="dropdown-menu">
-							<li><a th:inline="text"
-								th:href="@{${'/users/' + #authentication.name }}">個人資料編輯</a></li>
-							<li><a th:inline="text" th:href="@{/users/changepassword}">修改登入密碼</a></li>
+							<li>
+								<a th:inline="text"
+									th:href="@{${'/users/' + #authentication.name }}">個人資料編輯</a>
+							</li>
+							<li>
+								<a th:inline="text" th:href="@{/users/changepassword}">修改登入密碼</a>
+							</li>
 							<li role="separator" class="divider"></li>
-							<li><a th:href="@{/logout}">登出</a></li>
-						</ul></li>
+							<li>
+								<a th:href="@{/logout}">登出</a>
+							</li>
+						</ul>
+					</li>
 				</ul>
 			</div>
 
