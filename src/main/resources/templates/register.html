@@ -1,13 +1,16 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:th="http://www.thymeleaf.org"
-	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<html 
+  xmlns:th="http://www.thymeleaf.org"
+  xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
+  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorator="layout">
 <head>
 <meta charset="UTF-8" />
 <title>新增使用者</title>
 <th:block th:include="head :: bootstrap" />
 </head>
 <body>
+  <div layout:fragment="content" id="wrap">
 	<th:block th:include="top :: navigation" />
 	<div id="wrap">
 		<h1 class="text-center">新增使用者</h1>
@@ -43,6 +46,11 @@
 					</div>
 				</div>
 
+        <div class="form-group col-lg-12">
+          <input class="form-control" type="text" name="protocolId"
+            placeholder="Protocol ID"></input>
+        </div>
+        
 				<div class="form-group col-lg-12">
 					<input class="form-control" type="text" name="institute"
 						placeholder="服務單位"></input>
@@ -77,6 +85,6 @@
 			</form>
 		</div>
 	</div>
-	<th:block th:include="footer :: footer" class="container-fluid" />
+</div>
 </body>
 </html>

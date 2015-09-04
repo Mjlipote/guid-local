@@ -1,12 +1,15 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:th="http://www.thymeleaf.org"
-	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<html 
+  xmlns:th="http://www.thymeleaf.org"
+  xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
+  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorator="layout">
 <head>
 <title>Users Error</title>
 <th:block th:include="head :: bootstrap" />
 </head>
 <body>
+  <div layout:fragment="content" id="wrap">
 	<th:block th:include="top :: navigation" class="container-fluid" />
 	<div id="wrap">
 		<h1 class="text-center" th:text="${errorMessage}"></h1>
@@ -17,7 +20,6 @@
 				th:text="重新一次"></a>
 		</div>
 	</div>
-	<th:block th:include="footer :: footer" class="container-fluid" />
-
+</div>
 </body>
 </html>
