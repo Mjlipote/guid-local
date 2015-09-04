@@ -40,7 +40,7 @@ import tw.guid.local.web.Action;
 
 public final class HttpActionHelper {
 
-  private static final String API_ROOT = "guid";
+  private static final String API_ROOT = "guids";
 
   private static final RestTemplate restTemplate = new RestTemplate();
 
