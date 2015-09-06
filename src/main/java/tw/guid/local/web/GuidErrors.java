@@ -1,4 +1,4 @@
-/**
+/*
  *
  * @author Wei-Ming Wu
  *
