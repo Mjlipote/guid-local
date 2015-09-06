@@ -69,6 +69,7 @@ import tw.guid.local.validateion.BirthdayValidator;
 import tw.guid.local.web.Action;
 import tw.guid.local.web.CustomAuthenticationProvider;
 import tw.guid.local.web.SubprimeGuidRequest;
+import wmw.validate.TWNationalIdValidator;
 
 @RequestMapping("/guids")
 @Controller
@@ -240,6 +241,10 @@ public class WebGuidController {
       map.addAttribute("errorMessage", "請確實填寫必填資料，切勿留空值！！");
       map.addAttribute("link", "/guids");
       return "error";
+    } else if (!TWNationalIdValidator.validate(sid)) {
+      map.addAttribute("errorMessage", "填寫的身分證字號有誤！！");
+      map.addAttribute("link", "/guids");
+      return "error";
     } else {
       String[] birthday = birthDay.split("/");
       int birthOfYear = Integer.valueOf(birthday[0]);
@@ -268,7 +273,7 @@ public class WebGuidController {
                 pii.getHashcodes().get(2), prefix);
 
         if (sg != null) {
-          map.addAttribute("spguids", "(REPEAT): " + sg.getSpguid());
+          map.addAttribute("spguids", sg.getSpguid());
           Association existAssociation =
               associationRepo.findBySpguid(sg.getSpguid());
           existAssociation.setSubjectId(subjectId);
