@@ -5,6 +5,9 @@
 <meta charset="UTF-8" />
 <title>批次比對 GUIDs</title>
 <th:block th:include="head :: bootstrap" />
+<!-- Include Simple Pagination -->
+<link rel="stylesheet" href="/simplePagination.css"></link>
+<script src="/jquery.simplePagination.js"></script>
 <script type="text/javascript">
 	$(function() {
 		var items = $("table tbody tr");
@@ -57,10 +60,10 @@
 
 			<form class="col-md-8 col-md-offset-2" enctype="multipart/form-data"
 				method="post" th:action="@{/guids/batch/comparison}">
-				<label class="btn btn-primary col-md-6 col-md-offset-3">
-					<input id="my-file-selector" name="file" type="file"
-						style="display: none;"
-						accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"></input>
+				<label class="btn btn-primary col-md-6 col-md-offset-3"> <input
+					id="my-file-selector" name="file" type="file"
+					style="display: none;"
+					accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"></input>
 					選擇Excel檔案...
 				</label>
 				<div class="col-md-6 col-md-offset-3">
@@ -78,9 +81,7 @@
 							<td>#</td>
 							<td>
 								<h2>
-									<strong>
-										批次比對 GUIDs 結果：共有
-										<span th:text="${number}"></span>
+									<strong> 批次比對 GUIDs 結果：共有 <span th:text="${number}"></span>
 										組相同
 									</strong>
 								</h2>

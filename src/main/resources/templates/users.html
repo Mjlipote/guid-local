@@ -5,6 +5,9 @@
 <head>
 <title>使用者清單</title>
 <th:block th:include="head :: bootstrap" />
+<!-- Include Simple Pagination -->
+<link rel="stylesheet" href="/simplePagination.css"></link>
+<script src="/jquery.simplePagination.js"></script>
 <script type="text/javascript">
 	$(function() {
 		var items = $("table tbody tr");
@@ -58,8 +61,7 @@
 				th:action="@{/users/lookup}" role="form">
 				<div class="row">
 					<div class="form-group col-md-4">
-						<label class="sr-only">使用者權限：</label>
-						<select data-toggle="select"
+						<label class="sr-only">使用者權限：</label> <select data-toggle="select"
 							class="form-control select select-primary mrs mbm" name="role">
 							<option value="">使用者權限</option>
 							<option value="ROLE_ADMIN">系統管理者</option>
@@ -68,8 +70,8 @@
 					</div>
 
 					<div class="form-group col-md-4">
-						<label class="sr-only">Prefix 值：</label>
-						<select data-toggle="select"
+						<label class="sr-only">Prefix 值：</label> <select
+							data-toggle="select"
 							class="form-control select select-primary mrs mbm" name="prefix">
 							<option value="">Prefix</option>
 							<th:block th:each="prefix : ${prefixs}">
@@ -79,8 +81,7 @@
 
 					</div>
 					<div class="form-group col-md-4">
-						<label class="sr-only">服務單位：</label>
-						<select data-toggle="select"
+						<label class="sr-only">服務單位：</label> <select data-toggle="select"
 							class="form-control select select-primary mrs mbm"
 							name="institute">
 							<option value="">服務單位</option>
@@ -93,20 +94,18 @@
 
 				<div class="row col-md-12">
 					<div class="form-group">
-						<label class="sr-only">使用者帳號：</label>
-						<input class="form-control"
+						<label class="sr-only">使用者帳號：</label> <input class="form-control"
 							onkeyup="value=value.replace(/[^-_a-zA-Z0-9]/g,'')" type="text"
 							name="username" placeholder="使用者帳號"></input>
 					</div>
 
 					<div class="form-group">
-						<label class="sr-only">工作職銜：</label>
-						<input class="form-control" type="text" name="jobTitle"
-							placeholder="工作職銜"></input>
+						<label class="sr-only">工作職銜：</label> <input class="form-control"
+							type="text" name="jobTitle" placeholder="工作職銜"></input>
 					</div>
 					<div class="form-group">
-						<label class="sr-only">電子郵件 E-Mail：</label>
-						<input class="form-control" type="text" name="email"
+						<label class="sr-only">電子郵件 E-Mail：</label> <input
+							class="form-control" type="text" name="email"
 							placeholder="電子郵件 E-Mail"></input>
 					</div>
 
@@ -126,30 +125,14 @@
 					<thead>
 						<th:tr>
 							<td>#</td>
-							<td>
-								<strong>使用者權限</strong>
-							</td>
-							<td>
-								<strong>使用者帳號</strong>
-							</td>
-							<td>
-								<strong>Prefix 值</strong>
-							</td>
-							<td>
-								<strong>服務單位</strong>
-							</td>
-							<td>
-								<strong>工作職銜</strong>
-							</td>
-							<td>
-								<strong>電子郵件 E-Mail</strong>
-							</td>
-							<td>
-								<strong>聯絡電話</strong>
-							</td>
-							<td>
-								<strong>聯絡地址</strong>
-							</td>
+							<td><strong>使用者權限</strong></td>
+							<td><strong>使用者帳號</strong></td>
+							<td><strong>Prefix 值</strong></td>
+							<td><strong>服務單位</strong></td>
+							<td><strong>工作職銜</strong></td>
+							<td><strong>電子郵件 E-Mail</strong></td>
+							<td><strong>聯絡電話</strong></td>
+							<td><strong>聯絡地址</strong></td>
 							<td></td>
 						</th:tr>
 					</thead>
