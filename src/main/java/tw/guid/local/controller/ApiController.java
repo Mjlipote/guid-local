@@ -36,7 +36,7 @@ import tw.guid.local.repository.AssociationRepository;
 import tw.guid.local.repository.SubprimeGuidRepository;
 import tw.guid.local.service.ApiService;
 
-@RequestMapping("/guid/api")
+@RequestMapping("/guids/api")
 @RestController
 public class ApiController {
 

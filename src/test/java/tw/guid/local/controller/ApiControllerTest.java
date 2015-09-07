@@ -116,6 +116,7 @@ public class ApiControllerTest {
 
     assertEquals(HttpActionHelper
         .toGet(new URI(localServerUrl), Action.API_PREFIX, "", true).getBody(),
-        "[" + "\"UserTest\"" + "," + "\"AdminTest\"" + "]");
+        "[" + "\"UserTest\"" + "," + "\"BiobankTest\"" + "," + "\"AdminTest\""
+            + "]");
   }
 }
