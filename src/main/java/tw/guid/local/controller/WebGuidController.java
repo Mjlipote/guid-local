@@ -458,6 +458,38 @@ public class WebGuidController {
     }
   }
 
+  @RequestMapping(value = "/repeat", method = RequestMethod.GET)
+  String guidsRepeat(ModelMap map)
+      throws JsonProcessingException, URISyntaxException {
+
+    List<String> list = newArrayList();
+
+    for (SubprimeGuid subprimeGuid : subprimeGuidRepo.findAll()) {
+      list.add(subprimeGuid.getSpguid());
+    }
+
+    Map<String, Object> flattenJson =
+        JsonFlattener.flattenAsMap(HttpActionHelper
+            .toPost(new URI(centralServerUrl), Action.COMPARISON, list, false)
+            .getBody());
+
+    List<List<String>> lls = newArrayList();
+
+    for (int i = 0; i < flattenJson.size(); i++) {
+      List<String> ls = newArrayList();
+      for (int j = 0; j < flattenJson.size(); j++) {
+        if (flattenJson.get("[" + i + "]" + "[" + j + "]") != null) {
+          ls.add(flattenJson.get("[" + i + "]" + "[" + j + "]").toString());
+        }
+      }
+      if (ls.size() > 0) lls.add(ls);
+    }
+    map.addAttribute("result", lls);
+    map.addAttribute("number", lls.size());
+
+    return "repeat";
+  }
+
   private boolean isValidateLength(List<String> spguids) {
     for (String s : spguids) {
       if (!s.contains("-")) {

@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorator="layout">
+<head>
+<meta charset="UTF-8" />
+<title>重復收案</title>
+<!-- Include Simple Pagination -->
+<link rel="stylesheet" href="/simplePagination.css"></link>
+<script src="/jquery.simplePagination.js"></script>
+<script type="text/javascript">
+	$(function() {
+		var items = $("table tbody tr");
+		var numItems = items.length;
+		var perPage = 10;
+		items.slice(perPage).hide();
+
+		$(pages).pagination({
+
+			items : numItems,
+			itemsOnPage : perPage,
+			cssStyle : "light-theme",
+
+			onPageClick : function(pageNumber) {
+
+				var showFrom = perPage * (pageNumber - 1);
+				var showTo = showFrom + perPage;
+
+				items.hide() // first hide everything, then show for the new page
+				.slice(showFrom, showTo).show();
+			}
+		});
+		var checkFragment = function() {
+			// if there's no hash, make sure we go to page 1
+			var hash = window.location.hash || "#page-1";
+
+			// we'll use regex to check the hash string
+			hash = hash.match(/^#page-(\d+)$/);
+
+			if (hash)
+				// the selectPage function is described in the documentation
+				// we've captured the page number in a regex group: (\d+)
+				$(pages).pagination("selectPage", parseInt(hash[1]));
+		};
+
+		// we'll call this function whenever the back/forward is pressed
+		$(window).bind("popstate", checkFragment);
+
+		// and we'll also call it to check right now!
+		checkFragment();
+	});
+</script>
+</head>
+<body>
+	<div layout:fragment="content" id="wrap">
+		<div id="wrap">
+
+			<h1 class="text-center">重複收案列表</h1>
+			<div id="main" class="container">
+
+<h3 class="text-center" th:if="${number == 0}" th:text="尚無重複收案"></h3>
+				<div th:if="${number > 0}">
+					<div class="container" id="pages"></div>
+					<table
+						class="table table-responsive table-bordered table-striped table-condensed table-hover center">
+						<thead>
+							<tr>
+								<td>#</td>
+								<td>
+									<h2>
+										<strong> 共有 <span th:text="${number}"></span>
+											組重複收案
+										</strong>
+									</h2>
+								</td>
+							</tr>
+						</thead>
+						<tbody>
+
+							<tr th:each="pairs, iterationStatus : ${result}">
+								<td th:text="${iterationStatus.count}"></td>
+								<td th:text="${pairs}"></td>
+							</tr>
+
+						</tbody>
+					</table>
+					<div class="container" id="pages"></div>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>
