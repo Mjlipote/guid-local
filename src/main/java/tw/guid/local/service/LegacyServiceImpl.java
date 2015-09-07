@@ -100,10 +100,20 @@ public class LegacyServiceImpl implements LegacyService {
       else {
         String result = null;
 
+        System.out.println(bs.getValue());
+        List<String> newList = newArrayList();
+        SubprimeGuidRequest subprimeGuidRequest = new SubprimeGuidRequest();
+        newList.add(bs.getValue().getGuidHash().get(0).substring(0, 128));
+        newList.add(bs.getValue().getGuidHash().get(1).substring(0, 128));
+        newList.add(bs.getValue().getGuidHash().get(2).substring(0, 128));
+        subprimeGuidRequest.setGuidHash(newList);
+        subprimeGuidRequest.setPrefix(bs.getValue().getPrefix());
+
         try {
           result = (String) JsonFlattener
-              .flattenAsMap(HttpActionHelper.toPost(new URI(centralServerUrl),
-                  Action.NEW, Arrays.asList(bs.getValue()), false).getBody())
+              .flattenAsMap(
+                  HttpActionHelper.toPost(new URI(centralServerUrl), Action.NEW,
+                      Arrays.asList(subprimeGuidRequest), false).getBody())
               .get("[0].spguid");
         } catch (Exception e) {
           log.error(e.getMessage(), e);
@@ -113,9 +123,12 @@ public class LegacyServiceImpl implements LegacyService {
         SubprimeGuid subprimeGuid = new SubprimeGuid();
         subprimeGuid.setSpguid(result);
         subprimeGuid.setPrefix(str[0]);
-        subprimeGuid.setHashcode1(bs.getValue().getGuidHash().get(0));
-        subprimeGuid.setHashcode2(bs.getValue().getGuidHash().get(1));
-        subprimeGuid.setHashcode3(bs.getValue().getGuidHash().get(2));
+        subprimeGuid
+            .setHashcode1(bs.getValue().getGuidHash().get(0).substring(0, 128));
+        subprimeGuid
+            .setHashcode2(bs.getValue().getGuidHash().get(1).substring(0, 128));
+        subprimeGuid
+            .setHashcode3(bs.getValue().getGuidHash().get(2).substring(0, 128));
         subprimeGuidRepo.save(subprimeGuid);
 
         return result;
@@ -168,7 +181,7 @@ public class LegacyServiceImpl implements LegacyService {
   }
 
   private String getPrefixFromCurrentLoginUser(HttpServletRequest request) {
-    return getAccountUsers(request).getPrefix();
+    return getAccountUsers(request).getInstitutePrefix().getPrefix();
   }
 
 }

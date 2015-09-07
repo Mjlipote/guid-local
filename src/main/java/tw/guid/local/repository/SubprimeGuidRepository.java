@@ -39,23 +39,28 @@ public interface SubprimeGuidRepository
 
   public default Set<SubprimeGuid> findBySubprimeGuidRequest(
       SubprimeGuidRequest req) {
-    return findByHashcode1AndHashcode2AndHashcode3(req.getGuidHash().get(0),
-        req.getGuidHash().get(1), req.getGuidHash().get(2));
+    return findByHashcode1AndHashcode2AndHashcode3(
+        req.getGuidHash().get(0).substring(0, 128),
+        req.getGuidHash().get(1).substring(0, 128),
+        req.getGuidHash().get(2).substring(0, 128));
   }
 
   public default boolean isExist(SubprimeGuidRequest req) {
 
     return findByHashcode1AndHashcode2AndHashcode3AndPrefix(
-        req.getGuidHash().get(0), req.getGuidHash().get(1),
-        req.getGuidHash().get(2), req.getPrefix()) != null;
+        req.getGuidHash().get(0).substring(0, 128),
+        req.getGuidHash().get(1).substring(0, 128),
+        req.getGuidHash().get(2).substring(0, 128), req.getPrefix()) != null;
   }
 
   public default String getSubprimeGuidBySubprimeGuidRequest(
       SubprimeGuidRequest req) {
 
     return findByHashcode1AndHashcode2AndHashcode3AndPrefix(
-        req.getGuidHash().get(0), req.getGuidHash().get(1),
-        req.getGuidHash().get(2), req.getPrefix()).getSpguid();
+        req.getGuidHash().get(0).substring(0, 128),
+        req.getGuidHash().get(1).substring(0, 128),
+        req.getGuidHash().get(2).substring(0, 128), req.getPrefix())
+            .getSpguid();
 
   }
 

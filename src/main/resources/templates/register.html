@@ -1,90 +1,82 @@
 <!DOCTYPE html>
-<html 
-  xmlns:th="http://www.thymeleaf.org"
-  xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
-  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-  layout:decorator="layout">
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorator="layout">
 <head>
 <meta charset="UTF-8" />
 <title>新增使用者</title>
-<th:block th:include="head :: bootstrap" />
 </head>
 <body>
-  <div layout:fragment="content" id="wrap">
-	<th:block th:include="top :: navigation" />
-	<div id="wrap">
-		<h1 class="text-center">新增使用者</h1>
-		<div id="main" class="container">
-			<form class="col-md-6 col-md-offset-3" method="post"
-				th:action="@{/users/new}">
-				<div class="form-group col-lg-12">
-					<select data-toggle="select"
-						class="form-control select select-primary mrs mbm"
-						name="authority">
-						<option value="ROLE_ADMIN">系統管理者</option>
-						<option value="ROLE_USER">一般使用者</option>
-					</select>
-				</div>
-
-				<div class="form-group col-lg-12">
-					<input class="form-control"
-						onkeyup="value=value.replace(/[^-_a-zA-Z0-9]/g,'')" type="text"
-						name="username" placeholder="登入帳號"></input>
-				</div>
-
-				<div class="form-group col-lg-12">
-					<input class="form-control"
-						onkeyup="value=value.replace(/[^-_a-zA-Z0-9]/g,'')"
-						type="password" name="password" placeholder="登入密碼（Password）"></input>
-				</div>
-
-				<div class="form-group col-lg-12">
-					<div class="input-group">
-						<span class="input-group-addon">@</span>
-						<input type="email" class="form-control"
-							placeholder="E-Mail:Sample@mail.com" name="email"></input>
+	<div layout:fragment="content" id="wrap">
+		<div id="wrap">
+			<h1 class="text-center">新增使用者</h1>
+			<div id="main" class="container">
+				<form class="col-md-6 col-md-offset-3" method="post"
+					th:action="@{/users/new}">
+					<div class="form-group col-lg-12">
+						<select data-toggle="select"
+							class="form-control select select-primary mrs mbm"
+							name="authority">
+							<option value="ROLE_ADMIN">系統管理者</option>
+							<option value="ROLE_USER">一般使用者</option>
+						</select>
 					</div>
-				</div>
 
-        <div class="form-group col-lg-12">
-          <input class="form-control" type="text" name="protocolId"
-            placeholder="Protocol ID"></input>
-        </div>
-        
-				<div class="form-group col-lg-12">
-					<input class="form-control" type="text" name="institute"
-						placeholder="服務單位"></input>
-				</div>
+					<div class="form-group col-lg-12">
+						<input class="form-control"
+							onkeyup="value=value.replace(/[^-_a-zA-Z0-9]/g,'')" type="text"
+							name="username" placeholder="登入帳號"></input>
+					</div>
 
-				<div class="form-group col-lg-12">
-					<input class="form-control"
-						onkeyup="value=value.replace(/[^-_a-zA-Z0-9]/g,'')" type="text"
-						name="prefix" placeholder="Prefix 值"></input>
-				</div>
+					<div class="form-group col-lg-12">
+						<input class="form-control"
+							onkeyup="value=value.replace(/[^-_a-zA-Z0-9]/g,'')"
+							type="password" name="password" placeholder="登入密碼（Password）"></input>
+					</div>
 
-				<div class="form-group col-lg-12">
-					<input class="form-control" type="text" name="jobTitle"
-						placeholder="工作職銜"></input>
-				</div>
+					<div class="form-group col-lg-12">
+						<div class="input-group">
+							<span class="input-group-addon">@</span> <input type="email"
+								class="form-control" placeholder="E-Mail:Sample@mail.com"
+								name="email"></input>
+						</div>
+					</div>
 
-				<div class="form-group col-lg-12">
-					<input class="form-control"
-						onkeyup="value=value.replace(/[^-_0-9]/g,'')" type="text"
-						placeholder="聯絡電話（例）：0910xxxxxx" name="telephone"></input>
-				</div>
+					<div class="form-group col-lg-12">
+						<select data-toggle="select"
+							class="form-control select select-primary mrs mbm"
+							name="institute">
+							<option value="">服務單位</option>
+							<th:block th:each="institute : ${institutes}">
+								<option th:value="${institute}" th:text="${institute}"></option>
+							</th:block>
+						</select>
+					</div>
 
-				<div class="form-group col-lg-12">
-					<input class="form-control" type="text" name="address"
-						placeholder="聯絡住址"></input>
-				</div>
+					<div class="form-group col-lg-12">
+						<input class="form-control" type="text" name="jobTitle"
+							placeholder="工作職銜"></input>
+					</div>
 
-				<div class="form-group col-lg-12">
-					<input class="btn btn-inverse btn-block btn-lg" type="submit"
-						value="新增使用者"></input>
-				</div>
-			</form>
+					<div class="form-group col-lg-12">
+						<input class="form-control"
+							onkeyup="value=value.replace(/[^-_0-9]/g,'')" type="text"
+							placeholder="聯絡電話（例）：0910xxxxxx" name="telephone"></input>
+					</div>
+
+					<div class="form-group col-lg-12">
+						<input class="form-control" type="text" name="address"
+							placeholder="聯絡住址"></input>
+					</div>
+
+					<div class="form-group col-lg-12">
+						<input class="btn btn-inverse btn-block btn-lg" type="submit"
+							value="新增使用者"></input>
+					</div>
+				</form>
+			</div>
 		</div>
 	</div>
-</div>
 </body>
 </html>

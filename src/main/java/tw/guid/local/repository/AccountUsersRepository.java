@@ -21,8 +21,6 @@
 
 package tw.guid.local.repository;
 
-import static com.google.common.collect.Sets.newHashSet;
-
 import java.util.Set;
 
 import org.springframework.data.domain.Page;
@@ -41,33 +39,11 @@ public interface AccountUsersRepository extends
 
   public Page<AccountUser> findByUsername(String username, Pageable pageable);
 
-  public Set<AccountUser> findByInstitute(String institute);
-
   public Set<AccountUser> findByRole(Role role);
 
   public Set<AccountUser> findByPassword(String password);
 
-  public Set<AccountUser> findByPrefix(String prefix);
-
   public Page<AccountUser> findByRole(Role role, Pageable pageable);
-
-  public default Set<String> getAllPrefix() {
-    Set<String> prefixSet = newHashSet();
-
-    for (AccountUser acctUser : findAll()) {
-      prefixSet.add(acctUser.getPrefix());
-    }
-    return prefixSet;
-  }
-
-  public default Set<String> getAllInstitute() {
-    Set<String> instituteSet = newHashSet();
-
-    for (AccountUser acctUser : findAll()) {
-      instituteSet.add(acctUser.getInstitute());
-    }
-    return instituteSet;
-  }
 
   // 兩組
   public AccountUser findByUsernameAndPassword(String username,
@@ -78,15 +54,7 @@ public interface AccountUsersRepository extends
   public Page<AccountUser> findByUsernameAndRole(String username, Role role,
       Pageable pageable);
 
-  public Page<AccountUser> findByRoleAndPrefix(Role role, String prefix,
-      Pageable pageable);
-
-  public Page<AccountUser> findByUsernameAndPrefix(String username,
-      String prefix, Pageable pageable);
-
   // 三組
-  public Page<AccountUser> findByUsernameAndRoleAndPrefix(String username,
-      Role role, String prefix, Pageable pageable);
 
   public AccountUser findByUsernameAndPasswordAndRole(String username,
       String password, Role role);

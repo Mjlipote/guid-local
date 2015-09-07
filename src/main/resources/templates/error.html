@@ -1,25 +1,22 @@
 <!DOCTYPE html>
-<html 
-  xmlns:th="http://www.thymeleaf.org"
-  xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
-  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-  layout:decorator="layout">
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorator="layout">
 <head>
 <title>Users Error</title>
-<th:block th:include="head :: bootstrap" />
 </head>
 <body>
-  <div layout:fragment="content" id="wrap">
-	<th:block th:include="top :: navigation" class="container-fluid" />
-	<div id="wrap">
-		<h1 class="text-center" th:text="${errorMessage}"></h1>
-		<br></br>
-		<div id="main" class="container row col-md-6 col-md-offset-3">
-			<a class="btn btn-default col-md-6" th:href="@{/home}" th:text="回首頁"></a>
-			<a class="btn btn-inverse col-md-6" th:href="@{${link}}"
-				th:text="重新一次"></a>
+	<div layout:fragment="content" id="wrap">
+		<div id="wrap">
+			<h1 class="text-center" th:text="${errorMessage}"></h1>
+			<br></br>
+			<div id="main" class="container row col-md-6 col-md-offset-3">
+				<a class="btn btn-default col-md-6" th:href="@{/home}" th:text="回首頁"></a>
+				<a class="btn btn-inverse col-md-6" th:href="@{${link}}"
+					th:text="重新一次"></a>
+			</div>
 		</div>
 	</div>
-</div>
 </body>
 </html>

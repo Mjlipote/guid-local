@@ -1,13 +1,11 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
-  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-  layout:decorator="layout">
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorator="layout">
 <head>
 <title>二次編碼</title>
-<th:block th:include="head :: bootstrap" />
 </head>
 <body>
-	<th:block th:include="top :: navigation" class="container-fluid" />
 	<div layout:fragment="content" id="wrap">
 		<h1 class="text-center">已成功產生二次編碼 GUIDs：</h1>
 
@@ -26,6 +24,5 @@
 			<a th:href="@{/guids}" class="btn btn-inverse">繼續產生</a>
 		</div>
 	</div>
-	<th:block th:include="footer :: footer" class="container-fluid" />
 </body>
 </html>

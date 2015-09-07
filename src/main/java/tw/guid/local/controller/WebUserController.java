@@ -36,8 +36,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import tw.guid.local.entity.AccountUser;
+import tw.guid.local.entity.InstitutePrefix;
 import tw.guid.local.helper.HashcodeCreator;
 import tw.guid.local.repository.AccountUsersRepository;
+import tw.guid.local.repository.InstitutePrefixRepository;
 import tw.guid.local.repository.SubprimeGuidRepository;
 import tw.guid.local.web.CustomAuthenticationProvider;
 import tw.guid.local.web.Role;
@@ -51,6 +53,8 @@ public class WebUserController {
   @Autowired
   AccountUsersRepository acctUserRepo;
   @Autowired
+  InstitutePrefixRepository institutePrefixRepository;
+  @Autowired
   CustomAuthenticationProvider customAuthenticationProvider;
 
   /**
@@ -63,8 +67,8 @@ public class WebUserController {
   @RequestMapping(method = RequestMethod.GET)
   String usersList(ModelMap map) {
 
-    map.addAttribute("prefixs", acctUserRepo.getAllPrefix());
-    map.addAttribute("institutes", acctUserRepo.getAllInstitute());
+    map.addAttribute("prefixs", institutePrefixRepository.getAllPrefix());
+    map.addAttribute("institutes", institutePrefixRepository.getAllInstitute());
     map.addAttribute("acctUsers", acctUserRepo.findAll());
     return "users";
 
@@ -81,10 +85,9 @@ public class WebUserController {
    */
   @RequestMapping(value = "/lookup", method = RequestMethod.GET)
   String usersLookup(ModelMap map, @Param("username") String username,
-      @Param("role") String role, @Param("prefix") String prefix,
-      @Param("institute") String institute, @Param("jobTitle") String jobTitle,
-      @Param("email") String email, @Param("telephone") String telephone,
-      @Param("address") String address) {
+      @Param("role") String role, @Param("institute") String institute,
+      @Param("jobTitle") String jobTitle, @Param("email") String email,
+      @Param("telephone") String telephone, @Param("address") String address) {
 
     List<AccountUser> acctUsers = acctUserRepo.findAll((root, query, cb) -> {
       Predicate finalPredicate = cb.and();
@@ -97,13 +100,12 @@ public class WebUserController {
         finalPredicate = cb.and(finalPredicate, cb.equal(root.get("role"),
             role.equals("ROLE_ADMIN") ? Role.ROLE_ADMIN : Role.ROLE_USER));
       }
-      if (prefix != null && !prefix.equals("")) {
-        finalPredicate =
-            cb.and(finalPredicate, cb.equal(root.get("prefix"), prefix));
-      }
       if (institute != null && !institute.equals("")) {
-        finalPredicate =
-            cb.and(finalPredicate, cb.equal(root.get("institute"), institute));
+
+        InstitutePrefix institutePrefix =
+            institutePrefixRepository.findByInstitute(institute);
+        finalPredicate = cb.and(finalPredicate,
+            cb.equal(root.get("institutePrefix"), institutePrefix));
       }
       if (jobTitle != null && !jobTitle.equals("")) {
         finalPredicate =
@@ -125,8 +127,7 @@ public class WebUserController {
       return finalPredicate;
     });
 
-    map.addAttribute("prefixs", acctUserRepo.getAllPrefix());
-    map.addAttribute("institutes", acctUserRepo.getAllInstitute());
+    map.addAttribute("institutes", institutePrefixRepository.getAllInstitute());
     map.addAttribute("acctUsers", acctUsers);
 
     return "users";
@@ -188,11 +189,10 @@ public class WebUserController {
       @RequestParam(value = "institute") String institute,
       @RequestParam(value = "telephone") String telephone,
       @RequestParam(value = "address") String address,
-      @RequestParam(value = "prefix") String prefix,
       @RequestParam(value = "authority") String authority) {
 
     if (username.equals("") || password.equals("") || institute.equals("")
-        || email.equals("") || prefix.equals("")) {
+        || email.equals("")) {
       map.addAttribute("errorMessage", "請確實填寫資料，切勿留空值！！");
       map.addAttribute("link", "/register");
       return "error";
@@ -201,12 +201,13 @@ public class WebUserController {
       map.addAttribute("link", "/register");
       return "error";
     } else {
+
       AccountUser user = new AccountUser();
       user.setUsername(checkNotNull(username));
       user.setPassword(checkNotNull(password));
-      user.setInstitute(checkNotNull(institute));
+      user.setInstitutePrefix(
+          institutePrefixRepository.findByInstitute(institute));
       user.setEmail(checkNotNull(email));
-      user.setPrefix(checkNotNull(prefix));
       user.setTelephone(telephone);
       user.setJobTitle(jobTitle);
       user.setAddress(address);

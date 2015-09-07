@@ -33,6 +33,7 @@ import org.springframework.beans.factory.annotation.Value;
 import tw.guid.local.helper.HttpActionHelper;
 import tw.guid.local.repository.AccountUsersRepository;
 import tw.guid.local.repository.AssociationRepository;
+import tw.guid.local.repository.InstitutePrefixRepository;
 import tw.guid.local.repository.SubprimeGuidRepository;
 import tw.guid.local.web.Action;
 
@@ -50,6 +51,9 @@ public class ApiServiceImpl implements ApiService {
   @Autowired
   private AssociationRepository associationRepo;
 
+  @Autowired
+  private InstitutePrefixRepository institutePrefixRepo;
+
   /**
    * Get all prefix List
    * 
@@ -57,7 +61,7 @@ public class ApiServiceImpl implements ApiService {
    */
   @Override
   public Set<String> prefixLookup() {
-    return acctUserRepo.getAllPrefix();
+    return institutePrefixRepo.getAllPrefix();
   }
 
   @Override

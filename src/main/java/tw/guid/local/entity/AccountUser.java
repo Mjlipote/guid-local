@@ -25,10 +25,14 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.util.Objects;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 
 import org.springframework.data.jpa.domain.AbstractPersistable;
 
@@ -51,11 +55,9 @@ public class AccountUser extends AbstractPersistable<Long> {
   @Column(nullable = false)
   private String email;
 
-  @Column(nullable = false)
-  private String institute;
-
-  @Column(nullable = false)
-  private String prefix;
+  @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+  @JoinColumn(name = "INSTITUTEPREFIX_ID", nullable = false)
+  private InstitutePrefix institutePrefix;
 
   @Column(nullable = false)
   @Enumerated(EnumType.STRING)
@@ -119,36 +121,6 @@ public class AccountUser extends AbstractPersistable<Long> {
   }
 
   /**
-   * @return the institute
-   */
-  public String getInstitute() {
-    return institute;
-  }
-
-  /**
-   * @param institute
-   *          the institute to set
-   */
-  public void setInstitute(String institute) {
-    this.institute = institute;
-  }
-
-  /**
-   * @return the prefix
-   */
-  public String getPrefix() {
-    return prefix;
-  }
-
-  /**
-   * @param prefix
-   *          the prefix to set
-   */
-  public void setPrefix(String prefix) {
-    this.prefix = prefix;
-  }
-
-  /**
    * @return the role
    */
   public Role getRole() {
@@ -208,6 +180,21 @@ public class AccountUser extends AbstractPersistable<Long> {
     this.address = address;
   }
 
+  /**
+   * @return the institutePrefix
+   */
+  public InstitutePrefix getInstitutePrefix() {
+    return institutePrefix;
+  }
+
+  /**
+   * @param institutePrefix
+   *          the institutePrefix to set
+   */
+  public void setInstitutePrefix(InstitutePrefix institutePrefix) {
+    this.institutePrefix = institutePrefix;
+  }
+
   @Override
   public boolean equals(final Object other) {
     if (this == other) return true;
@@ -216,9 +203,9 @@ public class AccountUser extends AbstractPersistable<Long> {
     return Objects.equals(username, castOther.username)
         && Objects.equals(password, castOther.password)
         && Objects.equals(email, castOther.email)
-        && Objects.equals(institute, castOther.institute)
-        && Objects.equals(prefix, castOther.prefix)
-        && Objects.equals(role, castOther.role)
+        && Objects.equals(institutePrefix, castOther.institutePrefix)
+
+    && Objects.equals(role, castOther.role)
         && Objects.equals(jobTitle, castOther.jobTitle)
         && Objects.equals(telephone, castOther.telephone)
         && Objects.equals(address, castOther.address);
@@ -226,7 +213,7 @@ public class AccountUser extends AbstractPersistable<Long> {
 
   @Override
   public int hashCode() {
-    return Objects.hash(username, password, email, institute, prefix, role,
+    return Objects.hash(username, password, email, institutePrefix, role,
         jobTitle, telephone, address);
   }
 
@@ -234,7 +221,7 @@ public class AccountUser extends AbstractPersistable<Long> {
   public String toString() {
     return MoreObjects.toStringHelper(this).add("username", username)
         .add("password", password).add("email", email)
-        .add("institute", institute).add("prefix", prefix).add("role", role)
+        .add("institutePrefix", institutePrefix).add("role", role)
         .add("jobTitle", jobTitle).add("telephone", telephone)
         .add("address", address).toString();
   }

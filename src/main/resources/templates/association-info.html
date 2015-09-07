@@ -7,15 +7,13 @@
 <head>
 <meta charset="UTF-8" />
 <title>編輯受試者之通訊資料</title>
-<th:block th:include="head :: bootstrap" />
 </head>
 <body>
   <div layout:fragment="content" id="wrap">
-	<th:block th:include="top :: navigation" />
 	<div id="wrap">
 		<h1 class="text-center">編輯受試者之通訊資料</h1>
 		<div id="main" class="container">
-			<form th:each="association: ${associationUserInfo.association}"
+			<form th:each="association: ${associationUserInfo}"
 				id="association-infoForm" class="col-md-8 col-md-offset-2"
 				method="post"
 				th:action="@{${'/association/' + association.spguid }}">

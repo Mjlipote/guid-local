@@ -26,6 +26,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
 import tw.guid.local.entity.AccountUser;
+import tw.guid.local.entity.InstitutePrefix;
 import tw.guid.local.entity.SubprimeGuid;
 import tw.guid.local.repository.AccountUsersRepository;
 import tw.guid.local.repository.SubprimeGuidRepository;
@@ -47,34 +48,40 @@ public class SetupController {
   void preProcessData() {
 
     AccountUser superAdmin = new AccountUser();
+    InstitutePrefix institutePrefix = new InstitutePrefix();
+    institutePrefix.setInstitute("生物資料庫");
+    institutePrefix.setPrefix("BiobankTest");
+    superAdmin.setInstitutePrefix(institutePrefix);
     superAdmin.setUsername("super");
     superAdmin.setPassword("1qaz$RFV");
     superAdmin.setEmail("super@ym.com");
-    superAdmin.setInstitute("國立陽明大學");
     superAdmin.setJobTitle("生物資訊主管");
-    superAdmin.setPrefix("AdminTest");
     superAdmin.setTelephone("0910333222");
     superAdmin.setAddress("國立陽明大學");
     superAdmin.setRole(Role.ROLE_ADMIN);
 
     AccountUser admin = new AccountUser();
+    InstitutePrefix institutePrefixAdmin = new InstitutePrefix();
+    institutePrefixAdmin.setInstitute("國立陽明大學");
+    institutePrefixAdmin.setPrefix("AdminTest");
+    admin.setInstitutePrefix(institutePrefixAdmin);
     admin.setUsername("admin");
     admin.setPassword("password");
     admin.setEmail("admin@ym.com");
-    admin.setInstitute("國立陽明大學");
     admin.setJobTitle("系統管理員");
-    admin.setPrefix("AdminTest");
     admin.setTelephone("0910777666");
     admin.setAddress("國立陽明大學");
     admin.setRole(Role.ROLE_ADMIN);
 
     AccountUser user = new AccountUser();
+    InstitutePrefix institutePrefixUser = new InstitutePrefix();
+    institutePrefixUser.setInstitute("使用單位");
+    institutePrefixUser.setPrefix("UserTest");
+    user.setInstitutePrefix(institutePrefixUser);
     user.setUsername("user");
     user.setPassword("password");
     user.setEmail("user@ym.com");
-    user.setInstitute("國立陽明大學");
     user.setJobTitle("使用者");
-    user.setPrefix("UserTest");
     user.setTelephone("0910777000");
     user.setAddress("國立陽明大學");
     user.setRole(Role.ROLE_USER);

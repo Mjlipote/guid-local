@@ -28,16 +28,15 @@ import java.util.Objects;
 import com.google.common.base.MoreObjects;
 
 import tw.guid.local.entity.AccountUser;
+import tw.guid.local.entity.InstitutePrefix;
 
 public final class AccountUsersResponse {
 
   private String username;
 
-  private String prefix;
+  private InstitutePrefix institutePrefix;
 
   private String email;
-
-  private String institute;
 
   private String jobTitle;
 
@@ -55,10 +54,11 @@ public final class AccountUsersResponse {
 
     for (AccountUser au : accountusers) {
       AccountUsersResponse aur = new AccountUsersResponse();
+
       aur.username = au.getUsername();
-      aur.prefix = au.getPrefix();
+      aur.institutePrefix.setPrefix(au.getInstitutePrefix().getPrefix());
       aur.email = au.getEmail();
-      aur.institute = au.getInstitute();
+      aur.institutePrefix.setInstitute(au.getInstitutePrefix().getInstitute());
       aur.jobTitle = au.getJobTitle();
       aur.telephone = au.getTelephone();
       aur.address = au.getAddress();
@@ -77,24 +77,10 @@ public final class AccountUsersResponse {
   }
 
   /**
-   * @return the prefix
-   */
-  public String getPrefix() {
-    return prefix;
-  }
-
-  /**
    * @return the email
    */
   public String getEmail() {
     return email;
-  }
-
-  /**
-   * @return the institute
-   */
-  public String getInstitute() {
-    return institute;
   }
 
   /**
@@ -133,15 +119,29 @@ public final class AccountUsersResponse {
     this.role = role;
   }
 
+  /**
+   * @return the institutePrefix
+   */
+  public InstitutePrefix getInstitutePrefix() {
+    return institutePrefix;
+  }
+
+  /**
+   * @param institutePrefix
+   *          the institutePrefix to set
+   */
+  public void setInstitutePrefix(InstitutePrefix institutePrefix) {
+    this.institutePrefix = institutePrefix;
+  }
+
   @Override
   public boolean equals(final Object other) {
     if (this == other) return true;
     if (!(other instanceof AccountUsersResponse)) return false;
     AccountUsersResponse castOther = (AccountUsersResponse) other;
     return Objects.equals(username, castOther.username)
-        && Objects.equals(prefix, castOther.prefix)
+        && Objects.equals(institutePrefix, castOther.institutePrefix)
         && Objects.equals(email, castOther.email)
-        && Objects.equals(institute, castOther.institute)
         && Objects.equals(jobTitle, castOther.jobTitle)
         && Objects.equals(telephone, castOther.telephone)
         && Objects.equals(address, castOther.address)
@@ -150,14 +150,14 @@ public final class AccountUsersResponse {
 
   @Override
   public int hashCode() {
-    return Objects.hash(username, prefix, email, institute, jobTitle, telephone,
+    return Objects.hash(username, institutePrefix, email, jobTitle, telephone,
         address, role);
   }
 
   @Override
   public String toString() {
     return MoreObjects.toStringHelper(this).add("username", username)
-        .add("prefix", prefix).add("email", email).add("institute", institute)
+        .add("institutePrefix", institutePrefix).add("email", email)
         .add("jobTitle", jobTitle).add("telephone", telephone)
         .add("address", address).add("role", role).toString();
   }

@@ -22,9 +22,11 @@ package tw.guid.local.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import tw.guid.local.repository.AccountUsersRepository;
+import tw.guid.local.repository.InstitutePrefixRepository;
 import tw.guid.local.repository.PaperTrailRepository;
 
 @Controller
@@ -32,7 +34,8 @@ public class MainController {
 
   @Autowired
   AccountUsersRepository acctUserRepo;
-
+  @Autowired
+  InstitutePrefixRepository institutePrefixRepository;
   @Autowired
   PaperTrailRepository paperTrailRepo;
 
@@ -42,7 +45,8 @@ public class MainController {
   }
 
   @RequestMapping("/register")
-  String usersRegister() {
+  String usersRegister(ModelMap map) {
+    map.addAttribute("institutes", institutePrefixRepository.getAllInstitute());
     return "register";
   }
 

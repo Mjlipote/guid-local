@@ -28,6 +28,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -121,7 +122,8 @@ public class WebGuidController {
 
       Authentication auth =
           SecurityContextHolder.getContext().getAuthentication();
-      String prefix = acctUserRepo.findByUsername(auth.getName()).getPrefix();
+      String prefix = acctUserRepo.findByUsername(auth.getName())
+          .getInstitutePrefix().getPrefix();
       List<String> correctGuids = newArrayList();
 
       for (Map<String, String> row : reader.toMaps()) {
@@ -135,10 +137,13 @@ public class WebGuidController {
           return "error";
         } else {
           PII pii = BatchSubprimeGuidCreator.rowToPII(row);
+          String hashcode1 = pii.getHashcodes().get(0).substring(0, 128);
+          String hashcode2 = pii.getHashcodes().get(1).substring(0, 128);
+          String hashcode3 = pii.getHashcodes().get(2).substring(0, 128);
+
           SubprimeGuid sg =
               subprimeGuidRepo.findByHashcode1AndHashcode2AndHashcode3AndPrefix(
-                  pii.getHashcodes().get(0), pii.getHashcodes().get(1),
-                  pii.getHashcodes().get(2), prefix);
+                  hashcode1, hashcode2, hashcode3, prefix);
 
           if (sg != null) {
             correctGuids.add(sg.getSpguid());
@@ -153,7 +158,7 @@ public class WebGuidController {
             List<SubprimeGuidRequest> sgrs = newArrayList();
             SubprimeGuidRequest sgr = new SubprimeGuidRequest();
 
-            sgr.setGuidHash(pii.getHashcodes());
+            sgr.setGuidHash(Arrays.asList(hashcode1, hashcode2, hashcode3));
             sgr.setPrefix(prefix);
             sgrs.add(sgr);
 
@@ -172,9 +177,9 @@ public class WebGuidController {
 
             SubprimeGuid spGuid = new SubprimeGuid();
             spGuid.setSpguid(flattenJson.get("[0].spguid").toString());
-            spGuid.setHashcode1(pii.getHashcodes().get(0));
-            spGuid.setHashcode2(pii.getHashcodes().get(1));
-            spGuid.setHashcode3(pii.getHashcodes().get(2));
+            spGuid.setHashcode1(hashcode1);
+            spGuid.setHashcode2(hashcode2);
+            spGuid.setHashcode3(hashcode3);
             spGuid.setPrefix(prefix);
             subprimeGuidRepo.save(spGuid);
 
@@ -263,14 +268,18 @@ public class WebGuidController {
             new Birthday(birthOfYear, birthOfMonth, birthOfDay),
             new TWNationalId(sid)).build();
 
+        String hashcode1 = pii.getHashcodes().get(0).substring(0, 128);
+        String hashcode2 = pii.getHashcodes().get(1).substring(0, 128);
+        String hashcode3 = pii.getHashcodes().get(2).substring(0, 128);
+
         Authentication auth =
             SecurityContextHolder.getContext().getAuthentication();
 
-        String prefix = acctUserRepo.findByUsername(auth.getName()).getPrefix();
+        String prefix = acctUserRepo.findByUsername(auth.getName())
+            .getInstitutePrefix().getPrefix();
         SubprimeGuid sg =
             subprimeGuidRepo.findByHashcode1AndHashcode2AndHashcode3AndPrefix(
-                pii.getHashcodes().get(0), pii.getHashcodes().get(1),
-                pii.getHashcodes().get(2), prefix);
+                hashcode1, hashcode2, hashcode3, prefix);
 
         if (sg != null) {
           map.addAttribute("spguids", sg.getSpguid());
@@ -290,7 +299,7 @@ public class WebGuidController {
           List<SubprimeGuidRequest> sgrs = newArrayList();
           SubprimeGuidRequest sgr = new SubprimeGuidRequest();
 
-          sgr.setGuidHash(pii.getHashcodes());
+          sgr.setGuidHash(Arrays.asList(hashcode1, hashcode2, hashcode3));
           sgr.setPrefix(prefix);
           sgrs.add(sgr);
 
@@ -309,9 +318,9 @@ public class WebGuidController {
 
           SubprimeGuid spGuid = new SubprimeGuid();
           spGuid.setSpguid(flattenJson.get("[0].spguid").toString());
-          spGuid.setHashcode1(pii.getHashcodes().get(0));
-          spGuid.setHashcode2(pii.getHashcodes().get(1));
-          spGuid.setHashcode3(pii.getHashcodes().get(2));
+          spGuid.setHashcode1(hashcode1);
+          spGuid.setHashcode2(hashcode2);
+          spGuid.setHashcode3(hashcode3);
           spGuid.setPrefix(prefix);
           subprimeGuidRepo.save(spGuid);
 
