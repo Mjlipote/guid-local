@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorator="layout">
+
+<head>
+<title>輸入單位與 Prefix</title>
+<!-- Include Simple Pagination -->
+<link rel="stylesheet" href="/simplePagination.css"></link>
+<script src="/jquery.simplePagination.js"></script>
+<script type="text/javascript">
+	$(function() {
+		var items = $("table tbody tr");
+		var numItems = items.length;
+		var perPage = 10;
+		items.slice(perPage).hide();
+
+		$(pages).pagination({
+
+			items : numItems,
+			itemsOnPage : perPage,
+			cssStyle : "light-theme",
+
+			onPageClick : function(pageNumber) {
+
+				var showFrom = perPage * (pageNumber - 1);
+				var showTo = showFrom + perPage;
+
+				items.hide() // first hide everything, then show for the new page
+				.slice(showFrom, showTo).show();
+			}
+		});
+		var checkFragment = function() {
+			// if there's no hash, make sure we go to page 1
+			var hash = window.location.hash || "#page-1";
+
+			// we'll use regex to check the hash string
+			hash = hash.match(/^#page-(\d+)$/);
+
+			if (hash)
+				// the selectPage function is described in the documentation
+				// we've captured the page number in a regex group: (\d+)
+				$(pages).pagination("selectPage", parseInt(hash[1]));
+		};
+
+		// we'll call this function whenever the back/forward is pressed
+		$(window).bind("popstate", checkFragment);
+
+		// and we'll also call it to check right now!
+		checkFragment();
+	});
+
+	$('.institute-prefix').click(function() {
+		swal({
+			title : "確定完成編輯？",
+			type : "info",
+			showCancelButton : true,
+			confirmButtonClass : 'btn-info',
+			confirmButtonText : 'YES',
+			closeOnConfirm : true
+		}, function() {
+			$('#createForm').submit();
+		});
+	});
+</script>
+</head>
+<body>
+	<div layout:fragment="content" id="wrap">
+		<h1 class="text-center">輸入單位與 Prefix</h1>
+
+		<div id="main" class="container">
+
+			<div class="container col-lg-12">
+				<form id="createForm" role="form" method="post"
+					th:action="@{/institutes}">
+
+					<div class="row">
+						<div class="form-group col-lg-4">
+							<input class="form-control" type="text" name="institute"
+								placeholder="單位名稱"></input>
+						</div>
+
+						<div class="form-group col-lg-4">
+							<input class="form-control"
+								onkeyup="value=value.replace(/[^-_a-zA-Z0-9]/g,'')" type="text"
+								name="prefix" placeholder="Prefix"></input>
+						</div>
+
+						<div class="form-group col-lg-4 institute-prefix">
+							<input class="btn btn-inverse btn-block btn-lg create"
+								type="submit" value="產生單位與 Prefix"></input>
+						</div>
+					</div>
+				</form>
+			</div>
+
+			<div class="form-group container col-lg-12">
+				<form class="form-inline" method="get"
+					th:action="@{/institutes/lookup}" role="form">
+					<div class="row">
+
+						<div class="form-group col-md-4">
+							<label class="sr-only">單位名稱：</label> <select data-toggle="select"
+								class="form-control select select-primary mrs mbm"
+								name="institute">
+								<option value="">單位名稱</option>
+								<th:block th:each="institute : ${allInstitutes}">
+									<option th:value="${institute}" th:text="${institute}"></option>
+								</th:block>
+							</select>
+
+						</div>
+						<div class="form-group col-md-4">
+							<label class="sr-only">Prefix 值：</label> <select
+								data-toggle="select"
+								class="form-control select select-primary mrs mbm" name="prefix">
+								<option value="">Prefix 值</option>
+								<th:block th:each="prefix : ${allPrefixs}">
+									<option th:value="${prefix}" th:text="${prefix}"></option>
+								</th:block>
+							</select>
+						</div>
+
+
+						<div class="form-group col-md-4">
+							<input class="btn btn-inverse btn-block btn-sm" type="submit"
+								value="搜尋"></input>
+
+						</div>
+					</div>
+				</form>
+			</div>
+
+			<div class="container" id="pages"></div>
+
+			<div id="wrap">
+				<table
+					class="table table-responsive table-bordered table-striped table-condensed table-hover">
+					<thead>
+						<th:tr>
+							<td>#</td>
+							<td><strong>Prefix 值</strong></td>
+							<td><strong>服務單位</strong></td>
+							<td><strong>使用者數量</strong></td>
+							<td></td>
+							<td></td>
+						</th:tr>
+					</thead>
+					<tbody>
+
+						<tr
+							th:each="institutePrefix, iterationStatus: ${institutePrefixs}">
+							<td th:text="${iterationStatus.count}"></td>
+							<td th:text="${institutePrefix.prefix}"></td>
+							<td th:text="${institutePrefix.institute}"></td>
+							<td th:text="${institutePrefix.accountUsers.size()}"></td>
+							
+							<td>
+								<form method="get"
+									th:action="@{${'/institutes/users/' + institutePrefix.institute }}">
+									<button type="submit" name="${institutePrefix.institute}"
+										class="btn btn-block btn-sm btn-success">
+										<i class='glyphicon glyphicon-search' th:text="檢視"></i>
+									</button>
+								</form>
+							</td>
+
+							<td>
+								<form method="get"
+									th:action="@{${'/institutes/' + institutePrefix.institute }}">
+									<button type="submit" name="${institutePrefix.institute}"
+										class="btn btn-block btn-sm btn-info">
+										<i class='glyphicon glyphicon-pencil' th:text="編輯"></i>
+									</button>
+								</form>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+
+				<div class="container" id="pages"></div>
+			</div>
+
+		</div>
+	</div>
+</body>
+</html>

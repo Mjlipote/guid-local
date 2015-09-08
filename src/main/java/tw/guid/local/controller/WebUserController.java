@@ -21,8 +21,10 @@
 package tw.guid.local.controller;
 
 import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.collect.Sets.newHashSet;
 
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.criteria.Predicate;
 
@@ -53,7 +55,7 @@ public class WebUserController {
   @Autowired
   AccountUsersRepository acctUserRepo;
   @Autowired
-  InstitutePrefixRepository institutePrefixRepository;
+  InstitutePrefixRepository institutePrefixRepo;
   @Autowired
   CustomAuthenticationProvider customAuthenticationProvider;
 
@@ -67,8 +69,8 @@ public class WebUserController {
   @RequestMapping(method = RequestMethod.GET)
   String usersList(ModelMap map) {
 
-    map.addAttribute("prefixs", institutePrefixRepository.getAllPrefix());
-    map.addAttribute("institutes", institutePrefixRepository.getAllInstitute());
+    map.addAttribute("prefixs", institutePrefixRepo.getAllPrefix());
+    map.addAttribute("institutes", institutePrefixRepo.getAllInstitute());
     map.addAttribute("acctUsers", acctUserRepo.findAll());
     return "users";
 
@@ -103,7 +105,7 @@ public class WebUserController {
       if (institute != null && !institute.equals("")) {
 
         InstitutePrefix institutePrefix =
-            institutePrefixRepository.findByInstitute(institute);
+            institutePrefixRepo.findByInstitute(institute);
         finalPredicate = cb.and(finalPredicate,
             cb.equal(root.get("institutePrefix"), institutePrefix));
       }
@@ -127,7 +129,7 @@ public class WebUserController {
       return finalPredicate;
     });
 
-    map.addAttribute("institutes", institutePrefixRepository.getAllInstitute());
+    map.addAttribute("institutes", institutePrefixRepo.getAllInstitute());
     map.addAttribute("acctUsers", acctUsers);
 
     return "users";
@@ -201,12 +203,13 @@ public class WebUserController {
       map.addAttribute("link", "/register");
       return "error";
     } else {
+      InstitutePrefix institutePrefix =
+          institutePrefixRepo.findByInstitute(institute);
 
       AccountUser user = new AccountUser();
       user.setUsername(checkNotNull(username));
       user.setPassword(checkNotNull(password));
-      user.setInstitutePrefix(
-          institutePrefixRepository.findByInstitute(institute));
+      user.setInstitutePrefix(checkNotNull(institutePrefix));
       user.setEmail(checkNotNull(email));
       user.setTelephone(telephone);
       user.setJobTitle(jobTitle);
@@ -215,25 +218,16 @@ public class WebUserController {
           authority.equals("ROLE_ADMIN") ? Role.ROLE_ADMIN : Role.ROLE_USER);
 
       acctUserRepo.save(user);
+
+      Set<AccountUser> aus = newHashSet();
+      aus.add(user);
+      institutePrefix.setAccountUsers(aus);
+      institutePrefixRepo.save(institutePrefix);
+
       map.addAttribute("successMessage", "已成功新增一筆使用者：" + user.getUsername());
       map.addAttribute("link", "/register");
       return "success";
     }
-  }
-
-  /**
-   * Change users's password
-   * 
-   * 
-   * @param map
-   * @param username
-   * @return
-   */
-  @RequestMapping(value = "/changepassword", method = RequestMethod.GET)
-  String usersPasswordChange() {
-
-    return "change-password";
-
   }
 
   /**
@@ -289,6 +283,13 @@ public class WebUserController {
       return "success";
 
     }
+  }
+
+  @RequestMapping(value = "/changepassword", method = RequestMethod.GET)
+  String usersChangePasswordWebpage() {
+
+    return "change-password";
+
   }
 
   @RequestMapping(value = "/changepassword/{username}",

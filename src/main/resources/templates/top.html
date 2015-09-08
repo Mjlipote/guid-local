@@ -77,9 +77,21 @@
 						</li>
 					</ul>
 				</li>
-				<li sec:authorize="hasRole('ROLE_ADMIN')">
-					<a th:href="@{/trail}">操作記錄</a>
-				</li>
+				        <li class="dropdown" sec:authorize="hasRole('ROLE_ADMIN')">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown"
+            role="button" aria-haspopup="true" aria-expanded="false">
+            系統管理
+            <span class="caret"></span>
+          </a>
+          <ul class="dropdown-menu">
+            <li>
+              <a th:href="@{/trail}">操作記錄</a>
+            </li>
+            <li>
+              <a th:href="@{/institutes}">單位名稱與 Prefix 建置</a>
+            </li>
+          </ul>
+        </li>
 				<li>
 					<a th:href="@{https://www.cims.tw/}">關於我們</a>
 				</li>
