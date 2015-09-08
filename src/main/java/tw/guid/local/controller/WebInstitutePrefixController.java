@@ -144,6 +144,9 @@ public class WebInstitutePrefixController {
 
           return finalPredicate;
         });
+
+    map.addAttribute("allPrefixs", institutePrefixRepo.getAllPrefix());
+    map.addAttribute("allInstitutes", institutePrefixRepo.getAllInstitute());
     map.addAttribute("institutePrefixs", institutePrefixs);
 
     return "institute-prefix";
