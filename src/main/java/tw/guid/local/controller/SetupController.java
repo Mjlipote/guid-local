@@ -49,7 +49,7 @@ public class SetupController {
 
     AccountUser superAdmin = new AccountUser();
     InstitutePrefix institutePrefix = new InstitutePrefix();
-    institutePrefix.setInstitute("生物資料庫");
+    institutePrefix.setInstitute("生物資料庫測試單位");
     institutePrefix.setPrefix("BiobankTest");
     superAdmin.setInstitutePrefix(institutePrefix);
     superAdmin.setUsername("super");
@@ -62,7 +62,7 @@ public class SetupController {
 
     AccountUser admin = new AccountUser();
     InstitutePrefix institutePrefixAdmin = new InstitutePrefix();
-    institutePrefixAdmin.setInstitute("國立陽明大學");
+    institutePrefixAdmin.setInstitute("國立陽明大學測試單位");
     institutePrefixAdmin.setPrefix("AdminTest");
     admin.setInstitutePrefix(institutePrefixAdmin);
     admin.setUsername("admin");
@@ -75,7 +75,7 @@ public class SetupController {
 
     AccountUser user = new AccountUser();
     InstitutePrefix institutePrefixUser = new InstitutePrefix();
-    institutePrefixUser.setInstitute("使用單位");
+    institutePrefixUser.setInstitute("使用者測試單位");
     institutePrefixUser.setPrefix("UserTest");
     user.setInstitutePrefix(institutePrefixUser);
     user.setUsername("user");
