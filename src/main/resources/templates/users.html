@@ -143,7 +143,9 @@
 
 							<tr th:each="acctUser, iterationStatus: ${acctUsers}">
 								<td th:text="${iterationStatus.count}"></td>
-								<td th:text="${acctUser.role}"></td>
+								<td><p th:if="${acctUser.role.toString().equals('ROLE_ADMIN')}" th:text="系統管理者"></p>
+								<p th:if="${acctUser.role.toString().equals('ROLE_USER')}" th:text="系統使用者"></p>
+								</td>
 								<td th:text="${acctUser.username}"></td>
 								<td th:each="institutePrefix : ${acctUser.institutePrefix}"
 									th:text="${institutePrefix.prefix}"></td>

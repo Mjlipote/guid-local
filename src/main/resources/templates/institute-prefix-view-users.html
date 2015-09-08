@@ -54,53 +54,53 @@
 </head>
 <body>
 	<div layout:fragment="content" id="wrap">
-		<div id="wrap">
-			<h1 class="text-center">檢視使用者</h1>
 
-			<div id="main" class="container">
+		<h1 class="text-center">檢視使用者</h1>
 
-				<div class="container" id="pages"></div>
 
-				<div id="wrap">
-					<table
-						class="table table-responsive table-bordered table-striped table-condensed table-hover">
-						<thead>
-							<th:tr>
-								<td>#</td>
-								<td><strong>Prefix 值</strong></td>
-								<td><strong>服務單位</strong></td>
-								<td><strong>使用者帳號</strong></td>
-								<td><strong>使用者權限</strong></td>
-								<td><strong>工作職銜</strong></td>
-								<td><strong>電子郵件 E-Mail</strong></td>
-								<td><strong>聯絡電話</strong></td>
-								<td><strong>聯絡地址</strong></td>
-							</th:tr>
-						</thead>
-						<tbody>
 
-							<tr th:each="user, iterationStatus: ${users}">
-								<td th:text="${iterationStatus.count}"></td>
-								<td th:text="${prefix}"></td>
-								<td th:text="${institute}"></td>
-								<td th:text="${user.username}"></td>
-								<td th:text="${user.role}"></td>
-								<td th:text="${user.jobTitle}"></td>
-								<td th:text="${user.email}"></td>
-								<td th:text="${user.telephone}"></td>
-								<td th:text="${user.address}"></td>
-							</tr>
-						</tbody>
-					</table>
+		<div class="container" id="pages"></div>
 
-					<div class="container" id="pages"></div>
+		<table
+			class="table table-responsive table-bordered table-striped table-condensed table-hover">
+			<thead>
+				<th:tr>
+					<td>#</td>
+					<td><strong>使用者權限</strong></td>
+					<td><strong>使用者帳號</strong></td>
+					<td><strong>Prefix 值</strong></td>
+					<td><strong>服務單位</strong></td>
+					<td><strong>工作職銜</strong></td>
+					<td><strong>電子郵件 E-Mail</strong></td>
+					<td><strong>聯絡電話</strong></td>
+					<td><strong>聯絡地址</strong></td>
+				</th:tr>
+			</thead>
+			<tbody>
 
-				</div>
-				<div id="main" class="container row col-md-12 ">
-					<a class="btn btn-default col-md-6" th:href="@{/home}"
-						th:text="回首頁"></a> <a class="btn btn-inverse col-md-6"
-						th:href="@{/institutes}" th:text="回上一頁"></a>
-				</div>
+				<tr th:each="user, iterationStatus: ${users}">
+					<td th:text="${iterationStatus.count}"></td>
+					<td><p th:if="${user.role.toString().equals('ROLE_ADMIN')}"
+							th:text="系統管理者"></p>
+						<p th:if="${user.role.toString().equals('ROLE_USER')}"
+							th:text="系統使用者"></p></td>
+					<td th:text="${user.username}"></td>
+					<td th:text="${prefix}"></td>
+					<td th:text="${institute}"></td>
+					<td th:text="${user.jobTitle}"></td>
+					<td th:text="${user.email}"></td>
+					<td th:text="${user.telephone}"></td>
+					<td th:text="${user.address}"></td>
+				</tr>
+			</tbody>
+		</table>
+
+		<div class="container" id="pages"></div>
+		<div id="main" class="container">
+			<div id="main" class="container row col-md-12 ">
+				<a class="btn btn-default col-md-6" th:href="@{/home}" th:text="回首頁"></a>
+				<a class="btn btn-inverse col-md-6" th:href="@{/institutes}"
+					th:text="回上一頁"></a>
 			</div>
 		</div>
 	</div>
