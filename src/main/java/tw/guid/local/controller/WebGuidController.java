@@ -22,6 +22,7 @@ package tw.guid.local.controller;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.collect.Lists.newArrayList;
+import static com.google.common.collect.Sets.newHashSet;
 
 import java.io.ByteArrayInputStream;
 import java.io.FileNotFoundException;
@@ -31,6 +32,7 @@ import java.net.URISyntaxException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.openxml4j.exceptions.OpenXML4JException;
@@ -52,6 +54,8 @@ import org.springframework.web.multipart.MultipartFile;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.github.wnameless.json.flattener.JsonFlattener;
 import com.github.wnameless.workbookaccessor.WorkbookReader;
+import com.google.common.collect.HashMultimap;
+import com.google.common.collect.SetMultimap;
 
 import tw.edu.ym.guid.client.PII;
 import tw.edu.ym.guid.client.field.Birthday;
@@ -459,33 +463,28 @@ public class WebGuidController {
   }
 
   @RequestMapping(value = "/repeat", method = RequestMethod.GET)
-  String guidsRepeat(ModelMap map)
-      throws JsonProcessingException, URISyntaxException {
+  String guidsRepeat(ModelMap map) {
 
-    List<String> list = newArrayList();
+    Set<Set<String>> hhs = newHashSet();
+    SetMultimap<List<String>, String> multimap = HashMultimap.create();
 
     for (SubprimeGuid subprimeGuid : subprimeGuidRepo.findAll()) {
-      list.add(subprimeGuid.getSpguid());
+      multimap.put(
+          Arrays.asList(subprimeGuid.getHashcode1(),
+              subprimeGuid.getHashcode2(), subprimeGuid.getHashcode3()),
+          subprimeGuid.getSpguid());
     }
 
-    Map<String, Object> flattenJson =
-        JsonFlattener.flattenAsMap(HttpActionHelper
-            .toPost(new URI(centralServerUrl), Action.COMPARISON, list, false)
-            .getBody());
+    for (List<String> key : multimap.keySet()) {
+      Set<String> values = multimap.get(key);
 
-    List<List<String>> lls = newArrayList();
-
-    for (int i = 0; i < flattenJson.size(); i++) {
-      List<String> ls = newArrayList();
-      for (int j = 0; j < flattenJson.size(); j++) {
-        if (flattenJson.get("[" + i + "]" + "[" + j + "]") != null) {
-          ls.add(flattenJson.get("[" + i + "]" + "[" + j + "]").toString());
-        }
+      if (key != null && values.size() > 1) {
+        hhs.add(values);
       }
-      if (ls.size() > 0) lls.add(ls);
     }
-    map.addAttribute("result", lls);
-    map.addAttribute("number", lls.size());
+
+    map.addAttribute("result", hhs);
+    map.addAttribute("number", hhs.size());
 
     return "repeat";
   }
