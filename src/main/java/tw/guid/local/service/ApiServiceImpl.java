@@ -31,7 +31,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 
 import tw.guid.local.helper.HttpActionHelper;
-import tw.guid.local.repository.AccountUsersRepository;
 import tw.guid.local.repository.AssociationRepository;
 import tw.guid.local.repository.InstitutePrefixRepository;
 import tw.guid.local.repository.SubprimeGuidRepository;
@@ -43,14 +42,9 @@ public class ApiServiceImpl implements ApiService {
   private String centralServerUrl;
 
   @Autowired
-  private SubprimeGuidRepository spguidRepo;
-
-  @Autowired
-  private AccountUsersRepository acctUserRepo;
-
+  private SubprimeGuidRepository subprimeGuidRepo;
   @Autowired
   private AssociationRepository associationRepo;
-
   @Autowired
   private InstitutePrefixRepository institutePrefixRepo;
 
@@ -97,8 +91,8 @@ public class ApiServiceImpl implements ApiService {
     checkNotNull(hashcode2, "hashcode2 can't be null");
     checkNotNull(hashcode3, "hashcode3 can't be null");
 
-    if (spguidRepo.findByHashcode1AndHashcode2AndHashcode3(hashcode1, hashcode2,
-        hashcode3).size() > 0) {
+    if (subprimeGuidRepo.findByHashcode1AndHashcode2AndHashcode3(hashcode1,
+        hashcode2, hashcode3).size() > 0) {
       return true;
     } else {
       return HttpActionHelper.toGet(new URI(centralServerUrl),

@@ -20,12 +20,14 @@
  */
 package tw.guid.local.controller;
 
-import static org.junit.Assert.assertEquals;
+import static com.google.common.collect.Sets.newHashSet;
 import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.Map;
+import java.util.Set;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -35,6 +37,8 @@ import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.boot.test.WebIntegrationTest;
 import org.springframework.core.env.Environment;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+
+import com.github.wnameless.json.flattener.JsonFlattener;
 
 import tw.guid.local.Application;
 import tw.guid.local.helper.HttpActionHelper;
@@ -114,9 +118,23 @@ public class ApiControllerTest {
   public void testGetAllPrefixListInLocalServerDatabase()
       throws URISyntaxException, IOException {
 
-    assertEquals(HttpActionHelper
-        .toGet(new URI(localServerUrl), Action.API_PREFIX, "", true).getBody(),
-        "[" + "\"UserTest\"" + "," + "\"BiobankTest\"" + "," + "\"AdminTest\""
-            + "]");
+    Set<String> set = newHashSet();
+    set.add("UserTest");
+    set.add("BiobankSuper");
+    set.add("AdminTest");
+
+    Map<String, Object> flattenJson =
+        JsonFlattener.flattenAsMap(HttpActionHelper
+            .toGet(new URI(localServerUrl), Action.API_PREFIX, "", true)
+            .getBody());
+
+    Set<String> s = newHashSet();
+
+    for (int i = 0; i < flattenJson.size(); i++) {
+      s.add(flattenJson.get("[" + i + "]").toString());
+    }
+
+    assertTrue(set.containsAll(s));
+
   }
 }
