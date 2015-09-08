@@ -35,7 +35,7 @@ public class SubprimeGuid extends AbstractPersistable<Long> {
 
   private static final long serialVersionUID = 1L;
 
-  @Column(nullable = false)
+  @Column(unique = true, nullable = false)
   private String spguid;
 
   @Column(nullable = false)
