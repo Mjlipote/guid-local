@@ -153,7 +153,7 @@
 								<td th:text="${acctUser.email}"></td>
 								<td th:text="${acctUser.telephone}"></td>
 								<td th:text="${acctUser.address}"></td>
-								<td>
+								<td th:unless="${acctUser.username.equals('super')}">
 									<form method="post"
 										th:action="@{${'/users/' + acctUser.username }}">
 										<input type="hidden" name="_method" value="DELETE" />

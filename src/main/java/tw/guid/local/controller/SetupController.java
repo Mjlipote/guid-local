@@ -50,14 +50,12 @@ public class SetupController {
     AccountUser superAdmin = new AccountUser();
     InstitutePrefix institutePrefix = new InstitutePrefix();
     institutePrefix.setInstitute("生物資料庫測試單位");
-    institutePrefix.setPrefix("BiobankTest");
+    institutePrefix.setPrefix("BiobankSuper");
     superAdmin.setInstitutePrefix(institutePrefix);
     superAdmin.setUsername("super");
     superAdmin.setPassword("1qaz$RFV");
-    superAdmin.setEmail("super@ym.com");
+    superAdmin.setEmail("super@super.com");
     superAdmin.setJobTitle("生物資訊主管");
-    superAdmin.setTelephone("0910333222");
-    superAdmin.setAddress("國立陽明大學");
     superAdmin.setRole(Role.ROLE_ADMIN);
 
     AccountUser admin = new AccountUser();
@@ -68,9 +66,7 @@ public class SetupController {
     admin.setUsername("admin");
     admin.setPassword("password");
     admin.setEmail("admin@ym.com");
-    admin.setJobTitle("系統管理員");
-    admin.setTelephone("0910777666");
-    admin.setAddress("國立陽明大學");
+    admin.setJobTitle("測試用系統管理員");
     admin.setRole(Role.ROLE_ADMIN);
 
     AccountUser user = new AccountUser();
@@ -81,9 +77,7 @@ public class SetupController {
     user.setUsername("user");
     user.setPassword("password");
     user.setEmail("user@ym.com");
-    user.setJobTitle("使用者");
-    user.setTelephone("0910777000");
-    user.setAddress("國立陽明大學");
+    user.setJobTitle("測試用使用者");
     user.setRole(Role.ROLE_USER);
 
     userRepo.save(superAdmin);
