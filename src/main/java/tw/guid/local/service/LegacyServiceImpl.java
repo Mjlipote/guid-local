@@ -100,7 +100,6 @@ public class LegacyServiceImpl implements LegacyService {
       else {
         String result = null;
 
-        System.out.println(bs.getValue());
         List<String> newList = newArrayList();
         SubprimeGuidRequest subprimeGuidRequest = new SubprimeGuidRequest();
         newList.add(bs.getValue().getGuidHash().get(0).substring(0, 128));
