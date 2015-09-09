@@ -14,7 +14,7 @@
 			<div id="main" class="container">
 				<form th:each="association: ${associationUserInfo}"
 					id="association-infoForm"
-					class="row col-lg-8 col-lg-offset-2 col-md-8 col-md-offset-2 col-sm-8 col-sm-offset-2 col-xs-8 col-xs-offset-2"
+					class="row col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 col-sm-12 col-xs-12"
 					method="post"
 					th:action="@{${'/association/' + association.spguid }}">
 
