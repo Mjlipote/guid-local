@@ -13,7 +13,7 @@
 	<div id="login">
 		<div id="triangle"></div>
 		<h1>關聯比對驗證</h1>
-		<form class="form" th:action="@{/association}" method="post">
+		<form autocomplete="off" class="form" th:action="@{/association}" method="post">
 			<input type="text"
 				onkeyup="value=value.replace(/[^-_a-zA-Z0-9]/g,'')" name="username"
 				placeholder=" 第二組驗證者帳號" />
