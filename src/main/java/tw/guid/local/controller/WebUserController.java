@@ -159,6 +159,12 @@ public class WebUserController {
       AccountUser acctUser =
           acctUserRepo.findByUsernameAndRole(username, Role.ROLE_USER);
 
+      institutePrefixRepo
+          .findByInstitute(acctUser.getInstitutePrefix().getInstitute())
+          .getAccountUsers().remove(acctUser);
+
+      acctUser.setInstitutePrefix(new InstitutePrefix());
+
       acctUserRepo.delete(acctUser);
       map.addAttribute("successMessage",
           "已成功刪除一筆使用者：" + acctUser.getUsername());
