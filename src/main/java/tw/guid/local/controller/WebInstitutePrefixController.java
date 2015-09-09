@@ -20,6 +20,7 @@
  */
 package tw.guid.local.controller;
 
+import java.util.Arrays;
 import java.util.List;
 
 import javax.persistence.criteria.Predicate;
@@ -112,11 +113,19 @@ public class WebInstitutePrefixController {
     return "institute-prefix-info";
   }
 
+  @RequestMapping(value = "/users", method = RequestMethod.POST)
+  String institutesNewUsers(ModelMap map,
+      @RequestParam(value = "institute") String institute) {
+    map.addAttribute("institutes", Arrays
+        .asList(institutePrefixRepo.findByInstitute(institute).getInstitute()));
+
+    return "register";
+  }
+
   @RequestMapping(value = "/users/{institute}", method = RequestMethod.GET)
   String institutesViewUsers(ModelMap map,
       @PathVariable("institute") String institute) {
-    map.addAttribute("institute",
-        institutePrefixRepo.findByInstitute(institute).getInstitute());
+    map.addAttribute("institute", institute);
     map.addAttribute("prefix",
         institutePrefixRepo.findByInstitute(institute).getPrefix());
     map.addAttribute("users",

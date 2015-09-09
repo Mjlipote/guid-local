@@ -27,7 +27,7 @@
 						<select data-toggle="select"
 							class="form-control select select-primary mrs mbm"
 							name="institute">
-							<option value="">服務單位</option>
+							<option th:if="${institutes.size() > 1}" value="">服務單位（必填，請選填）</option>
 							<th:block th:each="institute : ${institutes}">
 								<option th:value="${institute}" th:text="${institute}"></option>
 							</th:block>
