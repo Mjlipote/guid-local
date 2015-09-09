@@ -15,7 +15,7 @@
 </head>
 <body>
 	<div layout:fragment="content" id="wrap">
-		<div class="jumbotron col-md-12">
+		<div class="jumbotron col-lg-12 col-md-12 col-sm-12 col-xs-12">
 			<h1 class="text-center" th:inline="text">您好！
 				[[${#httpServletRequest.remoteUser}]]</h1>
 			<div id="main" class="container">
@@ -56,20 +56,21 @@
 
 					<!-- Controls -->
 					<a class="left carousel-control" href="#carousel-example-generic"
-						role="button" data-slide="prev">
-						<span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+						role="button" data-slide="prev"> <span
+						class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
 						<span class="sr-only">Previous</span>
-					</a>
-					<a class="right carousel-control" href="#carousel-example-generic"
-						role="button" data-slide="next">
-						<span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+					</a> <a class="right carousel-control" href="#carousel-example-generic"
+						role="button" data-slide="next"> <span
+						class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
 						<span class="sr-only">Next</span>
 					</a>
 				</div>
 				<br></br>
-				<form class="col-md-8 col-md-offset-2" th:action="@{/logout}"
-					method="post">
-					<div class="col-md-8 col-md-offset-2">
+				<form
+					class="col-lg-8 col-lg-offset-2 col-md-8 col-md-offset-2 col-sm-8 col-sm-offset-2 col-xs-8 col-xs-offset-2"
+					th:action="@{/logout}" method="post">
+					<div
+						class="col-lg-8 col-lg-offset-2 col-md-8 col-md-offset-2 col-sm-8 col-sm-offset-2 col-xs-8 col-xs-offset-2">
 						<input class="btn btn-primary btn-block btn-lg" type="submit"
 							value="登出" />
 					</div>

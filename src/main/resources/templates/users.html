@@ -58,10 +58,11 @@
 			<h1 class="text-center">使用者清單</h1>
 
 			<div id="main">
-				<form class="form-inline col-md-8 col-md-offset-2" method="get"
-					th:action="@{/users/lookup}" role="form">
+				<form
+					class="form-inline col-lg-8 col-lg-offset-2 col-md-8 col-md-offset-2 col-sm-8 col-sm-offset-2 col-xs-8 col-xs-offset-2"
+					method="get" th:action="@{/users/lookup}" role="form">
 					<div class="row">
-						<div class="form-group col-md-6">
+						<div class="form-group col-lg-6 col-md-6 col-sm-6 col-xs-6">
 							<label class="sr-only">使用者權限：</label> <select
 								data-toggle="select"
 								class="form-control select select-primary mrs mbm" name="role">
@@ -71,7 +72,7 @@
 							</select>
 						</div>
 
-						<div class="form-group col-md-6">
+						<div class="form-group col-lg-6 col-md-6 col-sm-6 col-xs-6">
 							<label class="sr-only">服務單位：</label> <select data-toggle="select"
 								class="form-control select select-primary mrs mbm"
 								name="institute">
@@ -84,35 +85,35 @@
 					</div>
 
 					<div class="row">
-						<div class="form-group col-md-2">
+						<div class="form-group col-lg-2 col-md-4 col-sm-4 col-xs-4">
 							<label class="sr-only">使用者帳號：</label> <input class="form-control"
 								onkeyup="value=value.replace(/[^-_a-zA-Z0-9]/g,'')" type="text"
 								name="username" placeholder="使用者帳號"></input>
 						</div>
 
-						<div class="form-group col-md-2">
+						<div class="form-group col-lg-2 col-md-4 col-sm-4 col-xs-4">
 							<label class="sr-only">工作職銜：</label> <input class="form-control"
 								type="text" name="jobTitle" placeholder="工作職銜"></input>
 						</div>
 
-						<div class="form-group col-md-2">
+						<div class="form-group col-lg-2 col-md-4 col-sm-4 col-xs-4">
 							<label class="sr-only">電子郵件 E-Mail：</label> <input
 								class="form-control" type="text" name="email"
 								placeholder="電子郵件 E-Mail"></input>
 						</div>
 
-						<div class="form-group col-md-2">
+						<div class="form-group col-lg-2 col-md-4 col-sm-4 col-xs-4">
 							<label class="sr-only">聯絡電話：</label> <input class="form-control"
 								type="text" name="telephone" placeholder="聯絡電話"></input>
 						</div>
 
-						<div class="form-group col-md-2">
+						<div class="form-group col-lg-2 col-md-4 col-sm-4 col-xs-4">
 							<label class="sr-only">聯絡地址：</label> <input class="form-control"
 								type="text" name="address" placeholder="聯絡地址"></input>
 						</div>
 
-						<div class="form-group col-md-2">
-							<input class="btn btn-inverse btn-block btn-sm" type="submit"
+						<div class="form-group col-lg-2 col-md-4 col-sm-4 col-xs-4">
+							<input class="btn btn-inverse btn-block btn-md" type="submit"
 								value="搜尋使用者"></input>
 						</div>
 					</div>
@@ -121,7 +122,7 @@
 
 
 
-				<div id="wrap" >
+				<div id="wrap">
 					<div class="container" id="pages"></div>
 					<table
 						class="table table-responsive table-bordered table-striped table-condensed table-hover">
@@ -143,9 +144,11 @@
 
 							<tr th:each="acctUser, iterationStatus: ${acctUsers}">
 								<td th:text="${iterationStatus.count}"></td>
-								<td><p th:if="${acctUser.role.toString().equals('ROLE_ADMIN')}" th:text="系統管理者"></p>
-								<p th:if="${acctUser.role.toString().equals('ROLE_USER')}" th:text="一般使用者"></p>
-								</td>
+								<td><p
+										th:if="${acctUser.role.toString().equals('ROLE_ADMIN')}"
+										th:text="系統管理者"></p>
+									<p th:if="${acctUser.role.toString().equals('ROLE_USER')}"
+										th:text="一般使用者"></p></td>
 								<td th:text="${acctUser.username}"></td>
 								<td th:each="institutePrefix : ${acctUser.institutePrefix}"
 									th:text="${institutePrefix.prefix}"></td>

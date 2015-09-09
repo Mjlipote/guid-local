@@ -71,36 +71,36 @@
 
 		<div id="main" class="container">
 
-			<div class="container col-lg-12">
+			<div class="container col-lg-12 col-md-12 col-sm-12 col-xs-12">
 				<form id="createForm" role="form" method="post"
 					th:action="@{/institutes}">
 
 					<div class="row">
-						<div class="form-group col-lg-4">
+						<div class="form-group col-lg-4 col-md-4 col-sm-4 col-xs-6">
 							<input class="form-control" type="text" name="institute"
 								placeholder="單位名稱"></input>
 						</div>
 
-						<div class="form-group col-lg-4">
+						<div class="form-group col-lg-4 col-md-4 col-sm-4 col-xs-6">
 							<input class="form-control"
 								onkeyup="value=value.replace(/[^-_a-zA-Z0-9]/g,'')" type="text"
 								name="prefix" placeholder="Prefix"></input>
 						</div>
 
-						<div class="form-group col-lg-4 institute-prefix">
-							<input class="btn btn-inverse btn-block btn-lg create"
+						<div class="form-group col-lg-4 col-md-4 col-sm-4 col-xs-12 institute-prefix">
+							<input class="btn btn-inverse btn-block btn-md create"
 								type="submit" value="產生單位與 Prefix"></input>
 						</div>
 					</div>
 				</form>
 			</div>
 
-			<div class="form-group container col-lg-12">
+			<div class="form-group container col-lg-12 col-md-12 col-sm-12 col-xs-12">
 				<form class="form-inline" method="get"
 					th:action="@{/institutes/lookup}" role="form">
 					<div class="row">
 
-						<div class="form-group col-md-4">
+						<div class="form-group col-lg-4 col-md-4 col-sm-4 col-xs-6">
 							<label class="sr-only">單位名稱：</label> <select data-toggle="select"
 								class="form-control select select-primary mrs mbm"
 								name="institute">
@@ -111,7 +111,7 @@
 							</select>
 
 						</div>
-						<div class="form-group col-md-4">
+						<div class="form-group col-lg-4 col-md-4 col-sm-4 col-xs-6">
 							<label class="sr-only">Prefix 值：</label> <select
 								data-toggle="select"
 								class="form-control select select-primary mrs mbm" name="prefix">
@@ -123,8 +123,8 @@
 						</div>
 
 
-						<div class="form-group col-md-4">
-							<input class="btn btn-inverse btn-block btn-sm" type="submit"
+						<div class="form-group col-lg-4 col-md-4 col-sm-4 col-xs-12">
+							<input class="btn btn-inverse btn-block btn-md" type="submit"
 								value="搜尋"></input>
 
 						</div>

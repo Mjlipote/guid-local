@@ -12,28 +12,30 @@
 		<div id="wrap">
 			<h1 class="text-center">單位名稱與 prefix 資料</h1>
 			<div id="main" class="container">
-			
-				<form id="institutePrefix-infoForm" class="col-md-8 col-md-offset-2"
+
+				<form id="institutePrefix-infoForm"
+					class="col-lg-8 col-lg-offset-2 col-md-8 col-md-offset-2 col-sm-8 col-sm-offset-2 col-xs-8 col-xs-offset-2"
 					method="post"
 					th:action="@{${'/institutes/' + institutePrefixInfo.institute }}">
 
 
-          <div class="form-group col-lg-12">
-            <label>單位名稱：</label> <input type="text" class="form-control"
-              placeholder="單位名稱" name="newInstitute"
-              th:value="${institutePrefixInfo.institute}"></input>
-          </div>
-          
-					<div class="form-group col-lg-12">
+					<div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12">
+						<label>單位名稱：</label> <input type="text" class="form-control"
+							placeholder="單位名稱" name="newInstitute"
+							th:value="${institutePrefixInfo.institute}"></input>
+					</div>
+
+					<div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12">
 						<label>Prefix 值：</label> <input
 							onkeyup="value=value.replace(/[^-_a-zA-Z0-9]/g,'')" type="text"
 							class="form-control" placeholder="Prefix 值" name="prefix"
 							th:value="${institutePrefixInfo.prefix}"></input>
 					</div>
-   
-					<div class="form-group col-lg-12 institute-prefix-info">
-					       <input type="hidden" name="_method" value="PUT" />
-						<input class="btn btn-inverse btn-block btn-lg" value="編輯聯絡資料"></input>
+
+					<div
+						class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12 institute-prefix-info">
+						<input type="hidden" name="_method" value="PUT" /> <input
+							class="btn btn-inverse btn-block btn-lg" value="編輯聯絡資料"></input>
 					</div>
 
 				</form>

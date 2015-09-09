@@ -58,19 +58,22 @@
 			<h1 class="text-center">批次產生 GUIDs</h1>
 			<div id="main" class="container">
 
-				<form class="col-md-6 col-md-offset-3" enctype="multipart/form-data"
-					method="post" th:action="@{/guids/batch}">
+				<form
+					class="col-lg-6 col-lg-offset-3 col-md-6 col-md-offset-3 col-sm-6 col-sm-offset-3 col-xs-6 col-xs-offset-3"
+					enctype="multipart/form-data" method="post"
+					th:action="@{/guids/batch}">
 
-					<div class="form-group col-md-12">
-						<label class="btn btn-primary col-md-12"> <input
-							id="my-file-selector" name="file" type="file"
+					<div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12">
+						<label
+							class="btn btn-primary col-lg-12 col-md-12 col-sm-12 col-xs-12">
+							<input id="my-file-selector" name="file" type="file"
 							style="display: none;"
 							accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"></input>
 							選擇Excel檔案...
 						</label>
 					</div>
 
-					<div class="form-group col-md-12">
+					<div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12">
 						<input class="btn btn-inverse btn-block btn-lg col-md-12"
 							type="submit" value="批次比對"></input>
 					</div>
