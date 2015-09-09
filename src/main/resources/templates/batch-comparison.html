@@ -59,14 +59,15 @@
 			<div id="main" class="container">
 
 
-				<form role="form"
+				<form role="form" id="comparisonForm"
 					class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 col-sm-12 col-xs-12"
 					enctype="multipart/form-data" method="post"
 					th:action="@{/guids/batch/comparison}">
 
 					<div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12">
-						<label class="btn btn-primary col-lg-12 col-md-12 col-sm-12 col-xs-12"> <input
-							id="my-file-selector" name="file" type="file"
+						<label
+							class="btn btn-primary col-lg-12 col-md-12 col-sm-12 col-xs-12">
+							<input id="my-file-selector" name="file" type="file"
 							style="display: none;"
 							accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"></input>
 							選擇Excel檔案...
@@ -74,7 +75,8 @@
 					</div>
 
 					<div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12">
-						<input class="btn btn-inverse btn-block btn-lg col-lg-12 col-md-12 col-sm-12 col-xs-12"
+						<input
+							class="btn btn-inverse btn-block btn-lg col-lg-12 col-md-12 col-sm-12 col-xs-12"
 							type="submit" value="批次比對"></input>
 					</div>
 
@@ -106,8 +108,39 @@
 						</tbody>
 					</table>
 					<div class="container" id="pages"></div>
-				</div>
 
+					<script type="text/javascript">
+						$(function() {
+							$('#comparisonForm').submit(function() {
+								$('#myPleaseWait').modal('show');
+							})
+						});
+					</script>
+					<!-- Modal Start here-->
+					<div class="modal fade bs-example-modal-lg" id="myPleaseWait"
+						tabindex="-1" role="dialog" aria-hidden="true"
+						data-backdrop="static">
+						<div class="modal-dialog modal-lg">
+							<div class="modal-content">
+								<div class="modal-header">
+									<h4 class="modal-title">
+										<span class="glyphicon glyphicon-time"> </span>Please Wait
+									</h4>
+								</div>
+								<div class="modal-body">
+									<div class="progress">
+										<div
+											class="progress-bar progress-bar-info
+                    progress-bar-striped active"
+											style="width: 100%"></div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<!-- Modal ends Here -->
+
+				</div>
 			</div>
 		</div>
 	</div>
