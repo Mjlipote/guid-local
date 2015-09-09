@@ -15,7 +15,7 @@
 		var perPage = 10;
 		items.slice(perPage).hide();
 
-		$(pages).pagination({
+		$('.pages').pagination({
 
 			items : numItems,
 			itemsOnPage : perPage,
@@ -40,7 +40,7 @@
 			if (hash)
 				// the selectPage function is described in the documentation
 				// we've captured the page number in a regex group: (\d+)
-				$(pages).pagination("selectPage", parseInt(hash[1]));
+				$('.pages').pagination("selectPage", parseInt(hash[1]));
 		};
 
 		// we'll call this function whenever the back/forward is pressed
@@ -75,7 +75,7 @@
 				</form>
 
 				<div th:if="${number >= 0}">
-					<div class="container" id="pages"></div>
+					<div class="container pages"></div>
 					<table
 						class="table table-responsive table-bordered table-striped table-condensed table-hover center">
 						<thead>
@@ -99,7 +99,7 @@
 
 						</tbody>
 					</table>
-					<div class="container" id="pages"></div>
+					<div class="container pages"></div>
 				</div>
 			</div>
 		</div>

@@ -7,15 +7,37 @@
 <title>批次產生 GUIDs</title>
 <!-- Include Simple Pagination -->
 <link rel="stylesheet" href="/simplePagination.css"></link>
+<style>
+.glyphicon.spinning {
+  animation: spin 1s infinite linear;
+  -webkit-animation: spin2 1s infinite linear;
+}
+
+@keyframes spin {
+    from { transform: scale(1) rotate(0deg); }
+    to { transform: scale(1) rotate(360deg); }
+}
+
+@-webkit-keyframes spin2 {
+    from { -webkit-transform: rotate(0deg); }
+    to { -webkit-transform: rotate(360deg); }
+}
+</style>
 <script src="/jquery.simplePagination.js"></script>
 <script type="text/javascript">
 	$(function() {
+		$('#guidsProgress').hide();
+
+		$('#guidsForm').submit(function() {
+			$('#guidsProgress').show();
+		});
+
 		var items = $("table tbody tr");
 		var numItems = items.length;
 		var perPage = 10;
 		items.slice(perPage).hide();
 
-		$(pages).pagination({
+		$('.pages').pagination({
 
 			items : numItems,
 			itemsOnPage : perPage,
@@ -40,7 +62,7 @@
 			if (hash)
 				// the selectPage function is described in the documentation
 				// we've captured the page number in a regex group: (\d+)
-				$(pages).pagination("selectPage", parseInt(hash[1]));
+				$('.pages').pagination("selectPage", parseInt(hash[1]));
 		};
 
 		// we'll call this function whenever the back/forward is pressed
@@ -58,7 +80,7 @@
 			<h1 class="text-center">批次產生 GUIDs</h1>
 			<div id="main" class="container">
 
-				<form
+				<form id="guidsForm"
 					class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 col-sm-12 col-xs-12"
 					enctype="multipart/form-data" method="post"
 					th:action="@{/guids/batch}">
@@ -69,7 +91,8 @@
 							<input id="my-file-selector" name="file" type="file"
 							style="display: none;"
 							accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"></input>
-							選擇Excel檔案...
+							<span class="glyphicon glyphicon-folder-open"></span> 選擇 Excel
+							檔案...
 						</label>
 					</div>
 
@@ -80,8 +103,18 @@
 
 				</form>
 
+				<!-- Modal Start here-->
+				<button
+					class="btn btn-lg btn-default col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 col-sm-12 col-xs-12"
+					id="guidsProgress">
+					<span class="glyphicon glyphicon-refresh spinning"></span>
+					Loading...
+				</button>
+
+				<!-- Modal ends Here -->
+
 				<div th:if="${number >= 0}">
-					<div class="container" id="pages"></div>
+					<div class="container pages"></div>
 					<table
 						class="table table-responsive table-bordered table-striped table-condensed table-hover center">
 						<thead>
@@ -105,7 +138,7 @@
 
 						</tbody>
 					</table>
-					<div class="container" id="pages"></div>
+					<div class="container pages"></div>
 				</div>
 
 			</div>

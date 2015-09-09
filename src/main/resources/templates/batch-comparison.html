@@ -26,10 +26,10 @@
 <script src="/jquery.simplePagination.js"></script>
 <script type="text/javascript">
 	$(function() {
-		$('#myPleaseWait').modal('hide');
+        $('#comparisonProgress').hide();
 		
 		$('#comparisonForm').submit(function() {
-			$('#myPleaseWait').modal('show');
+			$('#comparisonProgress').show();
 		});
 		
 		var items = $("table tbody tr");
@@ -37,7 +37,7 @@
 		var perPage = 10;
 		items.slice(perPage).hide();
 
-		$('#pages').pagination({
+		$('.pages').pagination({
 
 			items : numItems,
 			itemsOnPage : perPage,
@@ -62,7 +62,7 @@
 			if (hash)
 				// the selectPage function is described in the documentation
 				// we've captured the page number in a regex group: (\d+)
-				$(pages).pagination("selectPage", parseInt(hash[1]));
+				$('.pages').pagination("selectPage", parseInt(hash[1]));
 		};
 
 		// we'll call this function whenever the back/forward is pressed
@@ -92,7 +92,7 @@
 							<input id="my-file-selector" name="file" type="file"
 								style="display: none;"
 								accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"></input>
-							選擇Excel檔案...
+							<span class="glyphicon glyphicon-folder-open"></span> 選擇 Excel 檔案...
 						</label>
 					</div>
 
@@ -105,32 +105,15 @@
 				</form>
 
 				<!-- Modal Start here-->
+					<button class="btn btn-lg btn-default col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 col-sm-12 col-xs-12" id="comparisonProgress">
+						<span class="glyphicon glyphicon-refresh spinning"></span>
+						Loading...
+					</button>
 
-<div class="modal fade bs-example-modal-lg" id="myPleaseWait" tabindex="-1"
-    role="dialog" aria-hidden="true" data-backdrop="static">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title">
-                    <span class="glyphicon glyphicon-time">
-                    </span>Please Wait
-                 </h4>
-            </div>
-            <div class="modal-body">
-                <div class="progress">
-                    <div class="progress-bar progress-bar-info
-                    progress-bar-striped active"
-                    style="width: 100%">
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
 				<!-- Modal ends Here -->
 
 				<div th:if="${number >= 0}">
-					<div class="container" id="pages"></div>
+					<div class="container pages"></div>
 					<table
 						class="table table-responsive table-bordered table-striped table-condensed table-hover center">
 						<thead>
@@ -156,7 +139,7 @@
 
 						</tbody>
 					</table>
-					<div class="container" id="pages"></div>
+					<div class="container pages"></div>
 
 				</div>
 			</div>
