@@ -147,7 +147,7 @@
 									th:text="比對GUIDs"></font> <font color="blue"
 									th:if="${paperTrail.httpMethod.toString().equals('POST') and paperTrail.requestURI == '/guids/batch/comparison' and paperTrail.httpStatus == 200}"
 									th:text="批次比對GUIDs"></font> <font color="blue"
-									th:if="${paperTrail.httpMethod.toString().equals('POST') and paperTrail.requestURI == '/users/new' and paperTrail.httpStatus == 200}"
+									th:if="${paperTrail.httpMethod.toString().equals('POST') and paperTrail.requestURI == '/users' and paperTrail.httpStatus == 200}"
 									th:text="新增使用者"></font> <font color="blue"
 									th:if="${paperTrail.httpMethod.toString().equals('POST') and paperTrail.requestURI == '/institutes' and paperTrail.httpStatus == 200}"
 									th:text="新增單位名稱"></font> <font color="blue"

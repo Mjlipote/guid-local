@@ -188,7 +188,7 @@ public class WebUserController {
    * @param prefix
    * @return
    */
-  @RequestMapping(value = "/new", method = RequestMethod.POST)
+  @RequestMapping(method = RequestMethod.POST)
   String usersNew(ModelMap map,
       @RequestParam(value = "username") String username,
       @RequestParam(value = "password") String password,
