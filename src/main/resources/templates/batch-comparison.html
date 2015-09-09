@@ -7,15 +7,37 @@
 <title>批次比對 GUIDs</title>
 <!-- Include Simple Pagination -->
 <link rel="stylesheet" href="/simplePagination.css"></link>
+<style>
+.glyphicon.spinning {
+	animation: spin 1s infinite linear;
+	-webkit-animation: spin2 1s infinite linear;
+}
+
+@keyframes spin {
+    from { transform: scale(1) rotate(0deg); }
+    to { transform: scale(1) rotate(360deg); }
+}
+
+@-webkit-keyframes spin2 {
+    from { -webkit-transform: rotate(0deg); }
+    to { -webkit-transform: rotate(360deg); }
+}
+</style>
 <script src="/jquery.simplePagination.js"></script>
 <script type="text/javascript">
 	$(function() {
+        $('#comparisonProgress').hide();
+		
+		$('#comparisonForm').submit(function() {
+			$('#comparisonProgress').show();
+		});
+		
 		var items = $("table tbody tr");
 		var numItems = items.length;
 		var perPage = 10;
 		items.slice(perPage).hide();
 
-		$(pages).pagination({
+		$('#pages').pagination({
 
 			items : numItems,
 			itemsOnPage : perPage,
@@ -68,8 +90,8 @@
 						<label
 							class="btn btn-primary col-lg-12 col-md-12 col-sm-12 col-xs-12">
 							<input id="my-file-selector" name="file" type="file"
-							style="display: none;"
-							accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"></input>
+								style="display: none;"
+								accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"></input>
 							選擇Excel檔案...
 						</label>
 					</div>
@@ -82,6 +104,14 @@
 
 				</form>
 
+				<!-- Modal Start here-->
+					<button class="btn btn-lg btn-warning" id="comparisonProgress">
+						<span class="glyphicon glyphicon-refresh spinning"></span>
+						Loading...
+					</button>
+
+				<!-- Modal ends Here -->
+
 				<div th:if="${number >= 0}">
 					<div class="container" id="pages"></div>
 					<table
@@ -91,7 +121,9 @@
 								<td>#</td>
 								<td>
 									<h2>
-										<strong> 批次比對 GUIDs 結果：共有 <span th:text="${number}"></span>
+										<strong>
+											批次比對 GUIDs 結果：共有
+											<span th:text="${number}"></span>
 											組相同
 										</strong>
 									</h2>
@@ -108,37 +140,6 @@
 						</tbody>
 					</table>
 					<div class="container" id="pages"></div>
-
-					<script type="text/javascript">
-						$(function() {
-							$('#comparisonForm').submit(function() {
-								$('#myPleaseWait').modal('show');
-							})
-						});
-					</script>
-					<!-- Modal Start here-->
-					<div class="modal fade bs-example-modal-lg" id="myPleaseWait"
-						tabindex="-1" role="dialog" aria-hidden="true"
-						data-backdrop="static">
-						<div class="modal-dialog modal-lg">
-							<div class="modal-content">
-								<div class="modal-header">
-									<h4 class="modal-title">
-										<span class="glyphicon glyphicon-time"> </span>Please Wait
-									</h4>
-								</div>
-								<div class="modal-body">
-									<div class="progress">
-										<div
-											class="progress-bar progress-bar-info
-                    progress-bar-striped active"
-											style="width: 100%"></div>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-					<!-- Modal ends Here -->
 
 				</div>
 			</div>
