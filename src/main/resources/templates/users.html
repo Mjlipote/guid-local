@@ -156,6 +156,17 @@
 								<td th:text="${acctUser.email}"></td>
 								<td th:text="${acctUser.telephone}"></td>
 								<td th:text="${acctUser.address}"></td>
+								
+								<td th:if="${acctUser.role.toString().equals('ROLE_ADMIN')}">
+                  <form method="post"
+                    th:action="@{${'/users/' + acctUser.username }}">
+                    <input type="hidden" name="_method" value="DELETE" />
+                    <button disabled="disabled" type="submit" name="${acctUser.username}"
+                      class="btn btn-block btn-sm btn-danger">
+                      <i class='glyphicon glyphicon-trash' th:text="刪除"></i>
+                    </button>
+                  </form>
+                </td>
 								<td th:unless="${acctUser.role.toString().equals('ROLE_ADMIN')}">
 									<form method="post"
 										th:action="@{${'/users/' + acctUser.username }}">

@@ -89,8 +89,18 @@
 					<td th:text="${user.email}"></td>
 					<td th:text="${user.telephone}"></td>
 					<td th:text="${user.address}"></td>
-					<td
-						th:unless="${user.role.toString().equals('ROLE_ADMIN')}">
+					<td th:if="${user.role.toString().equals('ROLE_ADMIN')}">
+						<form method="post"
+							th:action="@{${'/users/' + user.username }}">
+							<input type="hidden" name="_method" value="DELETE" />
+							<button disabled="disabled" type="submit"
+								name="${user.username}"
+								class="btn btn-block btn-sm btn-danger">
+								<i class='glyphicon glyphicon-trash' th:text="刪除"></i>
+							</button>
+						</form>
+					</td>
+					<td th:unless="${user.role.toString().equals('ROLE_ADMIN')}">
 						<form method="post" th:action="@{${'/users/' + user.username }}">
 							<input type="hidden" name="_method" value="DELETE" />
 							<button type="submit" name="${user.username}"
