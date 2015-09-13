@@ -65,7 +65,7 @@ public interface PaperTrailRepository
     Set<String> requestURI = newHashSet();
 
     for (PaperTrail paperTrail : findAll()) {
-      requestURI.add(paperTrail.getRequestURI());
+      requestURI.add(paperTrail.getRequestUri());
     }
     return requestURI;
   }
