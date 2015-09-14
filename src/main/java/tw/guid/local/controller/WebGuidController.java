@@ -363,8 +363,8 @@ public class WebGuidController {
       return "error";
     } else {
 
-      WorkbookReader reader = WorkbookReader.open(
-          WorkbookFactory.create(new ByteArrayInputStream(file.getBytes())));
+      WorkbookReader reader =
+          WorkbookReader.open(new ByteArrayInputStream(file.getBytes()));
 
       List<String> list = newArrayList();
 
