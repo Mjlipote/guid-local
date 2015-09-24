@@ -25,8 +25,6 @@ import static net.sf.rubycollect4j.RubyCollections.hp;
 import static net.sf.rubycollect4j.RubyCollections.ra;
 import static org.springframework.http.HttpStatus.UNAUTHORIZED;
 
-import java.net.URI;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map.Entry;
 
@@ -36,8 +34,17 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.test.TestRestTemplate;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.client.RestTemplate;
 
-import com.github.wnameless.json.flattener.JsonFlattener;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.wnameless.jsonapi.JsonApi;
+import com.github.wnameless.jsonapi.ResourceDocument;
 import com.google.common.io.BaseEncoding;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -46,14 +53,16 @@ import net.sf.rubycollect4j.RubyArray;
 import tw.guid.local.entity.AccountUser;
 import tw.guid.local.entity.SubprimeGuid;
 import tw.guid.local.helper.HashcodeCreator;
-import tw.guid.local.helper.HttpActionHelper;
+import tw.guid.local.model.PrefixedHashBundle;
+import tw.guid.local.model.PublicGuid;
 import tw.guid.local.repository.AccountUsersRepository;
 import tw.guid.local.repository.SubprimeGuidRepository;
-import tw.guid.local.web.Action;
-import tw.guid.local.web.GuidException;
-import tw.guid.local.web.SubprimeGuidRequest;
+import tw.guid.local.web.LegacyGuidException;
 
 public class LegacyServiceImpl implements LegacyService {
+
+  RestTemplate restTemplate = new TestRestTemplate();
+  ObjectMapper mapper = new ObjectMapper();
 
   private static final Logger log =
       LoggerFactory.getLogger(LegacyServiceImpl.class);
@@ -75,7 +84,7 @@ public class LegacyServiceImpl implements LegacyService {
   @Override
   public String create(String prefix, String jsonHashes,
       HttpServletRequest request) {
-    if (!isValidate(request)) throw new GuidException(UNAUTHORIZED);
+    if (!isValidate(request)) throw new LegacyGuidException(UNAUTHORIZED);
 
     if (prefix.equals("") && isValidate(request)) {
       prefix = getPrefixFromCurrentLoginUser(request);
@@ -83,9 +92,9 @@ public class LegacyServiceImpl implements LegacyService {
       prefix = "PSEUDO";
     }
 
-    List<SubprimeGuidRequest> sgrs = buildRequests(prefix, jsonHashes);
+    List<PrefixedHashBundle> sgrs = buildRequests(prefix, jsonHashes);
 
-    RubyArray<Entry<Boolean, SubprimeGuidRequest>> boolSgrs =
+    RubyArray<Entry<Boolean, PrefixedHashBundle>> boolSgrs =
         ra(sgrs).map((sgq) -> {
           if (subprimeGuidRepo.isExist(sgq))
             return hp(true, sgq);
@@ -99,21 +108,30 @@ public class LegacyServiceImpl implements LegacyService {
             .getSubprimeGuidBySubprimeGuidRequest(bs.getValue());
       else {
         String result = null;
-
-        List<String> newList = newArrayList();
-        SubprimeGuidRequest subprimeGuidRequest = new SubprimeGuidRequest();
-        newList.add(bs.getValue().getGuidHash().get(0).substring(0, 128));
-        newList.add(bs.getValue().getGuidHash().get(1).substring(0, 128));
-        newList.add(bs.getValue().getGuidHash().get(2).substring(0, 128));
-        subprimeGuidRequest.setGuidHash(newList);
-        subprimeGuidRequest.setPrefix(bs.getValue().getPrefix());
+        PrefixedHashBundle prefixedHashBundle = new PrefixedHashBundle();
+        prefixedHashBundle.setHash1(bs.getValue().getHash1().substring(0, 128));
+        prefixedHashBundle.setHash2(bs.getValue().getHash2().substring(0, 128));
+        prefixedHashBundle.setHash3(bs.getValue().getHash3().substring(0, 128));
+        prefixedHashBundle.setPrefix(bs.getValue().getPrefix());
 
         try {
-          result = (String) JsonFlattener
-              .flattenAsMap(
-                  HttpActionHelper.toPost(new URI(centralServerUrl), Action.NEW,
-                      Arrays.asList(subprimeGuidRequest), false).getBody())
-              .get("[0].spguid");
+
+          ResourceDocument<PrefixedHashBundle> body =
+              JsonApi.resourceDocument(prefixedHashBundle, "encodables");
+
+          HttpHeaders headers = new HttpHeaders();
+          headers.setContentType(MediaType.valueOf("application/vnd.api+json"));
+
+          HttpEntity<String> req =
+              new HttpEntity<String>(mapper.writeValueAsString(body), headers);
+          ResponseEntity<String> res = restTemplate.postForEntity(
+              centralServerUrl + "/api/v1/guids", req, String.class);
+
+          ResourceDocument<PublicGuid> acutal = mapper.readValue(res.getBody(),
+              new TypeReference<ResourceDocument<PublicGuid>>() {});
+
+          result = acutal.getData().getAttributes().getPrefix() + "-"
+              + acutal.getData().getAttributes().getCode();
         } catch (Exception e) {
           log.error(e.getMessage(), e);
         }
@@ -122,12 +140,9 @@ public class LegacyServiceImpl implements LegacyService {
         SubprimeGuid subprimeGuid = new SubprimeGuid();
         subprimeGuid.setSpguid(result);
         subprimeGuid.setPrefix(str[0]);
-        subprimeGuid
-            .setHashcode1(bs.getValue().getGuidHash().get(0).substring(0, 128));
-        subprimeGuid
-            .setHashcode2(bs.getValue().getGuidHash().get(1).substring(0, 128));
-        subprimeGuid
-            .setHashcode3(bs.getValue().getGuidHash().get(2).substring(0, 128));
+        subprimeGuid.setHashcode1(bs.getValue().getHash1().substring(0, 128));
+        subprimeGuid.setHashcode2(bs.getValue().getHash2().substring(0, 128));
+        subprimeGuid.setHashcode3(bs.getValue().getHash3().substring(0, 128));
         subprimeGuidRepo.save(subprimeGuid);
 
         return result;
@@ -137,9 +152,9 @@ public class LegacyServiceImpl implements LegacyService {
     return new Gson().toJson(correctGuids);
   }
 
-  private List<SubprimeGuidRequest> buildRequests(String prefix,
+  private List<PrefixedHashBundle> buildRequests(String prefix,
       String jsonHashes) {
-    List<SubprimeGuidRequest> sgrs = newArrayList();
+    List<PrefixedHashBundle> prefixedHashBundles = newArrayList();
 
     List<String> hash = null;
     List<List<String>> hashes = null;
@@ -151,17 +166,24 @@ public class LegacyServiceImpl implements LegacyService {
           new TypeToken<List<List<String>>>() {}.getType());
     }
 
-    if (hash != null) {
-      sgrs.add(new SubprimeGuidRequest(prefix, hash));
+    if (hash != null)
+
+    {
+      prefixedHashBundles.add(new PrefixedHashBundle(prefix, hash.get(0),
+          hash.get(1), hash.get(2)));
     }
 
-    if (hashes != null) {
+    if (hashes != null)
+
+    {
       for (List<String> h : hashes) {
-        sgrs.add(new SubprimeGuidRequest(prefix, h));
+        prefixedHashBundles
+            .add(new PrefixedHashBundle(prefix, h.get(0), h.get(1), h.get(2)));
       }
     }
 
-    return sgrs;
+    return prefixedHashBundles;
+
   }
 
   private AccountUser getAccountUsers(HttpServletRequest request) {

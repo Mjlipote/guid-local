@@ -213,11 +213,8 @@ public class WebAssociationController {
     associationUser.setAddress(address);
 
     associationRepo.saveAndFlush(associationUser);
-    map.addAttribute("successMessage",
-        "已成功修改 " + associationUser.getName() + " 的個人資料");
-    map.addAttribute("link", "/association");
 
-    return "success";
+    return "redirect:/association";
   }
 
   @RequestMapping(value = "/{spguid}", method = RequestMethod.GET)

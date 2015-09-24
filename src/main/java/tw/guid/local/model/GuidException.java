@@ -1,9 +1,6 @@
 /*
  *
- * @author Ming-Jheng Li
- *
- *
- * Copyright 2015 Ming-Jheng Li
+ * Copyright 2015 Wei-Ming Wu
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -18,20 +15,27 @@
  * the License.
  *
  */
+package tw.guid.local.model;
 
-package tw.guid.local.service;
+public class GuidException extends RuntimeException {
 
-import java.util.Set;
+  private static final long serialVersionUID = 1L;
 
-public interface ApiService {
+  private final String status;
 
-  public Set<String> prefixLookup();
+  private final String title;
 
-  public Set<String> hospitalLookup();
+  public GuidException(int status, String title) {
+    this.status = String.valueOf(status);
+    this.title = title;
+  }
 
-  public Set<String> doctorLookup();
+  public String getStatus() {
+    return status;
+  }
 
-  public boolean validation(String spguid);
+  public String getTitle() {
+    return title;
+  }
 
-  public boolean existence(String subprimeGuid);
 }

@@ -166,10 +166,8 @@ public class WebUserController {
       acctUser.setInstitutePrefix(new InstitutePrefix());
 
       acctUserRepo.delete(acctUser);
-      map.addAttribute("successMessage",
-          "已成功刪除一筆使用者：" + acctUser.getUsername());
-      map.addAttribute("link", "/users");
-      return "success";
+
+      return "redirect:/users";
 
     }
   }
@@ -230,9 +228,7 @@ public class WebUserController {
       institutePrefix.setAccountUsers(aus);
       institutePrefixRepo.save(institutePrefix);
 
-      map.addAttribute("successMessage", "已成功新增一筆使用者：" + user.getUsername());
-      map.addAttribute("link", "/register");
-      return "success";
+      return "redirect:/users";
     }
   }
 
@@ -285,7 +281,7 @@ public class WebUserController {
       acctUserRepo.saveAndFlush(acctUser);
       map.addAttribute("successMessage",
           "已成功修改 " + acctUser.getUsername() + " 的個人資料");
-      map.addAttribute("link", "/users");
+      map.addAttribute("link", "/home");
       return "success";
 
     }
@@ -324,7 +320,7 @@ public class WebUserController {
       acctUserRepo.saveAndFlush(acctUser);
       map.addAttribute("successMessage",
           "已成功修改 " + acctUser.getUsername() + " 的登入密碼");
-      map.addAttribute("link", "/users");
+      map.addAttribute("link", "/home");
       return "success";
     }
   }

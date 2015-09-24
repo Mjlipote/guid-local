@@ -78,9 +78,7 @@ public class WebInstitutePrefixController {
         institutePrefix.setInstitute(institute);
         institutePrefixRepo.save(institutePrefix);
 
-        map.addAttribute("successMessage", "已成功新增一筆使用單位：" + institute);
-        map.addAttribute("link", "/institutes");
-        return "success";
+        return "redirect:/institutes";
       }
     }
   }
@@ -98,10 +96,8 @@ public class WebInstitutePrefixController {
     institutePrefix.setPrefix(prefix);
 
     institutePrefixRepo.saveAndFlush(institutePrefix);
-    map.addAttribute("successMessage", "已成功修改 " + institute + " 的單位資料");
-    map.addAttribute("link", "/institutes");
 
-    return "success";
+    return "redirect:/institutes";
   }
 
   @RequestMapping(value = "/{institute}", method = RequestMethod.GET)

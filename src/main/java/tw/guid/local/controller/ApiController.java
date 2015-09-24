@@ -84,10 +84,8 @@ public class ApiController {
   }
 
   @RequestMapping("/existence")
-  boolean existence(@RequestParam("hashcode1") String hashcode1,
-      @RequestParam("hashcode2") String hashcode2,
-      @RequestParam("hashcode3") String hashcode3) throws URISyntaxException {
-    return apiService.existence(hashcode1, hashcode2, hashcode3);
+  boolean existence(@RequestParam("subprimeGuid") String subprimeGuid) {
+    return apiService.existence(subprimeGuid);
   }
 
 }

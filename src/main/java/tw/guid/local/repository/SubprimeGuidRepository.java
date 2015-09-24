@@ -26,7 +26,7 @@ import java.util.Set;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import tw.guid.local.entity.SubprimeGuid;
-import tw.guid.local.web.SubprimeGuidRequest;
+import tw.guid.local.model.PrefixedHashBundle;
 
 public interface SubprimeGuidRepository
     extends JpaRepository<SubprimeGuid, Long> {
@@ -34,33 +34,28 @@ public interface SubprimeGuidRepository
   public SubprimeGuid findByHashcode1AndHashcode2AndHashcode3AndPrefix(
       String hashcode1, String hashcode2, String hashcode3, String prefix);
 
+  public SubprimeGuid findBySpguid(String spguid);
+
   public Set<SubprimeGuid> findByHashcode1AndHashcode2AndHashcode3(
       String hashcode1, String hashcode2, String hashcode3);
 
-  public default Set<SubprimeGuid> findBySubprimeGuidRequest(
-      SubprimeGuidRequest req) {
-    return findByHashcode1AndHashcode2AndHashcode3(
-        req.getGuidHash().get(0).substring(0, 128),
-        req.getGuidHash().get(1).substring(0, 128),
-        req.getGuidHash().get(2).substring(0, 128));
-  }
-
-  public default boolean isExist(SubprimeGuidRequest req) {
+  public default boolean isExist(PrefixedHashBundle prefixedHashBundle) {
 
     return findByHashcode1AndHashcode2AndHashcode3AndPrefix(
-        req.getGuidHash().get(0).substring(0, 128),
-        req.getGuidHash().get(1).substring(0, 128),
-        req.getGuidHash().get(2).substring(0, 128), req.getPrefix()) != null;
+        prefixedHashBundle.getHash1().substring(0, 128),
+        prefixedHashBundle.getHash2().substring(0, 128),
+        prefixedHashBundle.getHash3().substring(0, 128),
+        prefixedHashBundle.getPrefix()) != null;
   }
 
   public default String getSubprimeGuidBySubprimeGuidRequest(
-      SubprimeGuidRequest req) {
+      PrefixedHashBundle prefixedHashBundle) {
 
     return findByHashcode1AndHashcode2AndHashcode3AndPrefix(
-        req.getGuidHash().get(0).substring(0, 128),
-        req.getGuidHash().get(1).substring(0, 128),
-        req.getGuidHash().get(2).substring(0, 128), req.getPrefix())
-            .getSpguid();
+        prefixedHashBundle.getHash1().substring(0, 128),
+        prefixedHashBundle.getHash2().substring(0, 128),
+        prefixedHashBundle.getHash3().substring(0, 128),
+        prefixedHashBundle.getPrefix()).getSpguid();
 
   }
 

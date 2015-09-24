@@ -27,9 +27,7 @@ import static com.google.common.collect.Sets.newHashSet;
 import java.io.ByteArrayInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -37,11 +35,14 @@ import java.util.Set;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.openxml4j.exceptions.OpenXML4JException;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.test.TestRestTemplate;
 import org.springframework.core.env.Environment;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -49,10 +50,17 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.github.wnameless.json.flattener.JsonFlattener;
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.wnameless.jsonapi.JsonApi;
+import com.github.wnameless.jsonapi.ResourceDocument;
+import com.github.wnameless.jsonapi.ResourceObject;
+import com.github.wnameless.jsonapi.ResourcesDocument;
 import com.github.wnameless.workbookaccessor.WorkbookReader;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.SetMultimap;
@@ -65,23 +73,20 @@ import tw.guid.local.entity.Association;
 import tw.guid.local.entity.Association.Gender;
 import tw.guid.local.entity.SubprimeGuid;
 import tw.guid.local.helper.BatchSubprimeGuidCreator;
-import tw.guid.local.helper.HttpActionHelper;
+import tw.guid.local.model.GuidSet;
+import tw.guid.local.model.PrefixedHashBundle;
+import tw.guid.local.model.PublicGuid;
 import tw.guid.local.repository.AccountUsersRepository;
 import tw.guid.local.repository.AssociationRepository;
 import tw.guid.local.repository.SubprimeGuidRepository;
 import tw.guid.local.util.NameSplitter;
 import tw.guid.local.validateion.BirthdayValidator;
-import tw.guid.local.web.Action;
 import tw.guid.local.web.CustomAuthenticationProvider;
-import tw.guid.local.web.SubprimeGuidRequest;
 import wmw.validate.TWNationalIdValidator;
 
 @RequestMapping("/guids")
 @Controller
 public class WebGuidController {
-
-  private static final Logger log =
-      LoggerFactory.getLogger(WebGuidController.class);
 
   @Autowired
   SubprimeGuidRepository subprimeGuidRepo;
@@ -129,6 +134,8 @@ public class WebGuidController {
       String prefix = acctUserRepo.findByUsername(auth.getName())
           .getInstitutePrefix().getPrefix();
       List<String> correctGuids = newArrayList();
+      RestTemplate restTemplate = new TestRestTemplate();
+      ObjectMapper mapper = new ObjectMapper();
 
       for (Map<String, String> row : reader.toMaps()) {
         if (BatchSubprimeGuidCreator.isEmptyOnEachRow(row)) {
@@ -159,28 +166,36 @@ public class WebGuidController {
             associationRepo.saveAndFlush(existAssociation);
           } else {
 
-            List<SubprimeGuidRequest> sgrs = newArrayList();
-            SubprimeGuidRequest sgr = new SubprimeGuidRequest();
+            PrefixedHashBundle prefixedHashBundle = new PrefixedHashBundle();
 
-            sgr.setGuidHash(Arrays.asList(hashcode1, hashcode2, hashcode3));
-            sgr.setPrefix(prefix);
-            sgrs.add(sgr);
+            prefixedHashBundle.setHash1(hashcode1);
+            prefixedHashBundle.setHash2(hashcode2);
+            prefixedHashBundle.setHash3(hashcode3);
+            prefixedHashBundle.setPrefix(prefix);
 
-            Map<String, Object> flattenJson = null;
-            try {
-              flattenJson = JsonFlattener.flattenAsMap(HttpActionHelper
-                  .toPost(new URI(centralServerUrl), Action.NEW, sgrs, false)
-                  .getBody());
-            } catch (JsonProcessingException e) {
-              log.error(e.getMessage(), e);
-            } catch (URISyntaxException e) {
-              log.error(e.getMessage(), e);
-            }
+            ResourceDocument<PrefixedHashBundle> body =
+                JsonApi.resourceDocument(prefixedHashBundle, "encodables");
 
-            correctGuids.add(flattenJson.get("[0].spguid").toString());
+            HttpHeaders headers = new HttpHeaders();
+            headers
+                .setContentType(MediaType.valueOf("application/vnd.api+json"));
+
+            HttpEntity<String> req = new HttpEntity<String>(
+                mapper.writeValueAsString(body), headers);
+            ResponseEntity<String> res = restTemplate.postForEntity(
+                centralServerUrl + "/api/v1/guids", req, String.class);
+
+            ResourceDocument<PublicGuid> acutal =
+                mapper.readValue(res.getBody(),
+                    new TypeReference<ResourceDocument<PublicGuid>>() {});
+
+            String subprimeGuid = acutal.getData().getAttributes().getPrefix()
+                + "-" + acutal.getData().getAttributes().getCode();
+
+            correctGuids.add(subprimeGuid);
 
             SubprimeGuid spGuid = new SubprimeGuid();
-            spGuid.setSpguid(flattenJson.get("[0].spguid").toString());
+            spGuid.setSpguid(subprimeGuid);
             spGuid.setHashcode1(hashcode1);
             spGuid.setHashcode2(hashcode2);
             spGuid.setHashcode3(hashcode3);
@@ -188,7 +203,7 @@ public class WebGuidController {
             subprimeGuidRepo.save(spGuid);
 
             Association association = new Association();
-            association.setSpguid(flattenJson.get("[0].spguid").toString());
+            association.setSpguid(subprimeGuid);
             association.setSubjectId(row.get("SUBJECTID"));
             association.setMrn(row.get("MRN"));
             association.setName(row.get("FULLNAME"));
@@ -222,6 +237,8 @@ public class WebGuidController {
    * @param sid
    * @param name
    * @return
+   * @throws JsonMappingException
+   * @throws JsonParseException
    * @throws FileNotFoundException
    * @throws URISyntaxException
    * @throws IOException
@@ -236,7 +253,8 @@ public class WebGuidController {
       @RequestParam(value = "hospital") String hospital,
       @RequestParam(value = "doctor") String doctor,
       @RequestParam(value = "telephone") String telephone,
-      @RequestParam(value = "address") String address) {
+      @RequestParam(value = "address") String address)
+          throws JsonParseException, JsonMappingException, IOException {
 
     checkNotNull(gender, "gender can't be null");
     checkNotNull(birthDay, "birthDay can't be null");
@@ -299,29 +317,37 @@ public class WebGuidController {
 
           return "guids-result";
         } else {
+          RestTemplate restTemplate = new TestRestTemplate();
+          ObjectMapper mapper = new ObjectMapper();
 
-          List<SubprimeGuidRequest> sgrs = newArrayList();
-          SubprimeGuidRequest sgr = new SubprimeGuidRequest();
+          PrefixedHashBundle prefixedHashBundle = new PrefixedHashBundle();
 
-          sgr.setGuidHash(Arrays.asList(hashcode1, hashcode2, hashcode3));
-          sgr.setPrefix(prefix);
-          sgrs.add(sgr);
+          prefixedHashBundle.setHash1(hashcode1);
+          prefixedHashBundle.setHash2(hashcode2);
+          prefixedHashBundle.setHash3(hashcode3);
+          prefixedHashBundle.setPrefix(prefix);
 
-          Map<String, Object> flattenJson = null;
-          try {
-            flattenJson = JsonFlattener.flattenAsMap(HttpActionHelper
-                .toPost(new URI(centralServerUrl), Action.NEW, sgrs, false)
-                .getBody());
-          } catch (JsonProcessingException e) {
-            log.error(e.getMessage(), e);
-          } catch (URISyntaxException e) {
-            log.error(e.getMessage(), e);
-          }
+          ResourceDocument<PrefixedHashBundle> body =
+              JsonApi.resourceDocument(prefixedHashBundle, "encodables");
 
-          map.addAttribute("spguids", flattenJson.get("[0].spguid").toString());
+          HttpHeaders headers = new HttpHeaders();
+          headers.setContentType(MediaType.valueOf("application/vnd.api+json"));
+
+          HttpEntity<String> req =
+              new HttpEntity<String>(mapper.writeValueAsString(body), headers);
+          ResponseEntity<String> res = restTemplate.postForEntity(
+              centralServerUrl + "/api/v1/guids", req, String.class);
+
+          ResourceDocument<PublicGuid> acutal = mapper.readValue(res.getBody(),
+              new TypeReference<ResourceDocument<PublicGuid>>() {});
+
+          String subprimeGuid = acutal.getData().getAttributes().getPrefix()
+              + "-" + acutal.getData().getAttributes().getCode();
+
+          map.addAttribute("spguids", subprimeGuid);
 
           SubprimeGuid spGuid = new SubprimeGuid();
-          spGuid.setSpguid(flattenJson.get("[0].spguid").toString());
+          spGuid.setSpguid(subprimeGuid);
           spGuid.setHashcode1(hashcode1);
           spGuid.setHashcode2(hashcode2);
           spGuid.setHashcode3(hashcode3);
@@ -329,7 +355,7 @@ public class WebGuidController {
           subprimeGuidRepo.save(spGuid);
 
           Association association = new Association();
-          association.setSpguid(flattenJson.get("[0].spguid").toString());
+          association.setSpguid(subprimeGuid);
           association.setSubjectId(subjectId);
           association.setMrn(mrn);
           association.setName(name);
@@ -366,11 +392,13 @@ public class WebGuidController {
       WorkbookReader reader =
           WorkbookReader.open(new ByteArrayInputStream(file.getBytes()));
 
-      List<String> list = newArrayList();
+      List<PublicGuid> list = newArrayList();
 
       for (List<String> str : reader.withoutHeader().toLists()) {
         if (!str.contains("")) {
-          list.addAll(str);
+          for (String s : str) {
+            list.add(new PublicGuid(s.split("-")[0], s.split("-")[1]));
+          }
         } else {
           map.addAttribute("errorMessage", "上傳檔案內容欄位不可空白");
           map.addAttribute("link", "/batch/comparison");
@@ -383,23 +411,34 @@ public class WebGuidController {
         map.addAttribute("link", "/batch/comparison");
         return "error";
       } else {
-        Map<String, Object> flattenJson = JsonFlattener
-            .flattenAsMap(HttpActionHelper.toPost(new URI(centralServerUrl),
-                Action.COMPARISON, list, false).getBody());
+        RestTemplate restTemplate = new TestRestTemplate();
+        ObjectMapper mapper = new ObjectMapper();
+        ResourceDocument<GuidSet<PublicGuid>> body =
+            JsonApi.resourceDocument(new GuidSet<>(list), "lists");
 
-        List<List<String>> lls = newArrayList();
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.valueOf("application/vnd.api+json"));
 
-        for (int i = 0; i < flattenJson.size(); i++) {
-          List<String> ls = newArrayList();
-          for (int j = 0; j < flattenJson.size(); j++) {
-            if (flattenJson.get("[" + i + "]" + "[" + j + "]") != null) {
-              ls.add(flattenJson.get("[" + i + "]" + "[" + j + "]").toString());
-            }
+        HttpEntity<String> request =
+            new HttpEntity<String>(mapper.writeValueAsString(body), headers);
+        ResponseEntity<String> res = restTemplate.postForEntity(
+            centralServerUrl + "/api/v1/groupings", request, String.class);
+
+        ResourcesDocument<GuidSet<PublicGuid>> acutal =
+            mapper.readValue(res.getBody(),
+                new TypeReference<ResourcesDocument<GuidSet<PublicGuid>>>() {});
+
+        Set<Set<String>> sets = newHashSet();
+
+        for (ResourceObject<GuidSet<PublicGuid>> ros : acutal.getData()) {
+          Set<String> set = newHashSet();
+          for (PublicGuid pg : ros.getAttributes().getSet()) {
+            set.add(pg.getPrefix() + "-" + pg.getCode());
           }
-          if (ls.size() > 0) lls.add(ls);
+          if (set.size() > 1) sets.add(set);
         }
-        map.addAttribute("result", lls);
-        map.addAttribute("number", lls.size());
+        map.addAttribute("result", sets);
+        map.addAttribute("number", sets.size());
         return "batch-comparison";
       }
     }
@@ -432,31 +471,42 @@ public class WebGuidController {
       map.addAttribute("link", "/comparison");
       return "error";
     } else {
-      List<String> list = newArrayList();
+      RestTemplate restTemplate = new TestRestTemplate();
+      ObjectMapper mapper = new ObjectMapper();
+      List<PublicGuid> list = newArrayList();
       String[] str = subprimeGuids.trim().split(",");
 
       for (String s : str) {
-        list.add(s);
+        list.add(new PublicGuid(s.split("-")[0], s.split("-")[1]));
       }
 
-      Map<String, Object> flattenJson =
-          JsonFlattener.flattenAsMap(HttpActionHelper
-              .toPost(new URI(centralServerUrl), Action.COMPARISON, list, false)
-              .getBody());
+      ResourceDocument<GuidSet<PublicGuid>> body =
+          JsonApi.resourceDocument(new GuidSet<>(list), "lists");
 
-      List<List<String>> lls = newArrayList();
+      HttpHeaders headers = new HttpHeaders();
+      headers.setContentType(MediaType.valueOf("application/vnd.api+json"));
 
-      for (int i = 0; i < flattenJson.size(); i++) {
-        List<String> ls = newArrayList();
-        for (int j = 0; j < flattenJson.size(); j++) {
-          if (flattenJson.get("[" + i + "]" + "[" + j + "]") != null) {
-            ls.add(flattenJson.get("[" + i + "]" + "[" + j + "]").toString());
-          }
+      HttpEntity<String> request =
+          new HttpEntity<String>(mapper.writeValueAsString(body), headers);
+      ResponseEntity<String> res = restTemplate.postForEntity(
+          centralServerUrl + "/api/v1/groupings", request, String.class);
+
+      ResourcesDocument<GuidSet<PublicGuid>> acutal =
+          mapper.readValue(res.getBody(),
+              new TypeReference<ResourcesDocument<GuidSet<PublicGuid>>>() {});
+
+      Set<Set<String>> sets = newHashSet();
+
+      for (ResourceObject<GuidSet<PublicGuid>> ros : acutal.getData()) {
+        Set<String> set = newHashSet();
+        for (PublicGuid pg : ros.getAttributes().getSet()) {
+          set.add(pg.getPrefix() + "-" + pg.getCode());
         }
-        if (ls.size() > 0) lls.add(ls);
+        if (set.size() > 1) sets.add(set);
       }
-      map.addAttribute("result", lls);
-      map.addAttribute("number", lls.size());
+
+      map.addAttribute("result", sets);
+      map.addAttribute("number", sets.size());
 
       return "comparison";
     }
@@ -466,16 +516,14 @@ public class WebGuidController {
   String guidsRepeat(ModelMap map) {
 
     Set<Set<String>> hhs = newHashSet();
-    SetMultimap<List<String>, String> multimap = HashMultimap.create();
+    SetMultimap<String, String> multimap = HashMultimap.create();
 
     for (SubprimeGuid subprimeGuid : subprimeGuidRepo.findAll()) {
-      multimap.put(
-          Arrays.asList(subprimeGuid.getHashcode1(),
-              subprimeGuid.getHashcode2(), subprimeGuid.getHashcode3()),
-          subprimeGuid.getSpguid());
+      multimap.put(subprimeGuid.getHashcode1() + subprimeGuid.getHashcode2()
+          + subprimeGuid.getHashcode3(), subprimeGuid.getSpguid());
     }
 
-    for (List<String> key : multimap.keySet()) {
+    for (String key : multimap.keySet()) {
       Set<String> values = multimap.get(key);
 
       if (key != null && values.size() > 1) {
@@ -489,11 +537,9 @@ public class WebGuidController {
     return "repeat";
   }
 
-  private boolean isValidateLength(List<String> spguids) {
-    for (String s : spguids) {
-      if (!s.contains("-")) {
-        return false;
-      } else if (s.toUpperCase().split("-")[1].length() != 8) {
+  private boolean isValidateLength(List<PublicGuid> spguids) {
+    for (PublicGuid pg : spguids) {
+      if (pg.getCode().length() != 8) {
         return false;
       } else {
         return true;

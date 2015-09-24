@@ -56,30 +56,6 @@ public class ApiControllerTest {
   String localServerUrl;
 
   @Test
-  public void testValidationNovelSubprimeGuid() throws URISyntaxException {
-
-    assertTrue(
-        HttpActionHelper.toGet(new URI(localServerUrl), Action.API_VALIDATION,
-            "?spguid=" + "BBB-SG1XQETJ", true).getBody().equals("true"));
-
-    assertTrue(
-        HttpActionHelper.toGet(new URI(localServerUrl), Action.API_VALIDATION,
-            "?spguid=" + "BBB-SG1XQETH", true).getBody().equals("false"));
-  }
-
-  @Test
-  public void testValidationOldSubprimeGuid() throws URISyntaxException {
-
-    assertTrue(
-        HttpActionHelper.toGet(new URI(localServerUrl), Action.API_VALIDATION,
-            "?spguid=" + "YM-75be31f6", true).getBody().equals("true"));
-
-    assertTrue(
-        HttpActionHelper.toGet(new URI(localServerUrl), Action.API_VALIDATION,
-            "?spguid=" + "YM-75be31f0", true).getBody().equals("false"));
-  }
-
-  @Test
   public void testValidationSubprimeGuidLength() throws URISyntaxException {
 
     assertTrue(
@@ -92,25 +68,11 @@ public class ApiControllerTest {
   }
 
   @Test
-  public void testExistence() throws URISyntaxException, IOException {
+  public void testExistence() throws URISyntaxException {
 
     assertTrue(
         HttpActionHelper.toGet(new URI(localServerUrl), Action.API_EXISTENCE,
-            "?hashcode1="
-                + "f3042960fc9351d1ad99550817f892968207c6cb2539c6fd11b3258e815dedfe4f8f3f2a95c846b32aacf6201282921e2b93812587cc19752cfc9c0cf236a57b"
-                + "&hashcode2="
-                + "e92e7cf25a726bb9f7aff7c36c31fa4a96b0014a3a7ce5018c6b84bc459df512653253d01e0742878ca7ddd7bd9c5179273fa915761a9ba84948fd85007cc8f9"
-                + "&hashcode3="
-                + "636ce21c211c33e6ee8e2f7590034fef8a3a5b3263c6d83af9c54b490175d649f11937e855509f57c986d1882cb5259372a37697899660afff8db6c8049de6a9",
-        true).getBody().equals("true"));
-
-    assertTrue(
-        HttpActionHelper
-            .toGet(new URI(localServerUrl),
-                Action.API_EXISTENCE, "?hashcode1=" + "xxx" + "&hashcode2="
-                    + "yyy" + "&hashcode3=" + "zzz",
-                true)
-            .getBody().equals("false"));
+            "?subprimeGuid=TEST-Y3XZU2NG", true).getBody().equals("true"));
 
   }
 
@@ -119,9 +81,9 @@ public class ApiControllerTest {
       throws URISyntaxException, IOException {
 
     Set<String> set = newHashSet();
-    set.add("UserTest");
-    set.add("BiobankSuper");
-    set.add("AdminTest");
+    set.add("YMU");
+    set.add("BIOBANK");
+    set.add("TEST");
 
     Map<String, Object> flattenJson =
         JsonFlattener.flattenAsMap(HttpActionHelper

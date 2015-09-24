@@ -1,9 +1,6 @@
 /*
  *
- * @author Ming-Jheng Li
- *
- *
- * Copyright 2015 Ming-Jheng Li
+ * Copyright 2015 Wei-Ming Wu
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -18,20 +15,24 @@
  * the License.
  *
  */
+package tw.guid.local.model;
 
-package tw.guid.local.service;
+public interface GuidEncodable {
 
-import java.util.Set;
+  public String getPrefix();
 
-public interface ApiService {
+  public void setPrefix(String prefix);
 
-  public Set<String> prefixLookup();
+  public String getHash1();
 
-  public Set<String> hospitalLookup();
+  public void setHash1(String hash1);
 
-  public Set<String> doctorLookup();
+  public String getHash2();
 
-  public boolean validation(String spguid);
+  public void setHash2(String hash2);
 
-  public boolean existence(String subprimeGuid);
+  public String getHash3();
+
+  public void setHash3(String hash3);
+
 }

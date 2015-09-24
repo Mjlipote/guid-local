@@ -32,11 +32,11 @@ import com.google.common.collect.ImmutableList;
 
 /**
  * 
- * {@link GuidException} is used to represent any exception happened in the GUID
+ * {@link LegacyGuidException} is used to represent any exception happened in the GUID
  * web service.
  *
  */
-public final class GuidException extends RuntimeException {
+public final class LegacyGuidException extends RuntimeException {
 
   private static final long serialVersionUID = 1L;
 
@@ -44,30 +44,30 @@ public final class GuidException extends RuntimeException {
   private final List<String> errorMessages;
 
   /**
-   * Creates a {@link GuidException}.
+   * Creates a {@link LegacyGuidException}.
    *
    * @param httpStatus
    *          of this exception
    * @param errorMessages
    *          of exception details
    */
-  public GuidException(HttpStatus httpStatus, List<String> errorMessages) {
+  public LegacyGuidException(HttpStatus httpStatus, List<String> errorMessages) {
     this.httpStatus = checkNotNull(httpStatus);
     this.errorMessages = ImmutableList.copyOf(errorMessages);
   }
 
-  public GuidException(HttpStatus httpStatus, String... errorMessages) {
+  public LegacyGuidException(HttpStatus httpStatus, String... errorMessages) {
     this.httpStatus = checkNotNull(httpStatus);
     this.errorMessages = ImmutableList.copyOf(errorMessages);
   }
 
   /**
-   * Creates a {@link GuidException} without error messages.
+   * Creates a {@link LegacyGuidException} without error messages.
    *
    * @param httpStatus
    *          of this exception
    */
-  public GuidException(HttpStatus httpStatus) {
+  public LegacyGuidException(HttpStatus httpStatus) {
     this.httpStatus = checkNotNull(httpStatus);
     this.errorMessages = ImmutableList.of();
   }

@@ -22,19 +22,14 @@ package tw.guid.local.service;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.sql.SQLException;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 
-import tw.guid.local.helper.HttpActionHelper;
 import tw.guid.local.repository.AssociationRepository;
 import tw.guid.local.repository.InstitutePrefixRepository;
 import tw.guid.local.repository.SubprimeGuidRepository;
-import tw.guid.local.web.Action;
 
 public class ApiServiceImpl implements ApiService {
 
@@ -69,37 +64,23 @@ public class ApiServiceImpl implements ApiService {
   }
 
   @Override
-  public boolean validation(String spguid) throws URISyntaxException {
-    return HttpActionHelper.toGet(new URI(centralServerUrl), Action.VALIDATION,
-        "?spguid=" + spguid, false).getBody().equals("true") ? true : false;
+  public boolean validation(String spguid) {
+
+    return spguid.split("-")[1].length() == 8;
   }
 
   /**
    * 確認是否存在於 local server 資料庫
    * 
-   * @param hashcode1
-   * @param hashcode2
-   * @param hashcode3
+   * @param subprimeGuid
    * @return
-   * @throws SQLException
-   * @throws URISyntaxException
    */
   @Override
-  public boolean existence(String hashcode1, String hashcode2, String hashcode3)
-      throws URISyntaxException {
-    checkNotNull(hashcode1, "hashcode1 can't be null");
-    checkNotNull(hashcode2, "hashcode2 can't be null");
-    checkNotNull(hashcode3, "hashcode3 can't be null");
+  public boolean existence(String subprimeGuid) {
+    checkNotNull(subprimeGuid, "subprimeGuid can't be null");
 
-    if (subprimeGuidRepo.findByHashcode1AndHashcode2AndHashcode3(hashcode1,
-        hashcode2, hashcode3).size() > 0) {
-      return true;
-    } else {
-      return HttpActionHelper.toGet(new URI(centralServerUrl),
-          Action.EXISTENCE, "?hashcode1=" + hashcode1 + "&hashcode2="
-              + hashcode2 + "&hashcode3=" + hashcode3,
-          false).getBody().equals("true") ? true : false;
-    }
+    return subprimeGuidRepo.findBySpguid(subprimeGuid) != null;
+
   }
 
 }
