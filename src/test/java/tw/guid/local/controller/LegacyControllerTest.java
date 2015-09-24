@@ -152,13 +152,14 @@ public class LegacyControllerTest {
   }
 
   @Test
-  public void testGuidNew() throws IOException, URISyntaxException {
+  public void testGuidCreateWithOldPrefix()
+      throws IOException, URISyntaxException {
     GuidClient gc =
-        new GuidClient(new URI(localServerUrl), "admin", "password", "TEST");
+        new GuidClient(new URI(localServerUrl), "admin", "password", "VGH16");
     PII pii = new PII.Builder(new Name("明政", "李"), Sex.MALE,
         new Birthday(1979, 7, 21), new TWNationalId("E122371585")).build();
 
-    assertEquals(gc.create(pii), "TEST-JENYBB2U");
+    assertEquals(gc.create(pii), "VGH16-3AC3DEC6");
 
   }
 
