@@ -228,6 +228,7 @@ public class LegacyControllerTest {
 
   @Test
   public void testGroup() throws Exception {
+
     ResourceDocument<GuidSet<PublicGuid>> body = JsonApi.resourceDocument(
         new GuidSet<>(Arrays.asList(new PublicGuid("VGH26", "E831D239"),
             new PublicGuid("VGH16", "0306693A"))),
