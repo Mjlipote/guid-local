@@ -93,17 +93,11 @@ public final class CentralServerApiHelper {
   }
 
   public static Collection<Set<String>> groupings(URI uri,
-      Collection<String> subprimeGuids)
+      Collection<PublicGuid> subprimeGuids)
           throws JsonParseException, JsonMappingException, IOException {
-    List<PublicGuid> list = newArrayList();
-
-    for (String subprimeGuid : subprimeGuids) {
-      list.add(new PublicGuid(subprimeGuid.split("-")[0],
-          subprimeGuid.split("-")[1]));
-    }
 
     ResourceDocument<GuidSet<PublicGuid>> body =
-        JsonApi.resourceDocument(new GuidSet<>(list), "lists");
+        JsonApi.resourceDocument(new GuidSet<>(subprimeGuids), "lists");
 
     headers.setContentType(MediaType.valueOf("application/vnd.api+json"));
 

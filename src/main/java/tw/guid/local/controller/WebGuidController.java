@@ -27,7 +27,9 @@ import static com.google.common.collect.Sets.newHashSet;
 import java.io.ByteArrayInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -37,12 +39,7 @@ import org.apache.poi.openxml4j.exceptions.OpenXML4JException;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.test.TestRestTemplate;
 import org.springframework.core.env.Environment;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -50,17 +47,10 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.github.wnameless.jsonapi.JsonApi;
-import com.github.wnameless.jsonapi.ResourceDocument;
-import com.github.wnameless.jsonapi.ResourceObject;
-import com.github.wnameless.jsonapi.ResourcesDocument;
 import com.github.wnameless.workbookaccessor.WorkbookReader;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.SetMultimap;
@@ -73,7 +63,7 @@ import tw.guid.local.entity.Association;
 import tw.guid.local.entity.Association.Gender;
 import tw.guid.local.entity.SubprimeGuid;
 import tw.guid.local.helper.BatchSubprimeGuidCreator;
-import tw.guid.local.model.GuidSet;
+import tw.guid.local.helper.CentralServerApiHelper;
 import tw.guid.local.model.PrefixedHashBundle;
 import tw.guid.local.model.PublicGuid;
 import tw.guid.local.repository.AccountUsersRepository;
@@ -109,12 +99,13 @@ public class WebGuidController {
    * @param file
    * @return
    * @throws IOException
+   * @throws URISyntaxException
    * @throws InvalidFormatException
    */
   @RequestMapping(value = "/batch", method = RequestMethod.POST)
   String guidsBatchCreate(ModelMap map,
       @RequestParam("file") MultipartFile file)
-          throws OpenXML4JException, IOException {
+          throws OpenXML4JException, IOException, URISyntaxException {
     if (!file.getOriginalFilename().endsWith("xlsx")
         && !file.getOriginalFilename().endsWith("xls")) {
       map.addAttribute("errorMessage", "上傳檔案必須為 Excel (.xlsx 或 .xls)");
@@ -135,8 +126,6 @@ public class WebGuidController {
       String prefix = acctUserRepo.findByUsername(auth.getName())
           .getInstitutePrefix().getPrefix();
       List<String> correctGuids = newArrayList();
-      RestTemplate restTemplate = new TestRestTemplate();
-      ObjectMapper mapper = new ObjectMapper();
 
       for (Map<String, String> row : reader.toMaps()) {
         if (BatchSubprimeGuidCreator.isEmptyOnEachRow(row)) {
@@ -174,24 +163,9 @@ public class WebGuidController {
             prefixedHashBundle.setHash3(hashcode3);
             prefixedHashBundle.setPrefix(prefix);
 
-            ResourceDocument<PrefixedHashBundle> body =
-                JsonApi.resourceDocument(prefixedHashBundle, "encodables");
-
-            HttpHeaders headers = new HttpHeaders();
-            headers
-                .setContentType(MediaType.valueOf("application/vnd.api+json"));
-
-            HttpEntity<String> req = new HttpEntity<String>(
-                mapper.writeValueAsString(body), headers);
-            ResponseEntity<String> res = restTemplate.postForEntity(
-                centralServerUrl + "/api/v1/guids", req, String.class);
-
-            ResourceDocument<PublicGuid> acutal =
-                mapper.readValue(res.getBody(),
-                    new TypeReference<ResourceDocument<PublicGuid>>() {});
-
-            String subprimeGuid = acutal.getData().getAttributes().getPrefix()
-                + "-" + acutal.getData().getAttributes().getCode();
+            String subprimeGuid = CentralServerApiHelper.guids(
+                new URI(centralServerUrl + "/api/v1/guids"),
+                prefixedHashBundle);
 
             correctGuids.add(subprimeGuid);
 
@@ -256,7 +230,8 @@ public class WebGuidController {
       @RequestParam(value = "doctor") String doctor,
       @RequestParam(value = "telephone") String telephone,
       @RequestParam(value = "address") String address)
-          throws JsonParseException, JsonMappingException, IOException {
+          throws JsonParseException, JsonMappingException, IOException,
+          URISyntaxException {
 
     checkNotNull(gender, "gender can't be null");
     checkNotNull(birthDay, "birthDay can't be null");
@@ -319,8 +294,6 @@ public class WebGuidController {
 
           return "guids-result";
         } else {
-          RestTemplate restTemplate = new TestRestTemplate();
-          ObjectMapper mapper = new ObjectMapper();
 
           PrefixedHashBundle prefixedHashBundle = new PrefixedHashBundle();
 
@@ -329,22 +302,8 @@ public class WebGuidController {
           prefixedHashBundle.setHash3(hashcode3);
           prefixedHashBundle.setPrefix(prefix);
 
-          ResourceDocument<PrefixedHashBundle> body =
-              JsonApi.resourceDocument(prefixedHashBundle, "encodables");
-
-          HttpHeaders headers = new HttpHeaders();
-          headers.setContentType(MediaType.valueOf("application/vnd.api+json"));
-
-          HttpEntity<String> req =
-              new HttpEntity<String>(mapper.writeValueAsString(body), headers);
-          ResponseEntity<String> res = restTemplate.postForEntity(
-              centralServerUrl + "/api/v1/guids", req, String.class);
-
-          ResourceDocument<PublicGuid> acutal = mapper.readValue(res.getBody(),
-              new TypeReference<ResourceDocument<PublicGuid>>() {});
-
-          String subprimeGuid = acutal.getData().getAttributes().getPrefix()
-              + "-" + acutal.getData().getAttributes().getCode();
+          String subprimeGuid = CentralServerApiHelper.guids(
+              new URI(centralServerUrl + "/api/v1/guids"), prefixedHashBundle);
 
           map.addAttribute("spguids", subprimeGuid);
 
@@ -413,32 +372,9 @@ public class WebGuidController {
         map.addAttribute("link", "/batch/comparison");
         return "error";
       } else {
-        RestTemplate restTemplate = new TestRestTemplate();
-        ObjectMapper mapper = new ObjectMapper();
-        ResourceDocument<GuidSet<PublicGuid>> body =
-            JsonApi.resourceDocument(new GuidSet<>(list), "lists");
+        Collection<Set<String>> sets = CentralServerApiHelper
+            .groupings(new URI(centralServerUrl + "/api/v1/groupings"), list);
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.valueOf("application/vnd.api+json"));
-
-        HttpEntity<String> request =
-            new HttpEntity<String>(mapper.writeValueAsString(body), headers);
-        ResponseEntity<String> res = restTemplate.postForEntity(
-            centralServerUrl + "/api/v1/groupings", request, String.class);
-
-        ResourcesDocument<GuidSet<PublicGuid>> acutal =
-            mapper.readValue(res.getBody(),
-                new TypeReference<ResourcesDocument<GuidSet<PublicGuid>>>() {});
-
-        Set<Set<String>> sets = newHashSet();
-
-        for (ResourceObject<GuidSet<PublicGuid>> ros : acutal.getData()) {
-          Set<String> set = newHashSet();
-          for (PublicGuid pg : ros.getAttributes().getSet()) {
-            set.add(pg.getPrefix() + "-" + pg.getCode());
-          }
-          if (set.size() > 1) sets.add(set);
-        }
         map.addAttribute("result", sets);
         map.addAttribute("number", sets.size());
         return "batch-comparison";
@@ -473,8 +409,7 @@ public class WebGuidController {
       map.addAttribute("link", "/comparison");
       return "error";
     } else {
-      RestTemplate restTemplate = new TestRestTemplate();
-      ObjectMapper mapper = new ObjectMapper();
+
       List<PublicGuid> list = newArrayList();
       String[] str = subprimeGuids.trim().split(",");
 
@@ -482,30 +417,8 @@ public class WebGuidController {
         list.add(new PublicGuid(s.split("-")[0], s.split("-")[1]));
       }
 
-      ResourceDocument<GuidSet<PublicGuid>> body =
-          JsonApi.resourceDocument(new GuidSet<>(list), "lists");
-
-      HttpHeaders headers = new HttpHeaders();
-      headers.setContentType(MediaType.valueOf("application/vnd.api+json"));
-
-      HttpEntity<String> request =
-          new HttpEntity<String>(mapper.writeValueAsString(body), headers);
-      ResponseEntity<String> res = restTemplate.postForEntity(
-          centralServerUrl + "/api/v1/groupings", request, String.class);
-
-      ResourcesDocument<GuidSet<PublicGuid>> acutal =
-          mapper.readValue(res.getBody(),
-              new TypeReference<ResourcesDocument<GuidSet<PublicGuid>>>() {});
-
-      Set<Set<String>> sets = newHashSet();
-
-      for (ResourceObject<GuidSet<PublicGuid>> ros : acutal.getData()) {
-        Set<String> set = newHashSet();
-        for (PublicGuid pg : ros.getAttributes().getSet()) {
-          set.add(pg.getPrefix() + "-" + pg.getCode());
-        }
-        if (set.size() > 1) sets.add(set);
-      }
+      Collection<Set<String>> sets = CentralServerApiHelper
+          .groupings(new URI(centralServerUrl + "/api/v1/groupings"), list);
 
       map.addAttribute("result", sets);
       map.addAttribute("number", sets.size());
