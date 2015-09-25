@@ -159,11 +159,47 @@ public class LegacyControllerTest {
     PII pii = new PII.Builder(new Name("明政", "李"), Sex.MALE,
         new Birthday(1979, 7, 21), new TWNationalId("E122371585")).build();
 
-    System.out.println(pii.getHashcodes().get(0));
-    System.out.println(pii.getHashcodes().get(1));
-    System.out.println(pii.getHashcodes().get(2));
-
     assertEquals(gc.create(pii), "VGH16-3AC3DEC6");
+
+  }
+
+  @Test
+  public void testLegacyGuidCreateWithNewPrefix()
+      throws IOException, URISyntaxException {
+    GuidClient gc =
+        new GuidClient(new URI(localServerUrl), "admin", "password", "AABBXX");
+    PII pii = new PII.Builder(new Name("明政", "李"), Sex.MALE,
+        new Birthday(1979, 7, 21), new TWNationalId("E122371585")).build();
+
+    String subprimeGuid = gc.create(pii);
+
+    PrefixedHashBundle legacyEncodable = new PrefixedHashBundle();
+    legacyEncodable.setPrefix("AABBXX");
+    legacyEncodable.setHash1(
+        "f3daf55c7999e106cebb8733d24a8baa25b1a684154d601de5398cabde4d2da50072215f81ab0879f59ae29551b0442cbef37dd35931757f8745ca3d455caa95");
+    legacyEncodable.setHash2(
+        "57785c82cbeb5d9fdbf2d05ffaab797f23b2ca145c838a4f18225e2349fd60ec4b5d02c4410c88c22bf06dea3b4eed21700f313402b6b77700e012ddeeb3dc23");
+    legacyEncodable.setHash3(
+        "44ce1ef09c3e215aa635d1981dc7515705c02e67d50a46247f6fa55c23af3bc4dd4a3ceb48ccebff556529e8394f618461e71e4af99b847b0427d7cb57ad3587");
+
+    HttpHeaders headers = new HttpHeaders();
+    headers.setContentType(MediaType.valueOf("application/vnd.api+json"));
+
+    ResourceDocument<PrefixedHashBundle> body =
+        JsonApi.resourceDocument(legacyEncodable, "encodables");
+
+    HttpEntity<String> request =
+        new HttpEntity<String>(mapper.writeValueAsString(body), headers);
+    ResponseEntity<String> res = restTemplate.postForEntity(
+        centralServerUrl + "/api/v1/guids", request, String.class);
+
+    ResourceDocument<PublicGuid> acutal = mapper.readValue(res.getBody(),
+        new TypeReference<ResourceDocument<PublicGuid>>() {});
+
+    assertEquals(subprimeGuid.split("-")[0],
+        acutal.getData().getAttributes().getPrefix());
+    assertEquals(subprimeGuid.split("-")[1],
+        acutal.getData().getAttributes().getCode());
 
   }
 
