@@ -204,7 +204,7 @@ public class LegacyControllerTest {
   }
 
   @Test
-  public void testNewRepeatSubprimeGuids()
+  public void testCreateRepeatSubprimeGuids()
       throws IOException, URISyntaxException {
 
     GuidClient gc =
