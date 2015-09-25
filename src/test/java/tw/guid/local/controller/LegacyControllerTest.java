@@ -254,7 +254,7 @@ public class LegacyControllerTest {
   }
 
   @Test
-  public void testCreatWithNewEncodable() throws Exception {
+  public void testCreateWithNewEncodable() throws Exception {
     ResourceDocument<PrefixedHashBundle> body =
         JsonApi.resourceDocument(newEncodable, "encodables");
 
