@@ -112,8 +112,9 @@ public class WebGuidController {
    * @throws InvalidFormatException
    */
   @RequestMapping(value = "/batch", method = RequestMethod.POST)
-  String guidsBatchNew(ModelMap map, @RequestParam("file") MultipartFile file)
-      throws OpenXML4JException, IOException {
+  String guidsBatchCreate(ModelMap map,
+      @RequestParam("file") MultipartFile file)
+          throws OpenXML4JException, IOException {
     if (!file.getOriginalFilename().endsWith("xlsx")
         && !file.getOriginalFilename().endsWith("xls")) {
       map.addAttribute("errorMessage", "上傳檔案必須為 Excel (.xlsx 或 .xls)");
@@ -244,7 +245,8 @@ public class WebGuidController {
    * @throws IOException
    */
   @RequestMapping(method = RequestMethod.POST)
-  String guidsNew(ModelMap map, @RequestParam(value = "gender") String gender,
+  String guidsCreate(ModelMap map,
+      @RequestParam(value = "gender") String gender,
       @RequestParam(value = "birthDay") String birthDay,
       @RequestParam(value = "sid") String sid,
       @RequestParam(value = "name") String name,
