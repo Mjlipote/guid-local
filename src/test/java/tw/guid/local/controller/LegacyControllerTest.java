@@ -159,6 +159,10 @@ public class LegacyControllerTest {
     PII pii = new PII.Builder(new Name("明政", "李"), Sex.MALE,
         new Birthday(1979, 7, 21), new TWNationalId("E122371585")).build();
 
+    System.out.println(pii.getHashcodes().get(0));
+    System.out.println(pii.getHashcodes().get(1));
+    System.out.println(pii.getHashcodes().get(2));
+
     assertEquals(gc.create(pii), "VGH16-3AC3DEC6");
 
   }
