@@ -18,18 +18,17 @@
 					method="post"
 					th:action="@{${'/institutes/' + institutePrefixInfo.institute }}">
 
+          <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <label>Prefix 值：</label> <input
+              onkeyup="value=value.replace(/[^-_a-zA-Z0-9]/g,'')" type="text"
+              class="form-control" placeholder="Prefix 值" name="prefix"
+              th:value="${institutePrefixInfo.prefix}" disabled="disabled"></input>
+          </div>
 
 					<div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12">
 						<label>單位名稱：</label> <input type="text" class="form-control"
 							placeholder="單位名稱" name="newInstitute"
 							th:value="${institutePrefixInfo.institute}"></input>
-					</div>
-
-					<div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12">
-						<label>Prefix 值：</label> <input
-							onkeyup="value=value.replace(/[^-_a-zA-Z0-9]/g,'')" type="text"
-							class="form-control" placeholder="Prefix 值" name="prefix"
-							th:value="${institutePrefixInfo.prefix}"></input>
 					</div>
 
 					<div
