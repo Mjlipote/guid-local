@@ -26,13 +26,17 @@ import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.env.Environment;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import tw.guid.local.entity.InstitutePrefix;
 import tw.guid.local.repository.AccountUsersRepository;
 import tw.guid.local.repository.AssociationRepository;
+import tw.guid.local.repository.InstitutePrefixRepository;
 import tw.guid.local.repository.SubprimeGuidRepository;
 import tw.guid.local.service.ApiService;
 
@@ -48,6 +52,9 @@ public class ApiController {
 
   @Autowired
   AssociationRepository associationRepo;
+
+  @Autowired
+  InstitutePrefixRepository institutePrefixRepo;
 
   @Autowired
   ApiService apiService;
@@ -86,6 +93,20 @@ public class ApiController {
   @RequestMapping("/existence")
   boolean existence(@RequestParam("subprimeGuid") String subprimeGuid) {
     return apiService.existence(subprimeGuid);
+  }
+
+  @RequestMapping(value = "/test", method = RequestMethod.POST)
+  String institutesNew(ModelMap map,
+      @RequestParam(value = "institute") String institute,
+      @RequestParam(value = "prefix") String prefix) {
+
+    InstitutePrefix institutePrefix = new InstitutePrefix();
+    institutePrefix.setPrefix(prefix);
+    institutePrefix.setInstitute(institute);
+    institutePrefixRepo.save(institutePrefix);
+
+    return "DONE";
+
   }
 
 }

@@ -21,8 +21,6 @@
 
 package tw.guid.local.entity;
 
-import java.util.Objects;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 
@@ -123,23 +121,6 @@ public class SubprimeGuid extends AbstractPersistable<Long> {
    */
   public void setHashcode3(String hashcode3) {
     this.hashcode3 = hashcode3;
-  }
-
-  @Override
-  public boolean equals(final Object other) {
-    if (this == other) return true;
-    if (!(other instanceof SubprimeGuid)) return false;
-    SubprimeGuid castOther = (SubprimeGuid) other;
-    return Objects.equals(spguid, castOther.spguid)
-        && Objects.equals(prefix, castOther.prefix)
-        && Objects.equals(hashcode1, castOther.hashcode1)
-        && Objects.equals(hashcode2, castOther.hashcode2)
-        && Objects.equals(hashcode3, castOther.hashcode3);
-  }
-
-  @Override
-  public int hashCode() {
-    return Objects.hash(spguid, prefix, hashcode1, hashcode2, hashcode3);
   }
 
   @Override

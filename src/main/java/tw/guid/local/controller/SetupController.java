@@ -20,15 +20,21 @@
  */
 package tw.guid.local.controller;
 
+import java.util.List;
+import java.util.Set;
+
 import javax.annotation.PostConstruct;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
+import com.github.wnameless.workbookaccessor.WorkbookReader;
+
 import tw.guid.local.entity.AccountUser;
 import tw.guid.local.entity.InstitutePrefix;
 import tw.guid.local.entity.SubprimeGuid;
 import tw.guid.local.repository.AccountUsersRepository;
+import tw.guid.local.repository.InstitutePrefixRepository;
 import tw.guid.local.repository.SubprimeGuidRepository;
 import tw.guid.local.web.Role;
 
@@ -41,11 +47,55 @@ public class SetupController {
   @Autowired
   AccountUsersRepository userRepo;
 
+  @Autowired
+  InstitutePrefixRepository institutePrefixRepo;
+
   /**
    * 先將 Excel 的資料匯入
    */
   @PostConstruct
   void preProcessData() {
+
+    // --------------- YMU Only ---------------
+
+    WorkbookReader reader0 =
+        WorkbookReader.open("./src/main/resources/LegacyPrefixes.xlsx");
+
+    for (List<String> row : reader0.withoutHeader().toLists()) {
+      InstitutePrefix institutePrefix = new InstitutePrefix();
+      institutePrefix.setInstitute(row.get(0));
+      institutePrefix.setPrefix(row.get(0));
+      institutePrefixRepo.save(institutePrefix);
+    }
+
+    WorkbookReader reader1 =
+        WorkbookReader.open("./src/main/resources/LegacyUsers.xlsx");
+
+    for (List<String> row : reader1.withoutHeader().toLists()) {
+
+      InstitutePrefix institutePrefix =
+          institutePrefixRepo.findByInstitute(row.get(0));
+
+      AccountUser legacyUser = new AccountUser();
+      legacyUser.setInstitutePrefix(institutePrefix);
+      legacyUser.setUsername(row.get(1));
+      legacyUser.setHashPassword(row.get(2));
+      legacyUser.setAddress("NULL");
+      legacyUser.setEmail("NULL");
+      legacyUser.setJobTitle("NULL");
+      legacyUser.setTelephone("NULL");
+      legacyUser.setRole(Role.ROLE_USER);
+
+      Set<AccountUser> aus = institutePrefix.getAccountUsers();
+      aus.add(legacyUser);
+      institutePrefix.setAccountUsers(aus);
+
+      institutePrefixRepo.save(institutePrefix);
+
+      userRepo.save(legacyUser);
+    }
+
+    // ---------------
 
     AccountUser superAdmin = new AccountUser();
     InstitutePrefix institutePrefix = new InstitutePrefix();

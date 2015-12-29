@@ -21,7 +21,6 @@
 
 package tw.guid.local.entity;
 
-import java.util.Objects;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -40,7 +39,7 @@ public class InstitutePrefix extends AbstractPersistable<Long> {
   private static final long serialVersionUID = 1L;
 
   @OneToMany(mappedBy = "institutePrefix", cascade = { CascadeType.ALL },
-      fetch = FetchType.LAZY)
+      fetch = FetchType.EAGER)
   @Column(nullable = false)
   private Set<AccountUser> accountUsers;
 
@@ -95,21 +94,6 @@ public class InstitutePrefix extends AbstractPersistable<Long> {
    */
   public void setAccountUsers(Set<AccountUser> accountUsers) {
     this.accountUsers = accountUsers;
-  }
-
-  @Override
-  public boolean equals(final Object other) {
-    if (this == other) return true;
-    if (!(other instanceof InstitutePrefix)) return false;
-    InstitutePrefix castOther = (InstitutePrefix) other;
-    return Objects.equals(institute, castOther.institute)
-        && Objects.equals(prefix, castOther.prefix)
-        && Objects.equals(accountUsers, castOther.accountUsers);
-  }
-
-  @Override
-  public int hashCode() {
-    return Objects.hash(institute);
   }
 
   @Override

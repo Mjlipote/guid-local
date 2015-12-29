@@ -23,8 +23,6 @@ package tw.guid.local.entity;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-import java.util.Objects;
-
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -202,28 +200,6 @@ public class AccountUser extends AbstractPersistable<Long> {
    */
   public void setInstitutePrefix(InstitutePrefix institutePrefix) {
     this.institutePrefix = institutePrefix;
-  }
-
-  @Override
-  public boolean equals(final Object other) {
-    if (this == other) return true;
-    if (!(other instanceof AccountUser)) return false;
-    AccountUser castOther = (AccountUser) other;
-    return Objects.equals(username, castOther.username)
-        && Objects.equals(password, castOther.password)
-        && Objects.equals(email, castOther.email)
-        && Objects.equals(institutePrefix, castOther.institutePrefix)
-
-    && Objects.equals(role, castOther.role)
-        && Objects.equals(jobTitle, castOther.jobTitle)
-        && Objects.equals(telephone, castOther.telephone)
-        && Objects.equals(address, castOther.address);
-  }
-
-  @Override
-  public int hashCode() {
-    return Objects.hash(username, password, email, institutePrefix, role,
-        jobTitle, telephone, address);
   }
 
   @Override

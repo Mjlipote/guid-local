@@ -21,8 +21,6 @@
 
 package tw.guid.local.entity;
 
-import java.util.Objects;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -290,32 +288,6 @@ public class Association extends AbstractPersistable<Long>
         .compare(sid, other.sid).compare(hospital, other.hospital)
         .compare(doctor, other.doctor).compare(telephone, other.telephone)
         .compare(address, other.address).result();
-  }
-
-  @Override
-  public boolean equals(final Object other) {
-    if (!(other instanceof Association)) {
-      return false;
-    }
-    Association castOther = (Association) other;
-    return Objects.equals(spguid, castOther.spguid)
-        && Objects.equals(subjectId, castOther.subjectId)
-        && Objects.equals(mrn, castOther.mrn)
-        && Objects.equals(name, castOther.name)
-        && Objects.equals(birthOfYear, castOther.birthOfYear)
-        && Objects.equals(birthOfMonth, castOther.birthOfMonth)
-        && Objects.equals(birthOfDay, castOther.birthOfDay)
-        && Objects.equals(gender, castOther.gender)
-        && Objects.equals(sid, castOther.sid)
-        && Objects.equals(hospital, castOther.hospital)
-        && Objects.equals(doctor, castOther.doctor)
-        && Objects.equals(telephone, castOther.telephone)
-        && Objects.equals(address, castOther.address);
-  }
-
-  @Override
-  public int hashCode() {
-    return Objects.hashCode(spguid);
   }
 
   @Override
