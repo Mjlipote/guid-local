@@ -106,6 +106,15 @@ public class AccountUser extends AbstractPersistable<Long> {
   }
 
   /**
+   * @param password
+   *          the password to set
+   */
+  public void setHashPassword(String password) {
+
+    this.password = password;
+  }
+
+  /**
    * @return the email
    */
   public String getEmail() {
