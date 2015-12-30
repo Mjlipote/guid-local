@@ -131,19 +131,18 @@ public class LegacyServiceImpl implements LegacyService {
           new TypeToken<List<List<String>>>() {}.getType());
     }
 
-    if (hash != null)
-
-    {
-      prefixedHashBundles.add(new PrefixedHashBundle(prefix, hash.get(0),
-          hash.get(1), hash.get(2)));
+    if (hash != null) {
+      prefixedHashBundles.add(new PrefixedHashBundle(prefix.toUpperCase(),
+          hash.get(0).substring(0, 128).toUpperCase(),
+          hash.get(1).substring(0, 128).toUpperCase(),
+          hash.get(2).substring(0, 128).toUpperCase()));
     }
-
-    if (hashes != null)
-
-    {
+    if (hashes != null) {
       for (List<String> h : hashes) {
-        prefixedHashBundles
-            .add(new PrefixedHashBundle(prefix, h.get(0), h.get(1), h.get(2)));
+        prefixedHashBundles.add(new PrefixedHashBundle(prefix.toUpperCase(),
+            h.get(0).substring(0, 128).toUpperCase(),
+            h.get(1).substring(0, 128).toUpperCase(),
+            h.get(2).substring(0, 128).toUpperCase()));
       }
     }
 
