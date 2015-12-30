@@ -25,8 +25,8 @@ import java.util.Set;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import tw.guid.central.core.PrefixedHashBundle;
 import tw.guid.local.entity.SubprimeGuid;
-import tw.guid.local.model.PrefixedHashBundle;
 
 public interface SubprimeGuidRepository
     extends JpaRepository<SubprimeGuid, Long> {

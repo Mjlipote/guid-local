@@ -92,7 +92,7 @@ public class SetupController {
 
       institutePrefixRepo.save(institutePrefix);
 
-      userRepo.save(legacyUser);
+      // userRepo.save(legacyUser);
     }
 
     // ---------------

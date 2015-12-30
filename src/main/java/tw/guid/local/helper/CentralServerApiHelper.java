@@ -45,9 +45,9 @@ import com.github.wnameless.jsonapi.ResourceDocument;
 import com.github.wnameless.jsonapi.ResourceObject;
 import com.github.wnameless.jsonapi.ResourcesDocument;
 
-import tw.guid.local.model.GuidSet;
-import tw.guid.local.model.PrefixedHashBundle;
-import tw.guid.local.model.PublicGuid;
+import tw.guid.central.core.GuidSet;
+import tw.guid.central.core.PrefixedHashBundle;
+import tw.guid.central.core.PublicGuid;
 
 public final class CentralServerApiHelper {
 

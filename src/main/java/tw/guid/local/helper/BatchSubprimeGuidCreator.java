@@ -21,23 +21,21 @@
 package tw.guid.local.helper;
 
 import static net.sf.rubycollect4j.RubyCollections.ra;
-import static tw.edu.ym.guid.client.field.Sex.FEMALE;
-import static tw.edu.ym.guid.client.field.Sex.MALE;
 
 import java.util.List;
 import java.util.Map;
 
 import com.github.wnameless.workbookaccessor.WorkbookReader;
 
-import tw.edu.ym.guid.client.PII;
-import tw.edu.ym.guid.client.field.BaseNationalId;
-import tw.edu.ym.guid.client.field.Birthday;
-import tw.edu.ym.guid.client.field.Name;
-import tw.edu.ym.guid.client.field.NationalId;
-import tw.edu.ym.guid.client.field.Sex;
-import tw.edu.ym.guid.client.field.TWNationalId;
+import tw.guid.client.PII;
+import tw.guid.client.field.BaseNationalId;
+import tw.guid.client.field.Birthday;
+import tw.guid.client.field.Name;
+import tw.guid.client.field.NationalId;
+import tw.guid.client.field.Sex;
+import tw.guid.client.field.TWNationalId;
+import tw.guid.client.field.validation.TWNationalIdValidator;
 import tw.guid.local.util.NameSplitter;
-import wmw.validate.TWNationalIdValidator;
 
 public final class BatchSubprimeGuidCreator {
 
@@ -77,7 +75,7 @@ public final class BatchSubprimeGuidCreator {
 
   public static PII rowToPII(Map<String, String> row) {
     Name name = NameSplitter.split(row.get("FULLNAME"));
-    Sex sex = row.get("SEX").equals("M") ? MALE : FEMALE;
+    Sex sex = row.get("SEX").equals("M") ? Sex.MALE : Sex.FEMALE;
     Birthday birthday = new Birthday(Integer.valueOf(row.get("YOB")),
         Integer.valueOf(row.get("MOB")), Integer.valueOf(row.get("DOB")));
     NationalId nationalId =

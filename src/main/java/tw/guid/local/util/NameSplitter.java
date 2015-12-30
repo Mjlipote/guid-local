@@ -24,7 +24,7 @@ import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static tw.guid.local.util.ComboLastName.hasComboLastName;
 
-import tw.edu.ym.guid.client.field.Name;
+import tw.guid.client.field.Name;
 
 /**
  * 

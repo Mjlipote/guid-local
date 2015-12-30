@@ -20,12 +20,14 @@
  */
 package tw.guid.local.config;
 
+import java.net.URISyntaxException;
+
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import tw.guid.local.service.ApiService;
 import tw.guid.local.service.ApiServiceImpl;
-import tw.guid.local.service.LegacyService;
 import tw.guid.local.service.LegacyServiceImpl;
 
 @Configuration
@@ -37,8 +39,11 @@ public class ServicesConfig {
   }
 
   @Bean
-  public LegacyService legacyService() {
-    return new LegacyServiceImpl();
+  public LegacyServiceImpl legacyServiceImpl(
+      @Value("${guid.legacy.central.server}") String centralServer,
+      @Value("${guid.legacy.client.key}") String clientKey)
+          throws URISyntaxException {
+    return new LegacyServiceImpl(centralServer, clientKey);
   }
 
 }

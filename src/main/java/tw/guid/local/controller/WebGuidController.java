@@ -55,24 +55,24 @@ import com.github.wnameless.workbookaccessor.WorkbookReader;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.SetMultimap;
 
-import tw.edu.ym.guid.client.PII;
-import tw.edu.ym.guid.client.field.Birthday;
-import tw.edu.ym.guid.client.field.Sex;
-import tw.edu.ym.guid.client.field.TWNationalId;
+import tw.guid.central.core.PrefixedHashBundle;
+import tw.guid.central.core.PublicGuid;
+import tw.guid.client.PII;
+import tw.guid.client.field.Birthday;
+import tw.guid.client.field.Sex;
+import tw.guid.client.field.TWNationalId;
+import tw.guid.client.field.validation.TWNationalIdValidator;
 import tw.guid.local.entity.Association;
 import tw.guid.local.entity.Association.Gender;
 import tw.guid.local.entity.SubprimeGuid;
 import tw.guid.local.helper.BatchSubprimeGuidCreator;
 import tw.guid.local.helper.CentralServerApiHelper;
-import tw.guid.local.model.PrefixedHashBundle;
-import tw.guid.local.model.PublicGuid;
 import tw.guid.local.repository.AccountUsersRepository;
 import tw.guid.local.repository.AssociationRepository;
 import tw.guid.local.repository.SubprimeGuidRepository;
 import tw.guid.local.util.NameSplitter;
 import tw.guid.local.validateion.BirthdayValidator;
 import tw.guid.local.web.CustomAuthenticationProvider;
-import wmw.validate.TWNationalIdValidator;
 
 @RequestMapping("/guids")
 @Controller
