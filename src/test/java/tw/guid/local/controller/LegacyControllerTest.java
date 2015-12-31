@@ -104,7 +104,7 @@
 // @Value("${guid.local.server.url}")
 // String localServerUrl;
 //
-// @Value("${guid.central.server.url}")
+// @Value("${guid.legacy.central.server}")
 // String centralServerUrl;
 //
 // @Before

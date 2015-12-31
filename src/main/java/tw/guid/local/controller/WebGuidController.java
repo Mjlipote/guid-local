@@ -89,7 +89,7 @@ public class WebGuidController {
   @Autowired
   Environment env;
 
-  @Value("${guid.central.server.url}")
+  @Value("${guid.legacy.central.server}")
   String centralServerUrl;
 
   /**

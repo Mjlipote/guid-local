@@ -34,7 +34,6 @@ import javax.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.TestRestTemplate;
 import org.springframework.web.client.RestTemplate;
 
@@ -67,9 +66,6 @@ public class LegacyServiceImpl implements LegacyService {
       throws URISyntaxException {
     guidClient = new GuidHashClient(new URI(centralServer), clientKey);
   }
-
-  @Value("${guid.central.server.url}")
-  private String centralServerUrl;
 
   @Autowired
   private AccountUsersRepository acctUserRepo;

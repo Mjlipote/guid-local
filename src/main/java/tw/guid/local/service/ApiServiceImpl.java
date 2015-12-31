@@ -25,16 +25,12 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 
 import tw.guid.local.repository.AssociationRepository;
 import tw.guid.local.repository.InstitutePrefixRepository;
 import tw.guid.local.repository.SubprimeGuidRepository;
 
 public class ApiServiceImpl implements ApiService {
-
-  @Value("${guid.central.server.url}")
-  private String centralServerUrl;
 
   @Autowired
   private SubprimeGuidRepository subprimeGuidRepo;
