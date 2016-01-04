@@ -46,8 +46,9 @@ import com.github.wnameless.jsonapi.ResourceObject;
 import com.github.wnameless.jsonapi.ResourcesDocument;
 
 import tw.guid.central.core.GuidSet;
-import tw.guid.central.core.PrefixedHashBundle;
 import tw.guid.central.core.PublicGuid;
+import tw.guid.client.GuidClient;
+import tw.guid.client.PII;
 
 public final class CentralServerApiHelper {
 
@@ -57,39 +58,30 @@ public final class CentralServerApiHelper {
 
   private static final HttpHeaders headers = new HttpHeaders();
 
-  private CentralServerApiHelper() {}
+  private CentralServerApiHelper() {
 
-  public static String guids(URI uri, PrefixedHashBundle prefixedHashBundle)
-      throws IOException {
-
-    return guids(uri, Arrays.asList(prefixedHashBundle)).get(0);
   }
 
-  public static List<String> guids(URI uri,
-      List<PrefixedHashBundle> prefixedHashBundles) throws IOException {
+  public static String guids(URI uri, String publicKey, String prefix, PII pii)
+      throws IOException {
+
+    return guids(uri, publicKey, prefix, Arrays.asList(pii)).get(0);
+  }
+
+  public static List<String> guids(URI uri, String publicKey, String prefix,
+      List<PII> piis) throws IOException {
 
     List<String> lists = newArrayList();
 
-    for (PrefixedHashBundle prefixedHashBundle : prefixedHashBundles) {
+    GuidClient guidClient = new GuidClient(uri, publicKey);
 
-      ResourceDocument<PrefixedHashBundle> body =
-          JsonApi.resourceDocument(prefixedHashBundle, "encodables");
-
-      headers.setContentType(MediaType.valueOf("application/vnd.api+json"));
-
-      HttpEntity<String> req =
-          new HttpEntity<String>(mapper.writeValueAsString(body), headers);
-      ResponseEntity<String> res =
-          restTemplate.postForEntity(uri, req, String.class);
-
-      ResourceDocument<PublicGuid> acutal = mapper.readValue(res.getBody(),
-          new TypeReference<ResourceDocument<PublicGuid>>() {});
-
-      lists.add(acutal.getData().getAttributes().getPrefix() + "-"
-          + acutal.getData().getAttributes().getCode());
+    for (PII p : piis) {
+      lists.add(guidClient.compute(prefix, p).getPrefix() + "-"
+          + guidClient.compute(prefix, p).getCode());
     }
 
     return lists;
+
   }
 
   public static Collection<Set<String>> groupings(URI uri,

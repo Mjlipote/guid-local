@@ -92,6 +92,9 @@ public class WebGuidController {
   @Value("${guid.legacy.central.server}")
   String centralServerUrl;
 
+  @Value("${guid.legacy.client.key}")
+  String publicKey;
+
   /**
    * 網頁版批次產生 GUID
    * 
@@ -163,9 +166,8 @@ public class WebGuidController {
             prefixedHashBundle.setHash3(hashcode3);
             prefixedHashBundle.setPrefix(prefix);
 
-            String subprimeGuid = CentralServerApiHelper.guids(
-                new URI(centralServerUrl + "/api/v1/guids"),
-                prefixedHashBundle);
+            String subprimeGuid = CentralServerApiHelper
+                .guids(new URI(centralServerUrl), publicKey, prefix, pii);
 
             correctGuids.add(subprimeGuid);
 
@@ -302,8 +304,8 @@ public class WebGuidController {
           prefixedHashBundle.setHash3(hashcode3);
           prefixedHashBundle.setPrefix(prefix);
 
-          String subprimeGuid = CentralServerApiHelper.guids(
-              new URI(centralServerUrl + "/api/v1/guids"), prefixedHashBundle);
+          String subprimeGuid = CentralServerApiHelper
+              .guids(new URI(centralServerUrl), publicKey, prefix, pii);
 
           map.addAttribute("spguids", subprimeGuid);
 
