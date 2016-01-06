@@ -53,7 +53,7 @@ public class AccountUser extends AbstractPersistable<Long> {
   @Column(nullable = false)
   private String email;
 
-  @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+  @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
   @JoinColumn(name = "INSTITUTEPREFIX_ID", nullable = false)
   private InstitutePrefix institutePrefix;
 
@@ -107,9 +107,9 @@ public class AccountUser extends AbstractPersistable<Long> {
    * @param password
    *          the password to set
    */
-  public void setHashPassword(String password) {
+  public void setHashPassword(String sha512hash) {
 
-    this.password = password;
+    this.password = sha512hash;
   }
 
   /**
