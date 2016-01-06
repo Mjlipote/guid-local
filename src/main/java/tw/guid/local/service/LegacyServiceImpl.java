@@ -85,7 +85,7 @@ public class LegacyServiceImpl implements LegacyService {
 
     List<String> correctGuids = newArrayList();
     for (PrefixedHashBundle phb : buildRequests(prefix, jsonHashes)) {
-      System.out.println(phb);
+      // System.out.println(phb);
       try {
         PublicGuid guid = guidClient.compute(phb);
         correctGuids.add(guid.getPrefix() + "-" + guid.getCode());
