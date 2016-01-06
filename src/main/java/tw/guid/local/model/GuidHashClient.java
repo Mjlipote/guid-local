@@ -25,6 +25,7 @@ import com.github.wnameless.jsonapi.ResourceDocument;
 
 import tw.guid.central.core.PrefixedHashBundle;
 import tw.guid.central.core.PublicGuid;
+import tw.guid.client.BasicAuthSSLClient;
 
 /**
  * 

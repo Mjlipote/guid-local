@@ -375,7 +375,7 @@ public class WebGuidController {
         return "error";
       } else {
         Collection<Set<String>> sets = CentralServerApiHelper
-            .groupings(new URI(centralServerUrl + "/api/v1/groupings"), list);
+            .groupings(new URI(centralServerUrl), publicKey, list);
 
         map.addAttribute("result", sets);
         map.addAttribute("number", sets.size());
@@ -420,7 +420,7 @@ public class WebGuidController {
       }
 
       Collection<Set<String>> sets = CentralServerApiHelper
-          .groupings(new URI(centralServerUrl + "/api/v1/groupings"), list);
+          .groupings(new URI(centralServerUrl), publicKey, list);
 
       map.addAttribute("result", sets);
       map.addAttribute("number", sets.size());

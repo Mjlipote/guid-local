@@ -63,18 +63,19 @@ public final class CentralServerApiHelper {
 
   }
 
-  public static String guids(URI uri, String publicKey, String prefix, PII pii)
-      throws IOException {
+  public static String guids(URI centralServerUri, String publicKey,
+      String prefix, PII pii) throws IOException {
 
-    return guids(uri, publicKey, prefix, Arrays.asList(pii)).get(0);
+    return guids(centralServerUri, publicKey, prefix, Arrays.asList(pii))
+        .get(0);
   }
 
-  public static List<String> guids(URI uri, String publicKey, String prefix,
-      List<PII> piis) throws IOException {
+  public static List<String> guids(URI centralServerUri, String publicKey,
+      String prefix, List<PII> piis) throws IOException {
 
     List<String> lists = newArrayList();
 
-    GuidClient guidClient = new GuidClient(uri, publicKey);
+    GuidClient guidClient = new GuidClient(centralServerUri, publicKey);
 
     for (PII p : piis) {
       lists.add(guidClient.compute(prefix, p).getPrefix() + "-"
@@ -85,13 +86,14 @@ public final class CentralServerApiHelper {
 
   }
 
-  public static Collection<Set<String>> groupings(URI uri, String publicKey,
-      Collection<PublicGuid> subprimeGuids)
+  public static Collection<Set<String>> groupings(URI centralServerUri,
+      String publicKey, Collection<PublicGuid> subprimeGuids)
           throws JsonParseException, JsonMappingException, IOException {
 
     httpClient = BasicAuthSSLClient.create("token", checkNotNull(publicKey));
 
-    HttpPost post = new HttpPost(uri + API_ENDPOINT + "/groupings");
+    HttpPost post =
+        new HttpPost(centralServerUri + API_ENDPOINT + "/groupings");
 
     post.addHeader("content-type", "application/json");
 
@@ -101,6 +103,8 @@ public final class CentralServerApiHelper {
     post.setEntity(new StringEntity(mapper.writeValueAsString(body)));
 
     HttpResponse res = httpClient.execute(post);
+
+    // String content = IOUtils.toString(res.getEntity().getContent());
 
     ResourcesDocument<GuidSet<PublicGuid>> acutal =
         mapper.readValue(res.getEntity().getContent(),
