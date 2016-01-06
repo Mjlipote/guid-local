@@ -20,6 +20,7 @@
  */
 package tw.guid.local.helper;
 
+import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.collect.Lists.newArrayList;
 import static com.google.common.collect.Sets.newHashSet;
 
@@ -30,11 +31,10 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.client.RestTemplate;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -47,16 +47,17 @@ import com.github.wnameless.jsonapi.ResourcesDocument;
 
 import tw.guid.central.core.GuidSet;
 import tw.guid.central.core.PublicGuid;
+import tw.guid.client.BasicAuthSSLClient;
 import tw.guid.client.GuidClient;
 import tw.guid.client.PII;
 
 public final class CentralServerApiHelper {
 
-  private static final RestTemplate restTemplate = new RestTemplate();
-
   private static final ObjectMapper mapper = new ObjectMapper();
 
-  private static final HttpHeaders headers = new HttpHeaders();
+  private static HttpClient httpClient;
+
+  private static final String API_ENDPOINT = "/api/v1";
 
   private CentralServerApiHelper() {
 
@@ -84,22 +85,25 @@ public final class CentralServerApiHelper {
 
   }
 
-  public static Collection<Set<String>> groupings(URI uri,
+  public static Collection<Set<String>> groupings(URI uri, String publicKey,
       Collection<PublicGuid> subprimeGuids)
           throws JsonParseException, JsonMappingException, IOException {
+
+    httpClient = BasicAuthSSLClient.create("token", checkNotNull(publicKey));
+
+    HttpPost post = new HttpPost(uri + API_ENDPOINT + "/groupings");
+
+    post.addHeader("content-type", "application/json");
 
     ResourceDocument<GuidSet<PublicGuid>> body =
         JsonApi.resourceDocument(new GuidSet<>(subprimeGuids), "lists");
 
-    headers.setContentType(MediaType.valueOf("application/vnd.api+json"));
+    post.setEntity(new StringEntity(mapper.writeValueAsString(body)));
 
-    HttpEntity<String> request =
-        new HttpEntity<String>(mapper.writeValueAsString(body), headers);
-    ResponseEntity<String> res =
-        restTemplate.postForEntity(uri, request, String.class);
+    HttpResponse res = httpClient.execute(post);
 
     ResourcesDocument<GuidSet<PublicGuid>> acutal =
-        mapper.readValue(res.getBody(),
+        mapper.readValue(res.getEntity().getContent(),
             new TypeReference<ResourcesDocument<GuidSet<PublicGuid>>>() {});
 
     Collection<Set<String>> sets = newHashSet();
@@ -113,5 +117,7 @@ public final class CentralServerApiHelper {
     }
 
     return sets;
+
   }
+
 }
