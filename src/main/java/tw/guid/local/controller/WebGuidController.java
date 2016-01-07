@@ -41,7 +41,6 @@ import com.github.wnameless.workbookaccessor.WorkbookReader;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.SetMultimap;
 
-import tw.guid.central.core.PrefixedHashBundle;
 import tw.guid.central.core.PublicGuid;
 import tw.guid.client.PII;
 import tw.guid.client.field.Birthday;
@@ -127,36 +126,45 @@ public class WebGuidController {
           return "error";
         } else {
           PII pii = BatchSubprimeGuidCreator.rowToPII(row);
-          String hashcode1 = pii.getHashcodes().get(0).substring(0, 128);
-          String hashcode2 = pii.getHashcodes().get(1).substring(0, 128);
-          String hashcode3 = pii.getHashcodes().get(2).substring(0, 128);
-
+          String hashcode1 =
+              pii.getHashcodes().get(0).substring(0, 128).toUpperCase();
+          String hashcode2 =
+              pii.getHashcodes().get(1).substring(0, 128).toUpperCase();
+          String hashcode3 =
+              pii.getHashcodes().get(2).substring(0, 128).toUpperCase();
           SubprimeGuid sg =
               subprimeGuidRepo.findByHashcode1AndHashcode2AndHashcode3AndPrefix(
                   hashcode1, hashcode2, hashcode3, prefix);
 
           if (sg != null) {
             correctGuids.add(sg.getSpguid());
-            Association existAssociation =
-                associationRepo.findBySpguid(sg.getSpguid());
-            existAssociation.setMrn(row.get("MRN"));
-            existAssociation.setHospital(row.get("HP"));
-            existAssociation.setDoctor(row.get("Dr"));
-            associationRepo.saveAndFlush(existAssociation);
+            if (associationRepo.findBySpguid(sg.getSpguid()) != null) {
+              Association existAssociation =
+                  associationRepo.findBySpguid(sg.getSpguid());
+              existAssociation.setMrn(row.get("MRN"));
+              existAssociation.setHospital(row.get("HP"));
+              existAssociation.setDoctor(row.get("Dr"));
+              associationRepo.saveAndFlush(existAssociation);
+            } else {
+              Association association = new Association();
+              association.setSpguid(sg.getSpguid());
+              association.setSubjectId(row.get("SUBJECTID"));
+              association.setMrn(row.get("MRN"));
+              association.setName(row.get("FULLNAME"));
+              association.setSid(row.get("GIID"));
+              association.setBirthOfYear(Integer.valueOf(row.get("YOB")));
+              association.setBirthOfMonth(Integer.valueOf(row.get("MOB")));
+              association.setBirthOfDay(Integer.valueOf(row.get("DOB")));
+              association.setGender(
+                  row.get("SEX").equals("M") ? Gender.MALE : Gender.FEMALE);
+              association.setHospital(row.get("HP"));
+              association.setDoctor(row.get("Dr"));
+              associationRepo.save(association);
+            }
           } else {
-
-            PrefixedHashBundle prefixedHashBundle = new PrefixedHashBundle();
-
-            prefixedHashBundle.setHash1(hashcode1);
-            prefixedHashBundle.setHash2(hashcode2);
-            prefixedHashBundle.setHash3(hashcode3);
-            prefixedHashBundle.setPrefix(prefix);
-
             String subprimeGuid = CentralServerApiHelper
                 .guids(new URI(centralServerUrl), publicKey, prefix, pii);
-
             correctGuids.add(subprimeGuid);
-
             SubprimeGuid spGuid = new SubprimeGuid();
             spGuid.setSpguid(subprimeGuid);
             spGuid.setHashcode1(hashcode1);
@@ -164,7 +172,6 @@ public class WebGuidController {
             spGuid.setHashcode3(hashcode3);
             spGuid.setPrefix(prefix);
             subprimeGuidRepo.save(spGuid);
-
             Association association = new Association();
             association.setSpguid(subprimeGuid);
             association.setSubjectId(row.get("SUBJECTID"));
@@ -182,7 +189,6 @@ public class WebGuidController {
           }
         }
       }
-
       map.addAttribute("number", correctGuids.size());
       map.addAttribute("spguids", correctGuids);
       return "batch-guids";
@@ -220,7 +226,6 @@ public class WebGuidController {
       @RequestParam(value = "address") String address)
           throws JsonParseException, JsonMappingException, IOException,
           URISyntaxException {
-
     checkNotNull(gender, "gender can't be null");
     checkNotNull(birthDay, "birthDay can't be null");
     checkNotNull(sid, "sid can't be null");
@@ -254,14 +259,14 @@ public class WebGuidController {
             gender.equals("M") ? Sex.MALE : Sex.FEMALE,
             new Birthday(birthOfYear, birthOfMonth, birthOfDay),
             new TWNationalId(sid)).build();
-
-        String hashcode1 = pii.getHashcodes().get(0).substring(0, 128);
-        String hashcode2 = pii.getHashcodes().get(1).substring(0, 128);
-        String hashcode3 = pii.getHashcodes().get(2).substring(0, 128);
-
+        String hashcode1 =
+            pii.getHashcodes().get(0).substring(0, 128).toUpperCase();
+        String hashcode2 =
+            pii.getHashcodes().get(1).substring(0, 128).toUpperCase();
+        String hashcode3 =
+            pii.getHashcodes().get(2).substring(0, 128).toUpperCase();
         Authentication auth =
             SecurityContextHolder.getContext().getAuthentication();
-
         String prefix = acctUserRepo.findByUsername(auth.getName())
             .getInstitutePrefix().getPrefix();
         SubprimeGuid sg =
@@ -270,31 +275,39 @@ public class WebGuidController {
 
         if (sg != null) {
           map.addAttribute("spguids", sg.getSpguid());
-          Association existAssociation =
-              associationRepo.findBySpguid(sg.getSpguid());
-          existAssociation.setSubjectId(subjectId);
-          existAssociation.setMrn(mrn);
-          existAssociation.setHospital(hospital);
-          existAssociation.setDoctor(doctor);
-          existAssociation.setTelephone(telephone);
-          existAssociation.setAddress(address);
-          associationRepo.saveAndFlush(existAssociation);
-
+          if (associationRepo.findBySpguid(sg.getSpguid()) != null) {
+            Association existAssociation =
+                associationRepo.findBySpguid(sg.getSpguid());
+            existAssociation.setSubjectId(subjectId);
+            existAssociation.setMrn(mrn);
+            existAssociation.setHospital(hospital);
+            existAssociation.setDoctor(doctor);
+            existAssociation.setTelephone(telephone);
+            existAssociation.setAddress(address);
+            associationRepo.saveAndFlush(existAssociation);
+          } else {
+            Association association = new Association();
+            association.setSpguid(sg.getSpguid());
+            association.setSubjectId(subjectId);
+            association.setMrn(mrn);
+            association.setName(name);
+            association.setSid(sid);
+            association.setBirthOfYear(Integer.valueOf(birthday[0]));
+            association.setBirthOfMonth(Integer.valueOf(birthday[1]));
+            association.setBirthOfDay(Integer.valueOf(birthday[2]));
+            association
+                .setGender(gender.equals("M") ? Gender.MALE : Gender.FEMALE);
+            association.setHospital(hospital);
+            association.setDoctor(doctor);
+            association.setTelephone(telephone);
+            association.setAddress(address);
+            associationRepo.save(association);
+          }
           return "guids-result";
         } else {
-
-          PrefixedHashBundle prefixedHashBundle = new PrefixedHashBundle();
-
-          prefixedHashBundle.setHash1(hashcode1);
-          prefixedHashBundle.setHash2(hashcode2);
-          prefixedHashBundle.setHash3(hashcode3);
-          prefixedHashBundle.setPrefix(prefix);
-
           String subprimeGuid = CentralServerApiHelper
               .guids(new URI(centralServerUrl), publicKey, prefix, pii);
-
           map.addAttribute("spguids", subprimeGuid);
-
           SubprimeGuid spGuid = new SubprimeGuid();
           spGuid.setSpguid(subprimeGuid);
           spGuid.setHashcode1(hashcode1);
@@ -302,7 +315,6 @@ public class WebGuidController {
           spGuid.setHashcode3(hashcode3);
           spGuid.setPrefix(prefix);
           subprimeGuidRepo.save(spGuid);
-
           Association association = new Association();
           association.setSpguid(subprimeGuid);
           association.setSubjectId(subjectId);
@@ -319,7 +331,6 @@ public class WebGuidController {
           association.setTelephone(telephone);
           association.setAddress(address);
           associationRepo.save(association);
-
           return "guids-result";
         }
       }
@@ -337,10 +348,8 @@ public class WebGuidController {
       map.addAttribute("link", "/batch/comparison");
       return "error";
     } else {
-
       WorkbookReader reader =
           WorkbookReader.open(new ByteArrayInputStream(file.getBytes()));
-
       List<PublicGuid> list = newArrayList();
 
       for (List<String> str : reader.withoutHeader().toLists()) {
@@ -362,7 +371,6 @@ public class WebGuidController {
       } else {
         Collection<Set<String>> sets = CentralServerApiHelper
             .groupings(new URI(centralServerUrl), publicKey, list);
-
         map.addAttribute("result", sets);
         map.addAttribute("number", sets.size());
         return "batch-comparison";
@@ -397,7 +405,6 @@ public class WebGuidController {
       map.addAttribute("link", "/comparison");
       return "error";
     } else {
-
       List<PublicGuid> list = newArrayList();
       String[] str = subprimeGuids.trim().split(",");
 
@@ -407,17 +414,14 @@ public class WebGuidController {
 
       Collection<Set<String>> sets = CentralServerApiHelper
           .groupings(new URI(centralServerUrl), publicKey, list);
-
       map.addAttribute("result", sets);
       map.addAttribute("number", sets.size());
-
       return "comparison";
     }
   }
 
   @RequestMapping(value = "/repeat", method = RequestMethod.GET)
   String guidsRepeat(ModelMap map) {
-
     Set<Set<String>> hhs = newHashSet();
     SetMultimap<String, String> multimap = HashMultimap.create();
 
@@ -436,7 +440,6 @@ public class WebGuidController {
 
     map.addAttribute("result", hhs);
     map.addAttribute("number", hhs.size());
-
     return "repeat";
   }
 
