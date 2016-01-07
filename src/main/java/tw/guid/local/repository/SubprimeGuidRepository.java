@@ -9,8 +9,8 @@ package tw.guid.local.repository;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import tw.guid.central.core.PrefixedHashBundle;
-import tw.guid.local.HashCodeEncryptorHolder;
 import tw.guid.local.entity.SubprimeGuid;
+import tw.guid.local.security.HashCodeEncryptorHolder;
 
 public interface SubprimeGuidRepository
     extends JpaRepository<SubprimeGuid, Long> {

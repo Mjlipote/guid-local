@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import tw.guid.local.security.HashCodeEncryptor;
+import tw.guid.local.security.HashCodeEncryptorHolder;
 
 @Configuration
 public class LocalConfig {

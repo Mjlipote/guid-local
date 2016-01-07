@@ -6,7 +6,7 @@ package tw.guid.local.entity.converter;
 import javax.persistence.AttributeConverter;
 import javax.persistence.Converter;
 
-import tw.guid.local.HashCodeEncryptorHolder;
+import tw.guid.local.security.HashCodeEncryptorHolder;
 
 /**
  * 
