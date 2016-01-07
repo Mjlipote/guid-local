@@ -73,17 +73,20 @@ public class LegacyServiceImpl implements LegacyService {
     for (PrefixedHashBundle phb : buildRequests(prefix, jsonHashes)) {
       // System.out.println(phb);
       try {
+
         PublicGuid guid = guidClient.compute(phb);
         correctGuids.add(guid.getPrefix() + "-" + guid.getCode());
 
-        SubprimeGuid subprimeGuid = new SubprimeGuid();
-        subprimeGuid.setSpguid(guid.getPrefix() + "-" + guid.getCode());
-        subprimeGuid.setPrefix(guid.getPrefix());
-        subprimeGuid.setHashcode1(phb.getHash1().substring(0, 128));
-        subprimeGuid.setHashcode2(phb.getHash2().substring(0, 128));
-        subprimeGuid.setHashcode3(phb.getHash3().substring(0, 128));
-        subprimeGuidRepo.save(subprimeGuid);
-
+        if (subprimeGuidRepo
+            .findBySpguid(guid.getPrefix() + "-" + guid.getCode()) == null) {
+          SubprimeGuid subprimeGuid = new SubprimeGuid();
+          subprimeGuid.setSpguid(guid.getPrefix() + "-" + guid.getCode());
+          subprimeGuid.setPrefix(guid.getPrefix());
+          subprimeGuid.setHashcode1(phb.getHash1().substring(0, 128));
+          subprimeGuid.setHashcode2(phb.getHash2().substring(0, 128));
+          subprimeGuid.setHashcode3(phb.getHash3().substring(0, 128));
+          subprimeGuidRepo.save(subprimeGuid);
+        }
       } catch (IOException e) {
         log.error(null, e);
         throw new LegacyGuidException(INTERNAL_SERVER_ERROR, e.getMessage());
