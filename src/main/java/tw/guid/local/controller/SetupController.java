@@ -12,6 +12,7 @@ import java.util.Set;
 import javax.annotation.PostConstruct;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.DependsOn;
 import org.springframework.stereotype.Controller;
 
 import com.github.wnameless.workbookaccessor.WorkbookReader;
@@ -25,6 +26,7 @@ import tw.guid.local.repository.SubprimeGuidRepository;
 import tw.guid.local.web.Role;
 
 @Controller
+@DependsOn("hashCodeEncryptorHolder")
 public class SetupController {
 
   @Autowired

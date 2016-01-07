@@ -18,8 +18,6 @@ import javax.crypto.Cipher;
 import javax.crypto.CipherOutputStream;
 import javax.crypto.NoSuchPaddingException;
 
-import tw.guid.local.LocalConfig;
-
 /**
  * 
  * @author Wei-Ming Wu
@@ -30,8 +28,8 @@ public final class HashCodeEncryptor {
   private final PublicKey pubKey;
   private final Cipher pkCipher;
 
-  public HashCodeEncryptor() {
-    byte[] publicBytes = base64Url().decode(LocalConfig.CLIENT_KEY);
+  public HashCodeEncryptor(String clientKey) {
+    byte[] publicBytes = base64Url().decode(clientKey);
     X509EncodedKeySpec keySpec = new X509EncodedKeySpec(publicBytes);
     KeyFactory keyFactory;
     try {

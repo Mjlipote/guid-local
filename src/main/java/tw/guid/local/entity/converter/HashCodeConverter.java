@@ -6,7 +6,7 @@ package tw.guid.local.entity.converter;
 import javax.persistence.AttributeConverter;
 import javax.persistence.Converter;
 
-import tw.guid.local.LocalConfig;
+import tw.guid.local.HashCodeEncryptorHolder;
 
 /**
  * 
@@ -18,7 +18,7 @@ public class HashCodeConverter implements AttributeConverter<String, String> {
 
   @Override
   public String convertToDatabaseColumn(String hash) {
-    return LocalConfig.HASH_ENCRYPTOR.encrypt(hash);
+    return HashCodeEncryptorHolder.getHashCodeEncryptor().encrypt(hash);
   }
 
   @Override
