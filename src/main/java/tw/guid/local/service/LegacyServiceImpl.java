@@ -73,17 +73,23 @@ public class LegacyServiceImpl implements LegacyService {
     for (PrefixedHashBundle phb : buildRequests(prefix, jsonHashes)) {
       // System.out.println(phb);
       try {
-        PublicGuid guid = guidClient.compute(phb);
-        correctGuids.add(guid.getPrefix() + "-" + guid.getCode());
-
-        SubprimeGuid subprimeGuid = new SubprimeGuid();
-        subprimeGuid.setSpguid(guid.getPrefix() + "-" + guid.getCode());
-        subprimeGuid.setPrefix(guid.getPrefix());
-        subprimeGuid.setHashcode1(phb.getHash1().substring(0, 128));
-        subprimeGuid.setHashcode2(phb.getHash2().substring(0, 128));
-        subprimeGuid.setHashcode3(phb.getHash3().substring(0, 128));
-        subprimeGuidRepo.save(subprimeGuid);
-
+        SubprimeGuid spGuid =
+            subprimeGuidRepo.findByHashcode1AndHashcode2AndHashcode3AndPrefix(
+                phb.getHash1(), phb.getHash2(), phb.getHash3(), prefix);
+        if (spGuid != null) {
+          correctGuids.add(spGuid.getSpguid());
+        } else {
+          PublicGuid guid = guidClient.compute(phb);
+          String spguid = guid.getPrefix() + "-" + guid.getCode();
+          correctGuids.add(spguid);
+          SubprimeGuid subprimeGuid = new SubprimeGuid();
+          subprimeGuid.setSpguid(spguid);
+          subprimeGuid.setPrefix(guid.getPrefix());
+          subprimeGuid.setHashcode1(phb.getHash1().substring(0, 128));
+          subprimeGuid.setHashcode2(phb.getHash2().substring(0, 128));
+          subprimeGuid.setHashcode3(phb.getHash3().substring(0, 128));
+          subprimeGuidRepo.save(subprimeGuid);
+        }
       } catch (IOException e) {
         log.error(null, e);
         throw new LegacyGuidException(INTERNAL_SERVER_ERROR, e.getMessage());
@@ -108,14 +114,14 @@ public class LegacyServiceImpl implements LegacyService {
     }
 
     if (hash != null) {
-      prefixedHashBundles.add(new PrefixedHashBundle(prefix.toUpperCase(),
+      prefixedHashBundles.add(new PrefixedHashBundle(prefix,
           hash.get(0).substring(0, 128).toUpperCase(),
           hash.get(1).substring(0, 128).toUpperCase(),
           hash.get(2).substring(0, 128).toUpperCase()));
     }
     if (hashes != null) {
       for (List<String> h : hashes) {
-        prefixedHashBundles.add(new PrefixedHashBundle(prefix.toUpperCase(),
+        prefixedHashBundles.add(new PrefixedHashBundle(prefix,
             h.get(0).substring(0, 128).toUpperCase(),
             h.get(1).substring(0, 128).toUpperCase(),
             h.get(2).substring(0, 128).toUpperCase()));

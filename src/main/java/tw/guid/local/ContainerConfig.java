@@ -17,7 +17,7 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 // @PropertySource("file:${user.dir}/serverhost.properties")
-public class PersistenceConfig {
+public class ContainerConfig {
 
   @Bean
   public EmbeddedServletContainerFactory servletContainer() {

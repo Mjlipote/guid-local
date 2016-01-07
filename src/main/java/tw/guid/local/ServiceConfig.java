@@ -4,7 +4,7 @@
  * @author Ming-Jheng Li
  *
  */
-package tw.guid.local.config;
+package tw.guid.local;
 
 import java.net.URISyntaxException;
 
@@ -17,7 +17,7 @@ import tw.guid.local.service.ApiServiceImpl;
 import tw.guid.local.service.LegacyServiceImpl;
 
 @Configuration
-public class ServicesConfig {
+public class ServiceConfig {
 
   @Bean
   public ApiService apiService() {

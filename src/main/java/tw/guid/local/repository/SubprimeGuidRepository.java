@@ -6,8 +6,6 @@
  */
 package tw.guid.local.repository;
 
-import java.util.Set;
-
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import tw.guid.central.core.PrefixedHashBundle;
@@ -21,11 +19,7 @@ public interface SubprimeGuidRepository
 
   public SubprimeGuid findBySpguid(String spguid);
 
-  public Set<SubprimeGuid> findByHashcode1AndHashcode2AndHashcode3(
-      String hashcode1, String hashcode2, String hashcode3);
-
-  public default boolean isExist(PrefixedHashBundle prefixedHashBundle) {
-
+  default public boolean isExist(PrefixedHashBundle prefixedHashBundle) {
     return findByHashcode1AndHashcode2AndHashcode3AndPrefix(
         prefixedHashBundle.getHash1().substring(0, 128),
         prefixedHashBundle.getHash2().substring(0, 128),
@@ -33,15 +27,13 @@ public interface SubprimeGuidRepository
         prefixedHashBundle.getPrefix()) != null;
   }
 
-  public default String getSubprimeGuidBySubprimeGuidRequest(
+  default public String getSubprimeGuidBySubprimeGuidRequest(
       PrefixedHashBundle prefixedHashBundle) {
-
     return findByHashcode1AndHashcode2AndHashcode3AndPrefix(
         prefixedHashBundle.getHash1().substring(0, 128),
         prefixedHashBundle.getHash2().substring(0, 128),
         prefixedHashBundle.getHash3().substring(0, 128),
         prefixedHashBundle.getPrefix()).getSpguid();
-
   }
 
 }
