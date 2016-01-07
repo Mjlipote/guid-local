@@ -6,7 +6,7 @@
  */
 package tw.guid.local.repository;
 
-import java.util.Set;
+import static tw.guid.local.LocalConfig.HASH_ENCRYPTOR;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -19,29 +19,30 @@ public interface SubprimeGuidRepository
   public SubprimeGuid findByHashcode1AndHashcode2AndHashcode3AndPrefix(
       String hashcode1, String hashcode2, String hashcode3, String prefix);
 
+  default public SubprimeGuid findByHashcodesAndPrefix(String hashcode1,
+      String hashcode2, String hashcode3, String prefix) {
+    return findByHashcode1AndHashcode2AndHashcode3AndPrefix(
+        HASH_ENCRYPTOR.encrypt(hashcode1), HASH_ENCRYPTOR.encrypt(hashcode2),
+        HASH_ENCRYPTOR.encrypt(hashcode3), prefix);
+  }
+
   public SubprimeGuid findBySpguid(String spguid);
 
-  public Set<SubprimeGuid> findByHashcode1AndHashcode2AndHashcode3(
-      String hashcode1, String hashcode2, String hashcode3);
-
-  public default boolean isExist(PrefixedHashBundle prefixedHashBundle) {
-
-    return findByHashcode1AndHashcode2AndHashcode3AndPrefix(
+  default public boolean isExist(PrefixedHashBundle prefixedHashBundle) {
+    return findByHashcodesAndPrefix(
         prefixedHashBundle.getHash1().substring(0, 128),
         prefixedHashBundle.getHash2().substring(0, 128),
         prefixedHashBundle.getHash3().substring(0, 128),
         prefixedHashBundle.getPrefix()) != null;
   }
 
-  public default String getSubprimeGuidBySubprimeGuidRequest(
+  default public String getSubprimeGuidBySubprimeGuidRequest(
       PrefixedHashBundle prefixedHashBundle) {
-
-    return findByHashcode1AndHashcode2AndHashcode3AndPrefix(
+    return findByHashcodesAndPrefix(
         prefixedHashBundle.getHash1().substring(0, 128),
         prefixedHashBundle.getHash2().substring(0, 128),
         prefixedHashBundle.getHash3().substring(0, 128),
         prefixedHashBundle.getPrefix()).getSpguid();
-
   }
 
 }

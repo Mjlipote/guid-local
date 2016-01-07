@@ -131,9 +131,8 @@ public class WebGuidController {
           String hashcode2 = pii.getHashcodes().get(1).substring(0, 128);
           String hashcode3 = pii.getHashcodes().get(2).substring(0, 128);
 
-          SubprimeGuid sg =
-              subprimeGuidRepo.findByHashcode1AndHashcode2AndHashcode3AndPrefix(
-                  hashcode1, hashcode2, hashcode3, prefix);
+          SubprimeGuid sg = subprimeGuidRepo.findByHashcodesAndPrefix(hashcode1,
+              hashcode2, hashcode3, prefix);
 
           if (sg != null) {
             correctGuids.add(sg.getSpguid());
@@ -264,9 +263,8 @@ public class WebGuidController {
 
         String prefix = acctUserRepo.findByUsername(auth.getName())
             .getInstitutePrefix().getPrefix();
-        SubprimeGuid sg =
-            subprimeGuidRepo.findByHashcode1AndHashcode2AndHashcode3AndPrefix(
-                hashcode1, hashcode2, hashcode3, prefix);
+        SubprimeGuid sg = subprimeGuidRepo.findByHashcodesAndPrefix(hashcode1,
+            hashcode2, hashcode3, prefix);
 
         if (sg != null) {
           map.addAttribute("spguids", sg.getSpguid());

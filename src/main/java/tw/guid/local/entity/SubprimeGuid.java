@@ -7,11 +7,14 @@
 package tw.guid.local.entity;
 
 import javax.persistence.Column;
+import javax.persistence.Convert;
 import javax.persistence.Entity;
 
 import org.springframework.data.jpa.domain.AbstractPersistable;
 
 import com.google.common.base.MoreObjects;
+
+import tw.guid.local.entity.converter.HashCodeConverter;
 
 @Entity
 public class SubprimeGuid extends AbstractPersistable<Long> {
@@ -24,13 +27,16 @@ public class SubprimeGuid extends AbstractPersistable<Long> {
   @Column(nullable = false)
   private String prefix;
 
-  @Column(nullable = false)
+  @Column(nullable = false, length = 512)
+  @Convert(converter = HashCodeConverter.class)
   private String hashcode1;
 
-  @Column(nullable = false)
+  @Column(nullable = false, length = 512)
+  @Convert(converter = HashCodeConverter.class)
   private String hashcode2;
 
-  @Column(nullable = false)
+  @Column(nullable = false, length = 512)
+  @Convert(converter = HashCodeConverter.class)
   private String hashcode3;
 
   /**
