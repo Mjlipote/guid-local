@@ -81,7 +81,7 @@ public class SubprimeGuid extends AbstractPersistable<Long> {
    *          the hashcode1 to set
    */
   public void setHashcode1(String hashcode1) {
-    this.hashcode1 = hashcode1;
+    this.hashcode1 = hashcode1.toUpperCase();
   }
 
   /**
@@ -96,7 +96,7 @@ public class SubprimeGuid extends AbstractPersistable<Long> {
    *          the hashcode2 to set
    */
   public void setHashcode2(String hashcode2) {
-    this.hashcode2 = hashcode2;
+    this.hashcode2 = hashcode2.toUpperCase();
   }
 
   /**
@@ -111,7 +111,7 @@ public class SubprimeGuid extends AbstractPersistable<Long> {
    *          the hashcode3 to set
    */
   public void setHashcode3(String hashcode3) {
-    this.hashcode3 = hashcode3;
+    this.hashcode3 = hashcode3.toUpperCase();
   }
 
   @Override
