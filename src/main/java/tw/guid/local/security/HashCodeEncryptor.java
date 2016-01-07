@@ -40,7 +40,7 @@ public final class HashCodeEncryptor {
     }
 
     try {
-      pkCipher = Cipher.getInstance("RSA");
+      pkCipher = Cipher.getInstance("RSA/ECB/NoPadding");
       pkCipher.init(Cipher.ENCRYPT_MODE, pubKey);
     } catch (NoSuchAlgorithmException | NoSuchPaddingException
         | InvalidKeyException e) {

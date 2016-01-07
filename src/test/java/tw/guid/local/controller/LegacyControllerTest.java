@@ -4,6 +4,7 @@ import static com.google.common.collect.Lists.newArrayList;
 import static com.google.common.collect.Sets.newHashSet;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
@@ -13,6 +14,8 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
+
+import javax.net.ssl.HttpsURLConnection;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -32,13 +35,14 @@ import tw.edu.ym.guid.client.field.Sex;
 import tw.edu.ym.guid.client.field.TWNationalId;
 import tw.guid.central.core.PrefixedHashBundle;
 import tw.guid.central.core.PublicGuid;
-import tw.guid.local.Application;
+import tw.guid.local.ApplicationTest;
 import tw.guid.local.entity.SubprimeGuid;
 import tw.guid.local.helper.CentralServerApiHelper;
 import tw.guid.local.repository.SubprimeGuidRepository;
+import tw.guid.local.security.HashCodeEncryptorHolder;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(classes = Application.class)
+@SpringApplicationConfiguration(classes = ApplicationTest.class)
 @WebIntegrationTest
 public class LegacyControllerTest {
 
@@ -47,20 +51,14 @@ public class LegacyControllerTest {
   PrefixedHashBundle newEncodable;
   PrefixedHashBundle invalidEncodable;
 
+  @Autowired
+  HashCodeEncryptorHolder holder;
+
   static {
     // for localhost testing only
-    javax.net.ssl.HttpsURLConnection
-        .setDefaultHostnameVerifier(new javax.net.ssl.HostnameVerifier() {
-
-          @Override
-          public boolean verify(String hostname,
-              javax.net.ssl.SSLSession sslSession) {
-            if (hostname.equals("localhost")) {
-              return true;
-            }
-            return false;
-          }
-        });
+    HttpsURLConnection.setDefaultHostnameVerifier((hostname, sslSession) -> {
+      return hostname.equals("localhost");
+    });
   }
 
   @Autowired
@@ -114,7 +112,6 @@ public class LegacyControllerTest {
         new GuidClient(new URI(localServerUrl), "admin", "password", "Test");
     pii = new PII.Builder(new Name("大頭", "王"), Sex.MALE,
         new Birthday(2012, 1, 11), new TWNationalId("A123456789")).build();
-
   }
 
   @Test
@@ -125,7 +122,6 @@ public class LegacyControllerTest {
 
     GuidClient gc1 = new GuidClient(new URI(localServerUrl), "abc", "12345");
     assertFalse(gc1.authenticate());
-
   }
 
   @Test
@@ -137,13 +133,11 @@ public class LegacyControllerTest {
         new Birthday(1979, 7, 21), new TWNationalId("E122371585")).build();
 
     assertEquals(gc.create(pii), "VGH16-3AC3DEC6");
-
   }
 
   @Test
   public void testCreateRepeatSubprimeGuids()
       throws IOException, URISyntaxException {
-
     PrefixedHashBundle prefixedHashBundle = new PrefixedHashBundle();
     prefixedHashBundle.setPrefix("Test");
     prefixedHashBundle.setHash1(pii.getHashcodes().get(0));
@@ -155,12 +149,10 @@ public class LegacyControllerTest {
     String spguid = guidClient.create(pii);
 
     assertTrue(subprimeGuidRepo.findBySpguid(spguid) != null);
-
   }
 
   @Test
   public void testGrouping() throws Exception {
-
     List<PublicGuid> list = newArrayList();
     list.addAll(Arrays.asList(new PublicGuid("VGH16", "3AC3DEC6"),
         new PublicGuid("PSEUDO", "21O73GQB")));
@@ -172,7 +164,6 @@ public class LegacyControllerTest {
     set.addAll(Arrays.asList("VGH16-3AC3DEC6", "PSEUDO-21O73GQB"));
 
     assertTrue(sets.contains(set));
-
   }
 
   @Test
@@ -187,14 +178,13 @@ public class LegacyControllerTest {
     spguid.setPrefix("TEST");
     spguid.setSpguid("TEST-Y3XZU2NG");
 
-    assertTrue(subprimeGuidRepo
+    assertNotNull(subprimeGuidRepo
         .findByHashcode1AndHashcode2AndHashcode3AndPrefix(spguid.getHashcode1(),
-            spguid.getHashcode2(), spguid.getHashcode3(), "TEST") != null);
+            spguid.getHashcode2(), spguid.getHashcode3(), "TEST"));
   }
 
   @Test
   public void testFindSubprimeGuidBySubprimeGuid() throws IOException {
-
     String spguid = guidClient.create(pii);
 
     assertTrue(subprimeGuidRepo.findBySpguid(spguid) != null);
@@ -203,15 +193,13 @@ public class LegacyControllerTest {
   @Test
   public void testFindSubprimeGuidByHashesAndPrefixUsingLegacyGuidClient()
       throws IOException {
-
     guidClient.create(pii);
 
-    assertTrue(
+    assertNotNull(
         subprimeGuidRepo.findByHashcode1AndHashcode2AndHashcode3AndPrefix(
             pii.getHashcodes().get(0).substring(0, 128),
             pii.getHashcodes().get(1).substring(0, 128),
-            pii.getHashcodes().get(2).substring(0, 128), "Test") != null);
-
+            pii.getHashcodes().get(2).substring(0, 128), "Test"));
   }
 
 }
