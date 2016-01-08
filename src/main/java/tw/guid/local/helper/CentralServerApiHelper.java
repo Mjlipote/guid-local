@@ -45,20 +45,14 @@ public final class CentralServerApiHelper {
 
   private static final String API_ENDPOINT = "/api/v1";
 
-  private CentralServerApiHelper() {
-
-  }
-
   public static String guids(URI centralServerUri, String publicKey,
       String prefix, PII pii) throws IOException {
-
     return guids(centralServerUri, publicKey, prefix, Arrays.asList(pii))
         .get(0);
   }
 
   public static List<String> guids(URI centralServerUri, String publicKey,
       String prefix, List<PII> piis) throws IOException {
-
     List<String> lists = newArrayList();
 
     GuidClient guidClient = new GuidClient(centralServerUri, publicKey);
@@ -69,19 +63,17 @@ public final class CentralServerApiHelper {
     }
 
     return lists;
-
   }
 
   public static Collection<Set<String>> groupings(URI centralServerUri,
       String publicKey, Collection<PublicGuid> subprimeGuids)
           throws JsonParseException, JsonMappingException, IOException {
-
     httpClient = BasicAuthSSLClient.create("token", checkNotNull(publicKey));
 
     HttpPost post =
         new HttpPost(centralServerUri + API_ENDPOINT + "/groupings");
 
-    post.addHeader("content-type", "application/json");
+    post.addHeader("Content-Type", "application/json");
 
     ResourceDocument<GuidSet<PublicGuid>> body =
         JsonApi.resourceDocument(new GuidSet<>(subprimeGuids), "lists");
@@ -107,7 +99,6 @@ public final class CentralServerApiHelper {
     }
 
     return sets;
-
   }
 
 }

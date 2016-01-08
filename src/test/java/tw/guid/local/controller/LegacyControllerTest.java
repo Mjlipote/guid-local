@@ -38,14 +38,14 @@ import tw.edu.ym.guid.client.field.Sex;
 import tw.edu.ym.guid.client.field.TWNationalId;
 import tw.guid.central.core.PrefixedHashBundle;
 import tw.guid.central.core.PublicGuid;
-import tw.guid.local.ApplicationTest;
+import tw.guid.local.Application;
 import tw.guid.local.entity.SubprimeGuid;
 import tw.guid.local.helper.CentralServerApiHelper;
 import tw.guid.local.repository.SubprimeGuidRepository;
 import tw.guid.local.security.HashCodeEncryptorHolder;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(classes = ApplicationTest.class)
+@SpringApplicationConfiguration(classes = Application.class)
 @WebIntegrationTest
 public class LegacyControllerTest {
 
@@ -153,7 +153,6 @@ public class LegacyControllerTest {
         new PublicGuid("VGH26", "AABE1DBF")));
     Collection<Set<String>> sets = CentralServerApiHelper
         .groupings(new URI(centralServerUrl), publicKey, list);
-    System.out.println(sets);
     Set<String> set = newHashSet();
     set.addAll(Arrays.asList("TpeVGH-79C60E65", "VGH26-AABE1DBF"));
     assertTrue(sets.contains(set));
@@ -166,7 +165,6 @@ public class LegacyControllerTest {
         new PublicGuid("CCH24", "F5AWRPLY")));
     Collection<Set<String>> sets = CentralServerApiHelper
         .groupings(new URI(centralServerUrl), publicKey, list);
-    System.out.println(sets);
     Set<String> set = newHashSet();
     set.addAll(Arrays.asList("NTUH14-GW2UKHNP", "CCH24-F5AWRPLY"));
     assertTrue(sets.contains(set));
@@ -176,13 +174,13 @@ public class LegacyControllerTest {
   public void testGroupingWithNewPrefixAndLegacyPii() throws JsonParseException,
       JsonMappingException, IOException, URISyntaxException {
     List<PublicGuid> list = newArrayList();
-    list.addAll(Arrays.asList(new PublicGuid("Guid", "2JVQWNKG"),
-        new PublicGuid("Test", "JGLE0CZM")));
+    list.addAll(Arrays.asList(new PublicGuid("Guid", "B99D9ZCD"),
+        new PublicGuid("Test", "U713DNRM")));
     Collection<Set<String>> sets = CentralServerApiHelper
         .groupings(new URI(centralServerUrl), publicKey, list);
     Set<String> set = newHashSet();
-    set.addAll(Arrays.asList("Guid-2JVQWNKG", "Test-JGLE0CZM"));
-    assertTrue(sets.contains(set));
+    set.addAll(Arrays.asList("Guid-B99D9ZCD", "Test-U713DNRM"));
+    assertTrue(sets.iterator().next().containsAll(set));
   }
 
   @Test
@@ -192,7 +190,6 @@ public class LegacyControllerTest {
         new PublicGuid("Guid", "YA2RYNZ7")));
     Collection<Set<String>> sets = CentralServerApiHelper
         .groupings(new URI(centralServerUrl), publicKey, list);
-    System.out.println(sets);
     Set<String> set = newHashSet();
     set.addAll(Arrays.asList("Test-E8UF2CC2", "Guid-YA2RYNZ7"));
     assertTrue(sets.contains(set));
