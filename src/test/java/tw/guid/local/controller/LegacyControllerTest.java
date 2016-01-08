@@ -75,6 +75,7 @@ public class LegacyControllerTest {
   String localServerUrl = "https://localhost:8443";
   GuidClient guidClient;
   PII pii;
+  PII pii1;
 
   @Before
   public void setUp() throws Exception {
@@ -103,9 +104,11 @@ public class LegacyControllerTest {
     newEncodable.setHash3(
         "11033b50d8d2a018e466009bf2cbb6334853696c7406f0ac9845d4b9e543ef9f2c8f1c903a57298ae5211d1f5a64332a7d8bec8de7f54837ab6aeadde5dfb20f");
     guidClient =
-        new GuidClient(new URI(localServerUrl), "admin", "password", "TEST");
+        new GuidClient(new URI(localServerUrl), "admin", "password", "Test");
     pii = new PII.Builder(new Name("大頭", "王"), Sex.MALE,
         new Birthday(2012, 1, 11), new TWNationalId("A123456789")).build();
+    pii1 = new PII.Builder(new Name("光棍", "陳"), Sex.MALE,
+        new Birthday(2011, 11, 11), new TWNationalId("A123456789")).build();
   }
 
   @Test
@@ -132,23 +135,23 @@ public class LegacyControllerTest {
       throws IOException, URISyntaxException {
     PrefixedHashBundle prefixedHashBundle = new PrefixedHashBundle();
     prefixedHashBundle.setPrefix("Test");
-    prefixedHashBundle.setHash1(pii.getHashcodes().get(0));
-    prefixedHashBundle.setHash2(pii.getHashcodes().get(1));
-    prefixedHashBundle.setHash3(pii.getHashcodes().get(2));
+    prefixedHashBundle.setHash1(pii1.getHashcodes().get(0));
+    prefixedHashBundle.setHash2(pii1.getHashcodes().get(1));
+    prefixedHashBundle.setHash3(pii1.getHashcodes().get(2));
     assertFalse(subprimeGuidRepo.isExist(prefixedHashBundle));
-    String spguid = guidClient.create(pii);
+    String spguid = guidClient.create(pii1);
     assertTrue(subprimeGuidRepo.findBySpguid(spguid) != null);
   }
 
   @Test
   public void testGrouping() throws Exception {
     List<PublicGuid> list = newArrayList();
-    list.addAll(Arrays.asList(new PublicGuid("VGH16", "3AC3DEC6"),
-        new PublicGuid("PSEUDO", "21O73GQB")));
+    list.addAll(Arrays.asList(new PublicGuid("NTUH14", "C0A7AD5C"),
+        new PublicGuid("PSEUDO", "1B11B50C")));
     Collection<Set<String>> sets = CentralServerApiHelper
         .groupings(new URI(centralServerUrl), publicKey, list);
     Set<String> set = newHashSet();
-    set.addAll(Arrays.asList("VGH16-3AC3DEC6", "PSEUDO-21O73GQB"));
+    set.addAll(Arrays.asList("NTUH14-C0A7AD5C", "PSEUDO-1B11B50C"));
     assertTrue(sets.contains(set));
   }
 
@@ -182,6 +185,6 @@ public class LegacyControllerTest {
         subprimeGuidRepo.findByHashcode1AndHashcode2AndHashcode3AndPrefix(
             pii.getHashcodes().get(0).substring(0, 128).toUpperCase(),
             pii.getHashcodes().get(1).substring(0, 128).toUpperCase(),
-            pii.getHashcodes().get(2).substring(0, 128).toUpperCase(), "TEST"));
+            pii.getHashcodes().get(2).substring(0, 128).toUpperCase(), "Test"));
   }
 }
