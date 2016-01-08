@@ -27,9 +27,6 @@ import org.springframework.boot.test.WebIntegrationTest;
 import org.springframework.core.env.Environment;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.databind.JsonMappingException;
-
 import tw.edu.ym.guid.client.GuidClient;
 import tw.edu.ym.guid.client.PII;
 import tw.edu.ym.guid.client.field.Birthday;
@@ -49,11 +46,6 @@ import tw.guid.local.security.HashCodeEncryptorHolder;
 @WebIntegrationTest
 public class LegacyControllerTest {
 
-  PrefixedHashBundle legacyEncodable;
-  PrefixedHashBundle legacyEncodable1;
-  PrefixedHashBundle newEncodable;
-  PrefixedHashBundle invalidEncodable;
-
   @Autowired
   HashCodeEncryptorHolder holder;
 
@@ -66,52 +58,40 @@ public class LegacyControllerTest {
 
   @Autowired
   Environment env;
-
   @Autowired
   SubprimeGuidRepository subprimeGuidRepo;
-
   @Value("${guid.legacy.central.server}")
   String centralServerUrl;
-
   @Value("${guid.legacy.client.key}")
   String publicKey;
   String localServerUrl = "https://localhost:8443";
-  GuidClient guidClient;
-  PII pii;
-  PII pii1;
+  GuidClient guidClientWithNewPrefix;
+  GuidClient guidClientWithNewPrefix1;
+  GuidClient guidClientWithLegacyPrefix;
+  GuidClient guidClientWithLegacyPrefix1;
+  PII legacyPii;
+  PII newPii;
+  PII newPii1;
+  PII newPii2;
 
   @Before
   public void setUp() throws Exception {
-    legacyEncodable = new PrefixedHashBundle();
-    legacyEncodable.setPrefix("CCH24");
-    legacyEncodable.setHash1(
-        "293ae00f7a0088e628d5386da01b40fa0491a82498af7a88ca8147a9ca601e8583b4b5c8e4af045cd2554da4af5b82a24f0bef25cea9867879ef05460fa386bf");
-    legacyEncodable.setHash2(
-        "cadfd5da66fecd9f6475614c2029fc35c1be89076f4262ccf1184c61e25dcbdd690dbc7f65b79b826ba2a840165b073aff038ee090f3fa1fe3fdf7cee2530a64");
-    legacyEncodable.setHash3(
-        "01033b50d8d2a018e466009bf2cbb6334853696c7406f0ac9845d4b9e543ef9f2c8f1c903a57298ae5211d1f5a64332a7d8bec8de7f54837ab6aeadde5dfb20f");
-    legacyEncodable1 = new PrefixedHashBundle();
-    legacyEncodable1.setPrefix("VGH16");
-    legacyEncodable1.setHash1(
-        "293ae00f7a0088e628d5386da01b40fa0491a82498af7a88ca8147a9ca601e8583b4b5c8e4af045cd2554da4af5b82a24f0bef25cea9867879ef05460fa386bf");
-    legacyEncodable1.setHash2(
-        "cadfd5da66fecd9f6475614c2029fc35c1be89076f4262ccf1184c61e25dcbdd690dbc7f65b79b826ba2a840165b073aff038ee090f3fa1fe3fdf7cee2530a64");
-    legacyEncodable1.setHash3(
-        "01033b50d8d2a018e466009bf2cbb6334853696c7406f0ac9845d4b9e543ef9f2c8f1c903a57298ae5211d1f5a64332a7d8bec8de7f54837ab6aeadde5dfb20f");
-    newEncodable = new PrefixedHashBundle();
-    newEncodable.setPrefix("XXYYZZ");
-    newEncodable.setHash1(
-        "193ae00f7a0088e628d5386da01b40fa0491a82498af7a88ca8147a9ca601e8583b4b5c8e4af045cd2554da4af5b82a24f0bef25cea9867879ef05460fa386bf");
-    newEncodable.setHash2(
-        "1adfd5da66fecd9f6475614c2029fc35c1be89076f4262ccf1184c61e25dcbdd690dbc7f65b79b826ba2a840165b073aff038ee090f3fa1fe3fdf7cee2530a64");
-    newEncodable.setHash3(
-        "11033b50d8d2a018e466009bf2cbb6334853696c7406f0ac9845d4b9e543ef9f2c8f1c903a57298ae5211d1f5a64332a7d8bec8de7f54837ab6aeadde5dfb20f");
-    guidClient =
+    guidClientWithNewPrefix =
         new GuidClient(new URI(localServerUrl), "admin", "password", "Test");
-    pii = new PII.Builder(new Name("大頭", "王"), Sex.MALE,
-        new Birthday(2012, 1, 11), new TWNationalId("A123456789")).build();
-    pii1 = new PII.Builder(new Name("光棍", "陳"), Sex.MALE,
-        new Birthday(2011, 11, 11), new TWNationalId("A123456789")).build();
+    guidClientWithNewPrefix1 =
+        new GuidClient(new URI(localServerUrl), "admin", "password", "Guid");
+    guidClientWithLegacyPrefix =
+        new GuidClient(new URI(localServerUrl), "admin", "password", "NTUH14");
+    guidClientWithLegacyPrefix1 =
+        new GuidClient(new URI(localServerUrl), "admin", "password", "CCH24");
+    legacyPii = new PII.Builder(new Name("明政", "李"), Sex.MALE,
+        new Birthday(1979, 7, 21), new TWNationalId("E122371585")).build();
+    newPii = new PII.Builder(new Name("大頭", "巫"), Sex.MALE,
+        new Birthday(2000, 7, 7), new TWNationalId("A123456789")).build();
+    newPii1 = new PII.Builder(new Name("光棍", "施"), Sex.MALE,
+        new Birthday(2010, 11, 11), new TWNationalId("A123456789")).build();
+    newPii2 = new PII.Builder(new Name("小賓", "鄭"), Sex.MALE,
+        new Birthday(1977, 7, 7), new TWNationalId("A123456789")).build();
   }
 
   @Test
@@ -128,9 +108,7 @@ public class LegacyControllerTest {
       throws IOException, URISyntaxException {
     GuidClient gc =
         new GuidClient(new URI(localServerUrl), "admin", "password", "VGH16");
-    PII pii = new PII.Builder(new Name("明政", "李"), Sex.MALE,
-        new Birthday(1979, 7, 21), new TWNationalId("E122371585")).build();
-    assertEquals(gc.create(pii), "VGH16-3AC3DEC6");
+    assertEquals(gc.create(legacyPii), "VGH16-3AC3DEC6");
   }
 
   @Test
@@ -138,11 +116,11 @@ public class LegacyControllerTest {
       throws IOException, URISyntaxException {
     PrefixedHashBundle prefixedHashBundle = new PrefixedHashBundle();
     prefixedHashBundle.setPrefix("Test");
-    prefixedHashBundle.setHash1(pii1.getHashcodes().get(0));
-    prefixedHashBundle.setHash2(pii1.getHashcodes().get(1));
-    prefixedHashBundle.setHash3(pii1.getHashcodes().get(2));
+    prefixedHashBundle.setHash1(newPii.getHashcodes().get(0));
+    prefixedHashBundle.setHash2(newPii.getHashcodes().get(1));
+    prefixedHashBundle.setHash3(newPii.getHashcodes().get(2));
     assertFalse(subprimeGuidRepo.isExist(prefixedHashBundle));
-    String spguid = guidClient.create(pii1);
+    String spguid = guidClientWithNewPrefix.create(newPii);
     assertTrue(subprimeGuidRepo.findBySpguid(spguid) != null);
   }
 
@@ -160,39 +138,47 @@ public class LegacyControllerTest {
 
   @Test
   public void testGroupingWithLegacyPrefixAndNewPii() throws Exception {
+    String[] guid = guidClientWithLegacyPrefix.create(newPii1).split("-");
+    String[] guid1 = guidClientWithLegacyPrefix1.create(newPii1).split("-");
     List<PublicGuid> list = newArrayList();
-    list.addAll(Arrays.asList(new PublicGuid("NTUH14", "GW2UKHNP"),
-        new PublicGuid("CCH24", "F5AWRPLY")));
+    list.addAll(Arrays.asList(new PublicGuid(guid[0], guid[1]),
+        new PublicGuid(guid1[0], guid1[1])));
     Collection<Set<String>> sets = CentralServerApiHelper
         .groupings(new URI(centralServerUrl), publicKey, list);
     Set<String> set = newHashSet();
-    set.addAll(Arrays.asList("NTUH14-GW2UKHNP", "CCH24-F5AWRPLY"));
-    assertTrue(sets.contains(set));
+    set.addAll(
+        Arrays.asList(guid[0] + "-" + guid[1], guid1[0] + "-" + guid1[1]));
+    assertTrue(sets.iterator().next().containsAll(set));
   }
 
   @Test
-  public void testGroupingWithNewPrefixAndLegacyPii() throws JsonParseException,
-      JsonMappingException, IOException, URISyntaxException {
+  public void testGroupingWithNewPrefixAndLegacyPii() throws Exception {
+    String[] guid = guidClientWithNewPrefix.create(legacyPii).split("-");
+    String[] guid1 = guidClientWithNewPrefix1.create(legacyPii).split("-");
     List<PublicGuid> list = newArrayList();
-    list.addAll(Arrays.asList(new PublicGuid("Guid", "B99D9ZCD"),
-        new PublicGuid("Test", "U713DNRM")));
+    list.addAll(Arrays.asList(new PublicGuid(guid[0], guid[1]),
+        new PublicGuid(guid1[0], guid1[1])));
     Collection<Set<String>> sets = CentralServerApiHelper
         .groupings(new URI(centralServerUrl), publicKey, list);
     Set<String> set = newHashSet();
-    set.addAll(Arrays.asList("Guid-B99D9ZCD", "Test-U713DNRM"));
+    set.addAll(
+        Arrays.asList(guid[0] + "-" + guid[1], guid1[0] + "-" + guid1[1]));
     assertTrue(sets.iterator().next().containsAll(set));
   }
 
   @Test
   public void testGroupingWithNewPrefixAndNewPii() throws Exception {
+    String[] guid = guidClientWithNewPrefix.create(newPii2).split("-");
+    String[] guid1 = guidClientWithNewPrefix1.create(newPii2).split("-");
     List<PublicGuid> list = newArrayList();
-    list.addAll(Arrays.asList(new PublicGuid("Test", "E8UF2CC2"),
-        new PublicGuid("Guid", "YA2RYNZ7")));
+    list.addAll(Arrays.asList(new PublicGuid(guid[0], guid[1]),
+        new PublicGuid(guid1[0], guid1[1])));
     Collection<Set<String>> sets = CentralServerApiHelper
         .groupings(new URI(centralServerUrl), publicKey, list);
     Set<String> set = newHashSet();
-    set.addAll(Arrays.asList("Test-E8UF2CC2", "Guid-YA2RYNZ7"));
-    assertTrue(sets.contains(set));
+    set.addAll(
+        Arrays.asList(guid[0] + "-" + guid[1], guid1[0] + "-" + guid1[1]));
+    assertTrue(sets.iterator().next().containsAll(set));
   }
 
   @Test
@@ -213,18 +199,19 @@ public class LegacyControllerTest {
 
   @Test
   public void testFindSubprimeGuidBySubprimeGuid() throws IOException {
-    String spguid = guidClient.create(pii);
+    String spguid = guidClientWithLegacyPrefix.create(legacyPii);
     assertTrue(subprimeGuidRepo.findBySpguid(spguid) != null);
   }
 
   @Test
   public void testFindSubprimeGuidByHashesAndPrefixUsingLegacyGuidClient()
       throws IOException {
-    guidClient.create(pii);
+    guidClientWithNewPrefix.create(legacyPii);
     assertNotNull(
         subprimeGuidRepo.findByHashcode1AndHashcode2AndHashcode3AndPrefix(
-            pii.getHashcodes().get(0).substring(0, 128).toUpperCase(),
-            pii.getHashcodes().get(1).substring(0, 128).toUpperCase(),
-            pii.getHashcodes().get(2).substring(0, 128).toUpperCase(), "Test"));
+            legacyPii.getHashcodes().get(0).substring(0, 128).toUpperCase(),
+            legacyPii.getHashcodes().get(1).substring(0, 128).toUpperCase(),
+            legacyPii.getHashcodes().get(2).substring(0, 128).toUpperCase(),
+            "Test"));
   }
 }
