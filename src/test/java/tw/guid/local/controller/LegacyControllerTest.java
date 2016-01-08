@@ -27,6 +27,9 @@ import org.springframework.boot.test.WebIntegrationTest;
 import org.springframework.core.env.Environment;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+
 import tw.edu.ym.guid.client.GuidClient;
 import tw.edu.ym.guid.client.PII;
 import tw.edu.ym.guid.client.field.Birthday;
@@ -144,14 +147,54 @@ public class LegacyControllerTest {
   }
 
   @Test
-  public void testGrouping() throws Exception {
+  public void testGroupingWithLegacyPrefixAndLegacyPii() throws Exception {
     List<PublicGuid> list = newArrayList();
-    list.addAll(Arrays.asList(new PublicGuid("NTUH14", "C0A7AD5C"),
-        new PublicGuid("PSEUDO", "1B11B50C")));
+    list.addAll(Arrays.asList(new PublicGuid("TpeVGH", "79C60E65"),
+        new PublicGuid("VGH26", "AABE1DBF")));
+    Collection<Set<String>> sets = CentralServerApiHelper
+        .groupings(new URI(centralServerUrl), publicKey, list);
+    System.out.println(sets);
+    Set<String> set = newHashSet();
+    set.addAll(Arrays.asList("TpeVGH-79C60E65", "VGH26-AABE1DBF"));
+    assertTrue(sets.contains(set));
+  }
+
+  @Test
+  public void testGroupingWithLegacyPrefixAndNewPii() throws Exception {
+    List<PublicGuid> list = newArrayList();
+    list.addAll(Arrays.asList(new PublicGuid("NTUH14", "GW2UKHNP"),
+        new PublicGuid("CCH24", "F5AWRPLY")));
+    Collection<Set<String>> sets = CentralServerApiHelper
+        .groupings(new URI(centralServerUrl), publicKey, list);
+    System.out.println(sets);
+    Set<String> set = newHashSet();
+    set.addAll(Arrays.asList("NTUH14-GW2UKHNP", "CCH24-F5AWRPLY"));
+    assertTrue(sets.contains(set));
+  }
+
+  @Test
+  public void testGroupingWithNewPrefixAndLegacyPii() throws JsonParseException,
+      JsonMappingException, IOException, URISyntaxException {
+    List<PublicGuid> list = newArrayList();
+    list.addAll(Arrays.asList(new PublicGuid("Guid", "2JVQWNKG"),
+        new PublicGuid("Test", "JGLE0CZM")));
     Collection<Set<String>> sets = CentralServerApiHelper
         .groupings(new URI(centralServerUrl), publicKey, list);
     Set<String> set = newHashSet();
-    set.addAll(Arrays.asList("NTUH14-C0A7AD5C", "PSEUDO-1B11B50C"));
+    set.addAll(Arrays.asList("Guid-2JVQWNKG", "Test-JGLE0CZM"));
+    assertTrue(sets.contains(set));
+  }
+
+  @Test
+  public void testGroupingWithNewPrefixAndNewPii() throws Exception {
+    List<PublicGuid> list = newArrayList();
+    list.addAll(Arrays.asList(new PublicGuid("Test", "E8UF2CC2"),
+        new PublicGuid("Guid", "YA2RYNZ7")));
+    Collection<Set<String>> sets = CentralServerApiHelper
+        .groupings(new URI(centralServerUrl), publicKey, list);
+    System.out.println(sets);
+    Set<String> set = newHashSet();
+    set.addAll(Arrays.asList("Test-E8UF2CC2", "Guid-YA2RYNZ7"));
     assertTrue(sets.contains(set));
   }
 
