@@ -1,7 +1,12 @@
-/*Copyright(c)2015 ReiMed Co.to present.*All rights reserved.**@author Ming-Jheng Li**/package tw.guid.local.controller;
+/*
+ * Copyright(c)2015 ReiMed Co.to present.
+ * All rights reserved.
+ */
+package tw.guid.local.controller;
 
 import static com.google.common.collect.Lists.newArrayList;
 import static com.google.common.collect.Sets.newHashSet;
+import static net.sf.rubycollect4j.RubyCollections.ra;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
@@ -11,7 +16,6 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
@@ -37,7 +41,6 @@ import tw.guid.central.core.PrefixedHashBundle;
 import tw.guid.central.core.PublicGuid;
 import tw.guid.local.Application;
 import tw.guid.local.entity.SubprimeGuid;
-import tw.guid.local.helper.CentralServerApiHelper;
 import tw.guid.local.repository.SubprimeGuidRepository;
 import tw.guid.local.security.HashCodeEncryptorHolder;
 
@@ -60,6 +63,9 @@ public class LegacyControllerTest {
   Environment env;
   @Autowired
   SubprimeGuidRepository subprimeGuidRepo;
+  @Autowired
+  tw.guid.client.GuidClient guidClient;
+
   @Value("${guid.legacy.central.server}")
   String centralServerUrl;
   @Value("${guid.legacy.client.key}")
@@ -129,11 +135,11 @@ public class LegacyControllerTest {
     List<PublicGuid> list = newArrayList();
     list.addAll(Arrays.asList(new PublicGuid("TpeVGH", "79C60E65"),
         new PublicGuid("VGH26", "AABE1DBF")));
-    Collection<Set<String>> sets = CentralServerApiHelper
-        .groupings(new URI(centralServerUrl), publicKey, list);
-    Set<String> set = newHashSet();
-    set.addAll(Arrays.asList("TpeVGH-79C60E65", "VGH26-AABE1DBF"));
-    assertTrue(sets.contains(set));
+    List<Set<PublicGuid>> sets = guidClient.group(list);
+
+    Set<String> set = newHashSet("TpeVGH-79C60E65", "VGH26-AABE1DBF");
+    assertTrue(ra(sets.get(0)).map((s) -> s.getPrefix() + "-" + s.getCode())
+        .containsAll(set));
   }
 
   @Test
@@ -143,12 +149,12 @@ public class LegacyControllerTest {
     List<PublicGuid> list = newArrayList();
     list.addAll(Arrays.asList(new PublicGuid(guid[0], guid[1]),
         new PublicGuid(guid1[0], guid1[1])));
-    Collection<Set<String>> sets = CentralServerApiHelper
-        .groupings(new URI(centralServerUrl), publicKey, list);
-    Set<String> set = newHashSet();
-    set.addAll(
-        Arrays.asList(guid[0] + "-" + guid[1], guid1[0] + "-" + guid1[1]));
-    assertTrue(sets.iterator().next().containsAll(set));
+    List<Set<PublicGuid>> sets = guidClient.group(list);
+
+    Set<String> set =
+        newHashSet(guid[0] + "-" + guid[1], guid1[0] + "-" + guid1[1]);
+    assertTrue(ra(sets.get(0)).map((s) -> s.getPrefix() + "-" + s.getCode())
+        .containsAll(set));
   }
 
   @Test
@@ -158,12 +164,12 @@ public class LegacyControllerTest {
     List<PublicGuid> list = newArrayList();
     list.addAll(Arrays.asList(new PublicGuid(guid[0], guid[1]),
         new PublicGuid(guid1[0], guid1[1])));
-    Collection<Set<String>> sets = CentralServerApiHelper
-        .groupings(new URI(centralServerUrl), publicKey, list);
-    Set<String> set = newHashSet();
-    set.addAll(
-        Arrays.asList(guid[0] + "-" + guid[1], guid1[0] + "-" + guid1[1]));
-    assertTrue(sets.iterator().next().containsAll(set));
+    List<Set<PublicGuid>> sets = guidClient.group(list);
+
+    Set<String> set =
+        newHashSet(guid[0] + "-" + guid[1], guid1[0] + "-" + guid1[1]);
+    assertTrue(ra(sets.get(0)).map((s) -> s.getPrefix() + "-" + s.getCode())
+        .containsAll(set));
   }
 
   @Test
@@ -173,12 +179,12 @@ public class LegacyControllerTest {
     List<PublicGuid> list = newArrayList();
     list.addAll(Arrays.asList(new PublicGuid(guid[0], guid[1]),
         new PublicGuid(guid1[0], guid1[1])));
-    Collection<Set<String>> sets = CentralServerApiHelper
-        .groupings(new URI(centralServerUrl), publicKey, list);
-    Set<String> set = newHashSet();
-    set.addAll(
-        Arrays.asList(guid[0] + "-" + guid[1], guid1[0] + "-" + guid1[1]));
-    assertTrue(sets.iterator().next().containsAll(set));
+    List<Set<PublicGuid>> sets = guidClient.group(list);
+
+    Set<String> set =
+        newHashSet(guid[0] + "-" + guid[1], guid1[0] + "-" + guid1[1]);
+    assertTrue(ra(sets.get(0)).map((s) -> s.getPrefix() + "-" + s.getCode())
+        .containsAll(set));
   }
 
   @Test

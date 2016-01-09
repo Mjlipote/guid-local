@@ -9,13 +9,12 @@ package tw.guid.local.controller;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.collect.Lists.newArrayList;
 import static com.google.common.collect.Sets.newHashSet;
+import static net.sf.rubycollect4j.RubyCollections.ra;
 
 import java.io.ByteArrayInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -42,6 +41,7 @@ import com.google.common.collect.HashMultimap;
 import com.google.common.collect.SetMultimap;
 
 import tw.guid.central.core.PublicGuid;
+import tw.guid.client.GuidClient;
 import tw.guid.client.PII;
 import tw.guid.client.field.Birthday;
 import tw.guid.client.field.Sex;
@@ -51,7 +51,6 @@ import tw.guid.local.entity.Association;
 import tw.guid.local.entity.Association.Gender;
 import tw.guid.local.entity.SubprimeGuid;
 import tw.guid.local.helper.BatchSubprimeGuidCreator;
-import tw.guid.local.helper.CentralServerApiHelper;
 import tw.guid.local.repository.AccountUsersRepository;
 import tw.guid.local.repository.AssociationRepository;
 import tw.guid.local.repository.SubprimeGuidRepository;
@@ -63,6 +62,8 @@ import tw.guid.local.web.CustomAuthenticationProvider;
 @Controller
 public class WebGuidController {
 
+  @Autowired
+  GuidClient guidClient;
   @Autowired
   SubprimeGuidRepository subprimeGuidRepo;
   @Autowired
@@ -162,8 +163,8 @@ public class WebGuidController {
               associationRepo.save(association);
             }
           } else {
-            String subprimeGuid = CentralServerApiHelper
-                .guids(new URI(centralServerUrl), publicKey, prefix, pii);
+            PublicGuid pg = guidClient.compute(prefix, pii);
+            String subprimeGuid = pg.getPrefix() + "-" + pg.getCode();
             correctGuids.add(subprimeGuid);
             SubprimeGuid spGuid = new SubprimeGuid();
             spGuid.setSpguid(subprimeGuid);
@@ -305,8 +306,8 @@ public class WebGuidController {
           }
           return "guids-result";
         } else {
-          String subprimeGuid = CentralServerApiHelper
-              .guids(new URI(centralServerUrl), publicKey, prefix, pii);
+          PublicGuid pg = guidClient.compute(prefix, pii);
+          String subprimeGuid = pg.getPrefix() + "-" + pg.getCode();
           map.addAttribute("spguids", subprimeGuid);
           SubprimeGuid spGuid = new SubprimeGuid();
           spGuid.setSpguid(subprimeGuid);
@@ -369,10 +370,11 @@ public class WebGuidController {
         map.addAttribute("link", "/batch/comparison");
         return "error";
       } else {
-        Collection<Set<String>> sets = CentralServerApiHelper
-            .groupings(new URI(centralServerUrl), publicKey, list);
-        map.addAttribute("result", sets);
-        map.addAttribute("number", sets.size());
+        List<Set<PublicGuid>> sets = guidClient.group(list);
+        List<Set<String>> setss = ra(sets).map(s -> newHashSet(
+            ra(s).map(pg -> pg.getPrefix() + "-" + pg.getCode())));
+        map.addAttribute("result", setss);
+        map.addAttribute("number", setss.size());
         return "batch-comparison";
       }
     }
@@ -412,10 +414,12 @@ public class WebGuidController {
         list.add(new PublicGuid(s.split("-")[0], s.split("-")[1]));
       }
 
-      Collection<Set<String>> sets = CentralServerApiHelper
-          .groupings(new URI(centralServerUrl), publicKey, list);
-      map.addAttribute("result", sets);
-      map.addAttribute("number", sets.size());
+      List<Set<PublicGuid>> sets = guidClient.group(list);
+      List<Set<String>> setss = ra(sets).map(s -> newHashSet(
+          ra(s).map(pg -> pg.getPrefix() + "-" + pg.getCode())));
+
+      map.addAttribute("result", setss);
+      map.addAttribute("number", setss.size());
       return "comparison";
     }
   }
