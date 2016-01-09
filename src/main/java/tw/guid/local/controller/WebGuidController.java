@@ -10,6 +10,8 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.collect.Lists.newArrayList;
 import static com.google.common.collect.Sets.newHashSet;
 import static net.sf.rubycollect4j.RubyCollections.ra;
+import static org.springframework.web.bind.annotation.RequestMethod.GET;
+import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
 import java.io.ByteArrayInputStream;
 import java.io.FileNotFoundException;
@@ -30,7 +32,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -91,7 +92,7 @@ public class WebGuidController {
    * @throws URISyntaxException
    * @throws InvalidFormatException
    */
-  @RequestMapping(value = "/batch", method = RequestMethod.POST)
+  @RequestMapping(value = "/batch", method = POST)
   String guidsBatchCreate(ModelMap map,
       @RequestParam("file") MultipartFile file)
           throws OpenXML4JException, IOException, URISyntaxException {
@@ -213,7 +214,7 @@ public class WebGuidController {
    * @throws URISyntaxException
    * @throws IOException
    */
-  @RequestMapping(method = RequestMethod.POST)
+  @RequestMapping(method = POST)
   String guidsCreate(ModelMap map,
       @RequestParam(value = "gender") String gender,
       @RequestParam(value = "birthDay") String birthDay,
@@ -338,11 +339,10 @@ public class WebGuidController {
     }
   }
 
-  @RequestMapping(value = "/batch/comparison", method = RequestMethod.POST)
+  @RequestMapping(value = "/batch/comparison", method = POST)
   String guidsBatchComparison(ModelMap map,
       @RequestParam("file") MultipartFile file)
           throws IOException, OpenXML4JException, URISyntaxException {
-
     if (!file.getOriginalFilename().endsWith("xlsx")
         && !file.getOriginalFilename().endsWith("xls")) {
       map.addAttribute("errorMessage", "上傳檔案必須為 Excel (.xlsx 或 .xls)");
@@ -389,7 +389,7 @@ public class WebGuidController {
    * @throws IOException
    * @throws URISyntaxException
    */
-  @RequestMapping(value = "/comparison", method = RequestMethod.POST)
+  @RequestMapping(value = "/comparison", method = POST)
   String guidsComparison(ModelMap map,
       @RequestParam(value = "subprimeGuids") String subprimeGuids)
           throws IOException, URISyntaxException {
@@ -424,7 +424,7 @@ public class WebGuidController {
     }
   }
 
-  @RequestMapping(value = "/repeat", method = RequestMethod.GET)
+  @RequestMapping(value = "/repeat", method = GET)
   String guidsRepeat(ModelMap map) {
     Set<Set<String>> hhs = newHashSet();
     SetMultimap<String, String> multimap = HashMultimap.create();

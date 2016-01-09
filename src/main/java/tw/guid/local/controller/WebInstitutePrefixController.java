@@ -6,6 +6,10 @@
  */
 package tw.guid.local.controller;
 
+import static org.springframework.web.bind.annotation.RequestMethod.GET;
+import static org.springframework.web.bind.annotation.RequestMethod.POST;
+import static org.springframework.web.bind.annotation.RequestMethod.PUT;
+
 import java.util.Arrays;
 import java.util.List;
 
@@ -17,7 +21,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import tw.guid.local.entity.InstitutePrefix;
@@ -44,11 +47,10 @@ public class WebInstitutePrefixController {
     return "institute-prefix";
   }
 
-  @RequestMapping(method = RequestMethod.POST)
+  @RequestMapping(method = POST)
   String institutesNew(ModelMap map,
       @RequestParam(value = "institute") String institute,
       @RequestParam(value = "prefix") String prefix) {
-
     if (institute.equals("") || prefix.equals("")) {
       map.addAttribute("errorMessage", "請確實填寫資料，切勿留空值！！");
       map.addAttribute("link", "/institutes");
@@ -69,7 +71,7 @@ public class WebInstitutePrefixController {
     }
   }
 
-  @RequestMapping(value = "/{institute}", method = RequestMethod.PUT)
+  @RequestMapping(value = "/{institute}", method = PUT)
   String institutesEdit(ModelMap map,
       @PathVariable("institute") String institute,
       @Param("newInstitute") String newInstitute,
@@ -86,7 +88,7 @@ public class WebInstitutePrefixController {
     return "redirect:/institutes";
   }
 
-  @RequestMapping(value = "/{institute}", method = RequestMethod.GET)
+  @RequestMapping(value = "/{institute}", method = GET)
   String institutesEdit(ModelMap map,
       @PathVariable("institute") String institute) {
     map.addAttribute("institutePrefixInfo",
@@ -95,7 +97,7 @@ public class WebInstitutePrefixController {
     return "institute-prefix-info";
   }
 
-  @RequestMapping(value = "/users", method = RequestMethod.POST)
+  @RequestMapping(value = "/users", method = POST)
   String institutesNewUsers(ModelMap map,
       @RequestParam(value = "institute") String institute) {
     map.addAttribute("institutes", Arrays
@@ -104,7 +106,7 @@ public class WebInstitutePrefixController {
     return "register";
   }
 
-  @RequestMapping(value = "/users/{institute}", method = RequestMethod.GET)
+  @RequestMapping(value = "/users/{institute}", method = GET)
   String institutesViewUsers(ModelMap map,
       @PathVariable("institute") String institute) {
     map.addAttribute("institute", institute);
@@ -116,10 +118,9 @@ public class WebInstitutePrefixController {
     return "institute-prefix-view-users";
   }
 
-  @RequestMapping(value = "/lookup", method = RequestMethod.GET)
+  @RequestMapping(value = "/lookup", method = GET)
   String associationLookup(ModelMap map, @Param("prefix") String prefix,
       @Param("institute") String institute) {
-
     List<InstitutePrefix> institutePrefixs =
         institutePrefixRepo.findAll((root, query, cb) -> {
           Predicate finalPredicate = cb.and();
