@@ -17,11 +17,11 @@ import tw.guid.client.PII;
 import tw.guid.client.field.BaseNationalId;
 import tw.guid.client.field.Birthday;
 import tw.guid.client.field.Name;
+import tw.guid.client.field.NameSplitter;
 import tw.guid.client.field.NationalId;
 import tw.guid.client.field.Sex;
 import tw.guid.client.field.TWNationalId;
 import tw.guid.client.field.validation.TWNationalIdValidator;
-import tw.guid.local.util.NameSplitter;
 
 public final class BatchSubprimeGuidCreator {
 

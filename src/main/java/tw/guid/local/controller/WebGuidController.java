@@ -45,6 +45,7 @@ import tw.guid.central.core.PublicGuid;
 import tw.guid.client.GuidClient;
 import tw.guid.client.PII;
 import tw.guid.client.field.Birthday;
+import tw.guid.client.field.NameSplitter;
 import tw.guid.client.field.Sex;
 import tw.guid.client.field.TWNationalId;
 import tw.guid.client.field.validation.TWNationalIdValidator;
@@ -55,7 +56,6 @@ import tw.guid.local.helper.BatchSubprimeGuidCreator;
 import tw.guid.local.repository.AccountUsersRepository;
 import tw.guid.local.repository.AssociationRepository;
 import tw.guid.local.repository.SubprimeGuidRepository;
-import tw.guid.local.util.NameSplitter;
 import tw.guid.local.validateion.BirthdayValidator;
 import tw.guid.local.web.CustomAuthenticationProvider;
 
