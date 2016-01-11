@@ -43,13 +43,18 @@ public class PaperTrailController {
 
   @RequestMapping(value = "/lookup", method = GET)
   String trailLookup(ModelMap map, @Param("userId") String userId,
-      @Param("createdAt") String createdAt) throws ParseException {
+      @Param("createdAt") String createdAt,
+      @Param("createdEnd") String createdEnd) throws ParseException {
     int year = Integer.valueOf(createdAt.split("/")[0]);
     int month = Integer.valueOf(createdAt.split("/")[1]);
     int day = Integer.valueOf(createdAt.split("/")[2]);
 
+    int yearEnd = Integer.valueOf(createdEnd.split("/")[0]);
+    int monthEnd = Integer.valueOf(createdEnd.split("/")[1]);
+    int dayEnd = Integer.valueOf(createdEnd.split("/")[2]);
+
     Date startDate = RubyCollections.date(year, month, day).beginningOfDay();
-    Date endDate = RubyCollections.date(year, month, day).endOfDay();
+    Date endDate = RubyCollections.date(yearEnd, monthEnd, dayEnd).endOfDay();
 
     map.addAttribute("userIds", paperTrailRepo.getAllUserId());
     map.addAttribute("paperTrails",
