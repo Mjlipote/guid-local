@@ -10,14 +10,13 @@
 	<script
 		src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/1.0.2/Chart.min.js"></script>
 	<script>
-		var ctx = document.getElementById("c").getContext("2d");
-		var data = $.getJSON("https://localhost:8443/analysis/lookup?", {
+		var ctx = document.getElementById('c').getContext('2d');
+		$.getJSON('https://localhost:8443/analysis/lookup', {
 			start : 2016,
 			end : 2016
-		}, function(data) {
-			alert("Data Loaded: " + data);
+		}, function(res) {
+			new Chart(ctx).Line(res);
 		});
-		var MyNewChart = new Chart(ctx).Line(data);
 	</script>
 </body>
 
