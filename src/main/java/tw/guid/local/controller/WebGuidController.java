@@ -17,6 +17,7 @@ import java.io.ByteArrayInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -173,6 +174,7 @@ public class WebGuidController {
             spGuid.setHashcode2(hashcode2);
             spGuid.setHashcode3(hashcode3);
             spGuid.setPrefix(prefix);
+            spGuid.setCreatedAt(Calendar.getInstance().getTime());
             subprimeGuidRepo.save(spGuid);
             Association association = new Association();
             association.setSpguid(subprimeGuid);
@@ -316,6 +318,7 @@ public class WebGuidController {
           spGuid.setHashcode2(hashcode2);
           spGuid.setHashcode3(hashcode3);
           spGuid.setPrefix(prefix);
+          spGuid.setCreatedAt(Calendar.getInstance().getTime());
           subprimeGuidRepo.save(spGuid);
           Association association = new Association();
           association.setSpguid(subprimeGuid);
