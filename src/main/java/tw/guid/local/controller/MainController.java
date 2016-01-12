@@ -66,4 +66,8 @@ public class MainController {
     return "login";
   }
 
+  @RequestMapping("/analysis")
+  String analysis() {
+    return "analysis";
+  }
 }
