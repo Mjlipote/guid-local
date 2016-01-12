@@ -6,12 +6,12 @@
 </head>
 
 <body>
-	<canvas id="c" width="1000" height="1000"></canvas>
+	<canvas id="c" width="800" height="800"></canvas>
 	<script
 		src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/1.0.2/Chart.min.js"></script>
 	<script>
 		var ctx = document.getElementById('c').getContext('2d');
-		$.getJSON('https://localhost:8443/analysis/lookup', {
+		$.getJSON('/analysis/lookup', {
 			start : 2016,
 			end : 2016
 		}, function(res) {
