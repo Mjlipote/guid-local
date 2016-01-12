@@ -2,7 +2,7 @@
 <html>
 
 <head>
-<script type="text/javascript" src="jquery-1.6.2.min.js"></script>
+<script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
 </head>
 
 <body>
@@ -11,7 +11,7 @@
 		src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/1.0.2/Chart.min.js"></script>
 	<script>
 		var ctx = document.getElementById("c").getContext("2d");
-		var data = $.get("https://localhost:8443/analysis/lookup", {
+		var data = $.getJSON("https://localhost:8443/analysis/lookup?", {
 			start : 2016,
 			end : 2016
 		}, function(data) {
