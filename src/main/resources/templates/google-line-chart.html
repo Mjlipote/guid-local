@@ -10,26 +10,24 @@
 	google.charts.setOnLoadCallback(drawChart);
 
 	function drawChart() {
-		var value = $.getJSON('/analysis/lineChart', {
+		$.getJSON('/analysis/lineChart', {
 			year : 2016
+		}, function(res) {
+			var data = new google.visualization.DataTable(res, 0.6);
+
+			var options = {
+				title : 'GUID Count Number',
+				curveType : 'function',
+				legend : {
+					position : 'bottom'
+				}
+			};
+
+			var chart = new google.visualization.LineChart(document
+					.getElementById('curve_chart'));
+
+			chart.draw(data, options);
 		});
-
-		console.log(value);
-
-		var data = new google.visualization.DataTable(value, 0.6);
-
-		var options = {
-			title : 'GUID Count Number',
-			curveType : 'function',
-			legend : {
-				position : 'bottom'
-			}
-		};
-
-		var chart = new google.visualization.LineChart(document
-				.getElementById('curve_chart'));
-
-		chart.draw(data, options);
 	}
 </script>
 </head>
