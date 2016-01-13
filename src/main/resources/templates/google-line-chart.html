@@ -10,128 +10,13 @@
 	google.charts.setOnLoadCallback(drawChart);
 
 	function drawChart() {
-		var value = $.getJSON('/analysis/googleLineChart', {
-			start : 2016,
-			end : 2016
+		var value = $.getJSON('/analysis/lineChart', {
+			year : 2016
 		});
 
-		var v1 = {
-			"cols" : [ {
-				"id" : "month",
-				"label" : "Mounth",
-				"type" : "string"
-			}, {
-				"id" : "prefix",
-				"label" : "YMU",
-				"type" : "number"
-			}, {
-				"id" : "prefix",
-				"label" : "TEST",
-				"type" : "number"
-			} ],
-			"rows" : [ {
-				"c" : [ {
-					"v" : "JANUARY"
-				}, {
-					"v" : 2
-				}, {
-					"v" : 1
-				} ]
-			}, {
-				"c" : [ {
-					"v" : "FEBRUARY"
-				}, {
-					"v" : 0
-				}, {
-					"v" : 0
-				} ]
-			}, {
-				"c" : [ {
-					"v" : "MARCH"
-				}, {
-					"v" : 0
-				}, {
-					"v" : 0
-				} ]
-			}, {
-				"c" : [ {
-					"v" : "APRIL"
-				}, {
-					"v" : 0
-				}, {
-					"v" : 0
-				} ]
-			}, {
-				"c" : [ {
-					"v" : "MAY"
-				}, {
-					"v" : 0
-				}, {
-					"v" : 0
-				} ]
-			}, {
-				"c" : [ {
-					"v" : "JUNE"
-				}, {
-					"v" : 0
-				}, {
-					"v" : 0
-				} ]
-			}, {
-				"c" : [ {
-					"v" : "JULY"
-				}, {
-					"v" : 0
-				}, {
-					"v" : 0
-				} ]
-			}, {
-				"c" : [ {
-					"v" : "AUGUST"
-				}, {
-					"v" : 0
-				}, {
-					"v" : 0
-				} ]
-			}, {
-				"c" : [ {
-					"v" : "SEPTEMBER"
-				}, {
-					"v" : 0
-				}, {
-					"v" : 0
-				} ]
-			}, {
-				"c" : [ {
-					"v" : "OCTOBER"
-				}, {
-					"v" : 0
-				}, {
-					"v" : 0
-				} ]
-			}, {
-				"c" : [ {
-					"v" : "NOVEMBER"
-				}, {
-					"v" : 0
-				}, {
-					"v" : 0
-				} ]
-			}, {
-				"c" : [ {
-					"v" : "DECEMBER"
-				}, {
-					"v" : 0
-				}, {
-					"v" : 0
-				} ]
-			} ]
-		}
-
 		console.log(value);
-		console.log(v1);
 
-		var data = new google.visualization.DataTable(v1, 0.6);
+		var data = new google.visualization.DataTable(value, 0.6);
 
 		var options = {
 			title : 'GUID Count Number',
