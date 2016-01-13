@@ -73,4 +73,8 @@ public class MainController {
     return "google-line-chart";
   }
 
+  @RequestMapping(value = "/pie-chart", method = GET)
+  String pieChart() {
+    return "google-pie-chart";
+  }
 }

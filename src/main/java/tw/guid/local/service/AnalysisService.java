@@ -29,4 +29,8 @@ public interface AnalysisService {
   public DataTable lineChartBetweenByPrefix(String prefix, Integer start,
       Integer end);
 
+  public DataTable pieChartAll();
+
+  public DataTable pieChartBetween(Integer start, Integer end);
+
 }

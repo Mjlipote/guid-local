@@ -80,4 +80,14 @@ public class AnalysisController {
     return analysisService.lineChartBetweenByPrefix(prefix, start, end);
   }
 
+  @RequestMapping(value = "/pie-chart-all", method = GET)
+  DataTable pieChartAll() {
+    return analysisService.pieChartAll();
+  }
+
+  @RequestMapping(value = "/pie-chart-between", method = GET)
+  DataTable pieChartBetween(@Param("start") Integer start,
+      @Param("end") Integer end) {
+    return analysisService.pieChartBetween(start, end);
+  }
 }

@@ -216,4 +216,51 @@ public class AnalysisServiceImpl implements AnalysisService {
     return dataTable;
   }
 
+  @Override
+  public DataTable pieChartAll() {
+    List<Cols> colsList =
+        newArrayList(new Cols("prefix", "Prefix", Type.STRING),
+            new Cols("number", "Number", Type.NUMBER));
+    List<Rows> rowsList = newArrayList();
+    for (String p : institutePrefixRepo.getAllPrefix()) {
+      if (subprimeGuidRepo.findByPrefix(p).size() > 0) {
+        Value<String> strValue = new Value<>();
+        strValue.setV(p);
+        Value<Integer> numValue = new Value<>();
+        numValue.setV(subprimeGuidRepo.findByPrefix(p).size());
+        Rows row = new Rows(newArrayList(strValue, numValue));
+        rowsList.add(row);
+      }
+    }
+    DataTable dataTable = new DataTable(colsList, rowsList);
+    return dataTable;
+  }
+
+  @Override
+  public DataTable pieChartBetween(Integer start, Integer end) {
+    if (end < start) {
+      int temp = start;
+      start = end;
+      end = temp;
+    }
+    List<Cols> colsList =
+        newArrayList(new Cols("prefix", "Prefix", Type.STRING),
+            new Cols("number", "Number", Type.NUMBER));
+    List<Rows> rowsList = newArrayList();
+    for (String p : institutePrefixRepo.getAllPrefix()) {
+      if (subprimeGuidRepo.findByPrefix(p).size() > 0) {
+        Value<String> strValue = new Value<>();
+        strValue.setV(p);
+        Value<Integer> numValue = new Value<>();
+        numValue.setV(subprimeGuidRepo.countByPrefixAndCreatedAtBetween(p,
+            RubyCollections.date(start).beginningOfYear(),
+            RubyCollections.date(end).endOfYear()));
+        Rows row = new Rows(newArrayList(strValue, numValue));
+        rowsList.add(row);
+      }
+    }
+    DataTable dataTable = new DataTable(colsList, rowsList);
+    return dataTable;
+  }
+
 }
