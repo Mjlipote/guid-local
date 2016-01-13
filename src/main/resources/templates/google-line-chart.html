@@ -1,5 +1,8 @@
-<html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorator="layout">
 <head>
+<title>Line Chart</title>
 <script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
 <script type="text/javascript"
 	src="https://www.gstatic.com/charts/loader.js"></script>
@@ -10,7 +13,7 @@
 	google.charts.setOnLoadCallback(drawChart);
 
 	function drawChart() {
-		$.getJSON('/analysis/line-chart', {
+		$.getJSON('/analysis/line-chart-all', {
 			year : 2016
 		}, function(res) {
 			var data = new google.visualization.DataTable(res, 0.6);
@@ -32,6 +35,8 @@
 </script>
 </head>
 <body>
-	<div id="curve_chart" style="width: 900px; height: 500px"></div>
+	<div layout:fragment="content" id="wrap">
+		<div id="curve_chart" style="width: 1000px; height: 600px"></div>
+	</div>
 </body>
 </html>
