@@ -35,35 +35,46 @@ public class AnalysisController {
     return analysisService.countAllSubprimeGuid();
   }
 
-  @RequestMapping(value = "/totalByYear", method = GET)
+  @RequestMapping(value = "/total-by-year", method = GET)
   Integer countSubprimeGuidByYear(@Param("year") Integer year) {
     return analysisService.countSubprimeGuidByYear(year);
   }
 
-  @RequestMapping(value = "/totalBetween", method = GET)
+  @RequestMapping(value = "/total-between", method = GET)
   Integer countSubprimeGuidBetween(@Param("start") Integer start,
       @Param("end") Integer end) {
     return analysisService.countSubprimeGuidBetween(start, end);
   }
 
-  @RequestMapping(value = "/lineChart", method = GET)
+  @RequestMapping(value = "/line-chart", method = GET)
   DataTable lineChart(@Param("year") Integer year) {
     return analysisService.lineChart(year);
   }
 
-  @RequestMapping(value = "/lineChartByPrefix", method = GET)
+  @RequestMapping(value = "/line-chart-all", method = GET)
+  DataTable lineChartAll(@Param("year") Integer year) {
+    return analysisService.lineChartAll(year);
+  }
+
+  @RequestMapping(value = "/line-chart-by-prefix", method = GET)
   DataTable lineChartByPrefix(@Param("prefix") String prefix,
       @Param("year") Integer year) {
     return analysisService.lineChartByPrefix(prefix, year);
   }
 
-  @RequestMapping(value = "/lineChartBetween", method = GET)
+  @RequestMapping(value = "/line-chart-between", method = GET)
   DataTable lineChartBetween(@Param("start") Integer start,
       @Param("end") Integer end) {
     return analysisService.lineChartBetween(start, end);
   }
 
-  @RequestMapping(value = "/lineChartBetweenByPrefix", method = GET)
+  @RequestMapping(value = "/line-chart-all-between", method = GET)
+  DataTable lineChartAllBetween(@Param("start") Integer start,
+      @Param("end") Integer end) {
+    return analysisService.lineChartAllBetween(start, end);
+  }
+
+  @RequestMapping(value = "/line-chart-between-by-prefix", method = GET)
   DataTable lineChartBetweenByPrefix(@Param("prefix") String prefix,
       @Param("start") Integer start, @Param("end") Integer end) {
     return analysisService.lineChartBetweenByPrefix(prefix, start, end);

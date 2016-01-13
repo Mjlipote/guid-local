@@ -85,6 +85,29 @@ public class AnalysisServiceImpl implements AnalysisService {
   }
 
   @Override
+  public DataTable lineChartAll(Integer year) {
+    List<Cols> colsList =
+        newArrayList(new Cols("month", "Mounth", Type.STRING));
+    List<Rows> rowsList = newArrayList();
+    for (int i = 0; i < 12; i++) {
+      Value<String> value = new Value<>();
+      value.setV(MONTH.get(i));
+      Rows row = new Rows(newArrayList(value));
+      rowsList.add(row);
+    }
+    colsList.add(new Cols("guid", "GUID", Type.NUMBER));
+    for (int i = 0; i < 12; i++) {
+      Value<Integer> value = new Value<>();
+      value.setV(subprimeGuidRepo.countByCreatedAtBetween(
+          RubyCollections.date(year, i + 1).beginningOfMonth(),
+          RubyCollections.date(year, i + 1).endOfMonth()));
+      rowsList.get(i).getC().add(value);
+    }
+    DataTable dataTable = new DataTable(colsList, rowsList);
+    return dataTable;
+  }
+
+  @Override
   public DataTable lineChartByPrefix(String prefix, Integer year) {
     List<Cols> colsList =
         newArrayList(new Cols("month", "Mounth", Type.STRING));
@@ -139,6 +162,33 @@ public class AnalysisServiceImpl implements AnalysisService {
   }
 
   @Override
+  public DataTable lineChartAllBetween(Integer start, Integer end) {
+    if (end < start) {
+      int temp = start;
+      start = end;
+      end = temp;
+    }
+    List<Cols> colsList = newArrayList(new Cols("year", "Year", Type.STRING));
+    List<Rows> rowsList = newArrayList();
+    for (int i = 0; i <= end - start; i++) {
+      Value<String> value = new Value<>();
+      value.setV(String.valueOf(start + i));
+      Rows row = new Rows(newArrayList(value));
+      rowsList.add(row);
+    }
+    colsList.add(new Cols("guid", "GUID", Type.NUMBER));
+    for (int i = 0; i <= end - start; i++) {
+      Value<Integer> value = new Value<>();
+      value.setV(subprimeGuidRepo.countByCreatedAtBetween(
+          RubyCollections.date(start + i).beginningOfYear(),
+          RubyCollections.date(start + i).endOfYear()));
+      rowsList.get(i).getC().add(value);
+    }
+    DataTable dataTable = new DataTable(colsList, rowsList);
+    return dataTable;
+  }
+
+  @Override
   public DataTable lineChartBetweenByPrefix(String prefix, Integer start,
       Integer end) {
     if (end < start) {
@@ -165,4 +215,5 @@ public class AnalysisServiceImpl implements AnalysisService {
     DataTable dataTable = new DataTable(colsList, rowsList);
     return dataTable;
   }
+
 }

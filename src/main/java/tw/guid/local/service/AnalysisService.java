@@ -18,9 +18,13 @@ public interface AnalysisService {
 
   public DataTable lineChart(Integer year);
 
+  public DataTable lineChartAll(Integer year);
+
   public DataTable lineChartByPrefix(String prefix, Integer year);
 
   public DataTable lineChartBetween(Integer start, Integer end);
+
+  public DataTable lineChartAllBetween(Integer start, Integer end);
 
   public DataTable lineChartBetweenByPrefix(String prefix, Integer start,
       Integer end);
