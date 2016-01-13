@@ -4,7 +4,7 @@
  * @author Ming-Jheng Li
  *
  */
-package tw.guid.local.web;
+package tw.guid.local.controller;
 
 public enum Action {
 

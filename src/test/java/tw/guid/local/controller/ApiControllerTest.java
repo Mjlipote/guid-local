@@ -39,7 +39,6 @@ import com.github.wnameless.workbookaccessor.WorkbookReader;
 
 import tw.guid.local.Application;
 import tw.guid.local.repository.SubprimeGuidRepository;
-import tw.guid.local.web.Action;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = Application.class)

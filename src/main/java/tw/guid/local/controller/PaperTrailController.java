@@ -6,6 +6,8 @@
  */
 package tw.guid.local.controller;
 
+import static org.springframework.web.bind.annotation.RequestMethod.GET;
+
 import java.text.ParseException;
 import java.util.Date;
 
@@ -14,7 +16,6 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 
 import net.sf.rubycollect4j.RubyCollections;
 import tw.guid.local.repository.AccountUsersRepository;
@@ -30,7 +31,7 @@ public class PaperTrailController {
   @Autowired
   PaperTrailRepository paperTrailRepo;
 
-  @RequestMapping(method = RequestMethod.GET)
+  @RequestMapping(method = GET)
   String trail(ModelMap map) {
     map.addAttribute("remoteAddrs", paperTrailRepo.getAllRemoteAddr());
     map.addAttribute("userIds", paperTrailRepo.getAllUserId());
@@ -40,16 +41,20 @@ public class PaperTrailController {
     return "trail";
   }
 
-  @RequestMapping(value = "/lookup", method = RequestMethod.GET)
+  @RequestMapping(value = "/lookup", method = GET)
   String trailLookup(ModelMap map, @Param("userId") String userId,
-      @Param("createdAt") String createdAt) throws ParseException {
-
+      @Param("createdAt") String createdAt,
+      @Param("createdEnd") String createdEnd) throws ParseException {
     int year = Integer.valueOf(createdAt.split("/")[0]);
     int month = Integer.valueOf(createdAt.split("/")[1]);
     int day = Integer.valueOf(createdAt.split("/")[2]);
 
+    int yearEnd = Integer.valueOf(createdEnd.split("/")[0]);
+    int monthEnd = Integer.valueOf(createdEnd.split("/")[1]);
+    int dayEnd = Integer.valueOf(createdEnd.split("/")[2]);
+
     Date startDate = RubyCollections.date(year, month, day).beginningOfDay();
-    Date endDate = RubyCollections.date(year, month, day).endOfDay();
+    Date endDate = RubyCollections.date(yearEnd, monthEnd, dayEnd).endOfDay();
 
     map.addAttribute("userIds", paperTrailRepo.getAllUserId());
     map.addAttribute("paperTrails",
@@ -60,4 +65,5 @@ public class PaperTrailController {
 
     return "trail";
   }
+
 }

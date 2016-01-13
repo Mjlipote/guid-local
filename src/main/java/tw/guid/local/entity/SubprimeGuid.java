@@ -6,6 +6,8 @@
  */
 package tw.guid.local.entity;
 
+import java.util.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Convert;
 import javax.persistence.Entity;
@@ -26,6 +28,9 @@ public class SubprimeGuid extends AbstractPersistable<Long> {
 
   @Column(nullable = false)
   private String prefix;
+
+  @Column(nullable = false)
+  private Date createdAt;
 
   @Column(nullable = false, length = 512)
   @Convert(converter = HashCodeConverter.class)
@@ -67,6 +72,21 @@ public class SubprimeGuid extends AbstractPersistable<Long> {
    */
   public void setSpguid(String spguid) {
     this.spguid = spguid;
+  }
+
+  /**
+   * @return the createdAt
+   */
+  public Date getCreatedAt() {
+    return createdAt;
+  }
+
+  /**
+   * @param createdAt
+   *          the createdAt to set
+   */
+  public void setCreatedAt(Date createdAt) {
+    this.createdAt = createdAt;
   }
 
   /**
@@ -117,8 +137,9 @@ public class SubprimeGuid extends AbstractPersistable<Long> {
   @Override
   public String toString() {
     return MoreObjects.toStringHelper(this).add("spguid", spguid)
-        .add("prefix", prefix).add("hashcode1", hashcode1)
-        .add("hashcode2", hashcode2).add("hashcode3", hashcode3).toString();
+        .add("prefix", prefix).add("createdAt", createdAt)
+        .add("hashcode1", hashcode1).add("hashcode2", hashcode2)
+        .add("hashcode3", hashcode3).toString();
   }
 
 }

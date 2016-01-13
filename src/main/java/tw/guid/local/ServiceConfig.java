@@ -12,6 +12,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import tw.guid.local.service.AnalysisService;
+import tw.guid.local.service.AnalysisServiceImpl;
 import tw.guid.local.service.ApiService;
 import tw.guid.local.service.ApiServiceImpl;
 import tw.guid.local.service.LegacyServiceImpl;
@@ -30,6 +32,11 @@ public class ServiceConfig {
       @Value("${guid.legacy.client.key}") String clientKey)
           throws URISyntaxException {
     return new LegacyServiceImpl(centralServer, clientKey);
+  }
+
+  @Bean
+  public AnalysisService analysisService() {
+    return new AnalysisServiceImpl();
   }
 
 }

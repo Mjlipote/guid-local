@@ -1,7 +1,12 @@
-/*Copyright(c)2015 ReiMed Co.to present.*All rights reserved.**@author Ming-Jheng Li**/package tw.guid.local.controller;
+/*
+ * Copyright(c)2015 ReiMed Co.to present.
+ * All rights reserved.
+ */
+package tw.guid.local.controller;
 
 import static com.google.common.collect.Lists.newArrayList;
 import static com.google.common.collect.Sets.newHashSet;
+import static net.sf.rubycollect4j.RubyCollections.ra;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
@@ -11,7 +16,6 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
@@ -35,21 +39,15 @@ import tw.edu.ym.guid.client.field.Sex;
 import tw.edu.ym.guid.client.field.TWNationalId;
 import tw.guid.central.core.PrefixedHashBundle;
 import tw.guid.central.core.PublicGuid;
-import tw.guid.local.ApplicationTest;
+import tw.guid.local.Application;
 import tw.guid.local.entity.SubprimeGuid;
-import tw.guid.local.helper.CentralServerApiHelper;
 import tw.guid.local.repository.SubprimeGuidRepository;
 import tw.guid.local.security.HashCodeEncryptorHolder;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(classes = ApplicationTest.class)
+@SpringApplicationConfiguration(classes = Application.class)
 @WebIntegrationTest
 public class LegacyControllerTest {
-
-  PrefixedHashBundle legacyEncodable;
-  PrefixedHashBundle legacyEncodable1;
-  PrefixedHashBundle newEncodable;
-  PrefixedHashBundle invalidEncodable;
 
   @Autowired
   HashCodeEncryptorHolder holder;
@@ -63,49 +61,43 @@ public class LegacyControllerTest {
 
   @Autowired
   Environment env;
-
   @Autowired
   SubprimeGuidRepository subprimeGuidRepo;
+  @Autowired
+  tw.guid.client.GuidClient guidClient;
 
   @Value("${guid.legacy.central.server}")
   String centralServerUrl;
-
   @Value("${guid.legacy.client.key}")
   String publicKey;
   String localServerUrl = "https://localhost:8443";
-  GuidClient guidClient;
-  PII pii;
+  GuidClient guidClientWithNewPrefix;
+  GuidClient guidClientWithNewPrefix1;
+  GuidClient guidClientWithLegacyPrefix;
+  GuidClient guidClientWithLegacyPrefix1;
+  PII legacyPii;
+  PII newPii;
+  PII newPii1;
+  PII newPii2;
 
   @Before
   public void setUp() throws Exception {
-    legacyEncodable = new PrefixedHashBundle();
-    legacyEncodable.setPrefix("CCH24");
-    legacyEncodable.setHash1(
-        "293ae00f7a0088e628d5386da01b40fa0491a82498af7a88ca8147a9ca601e8583b4b5c8e4af045cd2554da4af5b82a24f0bef25cea9867879ef05460fa386bf");
-    legacyEncodable.setHash2(
-        "cadfd5da66fecd9f6475614c2029fc35c1be89076f4262ccf1184c61e25dcbdd690dbc7f65b79b826ba2a840165b073aff038ee090f3fa1fe3fdf7cee2530a64");
-    legacyEncodable.setHash3(
-        "01033b50d8d2a018e466009bf2cbb6334853696c7406f0ac9845d4b9e543ef9f2c8f1c903a57298ae5211d1f5a64332a7d8bec8de7f54837ab6aeadde5dfb20f");
-    legacyEncodable1 = new PrefixedHashBundle();
-    legacyEncodable1.setPrefix("VGH16");
-    legacyEncodable1.setHash1(
-        "293ae00f7a0088e628d5386da01b40fa0491a82498af7a88ca8147a9ca601e8583b4b5c8e4af045cd2554da4af5b82a24f0bef25cea9867879ef05460fa386bf");
-    legacyEncodable1.setHash2(
-        "cadfd5da66fecd9f6475614c2029fc35c1be89076f4262ccf1184c61e25dcbdd690dbc7f65b79b826ba2a840165b073aff038ee090f3fa1fe3fdf7cee2530a64");
-    legacyEncodable1.setHash3(
-        "01033b50d8d2a018e466009bf2cbb6334853696c7406f0ac9845d4b9e543ef9f2c8f1c903a57298ae5211d1f5a64332a7d8bec8de7f54837ab6aeadde5dfb20f");
-    newEncodable = new PrefixedHashBundle();
-    newEncodable.setPrefix("XXYYZZ");
-    newEncodable.setHash1(
-        "193ae00f7a0088e628d5386da01b40fa0491a82498af7a88ca8147a9ca601e8583b4b5c8e4af045cd2554da4af5b82a24f0bef25cea9867879ef05460fa386bf");
-    newEncodable.setHash2(
-        "1adfd5da66fecd9f6475614c2029fc35c1be89076f4262ccf1184c61e25dcbdd690dbc7f65b79b826ba2a840165b073aff038ee090f3fa1fe3fdf7cee2530a64");
-    newEncodable.setHash3(
-        "11033b50d8d2a018e466009bf2cbb6334853696c7406f0ac9845d4b9e543ef9f2c8f1c903a57298ae5211d1f5a64332a7d8bec8de7f54837ab6aeadde5dfb20f");
-    guidClient =
-        new GuidClient(new URI(localServerUrl), "admin", "password", "TEST");
-    pii = new PII.Builder(new Name("大頭", "王"), Sex.MALE,
-        new Birthday(2012, 1, 11), new TWNationalId("A123456789")).build();
+    guidClientWithNewPrefix =
+        new GuidClient(new URI(localServerUrl), "admin", "password", "Test");
+    guidClientWithNewPrefix1 =
+        new GuidClient(new URI(localServerUrl), "admin", "password", "Guid");
+    guidClientWithLegacyPrefix =
+        new GuidClient(new URI(localServerUrl), "admin", "password", "NTUH14");
+    guidClientWithLegacyPrefix1 =
+        new GuidClient(new URI(localServerUrl), "admin", "password", "CCH24");
+    legacyPii = new PII.Builder(new Name("明政", "李"), Sex.MALE,
+        new Birthday(1979, 7, 21), new TWNationalId("E122371585")).build();
+    newPii = new PII.Builder(new Name("大頭", "巫"), Sex.MALE,
+        new Birthday(2000, 7, 7), new TWNationalId("A123456789")).build();
+    newPii1 = new PII.Builder(new Name("光棍", "施"), Sex.MALE,
+        new Birthday(2010, 11, 11), new TWNationalId("A123456789")).build();
+    newPii2 = new PII.Builder(new Name("小賓", "鄭"), Sex.MALE,
+        new Birthday(1977, 7, 7), new TWNationalId("A123456789")).build();
   }
 
   @Test
@@ -122,9 +114,7 @@ public class LegacyControllerTest {
       throws IOException, URISyntaxException {
     GuidClient gc =
         new GuidClient(new URI(localServerUrl), "admin", "password", "VGH16");
-    PII pii = new PII.Builder(new Name("明政", "李"), Sex.MALE,
-        new Birthday(1979, 7, 21), new TWNationalId("E122371585")).build();
-    assertEquals(gc.create(pii), "VGH16-3AC3DEC6");
+    assertEquals(gc.create(legacyPii), "VGH16-3AC3DEC6");
   }
 
   @Test
@@ -132,24 +122,69 @@ public class LegacyControllerTest {
       throws IOException, URISyntaxException {
     PrefixedHashBundle prefixedHashBundle = new PrefixedHashBundle();
     prefixedHashBundle.setPrefix("Test");
-    prefixedHashBundle.setHash1(pii.getHashcodes().get(0));
-    prefixedHashBundle.setHash2(pii.getHashcodes().get(1));
-    prefixedHashBundle.setHash3(pii.getHashcodes().get(2));
+    prefixedHashBundle.setHash1(newPii.getHashcodes().get(0));
+    prefixedHashBundle.setHash2(newPii.getHashcodes().get(1));
+    prefixedHashBundle.setHash3(newPii.getHashcodes().get(2));
     assertFalse(subprimeGuidRepo.isExist(prefixedHashBundle));
-    String spguid = guidClient.create(pii);
+    String spguid = guidClientWithNewPrefix.create(newPii);
     assertTrue(subprimeGuidRepo.findBySpguid(spguid) != null);
   }
 
   @Test
-  public void testGrouping() throws Exception {
+  public void testGroupingWithLegacyPrefixAndLegacyPii() throws Exception {
     List<PublicGuid> list = newArrayList();
-    list.addAll(Arrays.asList(new PublicGuid("VGH16", "3AC3DEC6"),
-        new PublicGuid("PSEUDO", "21O73GQB")));
-    Collection<Set<String>> sets = CentralServerApiHelper
-        .groupings(new URI(centralServerUrl), publicKey, list);
-    Set<String> set = newHashSet();
-    set.addAll(Arrays.asList("VGH16-3AC3DEC6", "PSEUDO-21O73GQB"));
-    assertTrue(sets.contains(set));
+    list.addAll(Arrays.asList(new PublicGuid("TpeVGH", "79C60E65"),
+        new PublicGuid("VGH26", "AABE1DBF")));
+    List<Set<PublicGuid>> sets = guidClient.group(list);
+
+    Set<String> set = newHashSet("TpeVGH-79C60E65", "VGH26-AABE1DBF");
+    assertTrue(ra(sets.get(0)).map((s) -> s.getPrefix() + "-" + s.getCode())
+        .containsAll(set));
+  }
+
+  @Test
+  public void testGroupingWithLegacyPrefixAndNewPii() throws Exception {
+    String[] guid = guidClientWithLegacyPrefix.create(newPii1).split("-");
+    String[] guid1 = guidClientWithLegacyPrefix1.create(newPii1).split("-");
+    List<PublicGuid> list = newArrayList();
+    list.addAll(Arrays.asList(new PublicGuid(guid[0], guid[1]),
+        new PublicGuid(guid1[0], guid1[1])));
+    List<Set<PublicGuid>> sets = guidClient.group(list);
+
+    Set<String> set =
+        newHashSet(guid[0] + "-" + guid[1], guid1[0] + "-" + guid1[1]);
+    assertTrue(ra(sets.get(0)).map((s) -> s.getPrefix() + "-" + s.getCode())
+        .containsAll(set));
+  }
+
+  @Test
+  public void testGroupingWithNewPrefixAndLegacyPii() throws Exception {
+    String[] guid = guidClientWithNewPrefix.create(legacyPii).split("-");
+    String[] guid1 = guidClientWithNewPrefix1.create(legacyPii).split("-");
+    List<PublicGuid> list = newArrayList();
+    list.addAll(Arrays.asList(new PublicGuid(guid[0], guid[1]),
+        new PublicGuid(guid1[0], guid1[1])));
+    List<Set<PublicGuid>> sets = guidClient.group(list);
+
+    Set<String> set =
+        newHashSet(guid[0] + "-" + guid[1], guid1[0] + "-" + guid1[1]);
+    assertTrue(ra(sets.get(0)).map((s) -> s.getPrefix() + "-" + s.getCode())
+        .containsAll(set));
+  }
+
+  @Test
+  public void testGroupingWithNewPrefixAndNewPii() throws Exception {
+    String[] guid = guidClientWithNewPrefix.create(newPii2).split("-");
+    String[] guid1 = guidClientWithNewPrefix1.create(newPii2).split("-");
+    List<PublicGuid> list = newArrayList();
+    list.addAll(Arrays.asList(new PublicGuid(guid[0], guid[1]),
+        new PublicGuid(guid1[0], guid1[1])));
+    List<Set<PublicGuid>> sets = guidClient.group(list);
+
+    Set<String> set =
+        newHashSet(guid[0] + "-" + guid[1], guid1[0] + "-" + guid1[1]);
+    assertTrue(ra(sets.get(0)).map((s) -> s.getPrefix() + "-" + s.getCode())
+        .containsAll(set));
   }
 
   @Test
@@ -170,18 +205,19 @@ public class LegacyControllerTest {
 
   @Test
   public void testFindSubprimeGuidBySubprimeGuid() throws IOException {
-    String spguid = guidClient.create(pii);
+    String spguid = guidClientWithLegacyPrefix.create(legacyPii);
     assertTrue(subprimeGuidRepo.findBySpguid(spguid) != null);
   }
 
   @Test
   public void testFindSubprimeGuidByHashesAndPrefixUsingLegacyGuidClient()
       throws IOException {
-    guidClient.create(pii);
+    guidClientWithNewPrefix.create(legacyPii);
     assertNotNull(
         subprimeGuidRepo.findByHashcode1AndHashcode2AndHashcode3AndPrefix(
-            pii.getHashcodes().get(0).substring(0, 128).toUpperCase(),
-            pii.getHashcodes().get(1).substring(0, 128).toUpperCase(),
-            pii.getHashcodes().get(2).substring(0, 128).toUpperCase(), "TEST"));
+            legacyPii.getHashcodes().get(0).substring(0, 128).toUpperCase(),
+            legacyPii.getHashcodes().get(1).substring(0, 128).toUpperCase(),
+            legacyPii.getHashcodes().get(2).substring(0, 128).toUpperCase(),
+            "Test"));
   }
 }

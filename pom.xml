@@ -85,14 +85,9 @@
 			<version>1.8.1</version>
 		</dependency>
 		<dependency>
-			<groupId>org.apache.poi</groupId>
-			<artifactId>poi</artifactId>
-			<version>3.12</version>
-		</dependency>
-		<dependency>
 			<groupId>tw.guid.client</groupId>
 			<artifactId>guid-client-java</artifactId>
-			<version>0.1.1</version>
+			<version>0.3.0</version>
 		</dependency>
 
 		<!-- Testing -->
@@ -117,6 +112,7 @@
 			<groupId>tw.edu.ym.guid</groupId>
 			<artifactId>guid-client</artifactId>
 			<version>1.3.1</version>
+			<scope>test</scope>
 		</dependency>
 	</dependencies>
 

@@ -6,6 +6,9 @@
  */
 package tw.guid.local.repository;
 
+import java.util.Date;
+import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import tw.guid.central.core.PrefixedHashBundle;
@@ -18,6 +21,16 @@ public interface SubprimeGuidRepository
       String hashcode1, String hashcode2, String hashcode3, String prefix);
 
   public SubprimeGuid findBySpguid(String spguid);
+
+  public List<SubprimeGuid> findByPrefix(String prefix);
+
+  public List<SubprimeGuid> findByPrefixAndCreatedAtBetween(String prefix,
+      Date startDate, Date endDate);
+
+  public Integer countByPrefixAndCreatedAtBetween(String prefix, Date startDate,
+      Date endDate);
+
+  public Integer countByCreatedAtBetween(Date startDate, Date endDate);
 
   default public boolean isExist(PrefixedHashBundle prefixedHashBundle) {
     return findByHashcode1AndHashcode2AndHashcode3AndPrefix(

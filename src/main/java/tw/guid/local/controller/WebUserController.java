@@ -8,6 +8,10 @@ package tw.guid.local.controller;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.collect.Sets.newHashSet;
+import static org.springframework.web.bind.annotation.RequestMethod.DELETE;
+import static org.springframework.web.bind.annotation.RequestMethod.GET;
+import static org.springframework.web.bind.annotation.RequestMethod.POST;
+import static org.springframework.web.bind.annotation.RequestMethod.PUT;
 
 import java.util.List;
 import java.util.Set;
@@ -20,7 +24,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import tw.guid.local.entity.AccountUser;
@@ -52,7 +55,7 @@ public class WebUserController {
    * @param page
    * @return
    */
-  @RequestMapping(method = RequestMethod.GET)
+  @RequestMapping(method = GET)
   String usersList(ModelMap map) {
 
     map.addAttribute("prefixs", institutePrefixRepo.getAllPrefix());
@@ -71,7 +74,7 @@ public class WebUserController {
    * @param page
    * @return
    */
-  @RequestMapping(value = "/lookup", method = RequestMethod.GET)
+  @RequestMapping(value = "/lookup", method = GET)
   String usersLookup(ModelMap map, @Param("username") String username,
       @Param("role") String role, @Param("institute") String institute,
       @Param("jobTitle") String jobTitle, @Param("email") String email,
@@ -129,7 +132,7 @@ public class WebUserController {
    * @param username
    * @return
    */
-  @RequestMapping(value = "/{username}", method = RequestMethod.DELETE)
+  @RequestMapping(value = "/{username}", method = DELETE)
   String usersRemove(ModelMap map, @PathVariable("username") String username) {
 
     if (username.equals("")) {
@@ -172,7 +175,7 @@ public class WebUserController {
    * @param prefix
    * @return
    */
-  @RequestMapping(method = RequestMethod.POST)
+  @RequestMapping(method = POST)
   String usersNew(ModelMap map,
       @RequestParam(value = "username") String username,
       @RequestParam(value = "password") String password,
@@ -226,7 +229,7 @@ public class WebUserController {
    * @param username
    * @return
    */
-  @RequestMapping(value = "/{username}", method = RequestMethod.GET)
+  @RequestMapping(value = "/{username}", method = GET)
   String usersGetPersonalInfo(ModelMap map,
       @PathVariable("username") String username) {
 
@@ -245,7 +248,7 @@ public class WebUserController {
    * @param username
    * @return
    */
-  @RequestMapping(value = "/{username}", method = RequestMethod.PUT)
+  @RequestMapping(value = "/{username}", method = PUT)
   String usersEdit(ModelMap map, @PathVariable("username") String username,
       @Param(value = "email") String email,
       @Param(value = "jobTitle") String jobTitle,
@@ -273,15 +276,14 @@ public class WebUserController {
     }
   }
 
-  @RequestMapping(value = "/changepassword", method = RequestMethod.GET)
+  @RequestMapping(value = "/changepassword", method = GET)
   String usersChangePasswordWebpage() {
 
     return "change-password";
 
   }
 
-  @RequestMapping(value = "/changepassword/{username}",
-      method = RequestMethod.PUT)
+  @RequestMapping(value = "/changepassword/{username}", method = PUT)
   String usersChangePassword(ModelMap map,
       @PathVariable("username") String username,
       @Param(value = "oldpassword") String oldpassword,

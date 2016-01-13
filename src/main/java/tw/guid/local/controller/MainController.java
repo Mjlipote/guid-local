@@ -6,6 +6,8 @@
  */
 package tw.guid.local.controller;
 
+import static org.springframework.web.bind.annotation.RequestMethod.GET;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -25,45 +27,54 @@ public class MainController {
   @Autowired
   PaperTrailRepository paperTrailRepo;
 
-  @RequestMapping("/home")
+  @RequestMapping(value = "/home", method = GET)
   String home() {
     return "home";
   }
 
-  @RequestMapping("/register")
+  @RequestMapping(value = "/register", method = GET)
   String usersRegister(ModelMap map) {
     map.addAttribute("institutes", institutePrefixRepository.getAllInstitute());
     return "register";
   }
 
-  @RequestMapping("/guids")
+  @RequestMapping(value = "/guids", method = GET)
   String guidsNew() {
     return "guids";
   }
 
-  @RequestMapping("/comparison")
+  @RequestMapping(value = "/comparison", method = GET)
   String guidsComparison() {
     return "comparison";
   }
 
-  @RequestMapping("/batch/comparison")
+  @RequestMapping(value = "/batch/comparison", method = GET)
   String guidsBatchComparison() {
     return "batch-comparison";
   }
 
-  @RequestMapping("/guids/batch")
+  @RequestMapping(value = "/guids/batch", method = GET)
   String guidsBatchNew() {
     return "batch-guids";
   }
 
-  @RequestMapping("/remove")
+  @RequestMapping(value = "/remove", method = GET)
   String usersRemove() {
     return "users-remove";
   }
 
-  @RequestMapping("/login")
+  @RequestMapping(value = "/login", method = GET)
   String login() {
     return "login";
   }
 
+  @RequestMapping(value = "/line-chart", method = GET)
+  String lineChart() {
+    return "google-line-chart";
+  }
+
+  @RequestMapping(value = "/pie-chart", method = GET)
+  String pieChart() {
+    return "google-pie-chart";
+  }
 }

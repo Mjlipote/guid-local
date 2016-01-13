@@ -6,6 +6,7 @@
  */
 package tw.guid.local.controller;
 
+import java.util.Calendar;
 import java.util.List;
 import java.util.Set;
 
@@ -131,6 +132,7 @@ public class SetupController {
         "636ce21c211c33e6ee8e2f7590034fef8a3a5b3263c6d83af9c54b490175d649f11937e855509f57c986d1882cb5259372a37697899660afff8db6c8049de6a9");
     spguid.setPrefix("TEST");
     spguid.setSpguid("TEST-Y3XZU2NG");
+    spguid.setCreatedAt(Calendar.getInstance().getTime());
 
     spGuidRepo.save(spguid);
   }

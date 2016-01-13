@@ -13,6 +13,7 @@ import static org.springframework.http.HttpStatus.UNAUTHORIZED;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.Calendar;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -88,6 +89,7 @@ public class LegacyServiceImpl implements LegacyService {
           subprimeGuid.setHashcode1(phb.getHash1().substring(0, 128));
           subprimeGuid.setHashcode2(phb.getHash2().substring(0, 128));
           subprimeGuid.setHashcode3(phb.getHash3().substring(0, 128));
+          subprimeGuid.setCreatedAt(Calendar.getInstance().getTime());
           subprimeGuidRepo.save(subprimeGuid);
         }
       } catch (IOException e) {
