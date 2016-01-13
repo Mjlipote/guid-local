@@ -70,11 +70,11 @@ public class MainController {
 
   @RequestMapping(value = "/googleLineChart", method = GET)
   String googleLineChart() {
-    return "googleLineChart";
+    return "google-line-chart";
   }
 
   @RequestMapping(value = "/googleLineChartPrefix", method = GET)
   String googleLineChartPrefix() {
-    return "googleLineChart";
+    return "google-line-chart";
   }
 }
