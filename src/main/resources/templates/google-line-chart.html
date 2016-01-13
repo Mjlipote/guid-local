@@ -10,7 +10,7 @@
 	google.charts.setOnLoadCallback(drawChart);
 
 	function drawChart() {
-		$.getJSON('/analysis/lineChart', {
+		$.getJSON('/analysis/line-chart', {
 			year : 2016
 		}, function(res) {
 			var data = new google.visualization.DataTable(res, 0.6);

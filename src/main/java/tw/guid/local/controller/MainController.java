@@ -68,7 +68,7 @@ public class MainController {
     return "login";
   }
 
-  @RequestMapping(value = "/lineChart", method = GET)
+  @RequestMapping(value = "/line-chart", method = GET)
   String lineChart() {
     return "google-line-chart";
   }
