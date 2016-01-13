@@ -30,6 +30,8 @@ public interface SubprimeGuidRepository
   public Integer countByPrefixAndCreatedAtBetween(String prefix, Date startDate,
       Date endDate);
 
+  public Integer countByCreatedAtBetween(Date startDate, Date endDate);
+
   default public boolean isExist(PrefixedHashBundle prefixedHashBundle) {
     return findByHashcode1AndHashcode2AndHashcode3AndPrefix(
         prefixedHashBundle.getHash1().substring(0, 128),

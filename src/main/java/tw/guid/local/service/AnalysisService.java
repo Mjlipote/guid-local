@@ -12,9 +12,17 @@ public interface AnalysisService {
 
   public Integer countAllSubprimeGuid();
 
-  public DataTable googleLineChartPrefixLookup(String prefix, Integer start,
-      Integer end);
+  public Integer countSubprimeGuidByYear(Integer year);
 
-  public DataTable googleLineChartLookup(Integer start, Integer end);
+  public Integer countSubprimeGuidBetween(Integer start, Integer end);
+
+  public DataTable lineChart(Integer year);
+
+  public DataTable lineChartByPrefix(String prefix, Integer year);
+
+  public DataTable lineChartBetween(Integer start, Integer end);
+
+  public DataTable lineChartBetweenByPrefix(String prefix, Integer start,
+      Integer end);
 
 }

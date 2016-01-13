@@ -38,31 +38,27 @@ public class AnalysisServiceImpl implements AnalysisService {
   }
 
   @Override
-  public DataTable googleLineChartPrefixLookup(String prefix, Integer start,
-      Integer end) {
-    List<Cols> colsList =
-        newArrayList(new Cols("month", "Mounth", Type.STRING));
-    List<Rows> rowsList = newArrayList();
-    for (int i = 0; i < 12; i++) {
-      Value<String> value = new Value<>();
-      value.setV(MONTH.get(i));
-      Rows row = new Rows(newArrayList(value));
-      rowsList.add(row);
-    }
-    colsList.add(new Cols("prefix", prefix, Type.NUMBER));
-    for (int i = 0; i < 12; i++) {
-      Value<Integer> value = new Value<>();
-      value.setV(subprimeGuidRepo.countByPrefixAndCreatedAtBetween(prefix,
-          RubyCollections.date(start, i + 1).beginningOfMonth(),
-          RubyCollections.date(end, i + 1).endOfMonth()));
-      rowsList.get(i).getC().add(value);
-    }
-    DataTable dataTable = new DataTable(colsList, rowsList);
-    return dataTable;
+  public Integer countSubprimeGuidByYear(Integer year) {
+
+    return subprimeGuidRepo.countByCreatedAtBetween(
+        RubyCollections.date(year).beginningOfYear(),
+        RubyCollections.date(year).endOfYear());
   }
 
   @Override
-  public DataTable googleLineChartLookup(Integer start, Integer end) {
+  public Integer countSubprimeGuidBetween(Integer start, Integer end) {
+    if (end < start) {
+      int temp = start;
+      start = end;
+      end = temp;
+    }
+    return subprimeGuidRepo.countByCreatedAtBetween(
+        RubyCollections.date(start).beginningOfYear(),
+        RubyCollections.date(end).endOfYear());
+  }
+
+  @Override
+  public DataTable lineChart(Integer year) {
     List<Cols> colsList =
         newArrayList(new Cols("month", "Mounth", Type.STRING));
     List<Rows> rowsList = newArrayList();
@@ -78,8 +74,8 @@ public class AnalysisServiceImpl implements AnalysisService {
         for (int i = 0; i < 12; i++) {
           Value<Integer> value = new Value<>();
           value.setV(subprimeGuidRepo.countByPrefixAndCreatedAtBetween(p,
-              RubyCollections.date(start, i + 1).beginningOfMonth(),
-              RubyCollections.date(end, i + 1).endOfMonth()));
+              RubyCollections.date(year, i + 1).beginningOfMonth(),
+              RubyCollections.date(year, i + 1).endOfMonth()));
           rowsList.get(i).getC().add(value);
         }
       }
@@ -88,4 +84,85 @@ public class AnalysisServiceImpl implements AnalysisService {
     return dataTable;
   }
 
+  @Override
+  public DataTable lineChartByPrefix(String prefix, Integer year) {
+    List<Cols> colsList =
+        newArrayList(new Cols("month", "Mounth", Type.STRING));
+    List<Rows> rowsList = newArrayList();
+    for (int i = 0; i < 12; i++) {
+      Value<String> value = new Value<>();
+      value.setV(MONTH.get(i));
+      Rows row = new Rows(newArrayList(value));
+      rowsList.add(row);
+    }
+    colsList.add(new Cols("prefix", prefix, Type.NUMBER));
+    for (int i = 0; i < 12; i++) {
+      Value<Integer> value = new Value<>();
+      value.setV(subprimeGuidRepo.countByPrefixAndCreatedAtBetween(prefix,
+          RubyCollections.date(year, i + 1).beginningOfMonth(),
+          RubyCollections.date(year, i + 1).endOfMonth()));
+      rowsList.get(i).getC().add(value);
+    }
+    DataTable dataTable = new DataTable(colsList, rowsList);
+    return dataTable;
+  }
+
+  @Override
+  public DataTable lineChartBetween(Integer start, Integer end) {
+    if (end < start) {
+      int temp = start;
+      start = end;
+      end = temp;
+    }
+    List<Cols> colsList = newArrayList(new Cols("year", "Year", Type.STRING));
+    List<Rows> rowsList = newArrayList();
+    for (int i = 0; i <= end - start; i++) {
+      Value<String> value = new Value<>();
+      value.setV(String.valueOf(start + i));
+      Rows row = new Rows(newArrayList(value));
+      rowsList.add(row);
+    }
+    for (String p : institutePrefixRepo.getAllPrefix()) {
+      if (subprimeGuidRepo.findByPrefix(p).size() > 0) {
+        colsList.add(new Cols("prefix", p, Type.NUMBER));
+        for (int i = 0; i <= end - start; i++) {
+          Value<Integer> value = new Value<>();
+          value.setV(subprimeGuidRepo.countByPrefixAndCreatedAtBetween(p,
+              RubyCollections.date(start + i).beginningOfYear(),
+              RubyCollections.date(start + i).endOfYear()));
+          rowsList.get(i).getC().add(value);
+        }
+      }
+    }
+    DataTable dataTable = new DataTable(colsList, rowsList);
+    return dataTable;
+  }
+
+  @Override
+  public DataTable lineChartBetweenByPrefix(String prefix, Integer start,
+      Integer end) {
+    if (end < start) {
+      int temp = start;
+      start = end;
+      end = temp;
+    }
+    List<Cols> colsList = newArrayList(new Cols("year", "Year", Type.STRING));
+    List<Rows> rowsList = newArrayList();
+    for (int i = 0; i <= end - start; i++) {
+      Value<String> value = new Value<>();
+      value.setV(String.valueOf(start + i));
+      Rows row = new Rows(newArrayList(value));
+      rowsList.add(row);
+    }
+    colsList.add(new Cols("prefix", prefix, Type.NUMBER));
+    for (int i = 0; i <= end - start; i++) {
+      Value<Integer> value = new Value<>();
+      value.setV(subprimeGuidRepo.countByPrefixAndCreatedAtBetween(prefix,
+          RubyCollections.date(start + i).beginningOfYear(),
+          RubyCollections.date(start + i).endOfYear()));
+      rowsList.get(i).getC().add(value);
+    }
+    DataTable dataTable = new DataTable(colsList, rowsList);
+    return dataTable;
+  }
 }

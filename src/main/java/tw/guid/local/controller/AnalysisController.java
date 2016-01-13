@@ -1,4 +1,5 @@
-/*Copyright(c)2015 ReiMed Co.to present.*All rights reserved.**@author Ming-Jheng Li**/package tw.guid.local.controller;
+/*Copyright(c)2015 ReiMed Co.to present.*All rights reserved.**@author Ming-Jheng Li**/
+package tw.guid.local.controller;
 
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 
@@ -29,21 +30,43 @@ public class AnalysisController {
   @Autowired
   AnalysisService analysisService;
 
-  @RequestMapping(value = "/totalNumber", method = GET)
+  @RequestMapping(value = "/total", method = GET)
   Integer countAllSubprimeGuid() {
     return analysisService.countAllSubprimeGuid();
   }
 
-  @RequestMapping(value = "/googleLineChart", method = GET)
-  DataTable googleLineChartLookup(@Param("start") Integer start,
-      @Param("end") Integer end) {
-    return analysisService.googleLineChartLookup(start, end);
+  @RequestMapping(value = "/totalByYear", method = GET)
+  Integer countSubprimeGuidByYear(@Param("year") Integer year) {
+    return analysisService.countSubprimeGuidByYear(year);
   }
 
-  @RequestMapping(value = "/googleLineChartPrefix", method = GET)
-  DataTable googleLineChartPrefixLookup(@Param("prefix") String prefix,
+  @RequestMapping(value = "/totalBetween", method = GET)
+  Integer countSubprimeGuidBetween(@Param("start") Integer start,
+      @Param("end") Integer end) {
+    return analysisService.countSubprimeGuidBetween(start, end);
+  }
+
+  @RequestMapping(value = "/lineChart", method = GET)
+  DataTable lineChart(@Param("year") Integer year) {
+    return analysisService.lineChart(year);
+  }
+
+  @RequestMapping(value = "/lineChartByPrefix", method = GET)
+  DataTable lineChartByPrefix(@Param("prefix") String prefix,
+      @Param("year") Integer year) {
+    return analysisService.lineChartByPrefix(prefix, year);
+  }
+
+  @RequestMapping(value = "/lineChartBetween", method = GET)
+  DataTable lineChartBetween(@Param("start") Integer start,
+      @Param("end") Integer end) {
+    return analysisService.lineChartBetween(start, end);
+  }
+
+  @RequestMapping(value = "/lineChartBetweenByPrefix", method = GET)
+  DataTable lineChartBetweenByPrefix(@Param("prefix") String prefix,
       @Param("start") Integer start, @Param("end") Integer end) {
-    return analysisService.googleLineChartPrefixLookup(prefix, start, end);
+    return analysisService.lineChartBetweenByPrefix(prefix, start, end);
   }
 
 }
