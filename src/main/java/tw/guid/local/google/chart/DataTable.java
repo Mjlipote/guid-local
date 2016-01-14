@@ -8,15 +8,18 @@ package tw.guid.local.google.chart;
 
 import static com.google.common.collect.Lists.newArrayList;
 
+import java.util.Arrays;
 import java.util.List;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 
 public final class DataTable {
 
+  private final ObjectMapper mapper = new ObjectMapper();
   private final List<ColumnDescription> cols;
-
   private final List<Cells> rows;
 
   public DataTable() {
@@ -46,9 +49,38 @@ public final class DataTable {
     return this;
   }
 
+  public DataTable addColumn(Iterable<ColumnDescription> columns) {
+    for (ColumnDescription cd : columns) {
+      this.cols.add(cd);
+    }
+    return this;
+  }
+
+  public DataTable addColumn(ColumnDescription... fields) {
+    return addColumn(Arrays.asList(fields));
+  }
+
   public DataTable addRow(Cells cells) {
     this.rows.add(cells);
     return this;
+  }
+
+  public DataTable addRow(Iterable<?> values) {
+    Cells cells = new Cells();
+    for (Object o : values) {
+      Value<Object> value = new Value<>(o);
+      cells.addValue(value);
+    }
+    this.rows.add(cells);
+    return this;
+  }
+
+  public DataTable addRow(Object... fields) {
+    return addRow(Arrays.asList(fields));
+  }
+
+  public String toJson() throws JsonProcessingException {
+    return mapper.writeValueAsString(this);
   }
 
   /**
@@ -63,6 +95,10 @@ public final class DataTable {
    */
   public List<Cells> getRows() {
     return rows;
+  }
+
+  public List<Value<?>> getCells(Integer i) {
+    return this.rows.get(i).getC();
   }
 
   @Override

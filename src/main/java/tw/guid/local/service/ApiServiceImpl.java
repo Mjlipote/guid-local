@@ -16,7 +16,6 @@ import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import net.sf.rubycollect4j.RubyCollections;
-import tw.guid.local.google.chart.Cells;
 import tw.guid.local.google.chart.ColumnDescription;
 import tw.guid.local.google.chart.DataTable;
 import tw.guid.local.google.chart.Type;
@@ -104,13 +103,13 @@ public class ApiServiceImpl implements ApiService {
     DataTable dataTable = new DataTable();
     dataTable.addColumn(new ColumnDescription("month", "Mounth", Type.STRING));
     for (int i = 0; i < 12; i++) {
-      dataTable.addRow(new Cells().addValue(new Value<>(MONTH.get(i))));
+      dataTable.addRow(MONTH.get(i));
     }
     for (String p : institutePrefixRepo.getAllPrefix()) {
       if (subprimeGuidRepo.findByPrefix(p).size() > 0) {
         dataTable.addColumn(new ColumnDescription("prefix", p, Type.NUMBER));
         for (int i = 0; i < 12; i++) {
-          dataTable.getRows().get(i).getC()
+          dataTable.getCells(i)
               .add(new Value<Integer>(
                   subprimeGuidRepo.countByPrefixAndCreatedAtBetween(p,
                       RubyCollections.date(year, i + 1).beginningOfMonth(),
@@ -126,11 +125,11 @@ public class ApiServiceImpl implements ApiService {
     DataTable dataTable = new DataTable();
     dataTable.addColumn(new ColumnDescription("month", "Mounth", Type.STRING));
     for (int i = 0; i < 12; i++) {
-      dataTable.addRow(new Cells().addValue(new Value<>(MONTH.get(i))));
+      dataTable.addRow(MONTH.get(i));
     }
     dataTable.addColumn(new ColumnDescription("guid", "GUID", Type.NUMBER));
     for (int i = 0; i < 12; i++) {
-      dataTable.getRows().get(i).getC()
+      dataTable.getCells(i)
           .add(new Value<Integer>(subprimeGuidRepo.countByCreatedAtBetween(
               RubyCollections.date(year, i + 1).beginningOfMonth(),
               RubyCollections.date(year, i + 1).endOfMonth())));
@@ -143,11 +142,11 @@ public class ApiServiceImpl implements ApiService {
     DataTable dataTable = new DataTable();
     dataTable.addColumn(new ColumnDescription("month", "Mounth", Type.STRING));
     for (int i = 0; i < 12; i++) {
-      dataTable.addRow(new Cells().addValue(new Value<>(MONTH.get(i))));
+      dataTable.addRow(MONTH.get(i));
     }
     dataTable.addColumn(new ColumnDescription("prefix", prefix, Type.NUMBER));
     for (int i = 0; i < 12; i++) {
-      dataTable.getRows().get(i).getC()
+      dataTable.getCells(i)
           .add(new Value<Integer>(
               subprimeGuidRepo.countByPrefixAndCreatedAtBetween(prefix,
                   RubyCollections.date(year, i + 1).beginningOfMonth(),
@@ -166,13 +165,13 @@ public class ApiServiceImpl implements ApiService {
     DataTable dataTable = new DataTable();
     dataTable.addColumn(new ColumnDescription("month", "Mounth", Type.STRING));
     for (int i = 0; i < 12; i++) {
-      dataTable.addRow(new Cells().addValue(new Value<>(MONTH.get(i))));
+      dataTable.addRow(MONTH.get(i));
     }
     for (String p : institutePrefixRepo.getAllPrefix()) {
       if (subprimeGuidRepo.findByPrefix(p).size() > 0) {
         dataTable.addColumn(new ColumnDescription("prefix", p, Type.NUMBER));
         for (int i = 0; i < 12; i++) {
-          dataTable.getRows().get(i).getC()
+          dataTable.getCells(i)
               .add(new Value<Integer>(
                   subprimeGuidRepo.countByPrefixAndCreatedAtBetween(p,
                       RubyCollections.date(start + i).beginningOfYear(),
@@ -193,11 +192,11 @@ public class ApiServiceImpl implements ApiService {
     DataTable dataTable = new DataTable();
     dataTable.addColumn(new ColumnDescription("month", "Mounth", Type.STRING));
     for (int i = 0; i < 12; i++) {
-      dataTable.addRow(new Cells().addValue(new Value<>(MONTH.get(i))));
+      dataTable.addRow(MONTH.get(i));
     }
     dataTable.addColumn(new ColumnDescription("guid", "GUID", Type.NUMBER));
     for (int i = 0; i < 12; i++) {
-      dataTable.getRows().get(i).getC()
+      dataTable.getCells(i)
           .add(new Value<Integer>(subprimeGuidRepo.countByCreatedAtBetween(
               RubyCollections.date(start + i).beginningOfYear(),
               RubyCollections.date(start + i).endOfYear())));
@@ -216,11 +215,11 @@ public class ApiServiceImpl implements ApiService {
     DataTable dataTable = new DataTable();
     dataTable.addColumn(new ColumnDescription("month", "Mounth", Type.STRING));
     for (int i = 0; i < 12; i++) {
-      dataTable.addRow(new Cells().addValue(new Value<>(MONTH.get(i))));
+      dataTable.addRow(MONTH.get(i));
     }
     dataTable.addColumn(new ColumnDescription("prefix", prefix, Type.NUMBER));
     for (int i = 0; i < 12; i++) {
-      dataTable.getRows().get(i).getC()
+      dataTable.getCells(i)
           .add(new Value<Integer>(
               subprimeGuidRepo.countByPrefixAndCreatedAtBetween(prefix,
                   RubyCollections.date(start + i).beginningOfYear(),
@@ -236,8 +235,7 @@ public class ApiServiceImpl implements ApiService {
         .addColumn(new ColumnDescription("number", "Number", Type.NUMBER));
     for (String p : institutePrefixRepo.getAllPrefix()) {
       if (subprimeGuidRepo.findByPrefix(p).size() > 0) {
-        dataTable.addRow(new Cells().addValue(new Value<>(p)).addValue(
-            new Value<Integer>(subprimeGuidRepo.findByPrefix(p).size())));
+        dataTable.addRow(p, subprimeGuidRepo.findByPrefix(p).size());
       }
     }
     return dataTable;
@@ -255,11 +253,10 @@ public class ApiServiceImpl implements ApiService {
         .addColumn(new ColumnDescription("number", "Number", Type.NUMBER));
     for (String p : institutePrefixRepo.getAllPrefix()) {
       if (subprimeGuidRepo.findByPrefix(p).size() > 0) {
-        dataTable.addRow(new Cells().addValue(new Value<>(p))
-            .addValue(new Value<Integer>(
-                subprimeGuidRepo.countByPrefixAndCreatedAtBetween(p,
-                    RubyCollections.date(start).beginningOfYear(),
-                    RubyCollections.date(end).endOfYear()))));
+        dataTable.addRow(p,
+            subprimeGuidRepo.countByPrefixAndCreatedAtBetween(p,
+                RubyCollections.date(start).beginningOfYear(),
+                RubyCollections.date(end).endOfYear()));
       }
     }
     return dataTable;
