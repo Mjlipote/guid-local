@@ -9,7 +9,7 @@ package tw.guid.local.google.chart;
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 
-public final class Cols {
+public final class ColumnDescription {
 
   private final String id;
 
@@ -17,7 +17,7 @@ public final class Cols {
 
   private final Type type;
 
-  public Cols(String id, String label, Type type) {
+  public ColumnDescription(String id, String label, Type type) {
     this.id = id;
     this.label = label;
     this.type = type;
@@ -46,10 +46,10 @@ public final class Cols {
 
   @Override
   public boolean equals(final Object other) {
-    if (!(other instanceof Cols)) {
+    if (!(other instanceof ColumnDescription)) {
       return false;
     }
-    Cols castOther = (Cols) other;
+    ColumnDescription castOther = (ColumnDescription) other;
     return Objects.equal(id, castOther.id)
         && Objects.equal(label, castOther.label)
         && Objects.equal(type, castOther.type);

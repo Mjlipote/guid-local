@@ -6,17 +6,28 @@
  */
 package tw.guid.local.google.chart;
 
+import static com.google.common.collect.Lists.newArrayList;
+
 import java.util.List;
 
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 
-public final class Rows {
+public final class Cells {
 
   private final List<Value<?>> c;
 
-  public Rows(List<Value<?>> c) {
+  public Cells(List<Value<?>> c) {
     this.c = c;
+  }
+
+  public Cells() {
+    this.c = newArrayList();
+  }
+
+  public Cells addValue(Value<?> value) {
+    this.c.add(value);
+    return this;
   }
 
   /**
@@ -28,10 +39,10 @@ public final class Rows {
 
   @Override
   public boolean equals(final Object other) {
-    if (!(other instanceof Rows)) {
+    if (!(other instanceof Cells)) {
       return false;
     }
-    Rows castOther = (Rows) other;
+    Cells castOther = (Cells) other;
     return Objects.equal(c, castOther.c);
   }
 

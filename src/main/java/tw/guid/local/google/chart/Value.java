@@ -14,13 +14,27 @@ import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 
 @JsonInclude(Include.NON_NULL)
-public class Value<T> {
+public final class Value<T> {
 
   private T v;
 
   private String f;
 
   private Map<String, Object> p;
+
+  public Value() {}
+
+  public Value(T v) {
+    this.v = v;
+  }
+
+  // public Value(String f) {
+  // this.f = f;
+  // }
+
+  public Value(Map<String, Object> p) {
+    this.p = p;
+  }
 
   /**
    * @return the v
