@@ -129,6 +129,19 @@
 					</execution>
 				</executions>
 			</plugin>
+			<plugin>
+				<groupId>com.heroku.sdk</groupId>
+				<artifactId>heroku-maven-plugin</artifactId>
+				<version>0.5.7</version>
+				<configuration>
+					<appName>${heroku.appName}</appName>
+					<jdkVersion>1.8</jdkVersion>
+					<processTypes>
+						<web>java -Dserver.port=$PORT -jar
+							target/guid-local-${project.version}.jar</web>
+					</processTypes>
+				</configuration>
+			</plugin>
 		</plugins>
 	</build>
 
