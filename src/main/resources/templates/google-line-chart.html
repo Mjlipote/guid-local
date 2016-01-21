@@ -13,7 +13,7 @@
 	google.charts.setOnLoadCallback(drawChart);
 
 	function drawChart() {
-		$.getJSON('/analysis/line-chart-all', {
+		$.getJSON('/guids/api/line-chart-all', {
 			year : 2016
 		}, function(res) {
 			var data = new google.visualization.DataTable(res, 0.6);

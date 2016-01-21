@@ -11,7 +11,7 @@
 	});
 	google.setOnLoadCallback(drawChart);
 	function drawChart() {
-		$.getJSON('/analysis/pie-chart-all', function(res) {
+		$.getJSON('/guids/api/pie-chart-all', function(res) {
 			var data = new google.visualization.DataTable(res, 0.6);
 
 			var options = {

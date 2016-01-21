@@ -8,46 +8,97 @@ package tw.guid.local.google.chart;
 
 import static com.google.common.collect.Lists.newArrayList;
 
+import java.util.Arrays;
 import java.util.List;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 
 public final class DataTable {
 
-  private final List<Cols> cols;
+  private final ObjectMapper mapper = new ObjectMapper();
+  private final List<ColumnDescription> cols;
+  private final List<Cells> rows;
 
-  private final List<Rows> rows;
+  public DataTable() {
+    this.cols = newArrayList();
+    this.rows = newArrayList();
+  }
 
-  public DataTable(List<Cols> cols, List<Rows> rows) {
+  public DataTable(List<ColumnDescription> cols, List<Cells> rows) {
     this.cols = cols;
     this.rows = rows;
   }
 
-  public DataTable(Cols col, Rows row) {
+  public DataTable(ColumnDescription col, Cells row) {
     this(newArrayList(col), newArrayList(row));
   }
 
-  public DataTable(List<Cols> cols, Rows row) {
+  public DataTable(List<ColumnDescription> cols, Cells row) {
     this(cols, newArrayList(row));
   }
 
-  public DataTable(Cols col, List<Rows> rows) {
+  public DataTable(ColumnDescription col, List<Cells> rows) {
     this(newArrayList(col), rows);
+  }
+
+  public DataTable addColumn(ColumnDescription column) {
+    this.cols.add(column);
+    return this;
+  }
+
+  public DataTable addColumn(Iterable<ColumnDescription> columns) {
+    for (ColumnDescription cd : columns) {
+      this.cols.add(cd);
+    }
+    return this;
+  }
+
+  public DataTable addColumn(ColumnDescription... fields) {
+    return addColumn(Arrays.asList(fields));
+  }
+
+  public DataTable addRow(Cells cells) {
+    this.rows.add(cells);
+    return this;
+  }
+
+  public DataTable addRow(Iterable<?> values) {
+    Cells cells = new Cells();
+    for (Object o : values) {
+      Value<Object> value = new Value<>(o);
+      cells.addValue(value);
+    }
+    this.rows.add(cells);
+    return this;
+  }
+
+  public DataTable addRow(Object... fields) {
+    return addRow(Arrays.asList(fields));
+  }
+
+  public String toJson() throws JsonProcessingException {
+    return mapper.writeValueAsString(this);
   }
 
   /**
    * @return the cols
    */
-  public List<Cols> getCols() {
+  public List<ColumnDescription> getCols() {
     return cols;
   }
 
   /**
    * @return the rows
    */
-  public List<Rows> getRows() {
+  public List<Cells> getRows() {
     return rows;
+  }
+
+  public List<Value<?>> getCells(Integer i) {
+    return this.rows.get(i).getC();
   }
 
   @Override
