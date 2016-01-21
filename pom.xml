@@ -137,8 +137,7 @@
 					<appName>${heroku.appName}</appName>
 					<jdkVersion>1.8</jdkVersion>
 					<processTypes>
-						<web>java -Dserver.port=$PORT -jar
-							target/guid-local-${project.version}.jar</web>
+						<web>java -Dserver.port=$PORT -jar target/guid-local-${project.version}.jar</web>
 					</processTypes>
 				</configuration>
 			</plugin>
