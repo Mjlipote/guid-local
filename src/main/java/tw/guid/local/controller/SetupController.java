@@ -6,6 +6,7 @@
  */
 package tw.guid.local.controller;
 
+import java.io.IOException;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Set;
@@ -17,6 +18,7 @@ import org.springframework.context.annotation.DependsOn;
 import org.springframework.stereotype.Controller;
 
 import com.github.wnameless.workbookaccessor.WorkbookReader;
+import com.google.common.io.Resources;
 
 import tw.guid.local.entity.AccountUser;
 import tw.guid.local.entity.InstitutePrefix;
@@ -41,14 +43,18 @@ public class SetupController {
 
   /**
    * 先將 Excel 的資料匯入
+   * 
+   * @throws IOException
    */
   @PostConstruct
-  void preProcessData() {
+  void preProcessData() throws IOException {
 
     // --------------- YMU Only ---------------
 
-    WorkbookReader reader0 =
-        WorkbookReader.open("./src/main/resources/LegacyPrefixes.xlsx");
+    WorkbookReader reader0;
+
+    reader0 = WorkbookReader
+        .open(Resources.getResource("LegacyPrefixes.xlsx").openStream());
 
     for (List<String> row : reader0.withoutHeader().toLists()) {
       InstitutePrefix institutePrefix = new InstitutePrefix();
@@ -57,8 +63,8 @@ public class SetupController {
       institutePrefixRepo.save(institutePrefix);
     }
 
-    WorkbookReader reader1 =
-        WorkbookReader.open("./src/main/resources/LegacyUsers.xlsx");
+    WorkbookReader reader1 = WorkbookReader
+        .open(Resources.getResource("LegacyUsers.xlsx").openStream());
 
     for (List<String> row : reader1.withoutHeader().toLists()) {
 
