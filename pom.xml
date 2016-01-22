@@ -13,6 +13,7 @@
 
 	<properties>
 		<java.version>1.8</java.version>
+		<heroku.appName>evening-oasis-76456</heroku.appName>
 	</properties>
 
 	<dependencies>
