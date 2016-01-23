@@ -57,10 +57,12 @@ public class SetupController {
         .open(Resources.getResource("LegacyPrefixes.xlsx").openStream());
 
     for (List<String> row : reader0.withoutHeader().toLists()) {
-      InstitutePrefix institutePrefix = new InstitutePrefix();
-      institutePrefix.setInstitute(row.get(0));
-      institutePrefix.setPrefix(row.get(0));
-      institutePrefixRepo.save(institutePrefix);
+      if (institutePrefixRepo.findByInstitute(row.get(0)) == null) {
+        InstitutePrefix institutePrefix = new InstitutePrefix();
+        institutePrefix.setInstitute(row.get(0));
+        institutePrefix.setPrefix(row.get(0));
+        institutePrefixRepo.save(institutePrefix);
+      }
     }
 
     WorkbookReader reader1 = WorkbookReader
@@ -71,22 +73,23 @@ public class SetupController {
       InstitutePrefix institutePrefix =
           institutePrefixRepo.findByInstitute(row.get(0));
 
-      AccountUser legacyUser = new AccountUser();
-      legacyUser.setInstitutePrefix(institutePrefix);
-      legacyUser.setUsername(row.get(1));
-      legacyUser.setHashPassword(row.get(2));
-      legacyUser.setAddress("NULL");
-      legacyUser.setEmail("NULL");
-      legacyUser.setJobTitle("NULL");
-      legacyUser.setTelephone("NULL");
-      legacyUser.setRole(Role.ROLE_USER);
+      if (userRepo.findByUsernameAndPassword(row.get(1), row.get(2)) == null) {
+        AccountUser legacyUser = new AccountUser();
+        legacyUser.setInstitutePrefix(institutePrefix);
+        legacyUser.setUsername(row.get(1));
+        legacyUser.setHashPassword(row.get(2));
+        legacyUser.setAddress("NULL");
+        legacyUser.setEmail("NULL");
+        legacyUser.setJobTitle("NULL");
+        legacyUser.setTelephone("NULL");
+        legacyUser.setRole(Role.ROLE_USER);
 
-      Set<AccountUser> aus = institutePrefix.getAccountUsers();
-      aus.add(legacyUser);
-      institutePrefix.setAccountUsers(aus);
+        Set<AccountUser> aus = institutePrefix.getAccountUsers();
+        aus.add(legacyUser);
+        institutePrefix.setAccountUsers(aus);
 
-      institutePrefixRepo.save(institutePrefix);
-
+        institutePrefixRepo.save(institutePrefix);
+      }
       // userRepo.save(legacyUser);
     }
 
