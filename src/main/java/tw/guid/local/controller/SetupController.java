@@ -137,11 +137,7 @@ public class SetupController {
       userRepo.save(user);
     }
 
-    if (spGuidRepo.findByHashcode1AndHashcode2AndHashcode3AndPrefix(
-        "f3042960fc9351d1ad99550817f892968207c6cb2539c6fd11b3258e815dedfe4f8f3f2a95c846b32aacf6201282921e2b93812587cc19752cfc9c0cf236a57b",
-        "e92e7cf25a726bb9f7aff7c36c31fa4a96b0014a3a7ce5018c6b84bc459df512653253d01e0742878ca7ddd7bd9c5179273fa915761a9ba84948fd85007cc8f9",
-        "636ce21c211c33e6ee8e2f7590034fef8a3a5b3263c6d83af9c54b490175d649f11937e855509f57c986d1882cb5259372a37697899660afff8db6c8049de6a9",
-        "TEST") == null) {
+    if (spGuidRepo.findBySpguid("TEST-Y3XZU2NG") == null) {
       SubprimeGuid spguid = new SubprimeGuid();
       spguid.setHashcode1(
           "f3042960fc9351d1ad99550817f892968207c6cb2539c6fd11b3258e815dedfe4f8f3f2a95c846b32aacf6201282921e2b93812587cc19752cfc9c0cf236a57b");
